@@ -18,6 +18,7 @@ public class Mysterybox {
     private int resourceAmount;
     private Upgrade upgrade;
     private List<Unit> units;
+    private static final int duration = 1800;
 
     /**
      * Creates a new Mysterybox object that contains info about the mysterybox.
@@ -61,5 +62,13 @@ public class Mysterybox {
      */
     public List<Unit> getUnits() {
         return Collections.unmodifiableList(units);
+    }
+    
+    /**
+     * Returns the duration of the mysterybox in frames. (amount of seconds times 60)
+     * @return Returns the duration
+     */
+    public int getDuration(){
+        return this.duration;
     }
 }
