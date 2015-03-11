@@ -48,4 +48,10 @@ public interface IPlayer {
      * @param newTeam The new team of the player. Can be null.
      */
     public void setTeam(Team newTeam);
+    
+    /**
+     * Gets the money of the player
+     * @return Returns the amount of money the player has.
+     */
+    public int getMoney();
 }

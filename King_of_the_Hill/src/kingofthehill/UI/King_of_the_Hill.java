@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import kingofthehill.domain.Player;
 
 /**
  *
@@ -27,7 +28,12 @@ public class King_of_the_Hill extends Application {
             
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
+                Player p = new Player();
+                try{
+                    p.getMoney();
+                } catch(Exception e) {
+                    System.out.println(e.getMessage());
+                }
             }
         });
         
