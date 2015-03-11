@@ -11,7 +11,8 @@ package kingofthehill.domain;
  */
 public enum GameMode {
     F4A("Free for All"),
-    Coop("2vs2 co-op");
+    COOP("2vs2 co-op"),
+    SINGLEPLAYER("Singleplayer vs AI");
     
     private final String descr;
     

@@ -5,13 +5,10 @@
  */
 package kingofthehill.domain;
 
-import java.util.List;
-
 /**
  *
  * @author Jur
  */
-public class GameManager {
-    private List<IPlayer> players;
-    private Mysterybox mysterybox;
+public abstract class Unit {
+    
 }

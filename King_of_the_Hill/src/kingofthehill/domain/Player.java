@@ -37,5 +37,10 @@ public class Player implements IPlayer{
     public List<Upgrade> getUpgrades() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void setTeam(Team newTeam) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
