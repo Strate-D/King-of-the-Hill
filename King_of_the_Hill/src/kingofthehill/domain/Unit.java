@@ -106,16 +106,27 @@ public abstract class Unit {
         }
     }
 
-    public void doNextAction() {
-        throw new UnsupportedOperationException("TODO doNextAction()");
-    }
+    /**
+     * Let's the unit perform its next action
+     */
+    public abstract void doNextAction();
 
-    private Unit canAttackUnit() {
-        throw new UnsupportedOperationException("TODO canAttackUnit()");
-    }
+    /**
+     * Checks if this unit can attack a enemy unit
+     * @return The unit it can attack, can be null.
+     */
+    public abstract Unit canAttackUnit();
 
-    private boolean killUnit() {
-        throw new UnsupportedOperationException("TODO killUnit()");
+    /**
+     * Kills this unit
+     */
+    private void killUnit() {
+        if(this.lane != null){
+            this.lane.removeUnit(this);
+        }
+        if(this.base != null) {
+            this.base.removeUnit(this);
+        }
     }
 
     public boolean receiveDamage(int damagepoints) {
