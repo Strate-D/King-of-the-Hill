@@ -113,6 +113,7 @@ public class Base {
         //Place unit
         try {
             this.units[index] = unit;
+            unit.setBase(this);
             return true;
         } catch (Exception ex) {
             return false;
@@ -128,6 +129,7 @@ public class Base {
         for(Unit u : this.units){
             if(u == unit){
                 this.units[i] = null;
+                unit.setBase(null);
                 return;
             }
             i++;

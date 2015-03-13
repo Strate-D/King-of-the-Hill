@@ -154,6 +154,25 @@ public abstract class Unit {
     }
     
     /**
+     * Sets the base of the unit
+     * If the lane was not null, it will be set to null.
+     * @param base The new base of the unit
+     */
+    public void setBase(Base base){
+        this.base = base;
+        this.lane = null;
+    }
+    
+    /**
+     * Sets the new lane of the unit
+     * If the base was not null, it will be set to null
+     * @param lane The new lane of the unit
+     */
+    public void setLane(Lane lane){
+        this.lane = lane;
+        this.base = null;
+    }
+    /**
      * Returns the lane object in wich the unit is placed.
      * @return Can be null
      */
