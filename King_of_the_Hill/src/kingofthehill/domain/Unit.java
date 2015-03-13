@@ -21,6 +21,7 @@ public abstract class Unit {
     private int viewRange;
     private int damage;
     private int movementSpeed;
+    private int position;
     private IPlayer owner;
     private Base base;
     private Lane lane;
@@ -139,6 +140,54 @@ public abstract class Unit {
     public int getCost() {
         if (this.cost > 0) {
             return this.cost;
+        } else {
+            return 1;
+        }
+    }
+    
+    /**
+     * Returns the base object of the unit.
+     * @return Can be null.
+     */
+    public Base getBase(){
+        return this.base;
+    }
+    
+    /**
+     * Returns the lane object in wich the unit is placed.
+     * @return Can be null
+     */
+    public Lane getLane(){
+        return this.lane;
+    }
+    
+    /**
+     * Returns the position of the unit on a lane
+     * @return Int between 0 and 100. -1 if unit is placed on a base.
+     */
+    public int getPosition(){
+        return this.position;
+    }
+    
+    /**
+     * Gets the cooldown time of a unit
+     * @return Always a positive int
+     */
+    public int getCooldown(){
+        if(this.cooldown > 0){
+            return this.cooldown;
+        } else {
+            return 1;
+        }
+    }
+    
+    /**
+     * Gets the view range of the unit
+     * @return Always a positive int
+     */
+    public int getViewRange(){
+        if(this.viewRange > 0){
+            return this.viewRange;
         } else {
             return 1;
         }
