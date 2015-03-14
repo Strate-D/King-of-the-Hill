@@ -28,6 +28,9 @@ public abstract class Unit {
     
     public Unit(int health, int attack, int armor,
             UnitType unittype, int movementSpeed, IPlayer owner){
+        if(health < 1 || attack < 1 || armor < 0  || unittype == null || movementSpeed < 0 || owner == null){
+            throw new IllegalArgumentException("Unit couldn't be made!");
+        }
         this.health = health;
         this.attack = attack;
         this.armor = armor;

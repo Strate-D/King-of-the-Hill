@@ -6,32 +6,23 @@
 package kingofthehill.domain;
 
 /**
- * Class containing all the information about the ranged unit Extends Unit
  *
  * @author Jur
  */
-public class Ranged extends Unit {
-
-    private final int attackRange;
+public class Melee extends Unit {
 
     /**
-     * Creates a new ranged unit with the given parameters. Unit has to be set
-     * to a lane or base manually!
+     * Creates a new melee unit with the given parameters. Unit has to be set to
+     * a lane or base manually!
      *
      * @param health Amount of health the unit has. Must be positive.
      * @param attack Amount of attack the unit has. Must be positive.
      * @param armor Amount of armor the unit has. Must be 0 or positive.
      * @param movementSpeed Movementspeed of the unit. Must be positive.
      * @param owner Owner of the unit, may not be null.
-     * @param attackRange attack range of the unit, must be higher than 1.
      */
-    public Ranged(int health, int attack, int armor,
-            int movementSpeed, IPlayer owner, int attackRange) {
-        super(health, attack, armor, UnitType.RANGED, movementSpeed, owner);
-        if (attackRange < 1) {
-            throw new IllegalArgumentException("Attackrange must be at least 1!");
-        }
-        this.attackRange = attackRange;
+    public Melee(int health, int attack, int armor, int movementSpeed, IPlayer owner) {
+        super(health, attack, armor, UnitType.MELEE, movementSpeed, owner);
     }
 
     @Override
@@ -85,7 +76,7 @@ public class Ranged extends Unit {
                 }
             }
             //Check if the unit is within attack range
-            if (closestDistance != -1 && closestDistance <= this.attackRange) {
+            if (closestDistance != -1 && closestDistance <= 1) {
                 return closestUnit;
             }
             return null;
