@@ -17,4 +17,20 @@ public class AITest
     @Test public void testGetters()
     {
     }
+    
+    @Test public void testSetters()
+    {
+    }
+    
+    @Test public void testCheckPassword()
+    {
+        /**
+         * Test the password check
+         */
+        
+        // default value
+        
+        IPlayer ai = new AI();
+        ai.checkPassword("Welkom01");
+    }
 }
