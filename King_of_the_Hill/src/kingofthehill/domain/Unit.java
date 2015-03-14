@@ -25,6 +25,18 @@ public abstract class Unit {
     private IPlayer owner;
     private Base base;
     private Lane lane;
+    
+    public Unit(int health, int attack, int armor,
+            UnitType unittype, int movementSpeed, IPlayer owner){
+        this.health = health;
+        this.attack = attack;
+        this.armor = armor;
+        this.type = unittype;
+        this.movementSpeed = movementSpeed;
+        this.owner = owner;
+        this.position = 0;
+        this.damage = 0;
+    }
 
     /**
      * Calculates the health of the unit with all the upgrades
@@ -113,6 +125,7 @@ public abstract class Unit {
 
     /**
      * Checks if this unit can attack a enemy unit
+     *
      * @return The unit it can attack, can be null.
      */
     public abstract Unit canAttackUnit();
@@ -121,10 +134,10 @@ public abstract class Unit {
      * Kills this unit
      */
     private void killUnit() {
-        if(this.lane != null){
+        if (this.lane != null) {
             this.lane.removeUnit(this);
         }
-        if(this.base != null) {
+        if (this.base != null) {
             this.base.removeUnit(this);
         }
     }
@@ -136,7 +149,7 @@ public abstract class Unit {
         } else {
             this.damage++;
         }
-        if(this.damage >= this.getHealth()){
+        if (this.damage >= this.getHealth()) {
             this.killUnit();
             return true;
         }
@@ -155,71 +168,118 @@ public abstract class Unit {
             return 1;
         }
     }
-    
+
     /**
      * Returns the base object of the unit.
+     *
      * @return Can be null.
      */
-    public Base getBase(){
+    public Base getBase() {
         return this.base;
     }
-    
+
     /**
-     * Sets the base of the unit
-     * If the lane was not null, it will be set to null.
+     * Sets the base of the unit If the lane was not null, it will be set to
+     * null.
+     *
      * @param base The new base of the unit
      */
-    public void setBase(Base base){
+    public void setBase(Base base) {
         this.base = base;
         this.lane = null;
     }
-    
+
     /**
-     * Sets the new lane of the unit
-     * If the base was not null, it will be set to null
+     * Sets the new lane of the unit If the base was not null, it will be set to
+     * null
+     * Also changes the position of the unit as close as possible to his own base.
      * @param lane The new lane of the unit
      */
-    public void setLane(Lane lane){
+    public void setLane(Lane lane) {
         this.lane = lane;
         this.base = null;
+        if (lane.getBaseEnd1().getOwner() == this.getOwner()){
+            this.position = 0;
+        } else {
+            this.position = 100;
+        }
     }
+
     /**
      * Returns the lane object in wich the unit is placed.
+     *
      * @return Can be null
      */
-    public Lane getLane(){
+    public Lane getLane() {
         return this.lane;
     }
-    
+
     /**
      * Returns the position of the unit on a lane
+     *
      * @return Int between 0 and 100. -1 if unit is placed on a base.
      */
-    public int getPosition(){
+    public int getPosition() {
         return this.position;
     }
-    
+
     /**
      * Gets the cooldown time of a unit
+     *
      * @return Always a positive int
      */
-    public int getCooldown(){
-        if(this.cooldown > 0){
+    public int getCooldown() {
+        if (this.cooldown > 0) {
             return this.cooldown;
         } else {
             return 1;
         }
     }
-    
+
     /**
      * Gets the view range of the unit
+     *
      * @return Always a positive int
      */
-    public int getViewRange(){
-        if(this.viewRange > 0){
+    public int getViewRange() {
+        if (this.viewRange > 0) {
             return this.viewRange;
         } else {
             return 1;
+        }
+    }
+
+    /**
+     * Gets the owner of the unit.
+     *
+     * @return Cannot be null
+     */
+    public IPlayer getOwner() {
+        return this.owner;
+    }
+
+    /**
+     * Moves the unit with use of the movementspeed
+     * If the unit reaches the base on the other side,
+     * the unit will be destroyed and damage will be dealt.
+     */
+    public void moveUnit() {
+        //Get lane and check wich way the unit has to move and move the unit
+        Lane lane = this.getLane();
+        if (lane != null) {
+            if (lane.getBaseEnd1().getOwner() == this.getOwner()) {
+                this.position += this.getMovementSpeed();
+            } else {
+                this.position -= this.getMovementSpeed();
+            }
+            //Check if unit has reached the base, if so, do damage
+            if (this.position > 100) {
+                lane.getBaseEnd2().receiveDamage(this.getAttack());
+                this.killUnit();
+            } else if (this.position < 0) {
+                lane.getBaseEnd1().receiveDamage(this.getAttack());
+                this.killUnit();
+            }
         }
     }
 }
