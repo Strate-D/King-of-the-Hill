@@ -17,11 +17,21 @@ public class IPlayerTest
 {   
    @Test public void testGetters()
    {
-        IPlayer player = new Player();
+        String name = "Bastiaan";
+        int exp = 10;
+        
+        IPlayer player = new Player(name, exp);
+        assertEquals(name, player.getName());
+        assertEquals(exp, player.getExp());
+        assertEquals(0, player.getScore());
+        assertEquals(100, player.getMoney());
+        assertNull(player.getUpgrades());
+        assertNull(player.getTeam());
+        assertNull(player.getBase());
    }
    
    @Test public void testSetters()
    {
-       IPlayer player = new Player();
+       IPlayer player = new Player("Rickske", 10);
    }
 }
