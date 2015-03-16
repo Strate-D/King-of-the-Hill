@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Reverse engineered King_of_the_Hill 2015.03.16 11-49-53-702">
+  <ClassDiagramComponents>
+    <Class xPosition="20.0" yPosition="20.0" package="kingofthehill.domain" name="AI" visibility="public">
+      <Constructors/>
+      <Fields/>
+      <Methods>
+        <Method name="getName" visibility="public" returnType="String"/>
+        <Method name="getExp" visibility="public" returnType="int"/>
+        <Method name="getScore" visibility="public" returnType="int"/>
+        <Method name="checkPassword" visibility="public" returnType="boolean">
+          <Argument type="String" name="password"/>
+        </Method>
+        <Method name="getUpgrades" visibility="public" returnType="List&lt;Upgrade&gt;"/>
+        <Method name="setTeam" visibility="public" returnType="void">
+          <Argument type="Team" name="newTeam"/>
+        </Method>
+        <Method name="getMoney" visibility="public" returnType="int"/>
+      </Methods>
+    </Class>
+    <Class xPosition="320.0" yPosition="20.0" package="kingofthehill.domain" name="Base" visibility="public">
+      <Constructors>
+        <Constructor name="Base" visibility="public">
+          <Argument type="IPlayer" name="owner"/>
+        </Constructor>
+      </Constructors>
+      <Fields>
+        <Field name="healthPoints" visibility="private" type="int"/>
+        <Field name="lanes" visibility="private" type="Lane[]"/>
+        <Field name="units" visibility="private" type="Unit[]"/>
+        <Field name="owner" visibility="private" type="IPlayer"/>
+      </Fields>
+      <Methods>
+        <Method name="getHealthPoints" visibility="public" returnType="int"/>
+        <Method name="getOwner" visibility="public" returnType="IPlayer"/>
+        <Method name="getLane" visibility="public" returnType="Lane">
+          <Argument type="int" name="index"/>
+        </Method>
+        <Method name="setLane" visibility="public" returnType="boolean">
+          <Argument type="int" name="index"/>
+          <Argument type="Lane" name="lane"/>
+        </Method>
+        <Method name="getUnit" visibility="public" returnType="Unit">
+          <Argument type="int" name="index"/>
+        </Method>
+        <Method name="setUnit" visibility="public" returnType="boolean">
+          <Argument type="int" name="index"/>
+          <Argument type="Unit" name="unit"/>
+        </Method>
+        <Method name="removeUnit" visibility="public" returnType="void">
+          <Argument type="Unit" name="unit"/>
+        </Method>
+        <Method name="getUnits" visibility="public" returnType="List&lt;Unit&gt;"/>
+        <Method name="receiveDamage" visibility="public" returnType="void">
+          <Argument type="int" name="damage"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="620.0" yPosition="20.0" package="kingofthehill.domain" name="Defence" visibility="public">
+      <Constructors/>
+      <Fields/>
+      <Methods/>
+    </Class>
+    <Class xPosition="920.0" yPosition="20.0" package="kingofthehill.domain" name="GameManager" visibility="public">
+      <Constructors/>
+      <Fields>
+        <Field name="players" visibility="private" type="List&lt;IPlayer&gt;"/>
+        <Field name="mysterybox" visibility="private" type="Mysterybox"/>
+      </Fields>
+      <Methods/>
+    </Class>
+    <Enum xPosition="20.0" yPosition="420.0" package="kingofthehill.domain" name="GameMode" visibility="public">
+      <Literals>
+        <Literal name="F4A"/>
+        <Literal name="COOP"/>
+        <Literal name="SINGLEPLAYER"/>
+      </Literals>
+    </Enum>
+    <Interface xPosition="320.0" yPosition="420.0" package="kingofthehill.domain" name="IPlayer" visibility="public">
+      <Methods>
+        <Method name="getName" visibility="public" returnType="String"/>
+        <Method name="getExp" visibility="public" returnType="int"/>
+        <Method name="getScore" visibility="public" returnType="int"/>
+        <Method name="getUpgrades" visibility="public" returnType="List&lt;Upgrade&gt;"/>
+        <Method name="checkPassword" visibility="public" returnType="boolean">
+          <Argument type="String" name="password"/>
+        </Method>
+        <Method name="setTeam" visibility="public" returnType="void">
+          <Argument type="Team" name="newTeam"/>
+        </Method>
+        <Method name="getMoney" visibility="public" returnType="int"/>
+      </Methods>
+    </Interface>
+    <Class xPosition="620.0" yPosition="420.0" package="kingofthehill.domain" name="Lane" visibility="public">
+      <Constructors>
+        <Constructor name="Lane" visibility="public">
+          <Argument type="Base" name="end1"/>
+          <Argument type="Base" name="end2"/>
+        </Constructor>
+      </Constructors>
+      <Fields>
+        <Field name="baseEnd1" visibility="private" type="Base" isFinal="true"/>
+        <Field name="baseEnd2" visibility="private" type="Base" isFinal="true"/>
+        <Field name="units" visibility="private" type="ArrayList&lt;Unit&gt;"/>
+      </Fields>
+      <Methods>
+        <Method name="getBaseEnd1" visibility="public" returnType="Base"/>
+        <Method name="getBaseEnd2" visibility="public" returnType="Base"/>
+        <Method name="getUnits" visibility="public" returnType="List&lt;Unit&gt;"/>
+        <Method name="addUnit" visibility="public" returnType="void">
+          <Argument type="Unit" name="unit"/>
+        </Method>
+        <Method name="removeUnit" visibility="public" returnType="void">
+          <Argument type="Unit" name="unit"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="920.0" yPosition="420.0" package="kingofthehill.domain" name="Melee" visibility="public">
+      <Constructors>
+        <Constructor name="Melee" visibility="public">
+          <Argument type="int" name="health"/>
+          <Argument type="int" name="attack"/>
+          <Argument type="int" name="armor"/>
+          <Argument type="int" name="movementSpeed"/>
+          <Argument type="IPlayer" name="owner"/>
+        </Constructor>
+      </Constructors>
+      <Fields/>
+      <Methods>
+        <Method name="doNextAction" visibility="public" returnType="void"/>
+        <Method name="canAttackUnit" visibility="public" returnType="Unit"/>
+      </Methods>
+    </Class>
+    <Class xPosition="20.0" yPosition="820.0" package="kingofthehill.domain" name="Mysterybox" visibility="public">
+      <Constructors>
+        <Constructor name="Mysterybox" visibility="public">
+          <Argument type="int" name="resources"/>
+          <Argument type="Upgrade" name="upgrade"/>
+          <Argument type="List&lt;Unit&gt;" name="units"/>
+        </Constructor>
+      </Constructors>
+      <Fields>
+        <Field name="resourceAmount" visibility="private" type="int"/>
+        <Field name="upgrade" visibility="private" type="Upgrade"/>
+        <Field name="units" visibility="private" type="List&lt;Unit&gt;"/>
+        <Field name="duration" visibility="private" type="int" isStatic="true" isFinal="true"/>
+      </Fields>
+      <Methods>
+        <Method name="getResourceAmount" visibility="public" returnType="int"/>
+        <Method name="getUpgrade" visibility="public" returnType="Upgrade"/>
+        <Method name="getUnits" visibility="public" returnType="List&lt;Unit&gt;"/>
+        <Method name="getDuration" visibility="public" returnType="int"/>
+      </Methods>
+    </Class>
+    <Class xPosition="320.0" yPosition="820.0" package="kingofthehill.domain" name="Player" visibility="public">
+      <Constructors>
+        <Constructor name="Player" visibility="public"/>
+      </Constructors>
+      <Fields/>
+      <Methods>
+        <Method name="getName" visibility="public" returnType="String"/>
+        <Method name="getExp" visibility="public" returnType="int"/>
+        <Method name="getScore" visibility="public" returnType="int"/>
+        <Method name="checkPassword" visibility="public" returnType="boolean">
+          <Argument type="String" name="password"/>
+        </Method>
+        <Method name="getUpgrades" visibility="public" returnType="List&lt;Upgrade&gt;"/>
+        <Method name="setTeam" visibility="public" returnType="void">
+          <Argument type="Team" name="newTeam"/>
+        </Method>
+        <Method name="getMoney" visibility="public" returnType="int"/>
+      </Methods>
+    </Class>
+    <Class xPosition="620.0" yPosition="820.0" package="kingofthehill.domain" name="Ranged" visibility="public">
+      <Constructors>
+        <Constructor name="Ranged" visibility="public">
+          <Argument type="int" name="health"/>
+          <Argument type="int" name="attack"/>
+          <Argument type="int" name="armor"/>
+          <Argument type="int" name="movementSpeed"/>
+          <Argument type="IPlayer" name="owner"/>
+          <Argument type="int" name="attackRange"/>
+        </Constructor>
+      </Constructors>
+      <Fields>
+        <Field name="attackRange" visibility="private" type="int" isFinal="true"/>
+      </Fields>
+      <Methods>
+        <Method name="doNextAction" visibility="public" returnType="void"/>
+        <Method name="canAttackUnit" visibility="public" returnType="Unit"/>
+      </Methods>
+    </Class>
+    <Class xPosition="920.0" yPosition="820.0" package="kingofthehill.domain" name="Team" visibility="public">
+      <Constructors>
+        <Constructor name="Team" visibility="public">
+          <Argument type="int" name="nr"/>
+          <Argument type="List&lt;IPlayer&gt;" name="players"/>
+        </Constructor>
+      </Constructors>
+      <Fields>
+        <Field name="nr" visibility="private" type="int"/>
+        <Field name="players" visibility="private" type="List&lt;IPlayer&gt;"/>
+      </Fields>
+      <Methods>
+        <Method name="getNr" visibility="public" returnType="int"/>
+        <Method name="getPlayers" visibility="public" returnType="List&lt;IPlayer&gt;"/>
+        <Method name="addPlayer" visibility="public" returnType="boolean">
+          <Argument type="IPlayer" name="newplayer"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class xPosition="20.0" yPosition="1220.0" package="kingofthehill.domain" isAbstract="true" name="Unit" visibility="public">
+      <Constructors>
+        <Constructor name="Unit" visibility="public">
+          <Argument type="int" name="health"/>
+          <Argument type="int" name="attack"/>
+          <Argument type="int" name="armor"/>
+          <Argument type="UnitType" name="unittype"/>
+          <Argument type="int" name="movementSpeed"/>
+          <Argument type="IPlayer" name="owner"/>
+        </Constructor>
+      </Constructors>
+      <Fields>
+        <Field name="health" visibility="private" type="int"/>
+        <Field name="attack" visibility="private" type="int"/>
+        <Field name="armor" visibility="private" type="int"/>
+        <Field name="cost" visibility="private" type="int"/>
+        <Field name="type" visibility="private" type="UnitType"/>
+        <Field name="cooldown" visibility="private" type="int"/>
+        <Field name="viewRange" visibility="private" type="int"/>
+        <Field name="damage" visibility="private" type="int"/>
+        <Field name="movementSpeed" visibility="private" type="int"/>
+        <Field name="position" visibility="private" type="int"/>
+        <Field name="owner" visibility="private" type="IPlayer"/>
+        <Field name="base" visibility="private" type="Base"/>
+        <Field name="lane" visibility="private" type="Lane"/>
+      </Fields>
+      <Methods>
+        <Method name="getHealth" visibility="public" returnType="int"/>
+        <Method name="getAttack" visibility="public" returnType="int"/>
+        <Method name="getArmor" visibility="public" returnType="int"/>
+        <Method name="getMovementSpeed" visibility="public" returnType="int"/>
+        <Method name="doNextAction" visibility="public" returnType="void" isAbstract="true"/>
+        <Method name="canAttackUnit" visibility="public" returnType="Unit" isAbstract="true"/>
+        <Method name="killUnit" visibility="private" returnType="void"/>
+        <Method name="receiveDamage" visibility="public" returnType="boolean">
+          <Argument type="int" name="damagepoints"/>
+        </Method>
+        <Method name="getCost" visibility="public" returnType="int"/>
+        <Method name="getBase" visibility="public" returnType="Base"/>
+        <Method name="setBase" visibility="public" returnType="void">
+          <Argument type="Base" name="base"/>
+        </Method>
+        <Method name="setLane" visibility="public" returnType="void">
+          <Argument type="Lane" name="lane"/>
+        </Method>
+        <Method name="getLane" visibility="public" returnType="Lane"/>
+        <Method name="getPosition" visibility="public" returnType="int"/>
+        <Method name="getCooldown" visibility="public" returnType="int"/>
+        <Method name="getViewRange" visibility="public" returnType="int"/>
+        <Method name="getOwner" visibility="public" returnType="IPlayer"/>
+        <Method name="moveUnit" visibility="public" returnType="void"/>
+      </Methods>
+    </Class>
+    <Enum xPosition="320.0" yPosition="1220.0" package="kingofthehill.domain" name="UnitType" visibility="public">
+      <Literals>
+        <Literal name="DEFENCE"/>
+        <Literal name="MELEE"/>
+        <Literal name="RANGED"/>
+        <Literal name="ALL"/>
+      </Literals>
+    </Enum>
+    <Class xPosition="620.0" yPosition="1220.0" package="kingofthehill.domain" name="Upgrade" visibility="public">
+      <Constructors>
+        <Constructor name="Upgrade" visibility="public">
+          <Argument type="Double" name="modHealth"/>
+          <Argument type="Double" name="modAttack"/>
+          <Argument type="Double" name="modArmor"/>
+          <Argument type="Double" name="modMovementSpeed"/>
+          <Argument type="UnitType" name="targetUnit"/>
+        </Constructor>
+      </Constructors>
+      <Fields>
+        <Field name="modHealth" visibility="private" type="double"/>
+        <Field name="modAttack" visibility="private" type="double"/>
+        <Field name="modArmor" visibility="private" type="double"/>
+        <Field name="modMovementSpeed" visibility="private" type="double"/>
+        <Field name="targetUnit" visibility="private" type="UnitType"/>
+      </Fields>
+      <Methods>
+        <Method name="getModHealth" visibility="public" returnType="double"/>
+        <Method name="getModAttack" visibility="public" returnType="double"/>
+        <Method name="getModArmor" visibility="public" returnType="double"/>
+        <Method name="getModMovementSpeed" visibility="public" returnType="double"/>
+        <Method name="getTargetUnit" visibility="public" returnType="UnitType"/>
+      </Methods>
+    </Class>
+    <Class xPosition="920.0" yPosition="1220.0" package="kingofthehill.UI" name="King_of_the_Hill" visibility="public">
+      <Constructors/>
+      <Fields/>
+      <Methods>
+        <Method name="start" visibility="public" returnType="void">
+          <Argument type="Stage" name="primaryStage"/>
+        </Method>
+        <Method name="main" visibility="public" returnType="void" isStatic="true">
+          <Argument type="String[]" name="args"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <UseRelation source="Player" target="Team" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Player" target="Upgrade" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Base" target="Lane" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="Ranged" target="Unit"/>
+    <UseRelation source="Ranged" target="Unit" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="mysterybox" source="GameManager" target="Mysterybox" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="IPlayer" target="Upgrade" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="IPlayer" target="Team" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="units" source="Base" target="Unit" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Unit" target="Unit" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Unit" target="Base" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="players" source="GameManager" target="Player" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="AI" target="IPlayer"/>
+    <UseRelation source="Lane" target="Unit" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Base" target="Unit" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="units" source="Lane" target="Unit" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List"/>
+    <UseRelation source="AI" target="Team" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Unit" target="Lane" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Team" target="Player" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="units" source="Mysterybox" target="Unit" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List"/>
+    <HasRelation name="baseEnd1" source="Lane" target="Base" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="baseEnd2" source="Lane" target="Base" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="players" source="Team" target="Player" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List"/>
+    <HasRelation name="owner" source="Unit" target="Player" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="base" source="Unit" target="Base" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Lane" target="Base" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Base" target="Player" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="lanes" source="Base" target="Lane" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="lane" source="Unit" target="Lane" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="owner" source="Base" target="Player" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Mysterybox" target="Upgrade" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="targetUnit" source="Upgrade" target="UnitType" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="type" source="Unit" target="UnitType" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Unit" target="Player" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="AI" target="Upgrade" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="Melee" target="Unit"/>
+    <UseRelation source="Melee" target="Unit" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="upgrade" source="Mysterybox" target="Upgrade" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Mysterybox" target="Unit" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="Upgrade" target="UnitType" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="Player" target="IPlayer"/>
+  </ClassDiagramRelations>
+</ClassDiagram>
