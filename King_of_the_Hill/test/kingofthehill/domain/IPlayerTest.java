@@ -7,14 +7,21 @@ package kingofthehill.domain;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 
 /**
  *
  * @author Bas
  */
 public class IPlayerTest 
-{
-   @Test public void Test()
-    {
-    }
+{   
+   @Test public void testGetters()
+   {
+        IPlayer player = new Player();
+   }
+   
+   @Test public void testSetters()
+   {
+       IPlayer player = new Player();
+   }
 }
