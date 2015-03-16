@@ -22,6 +22,24 @@ public class Player implements IPlayer{
     private Team team;
     private int money;
     private Base base;
+    
+    /**
+     * Creates a new player object
+     * @param name Name of the player, may not be empty
+     * @param exp Exp points of the player, may not be lower than 0.
+     */
+    public Player(String name, int exp){
+        if(name.isEmpty() || exp < 0){
+            throw new IllegalArgumentException("Illegal arguments given!");
+        }
+        this.name = name;
+        this.exp = exp;
+        this.score = 0;
+        this.upgrades = new ArrayList();
+        this.team = null;
+        this.money = 100;
+        this.base = null;
+    }
 
     @Override
     public String getName() {

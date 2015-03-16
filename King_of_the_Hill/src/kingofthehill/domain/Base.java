@@ -57,7 +57,7 @@ public class Base {
      * Gets the lane of the given index
      *
      * @param index Number between 0 and 7, with 0 to 3 being a group of lanes
-     * and 4 to 7.
+     * and 4 to 7. 0 to 3 is the group of lanes where this base is baseEnd1.
      * @return Returns the lane if there is one on the given index, else null.
      */
     public Lane getLane(int index) {
@@ -167,5 +167,19 @@ public class Base {
         if (damage > 0) {
             this.healthPoints -= damage;
         }
+    }
+    
+    /**
+     * Gets all the lanes connected to the base
+     * @return Returns a list, will not be null or contain null.
+     */
+    public List<Lane> getLanes(){
+        ArrayList<Lane> list = new ArrayList<>();
+        for(Lane l : this.lanes){
+            if(l != null){
+                list.add(l);
+            }
+        }
+        return list;
     }
 }

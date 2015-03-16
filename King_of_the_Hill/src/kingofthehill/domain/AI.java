@@ -22,6 +22,23 @@ public class AI implements IPlayer {
     private Team team;
     private int money;
     private Base base;
+    
+    /**
+     * Creates a new AI object
+     * @param name May not be null.
+     */
+    public AI(String name){
+        if(name.isEmpty()){
+            throw new IllegalArgumentException("Illegal arguments given!");
+        }
+        this.name = name;
+        this.exp = 12;
+        this.score = 0;
+        this.upgrades = new ArrayList();
+        this.team = null;
+        this.money = 100;
+        this.base = null;
+    }
 
     @Override
     public String getName() {
