@@ -23,8 +23,9 @@ public class MysteryboxTest
          * and get the values placed in it
          */
         
-        // create class
+        // default value
         Mysterybox mbox;
+        IPlayer ai = new AI("computer1");
         
         // 1: normal value
         Upgrade u1 = new Upgrade(10.0, 10.0, 10.0, 10.0, UnitType.ALL);
@@ -38,10 +39,11 @@ public class MysteryboxTest
         
         // 3: normal value
         List<Unit> units1 = new ArrayList<>();
-        fail("Unit cannot be initialised. No unit class!");
+        units1.add(new Melee(100, 10, 10, 10, ai));
         mbox = new Mysterybox(0, null, units1);
         assertEquals(0, mbox.getResourceAmount());
         assertEquals(units1, mbox.getUnits());
+        assertEquals(units1.get(0), mbox.getUnits().get(0));
         
         // 4: normal value
         Upgrade u2 = new Upgrade(5.0, 1.0, 6.0, 10.0, UnitType.DEFENCE);
@@ -52,7 +54,8 @@ public class MysteryboxTest
         // 5: normal value
         Upgrade u3 = new Upgrade(2.0, 4.0, 10.0, 15.0, UnitType.MELEE);
         List<Unit> units2 = new ArrayList<>();
-        fail("Unit cannot be initrailised. No unit class!");
+        units2.add(new Ranged(100, 10, 10, 10, ai, 20));
+        units2.add(new Defence(150, 20, 20, 20, ai));
         mbox = new Mysterybox(0, u3, units2);
         assertEquals(0, mbox.getResourceAmount());
         assertEquals(u3, mbox.getUpgrade());
@@ -60,14 +63,18 @@ public class MysteryboxTest
         
         // 6: normal value
         List<Unit> units3 = new ArrayList<>();
-        fail("Unit cannot be initialised. No unit class!");
+        units3.add(new Melee(100, 10, 10, 10, ai));
+        units3.add(new Melee(100, 10, 10, 10, ai));
+        units3.add(new Melee(100, 10, 10, 10, ai));
         mbox = new Mysterybox(50, null, units3);
         assertEquals(50, mbox.getResourceAmount());
         assertEquals(units3, mbox.getUnits());
         
         // 7: normal value
         List<Unit> units4 = new ArrayList<>();
-        fail("Unit cannot be initialised. No unit class!");
+        units4.add(new Ranged(100, 10, 10, 10, ai, 20));
+        units4.add(new Defence(150, 20, 20, 20, ai));
+        units4.add(new Melee(200, 10, 10, 10, ai));
         Upgrade u4 = new Upgrade(5.0, 5.0, 5.0, 5.0, UnitType.RANGED);
         mbox = new Mysterybox(200, u4, units4);
         assertEquals(200, mbox.getResourceAmount());

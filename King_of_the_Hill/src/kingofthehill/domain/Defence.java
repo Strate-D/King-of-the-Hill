@@ -11,8 +11,8 @@ package kingofthehill.domain;
  */
 public class Defence extends Unit{
     //TODO
-    public Defence(int health, int attack, int armor, UnitType unittype, int movementSpeed, IPlayer owner) {
-        super(health, attack, armor, unittype, movementSpeed, owner);
+    public Defence(int health, int attack, int armor, int movementSpeed, IPlayer owner) {
+        super(health, attack, armor, UnitType.DEFENCE, movementSpeed, owner);
         //TODO
     }
 
