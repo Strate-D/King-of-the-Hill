@@ -44,6 +44,12 @@ public interface IPlayer {
     public boolean checkPassword(String password);
     
     /**
+     * Gets the players team
+     * @return The team of the player, can be null
+     */
+    public Team getTeam();
+    
+    /**
      * Sets the team of the player
      * @param newTeam The new team of the player. Can be null.
      */
@@ -54,4 +60,29 @@ public interface IPlayer {
      * @return Returns the amount of money the player has.
      */
     public int getMoney();
+    
+    /**
+     * Adds money to the players amount of money
+     * @param amount The amount that has to be added, has to be positive
+     */
+    public void addMoney(int amount);
+    
+    /**
+     * Lowers the amount of money of the player
+     * @param amount The amount of money the player has to pay, has to be positive
+     * @return Boolean if the player has enough money or not, if not the money is not lowered
+     */
+    public boolean payMoney(int amount);
+    
+    /**
+     * Gets the base of the player
+     * @return The base of the player, can be null.
+     */
+    public Base getBase();
+    
+    /**
+     * Sets the base for the player.
+     * @param newBase The new base, can be null.
+     */
+    public void setBase(Base newBase);
 }

@@ -6,7 +6,7 @@
 package kingofthehill.domain;
 
 /**
- *
+ * Class containing all the information about a Melee unit. Extends Unit.
  * @author Jur
  */
 public class Melee extends Unit {
