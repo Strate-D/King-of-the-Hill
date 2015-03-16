@@ -56,18 +56,25 @@ public class GameManager {
      * @param unit The unit that has to be placed. May not be null.
      * @param index Number between 0 and 7, with 0 to 3 being a group of lanes
      * and 4 to 7. 0 to 3 is the group of lanes where this base is baseEnd1. Must be between 0 and 7.
+     * @param cost The cost of the unit, must be higher than 0.
      */
-    public void placeUnitAtLane(IPlayer player, Unit unit, int index){
-        if(player == null || unit == null || index < 0 || index > 7){
-            return;
+    public boolean placeUnitAtLane(IPlayer player, Unit unit, int index, int cost){
+        if(player == null || unit == null || index < 0 || index > 7 || cost < 1){
+            return false;
+        }
+        if(player.getMoney() < cost){
+            return false;
         }
         Base base = player.getBase();
         if (base != null){
             Lane l = base.getLane(index);
             if(l != null){
                 l.addUnit(unit);
+                player.payMoney(cost);
+                return true;
             }
         }
+        return false;
     }
     
     /**
