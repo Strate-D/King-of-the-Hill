@@ -26,7 +26,7 @@ public class AITest
          */
         
         // default value
-        IPlayer ai = new AI();
+        IPlayer ai = new AI("computer1");
         
         // 1: normal value
         Team team1 = new Team(1, null);
@@ -45,7 +45,7 @@ public class AITest
          */
         
         // default value
-        IPlayer ai = new AI();
+        IPlayer ai = new AI("computer1");
         
         // 1: normal value
         assertEquals(true, ai.checkPassword("Welkom01"));
