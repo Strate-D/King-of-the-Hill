@@ -28,7 +28,7 @@ public class King_of_the_Hill extends Application {
             
             @Override
             public void handle(ActionEvent event) {
-                Player p = new Player();
+                Player p = new Player("Henkie", 10);
                 try{
                     p.getMoney();
                 } catch(Exception e) {

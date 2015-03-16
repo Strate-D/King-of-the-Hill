@@ -21,7 +21,7 @@ public class BaseTest
          */
         
         // 1: normal value
-        IPlayer player = new Player();
+        IPlayer player = new Player("Henkie", 10);
         Base b = new Base(player);
         assertEquals(player, b.getOwner());
         assertEquals(100, b.getHealthPoints());
