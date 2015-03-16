@@ -18,8 +18,8 @@ public class Team {
     
     /**
      * Creates a new Team object
-     * @param nr Teamnumber. Must be bigger then 0
-     * @param players List of players in the team. May be null.
+     * @param nr Teamnumber. Must be bigger than 0
+     * @param players List of players in the team. May not be null, may be empty.
      * @throws IllegalArgumentException 
      */
     public Team(int nr, List<IPlayer> players) throws IllegalArgumentException{
@@ -53,7 +53,7 @@ public class Team {
     /**
      * Adds a new player to the team
      * @param newplayer Must be not null
-     * @return If the player is added or not. Will also return true if the player also was in the team.
+     * @return If the player is added or not. Will also return true if the player was in the team.
      */
     public boolean addPlayer(IPlayer newplayer){
         if(newplayer == null){
