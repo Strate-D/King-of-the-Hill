@@ -145,6 +145,11 @@ public abstract class Unit {
         }
     }
 
+    /**
+     * Adds a amount of damage to the Unit
+     * @param damagepoints Amount of damage that is dealt.
+     * @return If the unit is killed or not
+     */
     public boolean receiveDamage(int damagepoints) {
         int resultingDamage = damagepoints - this.armor;
         if (resultingDamage > 0) {
