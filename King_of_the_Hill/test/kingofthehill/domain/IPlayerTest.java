@@ -12,7 +12,7 @@ import org.junit.Before;
 
 /**
  *
- * @author Bas
+ * @author Dennis
  */
 public class IPlayerTest 
 {   
@@ -56,7 +56,7 @@ public class IPlayerTest
         // 4: fail test
         try{
             player = new Player(name, -1);
-            fail("Player without exp is created");
+            fail("Player with negative exp is created");
         }
         catch(IllegalArgumentException exc){}
         
@@ -103,7 +103,7 @@ public class IPlayerTest
         */
        
        // default value
-       String name = "Berta";
+       String name = "Bertha";
        
        // 1: normal player test
        IPlayer player = new Player(name, 10);
