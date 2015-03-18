@@ -1,0 +1,18 @@
+AI				-> 	testSetters() 			-> 	fail test
+BASE	 			->	testRemoveUnit() 			-> 	fail test
+					testRecieveDamage()		->	fail test
+GAMEMANAGER		->	testGenerateMysterybox()	->	all tests
+IPLAYER			->	testSetter()				->	fail test
+LANE				->	testAddUnit()				->	AddUnit() klopt niet
+					testRemoveUnit()			-> 	RemoveUnit() klopt niet
+MYSTERYBOX		->	testGetters()				-> 	fail test
+PLAYER			-> 	testSetters()				->	fail test
+					testGetters()				-> 	fail test
+					testCheckPassword()		->	checkPassword klopt niet
+TEAM				->	testGetters()				->	test voor player object
+					testAddPlayer()			->	test voor player object
+UNIT				->	testGetters()				->	all tests
+					testKillUnit()			-> 	all tests
+					testRecieveDamage()		->	all tests
+					testMoveUnit()			-> 	all tests
+UPGRADE			->	testGetters()				->	fail test
