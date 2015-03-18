@@ -120,17 +120,17 @@ public class PlayerTest
         
         // 1: normal test
         if(!player.payMoney(10))
-            fail("Not payed");
+            fail("Not paid");
         assertEquals(90, player.getMoney());
         
         // 2: normal test
         if(!player.payMoney(90))
-            fail("Not payed");
+            fail("Not paid");
         assertEquals(0, player.getMoney());
         
         // 3: normal test
         if(player.payMoney(10))
-            fail("There is no money availible");
+            fail("There is no money available");
         assertEquals(0, player.getMoney());
         
         // 4: fail test

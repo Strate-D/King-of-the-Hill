@@ -120,17 +120,17 @@ public class AITest
         
         // 1: normal test
         if(!ai.payMoney(10))
-            fail("Not payed");
+            fail("Not paid");
         assertEquals(90, ai.getMoney());
         
         // 2: normal test
         if(!ai.payMoney(90))
-            fail("Not payed");
+            fail("Not paid");
         assertEquals(0, ai.getMoney());
         
         // 3: normal test
         if(ai.payMoney(10))
-            fail("There is no money availible");
+            fail("There is no money available");
         assertEquals(0, ai.getMoney());
         
         // 4: fail test
