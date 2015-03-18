@@ -31,9 +31,18 @@ public class LaneTest
         assertEquals(0, l.getUnits().size());
         
         // 2: fail test
-        Lane l2 = new Lane(null, null);
-        assertNotNull(l2.getBaseEnd1());
-        assertNotNull(l2.getBaseEnd2());
+        try{
+            Lane l2 = new Lane(null, base2);
+            fail("baseEnd1 cannot be null");
+        }
+        catch(IllegalArgumentException exc) {}
+        
+        // 3: fail test
+        try{
+            Lane l2 = new Lane(base1, null);
+            fail("baseEnd2 cannot be null");
+        }
+        catch(IllegalArgumentException exc) {}
     }
     
     @Test public void testAddUnit()
