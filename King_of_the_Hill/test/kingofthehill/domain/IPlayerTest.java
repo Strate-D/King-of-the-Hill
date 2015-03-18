@@ -75,7 +75,7 @@ public class IPlayerTest
        */
        
        // default value
-       String name = "Rickske";
+       String name = "Rick";
        IPlayer player = new Player(name, 10);
        Base base = new Base(player);
        ArrayList<IPlayer> players = new ArrayList<>();
