@@ -8,7 +8,6 @@ package kingofthehill.domain;
 import java.util.ArrayList;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Before;
 
 /**
  *
@@ -94,6 +93,20 @@ public class IPlayerTest
        assertEquals(base, ai.getBase());
        ai.setTeam(team);
        assertEquals(team, ai.getTeam());
+       
+       // 3: fail test
+       try{
+           ai.setBase(null);
+           fail("Base cannot be null");
+       }
+       catch(IllegalArgumentException exc) {}
+       
+       //4: fail test
+       try{
+           player.setTeam(null);
+           fail("team cannot be null");
+       }
+       catch(IllegalArgumentException exc) {}
    }
    
    @Test public void testAddPayMoney()

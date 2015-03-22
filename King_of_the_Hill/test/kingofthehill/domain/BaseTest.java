@@ -38,9 +38,7 @@ public class BaseTest
             b = new Base(null);
             fail("Owner cannot be null");
         }
-        catch (IllegalArgumentException exc)
-        {
-        }
+        catch (IllegalArgumentException exc) {}
         
         // 3: fail test
         assertNull(b.getLane(-1));
@@ -102,6 +100,16 @@ public class BaseTest
         assertEquals(1, b1.getUnits().size());
         b1.removeUnit(u);
         assertEquals(0, b1.getUnits().size());
+        
+        // 2: remove unit that is null
+        b1.setUnit(0, u);
+        b1.removeUnit(null);
+        assertEquals(1, b1.getUnits().size());
+        
+        // 3: remove unit that doesnt exist in b1
+        u = new Ranged(20, 20, 20, 20, player2, 10);
+        b1.removeUnit(u);
+        assertEquals(1, b1.getUnits().size());
     }
     
     @Test public void receiveDamage()
@@ -118,7 +126,11 @@ public class BaseTest
         assertEquals(100, b.getHealthPoints());
         b.receiveDamage(10);
         assertEquals(90, b.getHealthPoints());
-        b.receiveDamage(91);
+        b.receiveDamage(90);
         assertEquals(0, b.getHealthPoints());
+        
+        // 2: negative damage
+        b.receiveDamage(-1);
+        assertEquals(0, b.getHealthPoints());     
     }
 }
