@@ -39,6 +39,6 @@ public class Defence extends Unit{
     @Override
     public Unit canAttackUnit() {
         
-        return u;
+        return null;
     }
 }
