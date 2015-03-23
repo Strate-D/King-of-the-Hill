@@ -1,18 +1,18 @@
-AI				-> 	testSetters() 			-> 	fail test
-BASE	 			->	testRemoveUnit() 			-> 	fail test
-					testRecieveDamage()		->	fail test
-GAMEMANAGER		->	testGenerateMysterybox()	->	all tests
-IPLAYER			->	testSetter()				->	fail test
-LANE				->	testAddUnit()				->	AddUnit() klopt niet
-					testRemoveUnit()			-> 	RemoveUnit() klopt niet
-MYSTERYBOX		->	testGetters()				-> 	fail test
-PLAYER			-> 	testSetters()				->	fail test
-					testGetters()				-> 	fail test
-					testCheckPassword()		->	checkPassword klopt niet
-TEAM				->	testGetters()				->	test voor player object
-					testAddPlayer()			->	test voor player object
+AI				-> 	testSetters() 			-> 	fail test					Done (Bas C)
+BASE	 			->	testRemoveUnit() 			-> 	fail test					Done (Dennis)
+					testRecieveDamage()		->	fail test					Done (Dennis)
+GAMEMANAGER		->	testGenerateMysterybox()	->	all tests					Removed (Bas C)
+IPLAYER			->	testSetter()				->	fail test					Done (Dennis)
+LANE				->	testAddUnit()				->	AddUnit() klopt niet			Klopt wel (Bas C + Jur)
+					testRemoveUnit()			-> 	RemoveUnit() klopt niet		Klopt wel (Bas C + Jur)
+MYSTERYBOX		->	testGetters()				-> 	fail test					Done (Bas C)
+PLAYER			-> 	testSetters()				->	fail test					Done (Bas C)
+					testGetters()				-> 	fail test					Done (Bas C)
+					testCheckPassword()		->	checkPassword klopt niet		Klopt wel (Bas C + Jur)
+TEAM				->	testGetters()				->	test voor player object		Done (Bas C)
+					testAddPlayer()			->	test voor player object		Done (Bas C)
 UNIT				->	testGetters()				->	all tests
 					testKillUnit()			-> 	all tests
 					testRecieveDamage()		->	all tests
 					testMoveUnit()			-> 	all tests
-UPGRADE			->	testGetters()				->	fail test
+UPGRADE			->	testGetters()				->	fail test					Done (Bas C)

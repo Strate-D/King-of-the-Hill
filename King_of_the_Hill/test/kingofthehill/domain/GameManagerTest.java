@@ -44,12 +44,7 @@ public class GameManagerTest
         }
         catch (NullPointerException ecx) {}
     }
-    
-    @Test public void testGenerateMysterybox()
-    {
-        fail("No javadoc written!");
-    }
-    
+
     @Test public void testPlaceUnitAtLane()
     {
         // create values

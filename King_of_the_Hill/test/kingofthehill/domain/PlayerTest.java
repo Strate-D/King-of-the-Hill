@@ -41,7 +41,7 @@ public class PlayerTest
         try
         {
             IPlayer player2 = new Player("", 0);
-            fail("AI name cannot be empty!");
+            fail("Speler name cannot be empty!");
         }
         catch (IllegalArgumentException exc)
         {
@@ -69,6 +69,30 @@ public class PlayerTest
         Base base = new Base(player1);
         player1.setBase(base);
         assertEquals(base, player1.getBase());
+        
+        // 3: fail test
+        try
+        {
+            team1 = new Team(1, null);
+            fail ("Playerlist cannot be null");
+        }
+        catch (NullPointerException ecx) {}
+        
+        // 4: fail test
+        try
+        {
+            team1 = new Team(-1, new ArrayList<>());
+            fail("Teamnummer cannot be negative");
+        }
+        catch (IllegalArgumentException ecx) {}
+        
+        // 5: fail test
+        try
+        {
+            base = new Base(null);
+            fail ("Player cannot be null");
+        }
+        catch (NullPointerException ecx) {}
     }
     
     @Test public void testCheckPassword()
