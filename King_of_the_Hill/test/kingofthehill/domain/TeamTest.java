@@ -25,6 +25,7 @@ public class TeamTest
         // default value
         IPlayer player1 = new AI("computer1");
         IPlayer player2 = new AI("computer2");
+        IPlayer player3 = new Player("Bas", 10);
         ArrayList<IPlayer> players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
@@ -61,6 +62,11 @@ public class TeamTest
         Team team4 = new Team(4, new ArrayList<>());
         assertEquals(4, team4.getNr());
         assertEquals(new ArrayList<>(), team4.getPlayers());
+        
+        // 5: normal test
+        Team team5 = new Team(5, new ArrayList());
+        team5.addPlayer(player3);
+        assertEquals(player3, team1.getPlayers().get(2));
     }
     
     @Test public void testAddPlayer()
@@ -72,6 +78,7 @@ public class TeamTest
         // default value
         IPlayer ai1 = new AI("Computer1");
         IPlayer ai2 = new AI("Computer2");
+        IPlayer player = new Player("Bas", 10);
         ArrayList<IPlayer> players = new ArrayList<>();
         players.add(ai1);
         players.add(ai2);
@@ -96,5 +103,9 @@ public class TeamTest
         // 3: fail test
         assertEquals(false, team2.addPlayer(null));
         
+        // 4: normal test
+        Team team3 = new Team(3, new ArrayList<>());
+        team3.addPlayer(player);
+        assertEquals(player, team3.getPlayers().get(2));
     }
 }

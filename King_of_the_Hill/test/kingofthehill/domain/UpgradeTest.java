@@ -80,7 +80,6 @@ public class UpgradeTest
         assertEquals(UnitType.RANGED, upg.getTargetUnit());
         
         // 7: fail test (set null values)
-        
         Double d = null;
         try
         {
@@ -91,5 +90,14 @@ public class UpgradeTest
         {
         }
         
+        // *: fail test : null value
+        try
+        {
+            upg = new Upgrade(d, d, d, d, UnitType.RANGED);
+            fail("(null) values are not accepted");
+        }
+        catch (IllegalArgumentException exc)
+        {
+        }
     }
 }
