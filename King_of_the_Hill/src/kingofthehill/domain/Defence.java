@@ -10,7 +10,7 @@ package kingofthehill.domain;
  * @author Jur
  */
 public class Defence extends Unit{
-    //TODO
+    
     public Defence(int health, int attack, int armor, int movementSpeed, IPlayer owner) {
         super(health, attack, armor, UnitType.DEFENCE, movementSpeed, owner);
         //TODO

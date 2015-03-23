@@ -1,0 +1,13 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+
+}
+
+#pane {
+    -fx-background-image: url("mainmenubackground.jpg");
+    -fx-background-repeat: stretch;
+    -fx-background-position: center center;
+}
