@@ -84,16 +84,131 @@ public class UnitTest
         // default value
         IPlayer ai = new AI("computer1");
         IPlayer player = new Player("speler1", 10);
-        Melee m1 = new Melee(10, 10, 10, 10, ai);
-        Melee m2 = new Melee(11, 11, 11, 11, player);
-        Ranged r1 = new Ranged(12, 12, 12, 12, ai, 12);
-        Ranged r2 = new Ranged(13, 13, 13, 13, player, 13);
-        Defence d1 = new Defence(14, 14, 14, 14, ai);
-        Defence d2 = new Defence(15, 15, 15 ,15, player);
+        Unit m1 = new Melee(10, 10, 10, 10, ai);
+        Unit m2 = new Melee(11, 11, 11, 11, player);
+        Unit r1 = new Ranged(12, 12, 12, 12, ai, 12);
+        Unit r2 = new Ranged(13, 13, 13, 13, player, 13);
+        Unit d1 = new Defence(14, 14, 14, 14, ai);
+        Unit d2 = new Defence(15, 15, 15 ,15, player);
+        // Melee Unit Tests
+        // m1
+        try {
+            m1.receiveDamage(-3);
+                fail("Unit can't take negative damage");
+            
+        }
+        catch(IllegalArgumentException e){}
+        assertFalse(m1.receiveDamage(1)); // False Melee Unit doesn't die.
+        assertTrue(m1.receiveDamage(1000)); // True Melee Unit dies.
+        assertNull(m1); // m1 should be null since it died.
+        // m2
+        try {
+            m2.receiveDamage(-3);
+                fail("Unit can't take negative damage");
+            
+        }
+        catch(IllegalArgumentException e){}
+        assertFalse(m2.receiveDamage(10)); // False Melee Unit barely doesn't die
+        assertTrue(m2.receiveDamage(1)); // True Melee Unit dies.
+        assertNull(m2); // m2 should be null since it died.
+
+        // Ranged Unit Tests  
+        // r1
+        try{
+            r1.receiveDamage(-5);
+            fail("Unit can't take negative damage");
+        }
+        catch (IllegalArgumentException e) {}
+        assertFalse(r1.receiveDamage(0)); // False Ranged Unit doesn't die.
+        assertTrue(r1.receiveDamage(500)); // True Ranged Unit dies.
+        assertNull(r1); // r1 should be null since it died.
+        // r2
+        try{
+            r2.receiveDamage(-25);
+            fail("Unit can't take negative damage");
+        }
+        catch (IllegalArgumentException e) {}
+        assertFalse(r2.receiveDamage(12)); // False Ranged Unit barely doesn't die.
+        assertTrue(r2.receiveDamage(12)); // True Ranged Unit dies.
+        assertNull(r2); // r2 should be null since it died.
+        
+        // Defence Unit Tests  
+        // d1
+        try{
+           d1.receiveDamage(-5);
+               fail("Unit can't take negative damage");
+           
+        }
+        catch (IllegalArgumentException e) {}
+        assertFalse(d1.receiveDamage(6)); // False Ranged Unit doesn't die.
+        assertTrue(d1.receiveDamage(500)); // True Ranged Unit dies.
+        assertNull(d1); // r1 should be null since it died.
+        // d2
+        try{
+           d2.receiveDamage(-15);
+               fail("Unit can't take negative damage");
+           
+        }
+        catch (IllegalArgumentException e) {}
+        assertFalse(d2.receiveDamage(13)); // False Ranged Unit barely doesn't die.
+        assertTrue(d2.receiveDamage(12)); // True Ranged Unit dies.
+        assertNull(d2); // r2 should be null since it died.
+        
     }
     
     @Test public void testRecieveDamage()
     {
+        /**
+         * Test the method KillUnit with the 3 unit classes
+         */
+        
+        // default value
+        IPlayer ai = new AI("computer1");
+        IPlayer player = new Player("speler1", 10);
+        Unit m1 = new Melee(10, 10, 10, 10, ai);
+        Unit m2 = new Melee(11, 11, 11, 11, player);
+        Unit r1 = new Ranged(12, 12, 12, 12, ai, 12);
+        Unit r2 = new Ranged(13, 13, 13, 13, player, 13);
+        Unit d1 = new Defence(14, 14, 14, 14, ai);
+        Unit d2 = new Defence(15, 15, 15 ,15, player);
+        // Melee Unit Tests
+        // m1
+        try {
+            m1.receiveDamage(-3);
+            fail("Unit can't take negative damage");
+            
+        }
+        catch(IllegalArgumentException e){}
+        m1.receiveDamage(11);
+        assertEquals(9, m1.getHealth() - m1.getDamage()); 
+        
+        // Ranged Unit Tests
+        // r1
+        try {
+            r1.receiveDamage(-6);
+            fail("Unit can't take negative damage");
+        }
+        catch(IllegalArgumentException e) {}
+        r1.receiveDamage(15);
+        assertEquals(9, r1.getHealth() - r1.getDamage());
+        
+        // Defence Unit Tests
+        // d1
+        try {
+            d1.receiveDamage(-2);
+            fail("Unit can't take negative damage");
+        }
+        catch(IllegalArgumentException e){}
+        d1.receiveDamage(19);
+        assertEquals(9, d1.getHealth() - d1.getDamage());
+        // d2
+        try {
+            d2.receiveDamage(-124);
+            fail("Unit can't take negative damage");
+        }
+        catch(IllegalArgumentException e){}
+        d2.receiveDamage(20);
+        assertEquals(10, d2.getHealth() - d2.getDamage());
     }
     
     @Test public void testMoveUnit()

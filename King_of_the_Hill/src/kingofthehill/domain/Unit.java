@@ -151,6 +151,9 @@ public abstract class Unit {
      * @return If the unit is killed or not
      */
     public boolean receiveDamage(int damagepoints) {
+        if(damagepoints < 0){
+            throw new IllegalArgumentException("Unit can't take negative damage");
+        }
         int resultingDamage = damagepoints - this.armor;
         if (resultingDamage > 0) {
             this.damage = this.damage + resultingDamage;
@@ -176,7 +179,13 @@ public abstract class Unit {
             return 1;
         }
     }
-
+    /**
+     * Returns the damage that was done to the unit
+     * @return The damage done to the unit.
+     */
+    public int getDamage() {
+        return this.damage;
+    }
     /**
      * Returns the base object of the unit.
      *
