@@ -83,17 +83,37 @@ public class UpgradeTest
         Double d = null;
         try
         {
-            upg = new Upgrade(d, d, d, d, UnitType.RANGED);
+            upg = new Upgrade(d, 10.0, 10.0, 10.0, UnitType.RANGED);
             fail("(null) values are not accepted");
         }
         catch (IllegalArgumentException exc)
         {
         }
         
-        // *: fail test : null value
+        // 8: fail test : null value
         try
         {
-            upg = new Upgrade(d, d, d, d, UnitType.RANGED);
+            upg = new Upgrade(10.0, d, 10.0, 10.0, UnitType.RANGED);
+            fail("(null) values are not accepted");
+        }
+        catch (IllegalArgumentException exc)
+        {
+        }
+        
+        // 9: fail test : null value
+        try
+        {
+            upg = new Upgrade(10.0, 10.0, d, 10.0, UnitType.RANGED);
+            fail("(null) values are not accepted");
+        }
+        catch (IllegalArgumentException exc)
+        {
+        }
+        
+        // 10: fail test : null value
+        try
+        {
+            upg = new Upgrade(10.0, 10.0, 10.0, d, UnitType.RANGED);
             fail("(null) values are not accepted");
         }
         catch (IllegalArgumentException exc)
