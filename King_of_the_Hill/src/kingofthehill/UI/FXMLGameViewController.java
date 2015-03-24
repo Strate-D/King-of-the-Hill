@@ -26,10 +26,10 @@ import javafx.scene.paint.Color;
  * @author Jur
  */
 public class FXMLGameViewController implements Initializable {
-    
+
     @FXML
     private Canvas canvas;
-    
+
     Image castle1, castle2, castle3, castle4;
     Image dirtField1, dirtField2;
     Image corner1, corner2, corner3, corner4;
@@ -60,13 +60,14 @@ public class FXMLGameViewController implements Initializable {
         //Draw field
         drawBackground();
         drawField();
-    }    
-    
+    }
+
     /**
      * Go back to the main menu when the quit button is pressed
-     * @param e 
+     *
+     * @param e
      */
-    public void handleQuitButton(ActionEvent e){
+    public void handleQuitButton(ActionEvent e) {
         try {
             //Load next window
             Parent window1;
@@ -76,7 +77,7 @@ public class FXMLGameViewController implements Initializable {
             Logger.getLogger(FXMLMainController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * Draws the background of the game
      */
@@ -94,11 +95,11 @@ public class FXMLGameViewController implements Initializable {
         //Draw background
         canvas.getGraphicsContext2D().drawImage(background, 8, 8, 884, 884);
     }
-    
+
     /**
      * Draws the field of the game
      */
-    private void drawField(){
+    private void drawField() {
         //Draw castles
         canvas.getGraphicsContext2D().drawImage(castle1, 20, 20, 300, 300);
         canvas.getGraphicsContext2D().drawImage(castle2, 580, 20, 300, 300);
@@ -110,14 +111,17 @@ public class FXMLGameViewController implements Initializable {
         canvas.getGraphicsContext2D().drawImage(dirtField2, 75, 317, 145, 265);
         canvas.getGraphicsContext2D().drawImage(dirtField2, 680, 317, 145, 265);
     }
-    
+
     /**
      * Gives the coordinates where the mouse is clicked
-     * @param e 
+     *
+     * @param e
      */
     public void giveCoordinates(MouseEvent e) {
+        long start = System.currentTimeMillis();
         drawBackground();
         drawField();
+        canvas.getGraphicsContext2D().fillText("Drawing time: " + (System.currentTimeMillis() - start) + "milliseconds", 460, 460);
         canvas.getGraphicsContext2D().fillText("x: " + e.getX() + " y: " + e.getY(), 450, 450);
     }
 }

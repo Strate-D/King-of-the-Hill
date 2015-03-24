@@ -15,7 +15,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -33,14 +32,14 @@ public class FXMLMainController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
     }
-    
+
     /**
      * Go to the gameview when the play button is pressed
-     * @param e 
+     *
+     * @param e
      */
-    public void handlePlayButton(ActionEvent e){
+    public void handlePlayButton(ActionEvent e) {
         try {
             //Load next window
             Parent window1;
@@ -50,12 +49,13 @@ public class FXMLMainController implements Initializable {
             Logger.getLogger(FXMLMainController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * Exit game when pressed on the button
-     * @param e 
+     *
+     * @param e
      */
-    public void handleQuitButton(ActionEvent e){
+    public void handleQuitButton(ActionEvent e) {
         System.exit(1);
     }
 
