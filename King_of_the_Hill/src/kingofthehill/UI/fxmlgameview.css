@@ -12,3 +12,10 @@
     -fx-background-position: center center;
     -fx-background-size: 100%;
 }
+
+#button-small {
+    -fx-background-image: url("button-small.png");
+    -fx-background-repeat: stretch;
+    -fx-background-position: center center;
+    -fx-background-size: 100%;
+}
