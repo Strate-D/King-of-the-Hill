@@ -102,12 +102,28 @@ public class AI implements IPlayer {
     
     public int getDefenceAtLane(int lane)
     {
-        return defenceAtLanes[lane];
+        int count  = 0;
+        for(int i = 0; i<4; i++)
+        {
+            if(getBase().getUnit(lane * 4 + i) != null)
+                count ++;
+        }     
+        
+        defenceAtLanes[lane] = count;
+        return count;
     }
     
     public int getAttackAtLane(int lane)
     {
-        return attackAtLanes[lane];
+        int count = 0;
+        for(int i = 0; i<this.getBase().getLane(lane).getUnits().size(); i++)
+        {
+            if(this.getBase().getLane(lane).getUnits().get(i).getOwner() == this)
+                count ++;
+        }
+        
+        attackAtLanes[lane] = count;
+        return count;
     }
     
     public int getRandomSeed()
