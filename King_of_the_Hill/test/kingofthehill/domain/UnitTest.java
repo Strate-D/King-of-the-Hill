@@ -73,6 +73,8 @@ public class UnitTest
         u2.setLane(l);
         assertEquals(l, u2.getLane());
         assertNull(u2.getBase());
+
+        assertEquals(null, u2.getBase());
         assertEquals(100, u2.getPosition());
         
         // 3: fail test
