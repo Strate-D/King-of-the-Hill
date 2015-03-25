@@ -82,7 +82,12 @@ public class AI implements IPlayer {
 
     @Override
     public void setTeam(Team newTeam) {
-        this.team = newTeam;
+        if(newTeam != null){
+            this.team = newTeam;
+        }
+        else{
+            throw new NullPointerException();
+        }
     }
 
     @Override
@@ -159,7 +164,12 @@ public class AI implements IPlayer {
 
     @Override
     public void setBase(Base newBase) {
-        this.base = newBase;
+        if(newBase != null){
+            this.base = newBase;
+        }
+        else{
+            throw new NullPointerException();
+        }
     }
     
     public void setRandomSeed(int seed)
