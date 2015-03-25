@@ -126,7 +126,7 @@ public class BaseTest
         assertEquals(100, b.getHealthPoints());
         b.receiveDamage(10);
         assertEquals(90, b.getHealthPoints());
-        b.receiveDamage(90);
+        b.receiveDamage(91);
         assertEquals(0, b.getHealthPoints());
         
         // 2: negative damage

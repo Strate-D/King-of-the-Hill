@@ -8,6 +8,7 @@ package kingofthehill.domain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Class that manages the game. Contains all the units and objects that are part
@@ -102,6 +103,49 @@ public class GameManager {
     private void generateMysterybox() {
         throw new UnsupportedOperationException("TODO generateMysterybox");
     }
+    
+    /**
+     * Does actions for the AI player. 
+     * @param player The AI player that needs to do something
+     */
+    private void operateAIPlayer(AI player)
+    {
+        // Let the AI decide what to do
+        for(int i = 0; i<8; i++)
+        {
+            int currentDefence = player.areDefenceUnitsAtLane(i);
+            if(currentDefence < 2)
+            {
+                // Check if the AI has lost units
+                int oldDefence = player.getDefenceAtLane(i);
+                if(oldDefence > currentDefence)
+                {
+                    // The AI has lost units
+                    Random rand = new Random(player.getRandomSeed());
+                    
+                    // Get a new place to spawn a defence unit
+                    int randomNewDefenceSpot = i * 4 + rand.nextInt(2);
+                    while(player.getBase().getUnit(randomNewDefenceSpot) != null)
+                        randomNewDefenceSpot = i * 4 + rand.nextInt(2);
+                    
+                    this.placeUnitAtBase(
+                            player, 
+                            new Defence(150, 10, 10, 0, player),
+                            randomNewDefenceSpot,
+                            20);
+                    
+                    
+                }
+            }
+            else
+            {
+                // Decide what to do with the rest of the money:
+                // - Spawn attack unit
+                // - Spawn extra defence unit
+                // - Bid on the Mysterybox
+            }
+        }
+    }
 
     /**
      * Does a step in the game (1/30 of a second).
@@ -114,6 +158,13 @@ public class GameManager {
         }
         //Operate all units
         operateUnits();
+        
+        //Operate all AI's
+        //Check if there are any AI players
+        for(IPlayer player : players)
+            if(player instanceof AI)
+                // The IPlayer is AI. Operate the AI player
+                operateAIPlayer((AI)player);
 
         //Keep track of timers
         this.resourceTimer++;

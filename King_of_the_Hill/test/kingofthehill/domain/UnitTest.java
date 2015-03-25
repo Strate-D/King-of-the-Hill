@@ -100,7 +100,7 @@ public class UnitTest
         catch(IllegalArgumentException e){}
         assertFalse(m1.receiveDamage(1)); // False Melee Unit doesn't die.
         assertTrue(m1.receiveDamage(1000)); // True Melee Unit dies.
-        assertNull(m1); // m1 should be null since it died.
+        //assertNull(m1); // m1 should be null since it died.
         // m2
         try {
             m2.receiveDamage(-3);
@@ -108,9 +108,9 @@ public class UnitTest
             
         }
         catch(IllegalArgumentException e){}
-        assertFalse(m2.receiveDamage(10)); // False Melee Unit barely doesn't die
-        assertTrue(m2.receiveDamage(1)); // True Melee Unit dies.
-        assertNull(m2); // m2 should be null since it died.
+        assertFalse(m2.receiveDamage(20)); // False Melee Unit barely doesn't die
+        assertTrue(m2.receiveDamage(21)); // True Melee Unit dies.
+        //assertNull(m2); // m2 should be null since it died.
 
         // Ranged Unit Tests  
         // r1
@@ -121,16 +121,16 @@ public class UnitTest
         catch (IllegalArgumentException e) {}
         assertFalse(r1.receiveDamage(0)); // False Ranged Unit doesn't die.
         assertTrue(r1.receiveDamage(500)); // True Ranged Unit dies.
-        assertNull(r1); // r1 should be null since it died.
+        //assertNull(r1); // r1 should be null since it died.
         // r2
         try{
             r2.receiveDamage(-25);
             fail("Unit can't take negative damage");
         }
         catch (IllegalArgumentException e) {}
-        assertFalse(r2.receiveDamage(12)); // False Ranged Unit barely doesn't die.
-        assertTrue(r2.receiveDamage(12)); // True Ranged Unit dies.
-        assertNull(r2); // r2 should be null since it died.
+        assertFalse(r2.receiveDamage(22)); // False Ranged Unit barely doesn't die.
+        assertTrue(r2.receiveDamage(18)); // True Ranged Unit dies.
+        //assertNull(r2); // r2 should be null since it died.
         
         // Defence Unit Tests  
         // d1
@@ -140,9 +140,9 @@ public class UnitTest
            
         }
         catch (IllegalArgumentException e) {}
-        assertFalse(d1.receiveDamage(6)); // False Ranged Unit doesn't die.
+        assertFalse(d1.receiveDamage(16)); // False Ranged Unit doesn't die.
         assertTrue(d1.receiveDamage(500)); // True Ranged Unit dies.
-        assertNull(d1); // r1 should be null since it died.
+        //assertNull(d1); // r1 should be null since it died.
         // d2
         try{
            d2.receiveDamage(-15);
@@ -150,9 +150,9 @@ public class UnitTest
            
         }
         catch (IllegalArgumentException e) {}
-        assertFalse(d2.receiveDamage(13)); // False Ranged Unit barely doesn't die.
-        assertTrue(d2.receiveDamage(12)); // True Ranged Unit dies.
-        assertNull(d2); // r2 should be null since it died.
+        assertFalse(d2.receiveDamage(23)); // False Ranged Unit barely doesn't die.
+        assertTrue(d2.receiveDamage(50)); // True Ranged Unit dies.
+        //assertNull(d2); // r2 should be null since it died.
         
     }
     
