@@ -17,9 +17,10 @@ public class AITesting {
     public static void main(String[] args) 
     {
         GameManager gm = new GameManager(new Player("Host", 20));
+        //gm.setDebugLevelAI(true);
         
         AI ai = (AI)gm.getPlayers().get(1);
-        for(int i = 0; i<5; i++)
+        for(int i = 0; i<10; i++)
         {
             System.out.println();
             System.out.println();
@@ -49,6 +50,12 @@ public class AITesting {
     
     private static String checkPlayerBaseSpot(AI player, int spot)
     {
-        return (player.getBase().getUnit(spot) == null ? " " : "D");
+        Unit u = player.getBase().getUnit(spot);
+        if(u == null)
+            return " ";
+        else if(u instanceof Defence)
+            return "D";
+        else
+            return "A";
     }
 }

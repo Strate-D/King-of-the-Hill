@@ -96,6 +96,11 @@ public class GameManager {
                         u.doNextAction();
                     }
                 }
+                
+                for(Unit u : b.getUnits())
+                {
+                    u.doNextAction();
+                }
             }
         }
     }
@@ -179,15 +184,24 @@ public class GameManager {
             {
                //Spawn attack unit
                 OutputDebugInfo(player, "--Place an attack unit", "");
-                this.placeUnitAtLane(player,
+                this.placeUnitAtBase(player,
                         new Melee(10, 10, 10, 10, player), 
-                        0, 
+                        3, 
                         1);
             }
             else if(toDoAction == 1)
             {
                 // Spawn extra defence unit
                 OutputDebugInfo(player, "--Place an extra defence unit", "");
+                
+                int randomNewDefenceSpot = Math.abs(getNextRandom(player, 0, 31));
+                while(player.getBase().getUnit(randomNewDefenceSpot) != null || randomNewDefenceSpot % 4 == 3)
+                    randomNewDefenceSpot = Math.abs(getNextRandom(player, 0, 31));
+                
+                this.placeUnitAtBase(player,
+                        new Defence(10, 10, 10, 10, player), 
+                        randomNewDefenceSpot, 
+                        1);
             }
             else if(toDoAction == 2)
             {
@@ -197,7 +211,7 @@ public class GameManager {
             else
             {
                 // Do an upgrade for units
-                OutputDebugInfo(player, "--Make an upgrade for units", "");
+                OutputDebugInfo(player, "--Do an upgrade for units", "");
             }
         }
     }
@@ -227,6 +241,7 @@ public class GameManager {
             giveResources();
             this.resourceTimer = 0;
         }
+        
         //Operate all units
         operateUnits();
         

@@ -182,4 +182,12 @@ public class Base {
         }
         return list;
     }
+    
+    public Lane getLane(Unit u)
+    {
+        int index = java.util.Arrays.asList(units).indexOf(u);
+        int lane = (int)Math.floor(index / 4);
+        
+        return lanes[lane];
+    }
 }
