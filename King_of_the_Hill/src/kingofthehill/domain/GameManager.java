@@ -7,6 +7,7 @@ package kingofthehill.domain;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -97,6 +98,25 @@ public class GameManager {
                 }
             }
         }
+    }
+    
+    /**
+     * Get all the units for drawing purposes
+     * @return A iterator of units
+     */
+    public Iterator<Unit> getUnits() {
+        ArrayList<Unit> list = new ArrayList<>();
+        for(IPlayer p : players){
+            Base b = p.getBase();
+            if (b != null) {
+                for (Lane l : b.getLanes()) {
+                    for (Unit u : l.getUnits()) {
+                        list.add(u);
+                    }
+                }
+            }
+        }
+        return list.iterator();
     }
 
     /**
@@ -228,13 +248,6 @@ public class GameManager {
         }
         //Operate all units
         operateUnits();
-        
-        //Operate all AI's
-        //Check if there are any AI players
-        for(IPlayer player : players)
-            if(player instanceof AI)
-                // The IPlayer is AI. Operate the AI player
-                operateAIPlayer((AI)player);
 
         //Keep track of timers
         this.resourceTimer++;

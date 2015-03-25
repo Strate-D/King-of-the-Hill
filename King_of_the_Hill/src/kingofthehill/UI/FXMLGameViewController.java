@@ -7,9 +7,11 @@ package kingofthehill.UI;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +20,10 @@ import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
+import kingofthehill.domain.GameManager;
+import kingofthehill.domain.Melee;
+import kingofthehill.domain.Player;
+import kingofthehill.domain.Unit;
 
 /**
  * FXML Controller class
@@ -35,6 +40,8 @@ public class FXMLGameViewController implements Initializable {
     Image corner1, corner2, corner3, corner4;
     Image side1, side2, side3, side4;
     Image background;
+    GameManager gm;
+    AnimationTimer antimer;
 
     /**
      * Initializes the controller class.
@@ -60,6 +67,28 @@ public class FXMLGameViewController implements Initializable {
         //Draw field
         drawBackground();
         drawField();
+        //Create the game
+        gm = new GameManager(new Player("Jur", 9001));
+
+        //Start animation timer
+        antimer = new AnimationTimer() {
+
+            @Override
+            public void handle(long now) {
+                // Update JavaFX Scene Graph
+                gm.doStep();
+                drawBackground();
+                drawField();
+                drawUnits();
+            }
+
+            @Override
+            public void start() {
+                super.start();
+            }
+        };
+        antimer.start();
+
     }
 
     /**
@@ -123,5 +152,26 @@ public class FXMLGameViewController implements Initializable {
         drawField();
         canvas.getGraphicsContext2D().fillText("Drawing time: " + (System.currentTimeMillis() - start) + "milliseconds", 460, 460);
         canvas.getGraphicsContext2D().fillText("x: " + e.getX() + " y: " + e.getY(), 450, 450);
+    }
+    
+    /**
+     * Draws all the units on the field
+     */
+    private void drawUnits(){
+        Iterator<Unit> i = gm.getUnits();
+        while(i.hasNext()){
+            Unit u = i.next();
+            if(u.getOwner() == gm.getPlayers().get(0)){
+                if(u.getLane() == gm.getPlayers().get(0).getBase().getLane(0)){
+                    canvas.getGraphicsContext2D().fillOval(u.getPosition() / 100 * 264 + 318
+                            , 95, 20, 20);
+                }
+            }
+        }
+    }
+    
+    public void placeTestUnit() {
+        gm.placeUnitAtLane(gm.getPlayers().get(0),
+                new Melee(1,1,1,1,gm.getPlayers().get(0)), 0, 1);
     }
 }
