@@ -221,10 +221,9 @@ public abstract class Unit {
      * @param lane The new lane of the unit
      */
     public void setLane(Lane lane) {
+        this.lane = lane;
+        this.base = null;
         if (lane != null) {
-            this.lane = lane;
-            this.base = null;
-
             if (lane.getBaseEnd1().getOwner() == this.getOwner()) {
                 this.position = 0;
             } else {

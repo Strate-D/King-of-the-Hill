@@ -7,9 +7,11 @@ package kingofthehill.domain;
 
 /**
  * Class containing all the information about a Melee unit. Extends Unit.
+ *
  * @author Jur
  */
 public class Melee extends Unit {
+    int lastAction;
 
     /**
      * Creates a new melee unit with the given parameters. Unit has to be set to
@@ -23,21 +25,31 @@ public class Melee extends Unit {
      */
     public Melee(int health, int attack, int armor, int movementSpeed, IPlayer owner) {
         super(health, attack, armor, UnitType.MELEE, movementSpeed, owner);
+        lastAction = 0;
     }
 
     @Override
     public void doNextAction() {
-        Unit targetUnit = this.canAttackUnit();
-        //Check if it is possible to attack
-        if (targetUnit != null) {
-            //Deal damage
-            targetUnit.receiveDamage(this.getAttack());
-            //Check if target unit can attack back, to make combat fair
-            if (targetUnit.canAttackUnit() == this) {
-                this.receiveDamage(targetUnit.getAttack());
+        //Check if unit can do a action
+        if (lastAction == 0) {
+            Unit targetUnit = this.canAttackUnit();
+            //Check if it is possible to attack
+            if (targetUnit != null) {
+                //Check if target unit can attack back, to make combat fair
+                if (targetUnit.canAttackUnit() == this) {
+                    this.receiveDamage(targetUnit.getAttack());
+                }
+                //Deal damage
+                targetUnit.receiveDamage(this.getAttack());
+                lastAction = 20;
+
+            } else {
+                this.moveUnit();
+                lastAction = 10;
             }
-        } else {
-            this.moveUnit();
+        }
+        else {
+            lastAction --;
         }
     }
 
@@ -69,7 +81,7 @@ public class Melee extends Unit {
                             || closestDistance == -1)) {
                         //Check if unit is not friendly
                         if (u.getOwner() != this.getOwner()) {
-                            closestDistance = u.getPosition() - this.getPosition();
+                            closestDistance = this.getPosition() - u.getPosition();
                             closestUnit = u;
                         }
                     }
