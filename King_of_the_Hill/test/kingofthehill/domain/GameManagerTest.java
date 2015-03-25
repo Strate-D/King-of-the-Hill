@@ -20,12 +20,13 @@ public class GameManagerTest
          * Test the constructor and the getPlayers() method
          */
         
+        //default value
+        Player bas = new Player("Bas", 100);
+        GameManager gm = new GameManager(bas);
+                
         // normal test
-        GameManager gm = new GameManager(new Player("Bas", 100));
-        assertEquals(new Player("Bas", 100), gm.getPlayers().get(0));
-        assertEquals(new AI("AI1"), gm.getPlayers().get(1));
-        assertEquals(new AI("AI2"), gm.getPlayers().get(2));
-        assertEquals(new AI("AI3"), gm.getPlayers().get(3));
+        assertEquals(bas, gm.getPlayers().get(0));
+        assertEquals(4, gm.getPlayers().size());
         
         assertEquals(1, gm.getPlayers().get(0).getTeam().getNr());
         assertEquals(2, gm.getPlayers().get(1).getTeam().getNr());
@@ -33,16 +34,18 @@ public class GameManagerTest
         assertEquals(2, gm.getPlayers().get(3).getTeam().getNr());
         
         // normal test
-        gm = new GameManager(new AI("AI0"));
-        assertEquals(new AI("AI0"), gm.getPlayers().get(0));
+        AI rick = new AI("Rick");
+        gm = new GameManager(rick);
+        assertEquals(rick, gm.getPlayers().get(0));
         assertEquals(1, gm.getPlayers().get(0).getTeam().getNr());
         
         // fail test
         try
         {
             gm = new GameManager(null);
+            fail("GameManager cannot have an null player");
         }
-        catch (NullPointerException ecx) {}
+        catch (IllegalArgumentException ecx) {}
     }
 
     @Test public void testPlaceUnitAtLane()

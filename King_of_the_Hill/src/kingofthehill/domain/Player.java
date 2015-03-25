@@ -72,7 +72,7 @@ public class Player implements IPlayer{
             this.team = newTeam; 
         }
         else{
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
     }
 
@@ -118,7 +118,7 @@ public class Player implements IPlayer{
             this.base = newBase;
         }
         else{
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
     }
     

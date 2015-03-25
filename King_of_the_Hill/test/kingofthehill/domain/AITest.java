@@ -76,7 +76,7 @@ public class AITest
             ai.setTeam(null);
             fail("Team cannot be null");
         }
-        catch (NullPointerException ecx) {}
+        catch (IllegalArgumentException ecx) {}
         
         // 4: fail test
         try
@@ -84,7 +84,7 @@ public class AITest
             ai.setBase(null);
             fail("Base cannot be null");
         }
-        catch (NullPointerException ecx) {}
+        catch (IllegalArgumentException ecx) {}
     }
     
     @Test public void testCheckPassword()

@@ -86,7 +86,7 @@ public class AI implements IPlayer {
             this.team = newTeam;
         }
         else{
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
     }
 
@@ -168,7 +168,7 @@ public class AI implements IPlayer {
             this.base = newBase;
         }
         else{
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
     }
     
