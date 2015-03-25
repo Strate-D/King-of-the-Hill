@@ -16,6 +16,34 @@ public class UnitTest
 {
     @Test public void testGetters()
     {
+        // default value
+        IPlayer ai = new AI("computer1");
+        IPlayer player = new Player("speler1", 10);
+        Base b1 = new Base(ai);
+        Base b2 = new Base(player);
+        Lane l = new Lane(b1, b2);
+        Unit m1 = new Melee(10, 10, 10, 10, ai);
+        Unit m2 = new Melee(11, 11, 11, 11, player);
+        Unit r1 = new Ranged(12, 12, 12, 12, ai, 12);
+        Unit r2 = new Ranged(13, 13, 13, 13, player, 13);
+        Unit d1 = new Defence(14, 14, 14, 14, ai);
+        Unit d2 = new Defence(15, 15, 15 ,15, player);
+ //       m1.setBase(b1);
+        m1.setLane(l);
+//        r1.setBase(b2);
+        r1.setLane(l);
+//        d1.setBase(b1);
+        
+//        assertEquals(b1,m1.getBase());
+        assertEquals(l,m1.getLane());
+//        assertEquals(b2,r1.getBase());
+        assertEquals(l,r1.getLane());
+//        assertEquals(b1,d1.getBase());
+        
+        assertEquals(10,m1.getArmor());
+        assertEquals(10,m1.getAttack());
+        assertEquals(10,m1.getMovementSpeed());
+        assertEquals(10,m1.getHealth());
     }
     
     @Test public void testSetters()
@@ -38,12 +66,13 @@ public class UnitTest
         u1.setLane(l);
         assertEquals(l, u1.getLane());
         assertNull(u1.getBase());
+        assertEquals(0, u1.getPosition());
         
         // 2: normal test
         Unit u2 = new Defence(20, 20, 20, 20, player1);
-        u2.setBase(b2);
-        assertEquals(b2, u2.getBase());
-        assertNull(u2.getLane());
+        u2.setLane(l);
+        assertEquals(l, u2.getLane());
+        assertNull(u2.getBase());
         assertEquals(100, u2.getPosition());
         
         // 3: fail test
@@ -213,5 +242,44 @@ public class UnitTest
     
     @Test public void testMoveUnit()
     {
+        // default value
+        IPlayer ai = new AI("computer1");
+        IPlayer player = new Player("speler1", 10);
+        Base aiBase = new Base(ai);
+        Base playerBase = new Base(player);
+        Lane lane = new Lane(aiBase, playerBase);
+        // Build Game
+        aiBase.setLane(1, lane);
+        playerBase.setLane(1, lane);
+        // Units to set
+        Unit m1 = new Melee(10, 10, 10, 10, ai);
+        Unit m2 = new Melee(11, 11, 11, 11, player);
+        Unit r1 = new Ranged(12, 12, 12, 12, ai, 12);
+        Unit r2 = new Ranged(13, 13, 13, 13, player, 13);
+        // Unit set to player and base
+        m1.setBase(aiBase);
+        m1.setLane(lane);
+        m2.setBase(playerBase);
+        m2.setLane(lane);
+        
+        r1.setBase(aiBase);
+        r1.setLane(lane);
+        r2.setBase(playerBase);
+        r2.setLane(lane);
+        // Do units move
+        int m1Position = m1.getPosition();
+        m1.moveUnit();
+        assertEquals(m1Position + 10, m1.getPosition());
+        int m2Position = m2.getPosition();
+        m2.moveUnit();
+        assertEquals(m2Position - 11, m2.getPosition());
+        
+        int r1Position = r1.getPosition();
+        r1.moveUnit();
+        assertEquals(r1Position + 12, r1.getPosition());
+        int r2Position = r2.getPosition();
+        r2.moveUnit();
+        assertEquals(r2Position - 13, r2.getPosition());
+        
     }
 }
