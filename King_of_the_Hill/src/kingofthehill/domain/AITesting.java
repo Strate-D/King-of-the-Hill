@@ -17,7 +17,7 @@ public class AITesting {
     public static void main(String[] args) 
     {
         GameManager gm = new GameManager(new Player("Host", 20));
-        //gm.setDebugLevelAI(true);
+        gm.setDebugLevelAI(true);
         
         AI ai = (AI)gm.getPlayers().get(1);
         for(int i = 0; i<10; i++)

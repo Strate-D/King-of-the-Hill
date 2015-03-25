@@ -263,6 +263,13 @@ public class GameManager {
         
         //Operate all units
         operateUnits();
+        
+        //Operate all AI's
+        //Check if there are any AI players
+        for(IPlayer player : players)
+            if(player instanceof AI)
+                // The IPlayer is AI. Operate the AI player
+                //operateAIPlayer((AI)player);
 
         //Keep track of timers
         this.resourceTimer++;
