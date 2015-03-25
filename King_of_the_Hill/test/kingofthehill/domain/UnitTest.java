@@ -41,9 +41,8 @@ public class UnitTest
         
         // 2: normal test
         Unit u2 = new Defence(20, 20, 20, 20, player1);
-        u2.setBase(b2);
-        assertEquals(b2, u2.getBase());
-        assertNull(u2.getLane());
+        u2.setLane(l);
+        assertEquals(null, u2.getBase());
         assertEquals(100, u2.getPosition());
         
         // 3: fail test
