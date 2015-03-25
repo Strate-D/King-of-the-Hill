@@ -168,108 +168,7 @@ public class GameManager {
      * @param player The AI player that needs to do something
      */
     private void operateAIPlayer(AI player) {
-        OutputDebugInfo(player, "AI operation for: ", player.getName());
-
-        boolean iNeededToPlaceDefence = false;
-
-        // Let the AI decide what to do
-//        for (int i = 0; i < 8; i++) {
-//            //Check the AI defences
-//            int currentDefence = player.areDefenceUnitsAtLane(i);
-//            //OutputDebugInfo(player, "Defence at lane " + i + ": ", currentDefence);
-//            if (currentDefence < 2) {
-//                // Check if the AI has lost units
-//                int oldDefence = player.getDefenceAtLane(i);
-//                OutputDebugInfo(player, "Defence at lane " + i + " in last turn : ", currentDefence);
-//                if (oldDefence >= currentDefence) {
-//                    OutputDebugInfo(player, "Units that i lost: ", oldDefence - currentDefence);
-//                    // The AI has lost units
-//                    // TODO: Spawn an extra attack unit for more strenght
-//
-//                    // Get a new place to spawn a defence unit
-//                    int randomNewDefenceSpot = i * 4 + Math.abs(getNextRandom(player, 0, 2));
-//                    while (player.getBase().getUnit(randomNewDefenceSpot) != null) {
-//                        randomNewDefenceSpot = i * 4 + Math.abs(getNextRandom(player, 0, 2));
-//                    }
-//
-//                    OutputDebugInfo(player, "Spawn defence unit at lane " + i + " on spot[" + i * 4 + "-" + (i * 4 + 3) + "]: ", randomNewDefenceSpot);
-//
-//                    UnitInfo ui = UnitInfo.getDefenceUnit(player);
-//                    this.placeUnitAtBase(
-//                            player,
-//                            ui.getUnit(),
-//                            randomNewDefenceSpot,
-//                            ui.getKosten());
-//
-//                    iNeededToPlaceDefence = true;
-//                }
-//            }
-//        }
-
-        // Decide to do other stuff when there are enough defence units placed
-        if (!iNeededToPlaceDefence) {
-            //OutputDebugInfo(player, "There is enough defence everywhere", "");
-            // Decide what to do with the rest of the money:
-            // - Spawn attack unit
-            // - Spawn extra defence unit
-            // - Bid on the Mysterybox
-            // - Do an upgrade for units
-
-            //Percentage that indicate if a action should be done
-            double[] chance = new double[]{80.0, 50.0, 10.0, 15.0};
-            double chanceState = 100;
-            int toDoAction = 0;
-//            while (chanceState > chance[toDoAction]) {
-//                toDoAction = getNextRandom(player, 0, 3);
-//                chanceState = getNextRandom(player, 0, 100);
-//                OutputDebugInfo(player, "", "action=" + toDoAction + "    " + chanceState + "/" + chance[toDoAction]);
-//            }
-
-            if (toDoAction == 0) {
-                //Spawn attack unit
-                OutputDebugInfo(player, "--Place an attack unit", "");
-                
-                int newSpot = Math.abs(getNextRandom(player, 0, 7));
-                
-                UnitInfo ui = UnitInfo.getMeleeUnit(player);
-                this.placeUnitAtBase(player,
-                        ui.getUnit(),
-                        newSpot * 4 + 3,
-                        ui.getKosten());
-            } else if (toDoAction == 1) {
-                // Spawn extra defence unit
-                OutputDebugInfo(player, "--Place an extra defence unit", "");
-
-                int randomNewDefenceSpot = Math.abs(getNextRandom(player, 0, 31));
-                while (player.getBase().getUnit(randomNewDefenceSpot) != null || randomNewDefenceSpot % 4 == 3) {
-                    randomNewDefenceSpot = Math.abs(getNextRandom(player, 0, 31));
-                }
-
-                UnitInfo ui = UnitInfo.getDefenceUnit(player);
-                this.placeUnitAtBase(player,
-                        ui.getUnit(),
-                        randomNewDefenceSpot,
-                        ui.getKosten());
-            } else if (toDoAction == 2) {
-                // Bid on Mysterybox
-                OutputDebugInfo(player, "--Bid on the mysterybox", "");
-            } else {
-                // Do an upgrade for units
-                OutputDebugInfo(player, "--Do an upgrade for units", "");
-            }
-        }
-    }
-
-    private int getNextRandom(AI player, int low, int high) {
-        return (int) (Math.random() * player.getRandomSeed()) % (high + 1) + low;
-    }
-
-    private void OutputDebugInfo(AI player, String pretext, Object data) {
-        if (DebugLevelAI) {
-            if (player.getName().equals("AI1")) {
-                System.out.println(pretext + data.toString());
-            }
-        }
+        player.doNextAction(player, this);
     }
 
     /**
@@ -385,5 +284,10 @@ public class GameManager {
 
     public void setDebugLevelAI(boolean value) {
         this.DebugLevelAI = value;
+    }
+    
+    public boolean getDebugLevelAI()
+    {
+        return DebugLevelAI;
     }
 }
