@@ -14,11 +14,11 @@
         <URL value="@fxmlgameview.css" />
     </stylesheets>
    <children>
-      <Button layoutX="1847.0" mnemonicParsing="false" onAction="#handleQuitButton" prefHeight="69.0" prefWidth="73.0" text="X">
+      <Button id="button-small" layoutX="1850.0" mnemonicParsing="false" onAction="#handleQuitButton" prefHeight="70.0" prefWidth="70.0" text="X" textFill="#ffcc00">
          <font>
             <Font size="30.0" />
          </font>
       </Button>
-      <Canvas fx:id="canvas" height="900.0" layoutX="510.0" layoutY="90.0" width="900.0" />
+      <Canvas fx:id="canvas" height="900.0" layoutX="510.0" layoutY="90.0" onMouseClicked="#giveCoordinates" width="900.0" />
    </children>
 </AnchorPane>

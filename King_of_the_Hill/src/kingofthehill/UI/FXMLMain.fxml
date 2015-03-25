@@ -13,13 +13,13 @@
         <URL value="@fxmlmain.css" />
     </stylesheets>
    <children>
-      <Button layoutX="755.0" layoutY="448.0" mnemonicParsing="false" onAction="#handlePlayButton" prefHeight="166.0" prefWidth="385.0" text="Play!">
+      <Button id="button" layoutX="642.0" layoutY="590.0" mnemonicParsing="false" onAction="#handlePlayButton" prefHeight="100.0" prefWidth="475.0" text="Play!" textFill="#ffcc00">
          <font>
-            <Font size="70.0" />
+            <Font size="45.0" />
          </font></Button>
-      <Button layoutX="755.0" layoutY="630.0" mnemonicParsing="false" onAction="#handleQuitButton" prefHeight="166.0" prefWidth="385.0" text="Quit">
+      <Button id="button" layoutX="642.0" layoutY="750.0" mnemonicParsing="false" onAction="#handleQuitButton" prefHeight="100.0" prefWidth="475.0" text="Quit" textFill="#ffcc00">
          <font>
-            <Font size="70.0" />
+            <Font size="45.0" />
          </font>
       </Button>
    </children>
