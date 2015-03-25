@@ -55,7 +55,9 @@ public class AITesting {
             return " ";
         else if(u instanceof Defence)
             return "D";
+        else if(u instanceof Melee)
+            return "M";
         else
-            return "A";
+            return "R";
     }
 }

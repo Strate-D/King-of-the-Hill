@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import kingofthehill.unitinfo.UnitInfo;
 
 /**
  * Class that manages the game. Contains all the units and objects that are part
@@ -193,11 +194,12 @@ public class GameManager {
 
                     OutputDebugInfo(player, "Spawn defence unit at lane " + i + " on spot[" + i * 4 + "-" + (i * 4 + 3) + "]: ", randomNewDefenceSpot);
 
+                    UnitInfo ui = UnitInfo.getDefenceUnit(player);
                     this.placeUnitAtBase(
                             player,
-                            new Defence(150, 10, 10, 0, player),
+                            ui.getUnit(),
                             randomNewDefenceSpot,
-                            1);
+                            ui.getKosten());
 
                     iNeededToPlaceDefence = true;
                 }
@@ -226,10 +228,14 @@ public class GameManager {
             if (toDoAction == 0) {
                 //Spawn attack unit
                 OutputDebugInfo(player, "--Place an attack unit", "");
+                
+                int newSpot = Math.abs(getNextRandom(player, 0, 7));
+                
+                UnitInfo ui = UnitInfo.getMeleeUnit(player);
                 this.placeUnitAtBase(player,
-                        new Melee(10, 10, 10, 10, player),
-                        3,
-                        1);
+                        ui.getUnit(),
+                        newSpot * 4 + 3,
+                        ui.getKosten());
             } else if (toDoAction == 1) {
                 // Spawn extra defence unit
                 OutputDebugInfo(player, "--Place an extra defence unit", "");
@@ -239,10 +245,11 @@ public class GameManager {
                     randomNewDefenceSpot = Math.abs(getNextRandom(player, 0, 31));
                 }
 
+                UnitInfo ui = UnitInfo.getDefenceUnit(player);
                 this.placeUnitAtBase(player,
-                        new Defence(10, 10, 10, 10, player),
+                        ui.getUnit(),
                         randomNewDefenceSpot,
-                        1);
+                        ui.getKosten());
             } else if (toDoAction == 2) {
                 // Bid on Mysterybox
                 OutputDebugInfo(player, "--Bid on the mysterybox", "");
@@ -283,7 +290,7 @@ public class GameManager {
         for (IPlayer player : players) {
             if (player instanceof AI) // The IPlayer is AI. Operate the AI player
             {
-                //operateAIPlayer((AI) player);
+                operateAIPlayer((AI) player);
             }
         }
 
