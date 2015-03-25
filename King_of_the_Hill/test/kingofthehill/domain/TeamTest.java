@@ -64,8 +64,7 @@ public class TeamTest
         assertEquals(new ArrayList<>(), team4.getPlayers());
         
         // 5: normal test
-        Team team5 = new Team(5, new ArrayList());
-        team5.addPlayer(player3);
+        team1.addPlayer(player3);
         assertEquals(player3, team1.getPlayers().get(2));
     }
     
@@ -104,8 +103,7 @@ public class TeamTest
         assertEquals(false, team2.addPlayer(null));
         
         // 4: normal test
-        Team team3 = new Team(3, new ArrayList<>());
-        team3.addPlayer(player);
-        assertEquals(player, team3.getPlayers().get(2));
+        team1.addPlayer(player);
+        assertEquals(player, team1.getPlayers().get(2));
     }
 }

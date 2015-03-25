@@ -78,8 +78,13 @@ public class Base {
      */
     public boolean setLane(int index, Lane lane) {
         try {
-            this.lanes[index] = lane;
-            return true;
+            if(lane != null){
+                this.lanes[index] = lane;
+                return true;
+            }
+            else{
+                return false;
+            }
         } catch (Exception ex) {
             return false;
         }
@@ -117,9 +122,14 @@ public class Base {
 
         //Place unit
         try {
-            this.units[index] = unit;
-            unit.setBase(this);
-            return true;
+            if(unit != null){
+                this.units[index] = unit;
+                unit.setBase(this);
+                return true;
+            }
+            else{
+                return false;
+            }
         } catch (Exception ex) {
             return false;
         }
@@ -131,14 +141,16 @@ public class Base {
      * @param unit The unit that has to be removed
      */
     public void removeUnit(Unit unit) {
-        int i = 0;
-        for (Unit u : this.units) {
+        if(unit != null){
+            int i = 0;
+            for (Unit u : this.units) {
             if (u == unit) {
                 this.units[i] = null;
                 unit.setBase(null);
                 return;
             }
             i++;
+            }
         }
     }
 
@@ -165,7 +177,13 @@ public class Base {
      */
     public void receiveDamage(int damage) {
         if (damage > 0) {
-            this.healthPoints -= damage;
+            int health = this.healthPoints - damage;
+            if(health < 0 ){
+                this.healthPoints = 0;
+            }
+            else{
+                this.healthPoints -= damage; 
+            }
         }
     }
     

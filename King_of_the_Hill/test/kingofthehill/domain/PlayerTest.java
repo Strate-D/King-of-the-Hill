@@ -76,7 +76,7 @@ public class PlayerTest
             team1 = new Team(1, null);
             fail ("Playerlist cannot be null");
         }
-        catch (NullPointerException ecx) {}
+        catch (IllegalArgumentException ecx) {}
         
         // 4: fail test
         try
@@ -92,7 +92,7 @@ public class PlayerTest
             base = new Base(null);
             fail ("Player cannot be null");
         }
-        catch (NullPointerException ecx) {}
+        catch (IllegalArgumentException ecx) {}
     }
     
     @Test public void testCheckPassword()

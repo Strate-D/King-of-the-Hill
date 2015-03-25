@@ -68,7 +68,9 @@ public class Player implements IPlayer{
 
     @Override
     public void setTeam(Team newTeam) {
-        this.team = newTeam;
+        if(newTeam != null){
+            this.team = newTeam; 
+        }
     }
 
     @Override
@@ -109,7 +111,9 @@ public class Player implements IPlayer{
 
     @Override
     public void setBase(Base newBase) {
-        this.base = newBase;
+        if(newBase != null){
+            this.base = newBase;
+        }
     }
     
 }

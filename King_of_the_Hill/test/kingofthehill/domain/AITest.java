@@ -71,20 +71,13 @@ public class AITest
         assertEquals(base, ai.getBase());
         
         // 3: fail test
-        try
-        {
-            ai.setTeam(null);
-            fail("Team cannot be null");
-        }
-        catch (NullPointerException ecx) {}
+        Team team2 = new Team(2, new ArrayList<>());
+        ai.setTeam(team2);
+        assertEquals(team2, ai.getTeam());
         
         // 4: fail test
-        try
-        {
-            ai.setBase(null);
-            fail("Base cannot be null");
-        }
-        catch (NullPointerException ecx) {}
+        ai.setBase(null);
+        assertEquals(team2, ai.getTeam());
     }
     
     @Test public void testCheckPassword()
