@@ -92,6 +92,7 @@ public class GameManager {
         for (IPlayer p : players) {
             Base b = p.getBase();
             if (b != null) {
+<<<<<<< HEAD
                 for (Lane l : b.getLanes()) {
 //                    for (Unit u : l.getUnits()) {
 //                        u.doNextAction();
@@ -109,7 +110,15 @@ public class GameManager {
                             }
                         } catch (Exception ecx) {
                         }
+=======
+                Iterator<Lane> iterLanes = b.getLanes().iterator();
+                while (iterLanes.hasNext()) {
+                    Iterator<Unit> iterUnits = iterLanes.next().getUnits().iterator();
+                    while (iterUnits.hasNext()) {
+                        iterUnits.next().doNextAction(); //THROWS EXCEPTION FOR FOR EACH CONSTRUCTION?
+>>>>>>> origin/master
                     }
+
                 }
 
 //                for(Unit u : b.getUnits())
