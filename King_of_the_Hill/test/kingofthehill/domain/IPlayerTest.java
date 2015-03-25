@@ -95,18 +95,12 @@ public class IPlayerTest
        assertEquals(team, ai.getTeam());
        
        // 3: fail test
-       try{
-           ai.setBase(null);
-           fail("Base cannot be null");
-       }
-       catch(IllegalArgumentException exc) {}
+       ai.setBase(null);
+       assertEquals(base, ai.getBase());
        
        //4: fail test
-       try{
-           player.setTeam(null);
-           fail("team cannot be null");
-       }
-       catch(IllegalArgumentException exc) {}
+       player.setTeam(null);
+       assertEquals(team, player.getTeam());
    }
    
    @Test public void testAddPayMoney()
