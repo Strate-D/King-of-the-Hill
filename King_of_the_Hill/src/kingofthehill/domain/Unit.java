@@ -25,10 +25,10 @@ public abstract class Unit {
     private IPlayer owner;
     private Base base;
     private Lane lane;
-    
+
     public Unit(int health, int attack, int armor,
-            UnitType unittype, int movementSpeed, IPlayer owner){
-        if(health < 1 || attack < 1 || armor < 0  || unittype == null || movementSpeed < 0 || owner == null){
+            UnitType unittype, int movementSpeed, IPlayer owner) {
+        if (health < 1 || attack < 1 || armor < 0 || unittype == null || movementSpeed < 0 || owner == null) {
             throw new IllegalArgumentException("Unit couldn't be made!");
         }
         this.health = health;
@@ -147,11 +147,12 @@ public abstract class Unit {
 
     /**
      * Adds a amount of damage to the Unit
+     *
      * @param damagepoints Amount of damage that is dealt.
      * @return If the unit is killed or not
      */
     public boolean receiveDamage(int damagepoints) {
-        if(damagepoints < 0){
+        if (damagepoints < 0) {
             throw new IllegalArgumentException("Unit can't take negative damage");
         }
         int resultingDamage = damagepoints - this.armor;
@@ -179,13 +180,16 @@ public abstract class Unit {
             return 1;
         }
     }
+
     /**
      * Returns the damage that was done to the unit
+     *
      * @return The damage done to the unit.
      */
     public int getDamage() {
         return this.damage;
     }
+
     /**
      * Returns the base object of the unit.
      *
@@ -202,28 +206,35 @@ public abstract class Unit {
      * @param base The new base of the unit
      */
     public void setBase(Base base) {
-        this.base = base;
-        this.lane = null;
-    }
 
-    /**
-     * Sets the new lane of the unit If the base was not null, it will be set to
-     * null
-     * Also changes the position of the unit as close as possible to his own base.
-     * @param lane The new lane of the unit
-     */
-    public void setLane(Lane lane) {
-        this.lane = lane;
-        this.base = null;
-        if (lane.getBaseEnd1().getOwner() == this.getOwner()){
-            this.position = 0;
-        } else {
-            this.position = 100;
+        if (base != null) {
+            this.base = base;
+            this.lane = null;
         }
     }
 
     /**
-     * Returns the lane object in wich the unit is placed.
+     * Sets the new lane of the unit If the base was not null, it will be set to
+     * null Also changes the position of the unit as close as possible to his
+     * own base.
+     *
+     * @param lane The new lane of the unit
+     */
+    public void setLane(Lane lane) {
+        if (lane != null) {
+            this.lane = lane;
+            this.base = null;
+
+            if (lane.getBaseEnd1().getOwner() == this.getOwner()) {
+                this.position = 0;
+            } else {
+                this.position = 100;
+            }
+        }
+    }
+
+    /**
+     * Returns the lane object in which the unit is placed.
      *
      * @return Can be null
      */
@@ -276,9 +287,8 @@ public abstract class Unit {
     }
 
     /**
-     * Moves the unit with use of the movementspeed
-     * If the unit reaches the base on the other side,
-     * the unit will be destroyed and damage will be dealt.
+     * Moves the unit with use of the movementspeed If the unit reaches the base
+     * on the other side, the unit will be destroyed and damage will be dealt.
      */
     public void moveUnit() {
         //Get lane and check wich way the unit has to move and move the unit
