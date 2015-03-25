@@ -11,6 +11,7 @@ package kingofthehill.domain;
  * @author Jur
  */
 public class Melee extends Unit {
+
     int lastAction;
 
     /**
@@ -30,8 +31,15 @@ public class Melee extends Unit {
 
     @Override
     public void doNextAction() {
-        //Check if unit can do a action
+        // Check if the unit is in one of the base spots
         if (lastAction == 0) {
+            if (this.getBase() != null) {
+                Lane newLane = this.getBase().getLane(this);
+                this.getBase().removeUnit(this);
+                //this.setLane(newLane);
+                newLane.addUnit(this);
+            }
+
             Unit targetUnit = this.canAttackUnit();
             //Check if it is possible to attack
             if (targetUnit != null) {
@@ -47,9 +55,8 @@ public class Melee extends Unit {
                 this.moveUnit();
                 lastAction = 10;
             }
-        }
-        else {
-            lastAction --;
+        } else {
+            lastAction--;
         }
     }
 

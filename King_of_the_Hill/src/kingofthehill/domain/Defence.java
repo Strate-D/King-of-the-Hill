@@ -30,10 +30,12 @@ public class Defence extends Unit{
         Unit targetUnit = this.canAttackUnit();
         if (targetUnit != null){
             targetUnit.receiveDamage(this.getAttack());
+            
+            if(targetUnit.canAttackUnit() == this) {
+                this.receiveDamage(targetUnit.getAttack());
+            }
         }
-        if(targetUnit.canAttackUnit() == this) {
-            this.receiveDamage(targetUnit.getAttack());
-        }
+        
     }
 
     @Override

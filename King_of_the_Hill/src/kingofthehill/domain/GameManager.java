@@ -99,6 +99,11 @@ public class GameManager {
                     }
 
                 }
+                
+                for(Unit u : b.getUnits())
+                {
+                    u.doNextAction();
+                }
             }
         }
     }
@@ -195,19 +200,30 @@ public class GameManager {
             if (toDoAction == 0) {
                 //Spawn attack unit
                 OutputDebugInfo(player, "--Place an attack unit", "");
-                this.placeUnitAtLane(player,
-                        new Melee(10, 10, 10, 10, player),
-                        0,
+                this.placeUnitAtBase(player,
+                        new Melee(10, 10, 10, 10, player), 
+                        3, 
                         1);
             } else if (toDoAction == 1) {
                 // Spawn extra defence unit
                 OutputDebugInfo(player, "--Place an extra defence unit", "");
-            } else if (toDoAction == 2) {
+                
+                int randomNewDefenceSpot = Math.abs(getNextRandom(player, 0, 31));
+                while(player.getBase().getUnit(randomNewDefenceSpot) != null || randomNewDefenceSpot % 4 == 3)
+                    randomNewDefenceSpot = Math.abs(getNextRandom(player, 0, 31));
+                
+                this.placeUnitAtBase(player,
+                        new Defence(10, 10, 10, 10, player), 
+                        randomNewDefenceSpot, 
+                        1);
+            }
+            else if(toDoAction == 2)
+            {
                 // Bid on Mysterybox
                 OutputDebugInfo(player, "--Bid on the mysterybox", "");
             } else {
                 // Do an upgrade for units
-                OutputDebugInfo(player, "--Make an upgrade for units", "");
+                OutputDebugInfo(player, "--Do an upgrade for units", "");
             }
         }
     }
@@ -233,8 +249,16 @@ public class GameManager {
             giveResources();
             this.resourceTimer = 0;
         }
+        
         //Operate all units
         operateUnits();
+        
+        //Operate all AI's
+        //Check if there are any AI players
+        for(IPlayer player : players)
+            if(player instanceof AI)
+                // The IPlayer is AI. Operate the AI player
+                //operateAIPlayer((AI)player);
 
         //Keep track of timers
         this.resourceTimer++;
@@ -259,6 +283,7 @@ public class GameManager {
      * and 4 to 7. 0 to 3 is the group of lanes where this base is baseEnd1.
      * Must be between 0 and 7.
      * @param cost The cost of the unit, must be higher than 0.
+     * @return true if unit is placed at lane, else false
      */
     public boolean placeUnitAtLane(IPlayer player, Unit unit, int index, int cost) {
         //Check input
@@ -291,6 +316,7 @@ public class GameManager {
      * being the group that is at the lane where the base of the player is
      * baseEnd1, 16 to 31 being the other lane.
      * @param cost The cost of the unit, must be higher than 0.
+     * @return true if unit is placed at base, else false
      */
     public boolean placeUnitAtBase(IPlayer player, Unit unit, int index, int cost) {
         //Check input

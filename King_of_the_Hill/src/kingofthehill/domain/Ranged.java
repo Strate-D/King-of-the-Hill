@@ -36,6 +36,14 @@ public class Ranged extends Unit {
 
     @Override
     public void doNextAction() {
+        // Check if the unit is in one of the base spots
+        if(this.getBase() != null)
+        {
+            Lane newLane = this.getBase().getLane(this);
+            this.getBase().removeUnit(this);
+            this.setLane(newLane);
+        }
+        
         Unit targetUnit = this.canAttackUnit();
         //Check if it is possible to attack
         if (targetUnit != null) {
