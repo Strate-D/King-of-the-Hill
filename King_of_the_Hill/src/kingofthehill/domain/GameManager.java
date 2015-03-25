@@ -287,6 +287,7 @@ public class GameManager {
      * and 4 to 7. 0 to 3 is the group of lanes where this base is baseEnd1.
      * Must be between 0 and 7.
      * @param cost The cost of the unit, must be higher than 0.
+     * @return true if unit is placed at lane, else false
      */
     public boolean placeUnitAtLane(IPlayer player, Unit unit, int index, int cost) {
         //Check input
@@ -319,6 +320,7 @@ public class GameManager {
      * being the group that is at the lane where the base of the player is
      * baseEnd1, 16 to 31 being the other lane.
      * @param cost The cost of the unit, must be higher than 0.
+     * @return true if unit is placed at base, else false
      */
     public boolean placeUnitAtBase(IPlayer player, Unit unit, int index, int cost) {
         //Check input

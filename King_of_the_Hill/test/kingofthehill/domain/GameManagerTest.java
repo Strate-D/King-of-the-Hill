@@ -54,20 +54,23 @@ public class GameManagerTest
         IPlayer ai = new AI("AI1");
         Unit def = new Defence(10, 10, 10, 10, ai);
         GameManager gm = new GameManager(new Player("Bas", 10));
+        Base base1 = new Base(ai);
+        IPlayer player = new Player("Henkie", 100);
+        Base base2 = new Base(player);
+        Lane lane = new Lane(base1, base2);
         
         // normal test
         assertFalse(gm.placeUnitAtLane(ai, def, 0, 100));
+        ai.setBase(base1);
+        assertFalse(gm.placeUnitAtLane(ai, def, 0, 100));
+        base1.setLane(0, lane);   
+        assertTrue(gm.placeUnitAtLane(ai, def, 0, 100));
         
-        // normal test
-        assertTrue(gm.placeUnitAtLane(ai, def, 1, 200));
+        // normal test NO MUNNIE
+        assertFalse(gm.placeUnitAtLane(ai, def, 1, 200));
         
         // fail test : null value
-        try
-        {
-            gm.placeUnitAtLane(null, null, 2, 10);
-            fail("Values cannot be null");
-        }
-        catch (NullPointerException ecx) {}
+        assertFalse(gm.placeUnitAtLane(null, null, 2, 10));
     }
     
     @Test public void testPlaceUnitAtBase()
@@ -76,19 +79,17 @@ public class GameManagerTest
         IPlayer ai = new AI("AI1");
         Unit def = new Defence(10, 10, 10, 10, ai);
         GameManager gm = new GameManager(new Player("Bas", 10));
+        Base base = new Base(ai);
         
         // normal test
         assertFalse(gm.placeUnitAtBase(ai, def, 1, 100));
+        ai.setBase(base);
+        assertTrue(gm.placeUnitAtBase(ai, def, 1, 100));
         
         // normal test
-        assertTrue(gm.placeUnitAtBase(ai, def, 1, 200));
+        assertFalse(gm.placeUnitAtBase(ai, def, 1, 200));
         
         // fail test : null value
-        try
-        {
-            gm.placeUnitAtBase(null, null, 2, 10);
-            fail("Values cannot be null");
-        }
-        catch (NullPointerException ecx) {}
+        assertFalse(gm.placeUnitAtBase(null, null, 2, 10));
     }
 }
