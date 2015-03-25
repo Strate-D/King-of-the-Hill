@@ -85,9 +85,6 @@ public class AI implements IPlayer {
         if(newTeam != null){
             this.team = newTeam;
         }
-        else{
-            throw new IllegalArgumentException();
-        }
     }
 
     @Override
@@ -166,9 +163,6 @@ public class AI implements IPlayer {
     public void setBase(Base newBase) {
         if(newBase != null){
             this.base = newBase;
-        }
-        else{
-            throw new IllegalArgumentException();
         }
     }
     

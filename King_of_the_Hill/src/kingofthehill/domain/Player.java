@@ -71,9 +71,6 @@ public class Player implements IPlayer{
         if(newTeam != null){
             this.team = newTeam; 
         }
-        else{
-            throw new IllegalArgumentException();
-        }
     }
 
     @Override
@@ -116,9 +113,6 @@ public class Player implements IPlayer{
     public void setBase(Base newBase) {
         if(newBase != null){
             this.base = newBase;
-        }
-        else{
-            throw new IllegalArgumentException();
         }
     }
     

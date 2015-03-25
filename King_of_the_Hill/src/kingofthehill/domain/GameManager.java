@@ -8,7 +8,6 @@ package kingofthehill.domain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Class that manages the game. Contains all the units and objects that are part
