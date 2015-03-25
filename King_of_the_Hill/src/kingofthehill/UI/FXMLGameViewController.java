@@ -23,6 +23,7 @@ import javafx.scene.input.MouseEvent;
 import kingofthehill.domain.GameManager;
 import kingofthehill.domain.Melee;
 import kingofthehill.domain.Player;
+import kingofthehill.domain.Ranged;
 import kingofthehill.domain.Unit;
 
 /**
@@ -188,7 +189,55 @@ public class FXMLGameViewController implements Initializable {
                     canvas.getGraphicsContext2D().fillOval((float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 201, 20, 20);
                 }
             }
+            //Lane 4
+            if (u.getOwner() == gm.getPlayers().get(0)) {
+                if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(4)) {
+                    canvas.getGraphicsContext2D().fillOval(83, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 20, 20);
+                }
+            }
+            //Lane 5
+            if (u.getOwner() == gm.getPlayers().get(0)) {
+                if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(5)) {
+                    canvas.getGraphicsContext2D().fillOval(115, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 20, 20);
+                }
+            }
+            //Lane 6
+            if (u.getOwner() == gm.getPlayers().get(0)) {
+                if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(6)) {
+                    canvas.getGraphicsContext2D().fillOval(154, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 20, 20);
+                }
+            }
+            //Lane 7
+            if (u.getOwner() == gm.getPlayers().get(0)) {
+                if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(7)) {
+                    canvas.getGraphicsContext2D().fillOval(189, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 20, 20);
+                }
+            }
             ///////////////////////////Draw for player 1///////////////////////////
+            //Lane 0
+            if (u.getOwner() == gm.getPlayers().get(1)) {
+                if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(0)) {
+                    canvas.getGraphicsContext2D().fillOval(689, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 20, 20);
+                }
+            }
+            //Lane 1
+            if (u.getOwner() == gm.getPlayers().get(1)) {
+                if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(1)) {
+                    canvas.getGraphicsContext2D().fillOval(721, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 20, 20);
+                }
+            }
+            //Lane 2
+            if (u.getOwner() == gm.getPlayers().get(1)) {
+                if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(2)) {
+                    canvas.getGraphicsContext2D().fillOval(759, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 20, 20);
+                }
+            }
+            //Lane 3
+            if (u.getOwner() == gm.getPlayers().get(1)) {
+                if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(3)) {
+                    canvas.getGraphicsContext2D().fillOval(792, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 20, 20);
+                }
+            }
             //Lane 4
             if (u.getOwner() == gm.getPlayers().get(1)) {
                 if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(4)) {
@@ -213,16 +262,130 @@ public class FXMLGameViewController implements Initializable {
                     canvas.getGraphicsContext2D().fillOval((float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 201, 20, 20);
                 }
             }
+            ///////////////////////////Draw for player 2///////////////////////////
+            //Lane 0
+            if (u.getOwner() == gm.getPlayers().get(2)) {
+                if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(0)) {
+                    canvas.getGraphicsContext2D().fillOval((float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 689, 20, 20);
+                }
+            }
+            //Lane 1
+            if (u.getOwner() == gm.getPlayers().get(2)) {
+                if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(1)) {
+                    canvas.getGraphicsContext2D().fillOval((float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 721, 20, 20);
+                }
+            }
+            //Lane 2
+            if (u.getOwner() == gm.getPlayers().get(2)) {
+                if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(2)) {
+                    canvas.getGraphicsContext2D().fillOval((float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 759, 20, 20);
+                }
+            }
+            //Lane 3
+            if (u.getOwner() == gm.getPlayers().get(2)) {
+                if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(3)) {
+                    canvas.getGraphicsContext2D().fillOval((float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 792, 20, 20);
+                }
+            }
+            //Lane 4
+            if (u.getOwner() == gm.getPlayers().get(2)) {
+                if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(4)) {
+                    canvas.getGraphicsContext2D().fillOval(689, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 20, 20);
+                }
+            }
+            //Lane 5
+            if (u.getOwner() == gm.getPlayers().get(2)) {
+                if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(5)) {
+                    canvas.getGraphicsContext2D().fillOval(721, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 20, 20);
+                }
+            }
+            //Lane 6
+            if (u.getOwner() == gm.getPlayers().get(2)) {
+                if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(6)) {
+                    canvas.getGraphicsContext2D().fillOval(759, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 20, 20);
+                }
+            }
+            //Lane 7
+            if (u.getOwner() == gm.getPlayers().get(2)) {
+                if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(7)) {
+                    canvas.getGraphicsContext2D().fillOval(792, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 20, 20);
+                }
+            }
+            ///////////////////////////Draw for player 3///////////////////////////
+            //Lane 0
+            if (u.getOwner() == gm.getPlayers().get(3)) {
+                if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(0)) {
+                    canvas.getGraphicsContext2D().fillOval(83, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 20, 20);
+                }
+            }
+            //Lane 1
+            if (u.getOwner() == gm.getPlayers().get(3)) {
+                if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(1)) {
+                    canvas.getGraphicsContext2D().fillOval(115, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 20, 20);
+                }
+            }
+            //Lane 2
+            if (u.getOwner() == gm.getPlayers().get(3)) {
+                if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(2)) {
+                    canvas.getGraphicsContext2D().fillOval(154, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 20, 20);
+                }
+            }
+            //Lane 3
+            if (u.getOwner() == gm.getPlayers().get(3)) {
+                if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(3)) {
+                    canvas.getGraphicsContext2D().fillOval(189, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 20, 20);
+                }
+            }
+            //Lane 4
+            if (u.getOwner() == gm.getPlayers().get(3)) {
+                if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(4)) {
+                    canvas.getGraphicsContext2D().fillOval((float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 689, 20, 20);
+                }
+            }
+            //Lane 5
+            if (u.getOwner() == gm.getPlayers().get(3)) {
+                if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(5)) {
+                    canvas.getGraphicsContext2D().fillOval((float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 721, 20, 20);
+                }
+            }
+            //Lane 6
+            if (u.getOwner() == gm.getPlayers().get(3)) {
+                if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(6)) {
+                    canvas.getGraphicsContext2D().fillOval((float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 759, 20, 20);
+                }
+            }
+            //Lane 7
+            if (u.getOwner() == gm.getPlayers().get(3)) {
+                if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(7)) {
+                    canvas.getGraphicsContext2D().fillOval((float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 792, 20, 20);
+                }
+            }
         }
     }
 
+    /**
+     * Test all drawing by placing units in all lanes
+     */
     public void placeTestUnit1() {
         gm.placeUnitAtLane(gm.getPlayers().get(0),
                 new Melee(5, 1, 1, 1, gm.getPlayers().get(0)), 0, 1);
+        gm.placeUnitAtLane(gm.getPlayers().get(0),
+                new Melee(5, 1, 1, 1, gm.getPlayers().get(0)), 4, 1);
+        gm.placeUnitAtLane(gm.getPlayers().get(1),
+                new Melee(5, 1, 1, 1, gm.getPlayers().get(1)), 0, 1);
+        gm.placeUnitAtLane(gm.getPlayers().get(1),
+                new Melee(5, 1, 1, 1, gm.getPlayers().get(1)), 4, 1);
+        gm.placeUnitAtLane(gm.getPlayers().get(2),
+                new Melee(5, 1, 1, 1, gm.getPlayers().get(2)), 0, 1);
+        gm.placeUnitAtLane(gm.getPlayers().get(2),
+                new Melee(5, 1, 1, 1, gm.getPlayers().get(2)), 4, 1);
+        gm.placeUnitAtLane(gm.getPlayers().get(3),
+                new Melee(5, 1, 1, 1, gm.getPlayers().get(3)), 0, 1);
+        gm.placeUnitAtLane(gm.getPlayers().get(3),
+                new Melee(5, 1, 1, 1, gm.getPlayers().get(3)), 4, 1);
     }
     
     public void placeTestUnit2() {
-        gm.placeUnitAtLane(gm.getPlayers().get(1),
-                new Melee(5, 1, 1, 1, gm.getPlayers().get(1)), 4, 1);
+        
     }
 }

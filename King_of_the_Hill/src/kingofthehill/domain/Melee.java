@@ -95,7 +95,7 @@ public class Melee extends Unit {
                 }
             }
             //Check if the unit is within attack range
-            if (closestDistance != -1 && closestDistance <= 1) {
+            if (closestDistance != -1 && closestDistance <= 5) {
                 return closestUnit;
             }
             return null;

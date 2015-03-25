@@ -13,6 +13,7 @@ package kingofthehill.domain;
 public class Ranged extends Unit {
 
     private final int attackRange;
+    private int lastAction;
 
     /**
      * Creates a new ranged unit with the given parameters. Unit has to be set
@@ -32,29 +33,36 @@ public class Ranged extends Unit {
             throw new IllegalArgumentException("Attackrange must be at least 1!");
         }
         this.attackRange = attackRange;
+        this.lastAction = 0;
     }
 
     @Override
     public void doNextAction() {
-        // Check if the unit is in one of the base spots
-        if(this.getBase() != null)
-        {
-            Lane newLane = this.getBase().getLane(this);
-            this.getBase().removeUnit(this);
-            this.setLane(newLane);
-        }
-        
-        Unit targetUnit = this.canAttackUnit();
-        //Check if it is possible to attack
-        if (targetUnit != null) {
-            //Deal damage
-            targetUnit.receiveDamage(this.getAttack());
-            //Check if target unit can attack back, to make combat fair
-            if (targetUnit.canAttackUnit() == this) {
-                this.receiveDamage(targetUnit.getAttack());
+        //Check if unit may do an action
+        if (lastAction == 0) {
+            // Check if the unit is in one of the base spots
+            if (this.getBase() != null) {
+                Lane newLane = this.getBase().getLane(this);
+                this.getBase().removeUnit(this);
+                this.setLane(newLane);
+            }
+
+            Unit targetUnit = this.canAttackUnit();
+            //Check if it is possible to attack
+            if (targetUnit != null) {
+                //Deal damage
+                targetUnit.receiveDamage(this.getAttack());
+                //Check if target unit can attack back, to make combat fair
+                if (targetUnit.canAttackUnit() == this) {
+                    this.receiveDamage(targetUnit.getAttack());
+                }
+                lastAction = 60;
+            } else {
+                this.moveUnit();
+                lastAction = 10;
             }
         } else {
-            this.moveUnit();
+            lastAction--;
         }
     }
 
@@ -86,7 +94,7 @@ public class Ranged extends Unit {
                             || closestDistance == -1)) {
                         //Check if unit is not friendly
                         if (u.getOwner() != this.getOwner()) {
-                            closestDistance = u.getPosition() - this.getPosition();
+                            closestDistance = this.getPosition() - u.getPosition();
                             closestUnit = u;
                         }
                     }
