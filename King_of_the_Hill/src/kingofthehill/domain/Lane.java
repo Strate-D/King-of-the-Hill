@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Lane object wich contains all the info of a lane in the game.
+ * Lane object which contains all the info of a lane in the game.
  *
  * @author Jur
  */
@@ -21,13 +21,16 @@ public class Lane {
     private ArrayList<Unit> units;
 
     public Lane(Base end1, Base end2){
+        if (end1 == null || end2 == null){
+            throw new IllegalArgumentException("Lane couldn't be made, ends cannot be null");
+        }
         this.baseEnd1 = end1;
         this.baseEnd2 = end2;
         this.units = new ArrayList<>();
     }
     
     /**
-     * Gets the base wich is at the first end of the lane
+     * Gets the base which is at the first end of the lane
      *
      * @return A base object, cannot be null.
      */
@@ -36,7 +39,7 @@ public class Lane {
     }
 
     /**
-     * Gets the base wich is at the second end of the lane
+     * Gets the base which is at the second end of the lane
      *
      * @return A base object, cannot be null
      */

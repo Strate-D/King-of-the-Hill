@@ -10,12 +10,40 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author Bas
+ * @author Rick
  */
 public class UnitUnitTest
 {
     @Test public void testGetters()
     {
+          // default value
+        IPlayer ai = new AI("computer1");
+        IPlayer player = new Player("speler1", 10);
+        Base b1 = new Base(ai);
+        Base b2 = new Base(player);
+        Lane l = new Lane(b1, b2);
+        Unit m1 = new Melee(10, 10, 10, 10, ai);
+        Unit m2 = new Melee(11, 11, 11, 11, player);
+        Unit r1 = new Ranged(12, 12, 12, 12, ai, 12);
+        Unit r2 = new Ranged(13, 13, 13, 13, player, 13);
+        Unit d1 = new Defence(14, 14, 14, 14, ai);
+        Unit d2 = new Defence(15, 15, 15 ,15, player);
+ //       m1.setBase(b1);
+        m1.setLane(l);
+//        r1.setBase(b2);
+        r1.setLane(l);
+//        d1.setBase(b1);
+        
+//        assertEquals(b1,m1.getBase());
+        assertEquals(l,m1.getLane());
+//        assertEquals(b2,r1.getBase());
+        assertEquals(l,r1.getLane());
+//        assertEquals(b1,d1.getBase());
+        
+        assertEquals(10,m1.getArmor());
+        assertEquals(10,m1.getAttack());
+        assertEquals(10,m1.getMovementSpeed());
+        assertEquals(10,m1.getHealth());
     }
     
     @Test public void testSetters()

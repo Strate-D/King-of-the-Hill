@@ -88,7 +88,6 @@ public class LaneTest
         assertEquals(1, l.getUnits().size());
         
         // 2: fail test
-        l.addUnit(u);
         l.removeUnit(null);
         assertEquals(1, l.getUnits().size());
     }
