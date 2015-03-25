@@ -52,9 +52,9 @@ public class UnitInfo
     {
         final int HP = 100;
         final int ATK = 10;
-        final int AMR = 10;
-        final int SPD = 10;
-        final int COST = 10;
+        final int AMR = 5;
+        final int SPD = 1;
+        final int COST = 1;
         
         Unit mel = new Melee(HP, ATK, AMR, SPD, owner);
         return new UnitInfo(COST, mel);
