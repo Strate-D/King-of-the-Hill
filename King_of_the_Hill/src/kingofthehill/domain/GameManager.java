@@ -189,7 +189,7 @@ public class GameManager {
         for (IPlayer player : players) {
             if (player instanceof AI) // The IPlayer is AI. Operate the AI player
             {
-                operateAIPlayer((AI) player);
+                //operateAIPlayer((AI) player);
             }
         }
 
