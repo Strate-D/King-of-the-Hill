@@ -44,7 +44,8 @@ public class Ranged extends Unit {
             if (this.getBase() != null) {
                 Lane newLane = this.getBase().getLane(this);
                 this.getBase().removeUnit(this);
-                this.setLane(newLane);
+                //this.setLane(newLane);
+                newLane.addUnit(this);
             }
 
             Unit targetUnit = this.canAttackUnit();

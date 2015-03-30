@@ -50,7 +50,7 @@ public class UnitInfo
         final int AMR = 10;
         final int SPD = 0;
         final int COST = 1;
-        final int COOL = 10;
+        final int COOL = 30;
         
         Unit def = new Defence(HP, ATK, AMR, SPD, owner);
         return new UnitInfo(COST, def, COOL);
@@ -63,7 +63,7 @@ public class UnitInfo
         final int AMR = 5;
         final int SPD = 1;
         final int COST = 1;
-        final int COOL = 10;
+        final int COOL = 40;
         
         Unit mel = new Melee(HP, ATK, AMR, SPD, owner);
         return new UnitInfo(COST, mel, COOL);
@@ -74,10 +74,10 @@ public class UnitInfo
         final int HP = 100;
         final int ATK = 10;
         final int AMR = 10;
-        final int SPD = 10;
+        final int SPD = 2;
         final int COST = 1;
         final int RAN = 10;
-        final int COOL = 10;
+        final int COOL = 40;
         
         Unit rang = new Ranged(HP, ATK, AMR, SPD, owner, RAN);
         return new UnitInfo(COST, rang, COOL);
