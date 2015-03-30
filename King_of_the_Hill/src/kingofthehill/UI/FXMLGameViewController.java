@@ -21,6 +21,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import kingofthehill.domain.AI;
+import kingofthehill.domain.AIState;
 import kingofthehill.domain.GameManager;
 import kingofthehill.domain.Melee;
 import kingofthehill.domain.Player;
@@ -52,7 +54,11 @@ public class FXMLGameViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //Create the game
-        gm = new GameManager(new Player("Jur", 9001));
+        //Player p = new Player("Jur", 9001);
+        AI a = new AI("AI0");
+        a.setAIType(AIState.AGRESSIVE);
+        gm = new GameManager(a);
+ 
         //Load all sprites
         castle1 = new Image("kingofthehill/UI/field/castle1.png");
         castle2 = new Image("kingofthehill/UI/field/castle2.png");
