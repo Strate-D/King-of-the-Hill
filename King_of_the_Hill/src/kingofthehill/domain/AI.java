@@ -255,21 +255,22 @@ public class AI implements IPlayer {
         // Check if there is still a cooldown on the Melee units
         if (this.stepsSinceLastMelee <= 0) {
             this.stepsSinceLastMelee = 0;
-        } else {
-            return;
         }
       
         // Check if there is still a cooldown on the Ranged units
         if (this.stepsSinceLastRanged <= 0) {
             this.stepsSinceLastRanged = 0;
-        } else {
-            return;
-        }
+        } 
         
         // Check if there is still a cooldown on the Defence units
         if (this.stepsSinceLastDefence <= 0) {
             this.stepsSinceLastDefence = 0;
-        } else {
+        } 
+        
+        // Check if there can be placed any unit
+        if(stepsSinceLastMelee != 0 && stepsSinceLastRanged != 0 && stepsSinceLastDefence != 0)
+        {
+            // No use to continue, player cannot spawn any units
             return;
         }
         
@@ -312,7 +313,7 @@ public class AI implements IPlayer {
         // Units from the enemy and the units that the AI has placed on that lane
         // The defencing units are also saved in this list
         
-        // Sort the list so the lane with the most attacking units in on top
+        // Sort the list so the lane with the most attacking units is on top
         for(int i = 0; i<AttackInfo.size(); i++)
         {
             for(int j = 0; j<AttackInfo.size(); j++)
@@ -325,6 +326,8 @@ public class AI implements IPlayer {
                 }
             }
         }
+        
+        // Take action to defend the base
         
     }
 
