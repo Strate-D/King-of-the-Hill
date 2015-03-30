@@ -504,7 +504,7 @@ public class AI implements IPlayer {
         // Get a random lane to place defence units
         int lane = getNextRandom(player, laneRange[0], laneRange[1]);
 
-        // Check if there are not already 3 defecen units in that lane
+        // Check if there are not already 3 defence units in that lane
         int defence_lane = player.getDefenceAtLane(lane);
         
         // The agressive AI does not want more that 1 defensive unit at a lane
@@ -618,6 +618,12 @@ public class AI implements IPlayer {
             maxlane = 3;
         if(player.getBase().getLane(4).getBaseEnd2().getHealthPoints() == 0)
             maxlane = 3;
+        
+        if(minlane > maxlane)
+        {
+            minlane = 0;
+            maxlane = 0;
+        }
         
         return new int[] {minlane, maxlane};
     }
