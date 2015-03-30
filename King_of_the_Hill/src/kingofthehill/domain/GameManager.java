@@ -5,12 +5,10 @@
  */
 package kingofthehill.domain;
 
-import static java.lang.System.gc;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import kingofthehill.unitinfo.UnitInfo;
 
 /**
  * Class that manages the game. Contains all the units and objects that are part
@@ -223,7 +221,7 @@ public class GameManager {
      */
     public boolean placeUnitAtLane(IPlayer player, Unit unit, int index, int cost) {
         //Check input
-        if (player == null || unit == null || index < 0 || index > 7 || cost < 1) {
+        if (player == null || unit == null || index < 0 || index > 7 || cost < 1 || player.getBase().getHealthPoints() <= 0) {
             return false;
         }
         //Check if player has enough money
@@ -256,7 +254,7 @@ public class GameManager {
      */
     public boolean placeUnitAtBase(IPlayer player, Unit unit, int index, int cost) {
         //Check input
-        if (player == null || unit == null || index > 31 || index < 0 || cost < 1) {
+        if (player == null || unit == null || index > 31 || index < 0 || cost < 1 || player.getBase().getHealthPoints() <= 0) {
             return false;
         }
         //Check if player has enough money
@@ -288,9 +286,8 @@ public class GameManager {
     public void setDebugLevelAI(boolean value) {
         this.DebugLevelAI = value;
     }
-    
-    public boolean getDebugLevelAI()
-    {
+
+    public boolean getDebugLevelAI() {
         return DebugLevelAI;
     }
 }
