@@ -247,8 +247,7 @@ public class AI implements IPlayer {
         {}
         else if(prepareForAttack(player, gm))
         {}
-        else if(thinkOfNextAction(player, gm))
-        {}
+        thinkOfNextAction(player, gm);
 
         // The cooldown for placing units
         stepsSinceLastDefence--;
@@ -367,6 +366,7 @@ public class AI implements IPlayer {
                 OutputDebugInfo(player, player.getName() + ": ", "Melee spawned");
                 this.stepsSinceLastMelee = ui.getCooldown();
                 hasPlacedUnits = true;
+                return hasPlacedUnits;
             }
             else if(this.stepsSinceLastRanged == 0)
             {
@@ -379,6 +379,7 @@ public class AI implements IPlayer {
                 OutputDebugInfo(player, player.getName() + ": ", "Ranged spawned");
                 this.stepsSinceLastRanged = ui.getCooldown();
                 hasPlacedUnits = true;
+                return hasPlacedUnits;
             }
         }
         
