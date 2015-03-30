@@ -28,5 +28,7 @@
       <Button layoutX="101.0" layoutY="150.0" mnemonicParsing="false" onAction="#placeTestUnit5" text="5" />
       <Button layoutX="54.0" layoutY="150.0" mnemonicParsing="false" onAction="#placeTestUnit6" text="6" />
       <Button layoutX="22.0" layoutY="150.0" mnemonicParsing="false" onAction="#placeTestUnit7" text="7" />
+      <Button layoutX="19.0" layoutY="206.0" mnemonicParsing="false" onAction="#placeMeleeUnit" text="Melee" />
+      <Button layoutX="18.0" layoutY="250.0" mnemonicParsing="false" onAction="#placeRangeUnit" text="Range" />
    </children>
 </AnchorPane>

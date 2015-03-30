@@ -26,6 +26,8 @@ import javafx.scene.text.FontWeight;
 import kingofthehill.domain.AI;
 import kingofthehill.domain.AIState;
 import kingofthehill.domain.GameManager;
+import kingofthehill.domain.IPlayer;
+import kingofthehill.domain.Player;
 import kingofthehill.domain.Unit;
 import kingofthehill.unitinfo.UnitInfo;
 
@@ -64,10 +66,10 @@ public class FXMLGameViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //Create the game
-        //Player p = new Player("Jur", 9001);
-        AI a = new AI("ArtificialIntelligence0");
-        a.setAIType(AIState.AGRESSIVE);
-        gm = new GameManager(a);
+        IPlayer p = new Player("Jur", 10);
+        //AI a = new AI("ArtificialIntelligence0");
+        //a.setAIType(AIState.AGRESSIVE);
+        gm = new GameManager(p);
 
         isMouseOnCanvas = false;
 
@@ -482,7 +484,27 @@ public class FXMLGameViewController implements Initializable {
             }
         }
     }
-
+    /**
+     * Place a Range Unit in a lane
+     */
+    public void placeRangeUnit() {
+        // TODO: Code to place unit on correct lane
+        IPlayer p = gm.getPlayers().get(0);
+        if(p instanceof Player) {
+            gm.placeUnitAtLane(p, UnitInfo.getRangeUnit(p).getUnit(), 0, UnitInfo.getRangeUnit(p).getKosten());
+        }
+    }
+    /**
+     * Place a Melee unit in a lane
+     */
+    public void placeMeleeUnit() {
+        // TODO: Code to place unit on correct lane
+        IPlayer p = gm.getPlayers().get(0);
+        if(p instanceof Player) {
+            gm.placeUnitAtLane(p, UnitInfo.getMeleeUnit(p).getUnit(), 0, UnitInfo.getMeleeUnit(p).getKosten());
+        }
+    }
+    
     /**
      * Test all drawing by placing units in all lanes
      */
