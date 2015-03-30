@@ -629,7 +629,7 @@ public class AI implements IPlayer {
     }
 
     private int getNextRandom(AI player, int low, int high) {
-        return (int) (Math.random() * player.getRandomSeed()) % (high + 1) + low;
+        return (int) (Math.random() * player.getRandomSeed()) % ((high - low) + 1) + low;
     }
 
     private void OutputDebugInfo(AI player, String pretext, Object data) {
