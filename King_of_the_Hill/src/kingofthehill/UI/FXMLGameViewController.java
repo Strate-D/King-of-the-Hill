@@ -26,9 +26,6 @@ import javafx.scene.text.FontWeight;
 import kingofthehill.domain.AI;
 import kingofthehill.domain.AIState;
 import kingofthehill.domain.GameManager;
-import kingofthehill.domain.Melee;
-import kingofthehill.domain.Player;
-import kingofthehill.domain.Ranged;
 import kingofthehill.domain.Unit;
 import kingofthehill.unitinfo.UnitInfo;
 
@@ -57,6 +54,7 @@ public class FXMLGameViewController implements Initializable {
     Image background;
     GameManager gm;
     AnimationTimer antimer;
+    boolean isPlaying;
 
     double scrollPosX, scrollPosY, lastMousePosx, lastMousePosy;
 
@@ -113,6 +111,7 @@ public class FXMLGameViewController implements Initializable {
                 drawBackground();
                 drawField();
                 drawUnits();
+
                 // Check and handle mouse scrolling
                 if (lastMousePosx > 800) {
                     if (scrollPosX < -443) {
@@ -144,9 +143,17 @@ public class FXMLGameViewController implements Initializable {
 
                 //Check if game ended
                 if (gm.getPlayers().get(0).getBase().getHealthPoints() == 0 && gm.getPlayers().get(2).getBase().getHealthPoints() == 0) {
+                    canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
+                    drawBackground();
+                    drawField();
+                    drawUnits();
                     canvas.getGraphicsContext2D().fillText("Team blue won!", 450, 450);
                     this.stop();
                 } else if (gm.getPlayers().get(1).getBase().getHealthPoints() == 0 && gm.getPlayers().get(3).getBase().getHealthPoints() == 0) {
+                    canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
+                    drawBackground();
+                    drawField();
+                    drawUnits();
                     canvas.getGraphicsContext2D().fillText("Team red won!", 450, 450);
                     this.stop();
                 }
@@ -179,7 +186,8 @@ public class FXMLGameViewController implements Initializable {
 
     /**
      * Check for mouse movement on the game canvas
-     * @param e 
+     *
+     * @param e
      */
     public void handleMouseOver(MouseEvent e) {
         lastMousePosx = e.getX();
@@ -424,7 +432,7 @@ public class FXMLGameViewController implements Initializable {
                 }
                 //Lane 1
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(1)) {
-                    canvas.getGraphicsContext2D().drawImage(unitRedT, 105, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262,40, 40);
+                    canvas.getGraphicsContext2D().drawImage(unitRedT, 105, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
                 }
                 //Lane 2
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(2)) {
