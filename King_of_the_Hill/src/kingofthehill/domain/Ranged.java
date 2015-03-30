@@ -51,11 +51,15 @@ public class Ranged extends Unit {
             Unit targetUnit = this.canAttackUnit();
             //Check if it is possible to attack
             if (targetUnit != null) {
-                //Deal damage
-                targetUnit.receiveDamage(this.getAttack());
                 //Check if target unit can attack back, to make combat fair
                 if (targetUnit.canAttackUnit() == this) {
-                    this.receiveDamage(targetUnit.getAttack());
+                    if(this.receiveDamage(targetUnit.getAttack())){
+                        targetUnit.getOwner().addPoints(5);
+                    }
+                }
+                //Deal damage
+                if(targetUnit.receiveDamage(this.getAttack())){
+                    this.getOwner().addPoints(5);
                 }
                 lastAction = 60;
             } else {

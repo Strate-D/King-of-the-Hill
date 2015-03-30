@@ -85,4 +85,10 @@ public interface IPlayer {
      * @param newBase The new base, can be null.
      */
     public void setBase(Base newBase);
+    
+    /**
+     * Adds points to the player
+     * @param points The amount of points that has to be added, can be negative
+     */
+    public void addPoints(int points);
 }

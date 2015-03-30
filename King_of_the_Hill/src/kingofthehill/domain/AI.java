@@ -227,6 +227,11 @@ public class AI implements IPlayer {
         return (int) ret_lane.stream().filter(p -> p == true).count();
 
     }
+    
+    @Override
+    public void addPoints(int points) {
+        this.score += points;
+    }
 
     /**
      * =========================================================================
