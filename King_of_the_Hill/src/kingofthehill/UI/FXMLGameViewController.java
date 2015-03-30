@@ -126,6 +126,7 @@ public class FXMLGameViewController implements Initializable {
         canvas.getGraphicsContext2D().drawImage(background, 8, 8, 884, 884);
         canvas.getGraphicsContext2D().fillText("Base 1: " + gm.getPlayers().get(0).getBase().getHealthPoints(), 400, 400);
         canvas.getGraphicsContext2D().fillText("Base 2: " + gm.getPlayers().get(1).getBase().getHealthPoints(), 400, 420);
+                
     }
 
     /**
@@ -137,6 +138,11 @@ public class FXMLGameViewController implements Initializable {
         canvas.getGraphicsContext2D().drawImage(castle2, 580, 20, 300, 300);
         canvas.getGraphicsContext2D().drawImage(castle3, 580, 580, 300, 300);
         canvas.getGraphicsContext2D().drawImage(castle4, 20, 580, 300, 300);
+        //Draw health castles
+        canvas.getGraphicsContext2D().fillText("Health: " + gm.getPlayers().get(0).getBase().getHealthPoints(), 10, 10);
+        canvas.getGraphicsContext2D().fillText("Health: " + gm.getPlayers().get(0).getBase().getHealthPoints(), 570, 10);
+        canvas.getGraphicsContext2D().fillText("Health: " + gm.getPlayers().get(0).getBase().getHealthPoints(), 570, 570);
+        canvas.getGraphicsContext2D().fillText("Health: " + gm.getPlayers().get(0).getBase().getHealthPoints(), 10, 570);
         //Draw lanes
         canvas.getGraphicsContext2D().drawImage(dirtField1, 318, 73, 265, 150);
         canvas.getGraphicsContext2D().drawImage(dirtField1, 318, 679, 265, 150);
