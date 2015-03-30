@@ -197,14 +197,41 @@ public class FXMLGameViewController implements Initializable {
         canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(1).getName(), 695, 50);
         canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(2).getName(), 695, 860);
         canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(3).getName(), 90, 860);
+        //Draw money
+        canvas.getGraphicsContext2D().setFill(Color.GOLD);
+        canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(0).getMoney(), 100, 110);
+        canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(1).getMoney(), 705, 110);
+        canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(2).getMoney(), 705, 715);
+        canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(3).getMoney(), 100, 715);
+        //Draw exp
+        canvas.getGraphicsContext2D().setFill(Color.AQUA);
+        canvas.getGraphicsContext2D().fillRect(100, 85, 100, 5);
+        canvas.getGraphicsContext2D().fillRect(705, 85, 100, 5);
+        canvas.getGraphicsContext2D().fillRect(705, 690, 100, 5);
+        canvas.getGraphicsContext2D().fillRect(100, 690, 100, 5);
+        canvas.getGraphicsContext2D().setFill(Color.BLUE);
+        canvas.getGraphicsContext2D().fillRect(100, 85, (float) gm.getPlayers().get(0).getExp(), 5);
+        canvas.getGraphicsContext2D().fillRect(705, 85, (float) gm.getPlayers().get(1).getExp(), 5);
+        canvas.getGraphicsContext2D().fillRect(705, 690, (float) gm.getPlayers().get(2).getExp(), 5);
+        canvas.getGraphicsContext2D().fillRect(100, 690, (float) gm.getPlayers().get(3).getExp(), 5);
+        //Draw score
+        canvas.getGraphicsContext2D().setFill(Color.BLACK);
+        canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(0).getScore(), 120, 110);
+        canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(1).getScore(), 725, 110);
+        canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(2).getScore(), 725, 715);
+        canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(3).getScore(), 120, 715);
+        
         
         //Set color back
         canvas.getGraphicsContext2D().setFill(Color.BLACK);
+        canvas.getGraphicsContext2D().setFont(Font.font(null,FontWeight.NORMAL, 12));
         //Draw lanes
         canvas.getGraphicsContext2D().drawImage(dirtField1, 318, 73, 265, 150);
         canvas.getGraphicsContext2D().drawImage(dirtField1, 318, 679, 265, 150);
         canvas.getGraphicsContext2D().drawImage(dirtField2, 75, 317, 145, 265);
         canvas.getGraphicsContext2D().drawImage(dirtField2, 680, 317, 145, 265);
+        
+        
     }
 
     /**
