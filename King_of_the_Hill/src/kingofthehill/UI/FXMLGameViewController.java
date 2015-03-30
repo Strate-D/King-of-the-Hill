@@ -54,7 +54,7 @@ public class FXMLGameViewController implements Initializable {
     Image background;
     GameManager gm;
     AnimationTimer antimer;
-    boolean isPlaying;
+    boolean isMouseOnCanvas;
 
     double scrollPosX, scrollPosY, lastMousePosx, lastMousePosy;
 
@@ -68,6 +68,8 @@ public class FXMLGameViewController implements Initializable {
         AI a = new AI("ArtificialIntelligence0");
         a.setAIType(AIState.AGRESSIVE);
         gm = new GameManager(a);
+
+        isMouseOnCanvas = false;
 
         //Load all sprites
         unitBlueR = new Image("kingofthehill/UI/Units/Blue/BlueKnightR.png");
@@ -113,33 +115,40 @@ public class FXMLGameViewController implements Initializable {
                 drawUnits();
 
                 // Check and handle mouse scrolling
-                if (lastMousePosx > 800) {
-                    if (scrollPosX < -443) {
-                        scrollPosX = -450;
-                    } else {
-                        scrollPosX = scrollPosX - 7;
+                if (isMouseOnCanvas) {
+                    if (lastMousePosx > 800) {
+                        if (scrollPosX < -443) {
+                            scrollPosX = -450;
+                        } else {
+                            scrollPosX = scrollPosX - 7;
+                        }
+                    } else if (lastMousePosx < 100) {
+                        if (scrollPosX > -7) {
+                            scrollPosX = 0;
+                        } else {
+                            scrollPosX = scrollPosX + 7;
+                        }
                     }
-                } else if (lastMousePosx < 100) {
-                    if (scrollPosX > -7) {
-                        scrollPosX = 0;
-                    } else {
-                        scrollPosX = scrollPosX + 7;
+                    if (lastMousePosy > 800) {
+                        if (scrollPosY < -443) {
+                            scrollPosY = -450;
+                        } else {
+                            scrollPosY = scrollPosY - 7;
+                        }
+                    } else if (lastMousePosy < 100) {
+                        if (scrollPosY > -7) {
+                            scrollPosY = 0;
+                        } else {
+                            scrollPosY = scrollPosY + 7;
+                        }
                     }
                 }
-                if (lastMousePosy > 800) {
-                    if (scrollPosY < -443) {
-                        scrollPosY = -450;
-                    } else {
-                        scrollPosY = scrollPosY - 7;
-                    }
-                } else if (lastMousePosy < 100) {
-                    if (scrollPosY > -7) {
-                        scrollPosY = 0;
-                    } else {
-                        scrollPosY = scrollPosY + 7;
-                    }
+                //If mouse on canvas, zoom in
+                if (isMouseOnCanvas) {
+                    canvas.getGraphicsContext2D().setTransform(1.5, 0, 0, 1.5, scrollPosX, scrollPosY);
+                } else {
+                    canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
                 }
-                canvas.getGraphicsContext2D().setTransform(1.5, 0, 0, 1.5, scrollPosX, scrollPosY);
 
                 //Check if game ended
                 if (gm.getPlayers().get(0).getBase().getHealthPoints() == 0 && gm.getPlayers().get(2).getBase().getHealthPoints() == 0) {
@@ -190,8 +199,18 @@ public class FXMLGameViewController implements Initializable {
      * @param e
      */
     public void handleMouseOver(MouseEvent e) {
+        isMouseOnCanvas = true;
         lastMousePosx = e.getX();
         lastMousePosy = e.getY();
+    }
+
+    /**
+     * Create event when mouse is off the canvas
+     *
+     * @param e
+     */
+    public void handleMouseOffCanvas(MouseEvent e) {
+        isMouseOnCanvas = false;
     }
 
     /**
