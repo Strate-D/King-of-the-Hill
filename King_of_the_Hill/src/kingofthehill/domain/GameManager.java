@@ -170,7 +170,7 @@ public class GameManager {
      * @param player The AI player that needs to do something
      */
     private void operateAIPlayer(AI player) {
-        player.doNextAction(player, this);
+        player.doNextAction(this);
     }
 
     /**
