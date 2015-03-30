@@ -20,7 +20,13 @@
          </font>
       </Button>
       <Canvas fx:id="canvas" height="900.0" layoutX="510.0" layoutY="90.0" onMouseClicked="#giveCoordinates" width="900.0" />
-      <Button layoutX="35.0" layoutY="23.0" mnemonicParsing="false" onAction="#placeTestUnit1" text="Button" />
-      <Button layoutX="101.0" layoutY="23.0" mnemonicParsing="false" onAction="#placeTestUnit2" text="Button" />
+      <Button layoutX="173.0" layoutY="23.0" mnemonicParsing="false" onAction="#placeTestUnit0" text="0" />
+      <Button layoutX="173.0" layoutY="58.0" mnemonicParsing="false" onAction="#placeTestUnit1" text="1" />
+      <Button layoutX="173.0" layoutY="90.0" mnemonicParsing="false" onAction="#placeTestUnit2" text="2" />
+      <Button layoutX="173.0" layoutY="125.0" mnemonicParsing="false" onAction="#placeTestUnit3" text="3" />
+      <Button layoutX="141.0" layoutY="150.0" mnemonicParsing="false" onAction="#placeTestUnit4" text="4" />
+      <Button layoutX="101.0" layoutY="150.0" mnemonicParsing="false" onAction="#placeTestUnit5" text="5" />
+      <Button layoutX="54.0" layoutY="150.0" mnemonicParsing="false" onAction="#placeTestUnit6" text="6" />
+      <Button layoutX="22.0" layoutY="150.0" mnemonicParsing="false" onAction="#placeTestUnit7" text="7" />
    </children>
 </AnchorPane>
