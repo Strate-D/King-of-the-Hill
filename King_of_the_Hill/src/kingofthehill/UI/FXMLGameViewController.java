@@ -41,6 +41,7 @@ public class FXMLGameViewController implements Initializable {
     private Canvas canvas;
 
     Image castle1, castle2, castle3, castle4;
+    Image castle_destroyed1, castle_destroyed2, castle_destroyed3, castle_destroyed4;
     Image dirtField1, dirtField2;
     Image corner1, corner2, corner3, corner4;
     Image side1, side2, side3, side4;
@@ -64,6 +65,10 @@ public class FXMLGameViewController implements Initializable {
         castle2 = new Image("kingofthehill/UI/field/castle2.png");
         castle3 = new Image("kingofthehill/UI/field/castle3.png");
         castle4 = new Image("kingofthehill/UI/field/castle4.png");
+        castle_destroyed1 = new Image("kingofthehill/UI/field/castle_destroyed1.png");
+        castle_destroyed2 = new Image("kingofthehill/UI/field/castle_destroyed2.png");
+        castle_destroyed3 = new Image("kingofthehill/UI/field/castle_destroyed3.png");
+        castle_destroyed4 = new Image("kingofthehill/UI/field/castle_destroyed4.png");
         dirtField1 = new Image("kingofthehill/UI/field/dirt1.png");
         dirtField2 = new Image("kingofthehill/UI/field/dirt2.png");
         background = new Image("kingofthehill/UI/field/background/desert.jpg");
@@ -148,11 +153,27 @@ public class FXMLGameViewController implements Initializable {
      * Draws the field of the game
      */
     private void drawField() {
-        //Draw castles
-        canvas.getGraphicsContext2D().drawImage(castle1, 20, 20, 300, 300);
-        canvas.getGraphicsContext2D().drawImage(castle2, 580, 20, 300, 300);
-        canvas.getGraphicsContext2D().drawImage(castle3, 580, 580, 300, 300);
-        canvas.getGraphicsContext2D().drawImage(castle4, 20, 580, 300, 300);
+        //Check hp, then draw correct sprite for base
+        if (gm.getPlayers().get(0).getBase().getHealthPoints() > 0) {
+            canvas.getGraphicsContext2D().drawImage(castle1, 20, 20, 300, 300);
+        } else {
+            canvas.getGraphicsContext2D().drawImage(castle_destroyed1, 20, 20, 300, 300);
+        }
+        if (gm.getPlayers().get(1).getBase().getHealthPoints() > 0) {
+            canvas.getGraphicsContext2D().drawImage(castle1, 580, 20, 300, 300);
+        } else {
+            canvas.getGraphicsContext2D().drawImage(castle_destroyed1, 580, 20, 300, 300);
+        }
+        if (gm.getPlayers().get(2).getBase().getHealthPoints() > 0) {
+            canvas.getGraphicsContext2D().drawImage(castle1, 580, 580, 300, 300);
+        } else {
+            canvas.getGraphicsContext2D().drawImage(castle_destroyed1, 580, 580, 300, 300);
+        }
+        if (gm.getPlayers().get(3).getBase().getHealthPoints() > 0) {
+            canvas.getGraphicsContext2D().drawImage(castle1, 20, 580, 300, 300);
+        } else {
+            canvas.getGraphicsContext2D().drawImage(castle_destroyed1, 20, 580, 300, 300);
+        }
         //Draw health castles
         canvas.getGraphicsContext2D().setFill(Color.RED);
         canvas.getGraphicsContext2D().fillRect(100, 75, 100, 5);
@@ -364,32 +385,32 @@ public class FXMLGameViewController implements Initializable {
         gm.placeUnitAtLane(gm.getPlayers().get(0),
                 UnitInfo.getMeleeUnit(gm.getPlayers().get(0)).getUnit(), 1, 1);
     }
-    
+
     public void placeTestUnit2() {
         gm.placeUnitAtLane(gm.getPlayers().get(0),
                 UnitInfo.getMeleeUnit(gm.getPlayers().get(0)).getUnit(), 2, 1);
     }
-    
+
     public void placeTestUnit3() {
         gm.placeUnitAtLane(gm.getPlayers().get(0),
                 UnitInfo.getMeleeUnit(gm.getPlayers().get(0)).getUnit(), 3, 1);
     }
-    
+
     public void placeTestUnit4() {
         gm.placeUnitAtLane(gm.getPlayers().get(0),
                 UnitInfo.getMeleeUnit(gm.getPlayers().get(0)).getUnit(), 4, 1);
     }
-    
+
     public void placeTestUnit5() {
         gm.placeUnitAtLane(gm.getPlayers().get(0),
                 UnitInfo.getMeleeUnit(gm.getPlayers().get(0)).getUnit(), 5, 1);
     }
-    
+
     public void placeTestUnit6() {
         gm.placeUnitAtLane(gm.getPlayers().get(0),
                 UnitInfo.getMeleeUnit(gm.getPlayers().get(0)).getUnit(), 6, 1);
     }
-    
+
     public void placeTestUnit7() {
         gm.placeUnitAtLane(gm.getPlayers().get(0),
                 UnitInfo.getMeleeUnit(gm.getPlayers().get(0)).getUnit(), 7, 1);
