@@ -108,16 +108,32 @@ public class FXMLGameViewController implements Initializable {
                 drawBackground();
                 drawField();
                 drawUnits();
-                // Check for mouse scrolling;
+                // Check and handle mouse scrolling
                 if (lastMousePosx > 800) {
-                    scrollPosX = scrollPosX - 2;
+                    if (scrollPosX < -446) {
+                        scrollPosX = -450;
+                    } else {
+                        scrollPosX = scrollPosX - 4;
+                    }
                 } else if (lastMousePosx < 100) {
-                    scrollPosX = scrollPosX + 2;
+                    if (scrollPosX > -4) {
+                        scrollPosX = 0;
+                    } else {
+                        scrollPosX = scrollPosX + 4;
+                    }
                 }
                 if (lastMousePosy > 800) {
-                    scrollPosY = scrollPosY - 2;
+                    if (scrollPosY < -446) {
+                        scrollPosY = -450;
+                    } else {
+                        scrollPosY = scrollPosY - 4;
+                    }
                 } else if (lastMousePosy < 100) {
-                    scrollPosY = scrollPosY + 2;
+                    if (scrollPosY > -4) {
+                        scrollPosY = 0;
+                    } else {
+                        scrollPosY = scrollPosY + 4;
+                    }
                 }
                 canvas.getGraphicsContext2D().setTransform(1.5, 0, 0, 1.5, scrollPosX, scrollPosY);
 
@@ -247,18 +263,16 @@ public class FXMLGameViewController implements Initializable {
         canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(1).getScore(), 725, 110);
         canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(2).getScore(), 725, 715);
         canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(3).getScore(), 120, 715);
-        
-        
+
         //Set color back
         canvas.getGraphicsContext2D().setFill(Color.BLACK);
-        canvas.getGraphicsContext2D().setFont(Font.font(null,FontWeight.NORMAL, 12));
+        canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.NORMAL, 12));
         //Draw lanes
         canvas.getGraphicsContext2D().drawImage(dirtField1, 318, 73, 265, 150);
         canvas.getGraphicsContext2D().drawImage(dirtField1, 318, 679, 265, 150);
         canvas.getGraphicsContext2D().drawImage(dirtField2, 75, 317, 145, 265);
         canvas.getGraphicsContext2D().drawImage(dirtField2, 680, 317, 145, 265);
-        
-        
+
     }
 
     /**
