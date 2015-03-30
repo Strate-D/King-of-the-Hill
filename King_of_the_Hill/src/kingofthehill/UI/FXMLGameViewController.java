@@ -21,6 +21,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import kingofthehill.domain.AI;
 import kingofthehill.domain.AIState;
 import kingofthehill.domain.GameManager;
@@ -57,7 +59,7 @@ public class FXMLGameViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         //Create the game
         //Player p = new Player("Jur", 9001);
-        AI a = new AI("AI0");
+        AI a = new AI("ArtificialIntelligence0");
         a.setAIType(AIState.AGRESSIVE);
         gm = new GameManager(a);
  
@@ -188,6 +190,14 @@ public class FXMLGameViewController implements Initializable {
         canvas.getGraphicsContext2D().fillRect(705, 75, (float) gm.getPlayers().get(1).getBase().getHealthPoints(), 5);
         canvas.getGraphicsContext2D().fillRect(705, 680, (float) gm.getPlayers().get(2).getBase().getHealthPoints(), 5);
         canvas.getGraphicsContext2D().fillRect(100, 680, (float) gm.getPlayers().get(3).getBase().getHealthPoints(), 5);
+        //Draw name
+        canvas.getGraphicsContext2D().setFill(Color.BLACK);
+        canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.BOLD, 12));
+        canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(0).getName(), 90, 50);
+        canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(1).getName(), 695, 50);
+        canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(2).getName(), 695, 860);
+        canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(3).getName(), 90, 860);
+        
         //Set color back
         canvas.getGraphicsContext2D().setFill(Color.BLACK);
         //Draw lanes

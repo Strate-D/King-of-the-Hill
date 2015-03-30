@@ -40,11 +40,11 @@ public class GameManager {
         //Add players
         this.players = new ArrayList<>();
         this.players.add(player);
-        this.players.add(new AI("AI1"));
+        this.players.add(new AI("ArtificialIntelligence1"));
         ((AI)(this.players.get(1))).setAIType(AIState.AGRESSIVE);
-        this.players.add(new AI("AI2"));
+        this.players.add(new AI("ArtificialIntelligence2"));
         ((AI)(this.players.get(2))).setAIType(AIState.AGRESSIVE);
-        this.players.add(new AI("AI3"));
+        this.players.add(new AI("ArtificialIntelligence3"));
         ((AI)(this.players.get(3))).setAIType(AIState.AGRESSIVE);
 
         //Create teams
