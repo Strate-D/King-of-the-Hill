@@ -18,9 +18,12 @@ public class AITesting {
     {
         GameManager gm = new GameManager(new Player("Host", 20));
         //gm.setDebugLevelAI(true);
+        AI ai1 = (AI)(gm.getPlayers().get(1));
+        ai1.setAIType(AIState.AGRESSIVE);
+        ai1.setPrintDebug(true);
         
         AI ai = (AI)gm.getPlayers().get(1);
-        for(int i = 0; i<10; i++)
+        for(int i = 0; i<500; i++)
         {
             System.out.println();
             System.out.println();
@@ -46,6 +49,8 @@ public class AITesting {
             System.out.println("   " + ai.getAttackAtLane(4) + "  " + ai.getAttackAtLane(5) + "  " + ai.getAttackAtLane(6) + "  " + ai.getAttackAtLane(7));
             System.out.println("");
         }
+        
+        System.out.println(ai1.getMoney());
     }
     
     private static String checkPlayerBaseSpot(AI player, int spot)

@@ -11,5 +11,6 @@ package kingofthehill.domain;
  */
 public enum AIState {
     AGRESSIVE,
-    DEFENSIVE
+    DEFENSIVE,
+    MODERNATE
 }

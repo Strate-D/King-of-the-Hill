@@ -19,6 +19,7 @@ public class UnitInfo
 {
     private int kosten;
     private Unit unit;
+    private int cool;
     
     public int getKosten()
     {
@@ -30,10 +31,16 @@ public class UnitInfo
         return unit;
     }
     
-    private UnitInfo(int kosten, Unit unit)
+    public int getCooldown()
+    {
+        return cool;
+    }
+    
+    private UnitInfo(int kosten, Unit unit, int cooldown)
     {
         this.kosten = kosten;
         this.unit = unit;
+        this.cool = cooldown;
     }
     
     public static UnitInfo getDefenceUnit(IPlayer owner)
@@ -43,9 +50,10 @@ public class UnitInfo
         final int AMR = 10;
         final int SPD = 0;
         final int COST = 1;
+        final int COOL = 10;
         
         Unit def = new Defence(HP, ATK, AMR, SPD, owner);
-        return new UnitInfo(COST, def);
+        return new UnitInfo(COST, def, COOL);
     }
     
     public static UnitInfo getMeleeUnit(IPlayer owner)
@@ -54,10 +62,11 @@ public class UnitInfo
         final int ATK = 10;
         final int AMR = 5;
         final int SPD = 1;
-        final int COST = 5;
+        final int COST = 1;
+        final int COOL = 10;
         
         Unit mel = new Melee(HP, ATK, AMR, SPD, owner);
-        return new UnitInfo(COST, mel);
+        return new UnitInfo(COST, mel, COOL);
     }
     
     public static UnitInfo getRangeUnit(IPlayer owner)
@@ -66,10 +75,11 @@ public class UnitInfo
         final int ATK = 10;
         final int AMR = 10;
         final int SPD = 10;
-        final int COST = 5;
+        final int COST = 1;
         final int RAN = 10;
+        final int COOL = 10;
         
         Unit rang = new Ranged(HP, ATK, AMR, SPD, owner, RAN);
-        return new UnitInfo(COST, rang);
+        return new UnitInfo(COST, rang, COOL);
     }
 }
