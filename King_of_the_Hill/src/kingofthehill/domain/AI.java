@@ -639,4 +639,9 @@ public class AI implements IPlayer {
             }
         }
     }
+
+    @Override
+    public void addPoints(int points) {
+        this.score += points;
+    }
 }

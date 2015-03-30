@@ -45,10 +45,16 @@ public class Melee extends Unit {
             if (targetUnit != null) {
                 //Check if target unit can attack back, to make combat fair
                 if (targetUnit.canAttackUnit() == this) {
-                    this.receiveDamage(targetUnit.getAttack());
+                    if(this.receiveDamage(targetUnit.getAttack())){
+                        targetUnit.getOwner().addPoints(5);
+                        this.getOwner().addPoints(-5);
+                    }
                 }
                 //Deal damage
-                targetUnit.receiveDamage(this.getAttack());
+                if(targetUnit.receiveDamage(this.getAttack())){
+                    targetUnit.getOwner().addPoints(-5);
+                    this.getOwner().addPoints(5);
+                }
                 lastAction = 20;
 
             } else {

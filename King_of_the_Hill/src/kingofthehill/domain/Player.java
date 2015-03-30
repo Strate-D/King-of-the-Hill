@@ -115,5 +115,10 @@ public class Player implements IPlayer{
             this.base = newBase;
         }
     }
+
+    @Override
+    public void addPoints(int points) {
+        this.score += points;
+    }
     
 }
