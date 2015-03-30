@@ -32,6 +32,8 @@ public class FXMLMainController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        //Collect garbage
+        System.gc();
     }
 
     /**
