@@ -40,6 +40,7 @@ public class FXMLGameViewController implements Initializable {
     @FXML
     private Canvas canvas;
 
+    Image unitBlueR, unitBlueB;
     Image castle1, castle2, castle3, castle4;
     Image castle_destroyed1, castle_destroyed2, castle_destroyed3, castle_destroyed4;
     Image dirtField1, dirtField2;
@@ -61,6 +62,8 @@ public class FXMLGameViewController implements Initializable {
         gm = new GameManager(a);
  
         //Load all sprites
+        unitBlueR = new Image("kingofthehill/UI/Units/Blue/BlueknightR.png");
+        unitBlueB = new Image("kingofthehill/UI/Units/Blue/BlueknightB.png");
         castle1 = new Image("kingofthehill/UI/field/castle1.png");
         castle2 = new Image("kingofthehill/UI/field/castle2.png");
         castle3 = new Image("kingofthehill/UI/field/castle3.png");
@@ -160,19 +163,19 @@ public class FXMLGameViewController implements Initializable {
             canvas.getGraphicsContext2D().drawImage(castle_destroyed1, 20, 20, 300, 300);
         }
         if (gm.getPlayers().get(1).getBase().getHealthPoints() > 0) {
-            canvas.getGraphicsContext2D().drawImage(castle1, 580, 20, 300, 300);
+            canvas.getGraphicsContext2D().drawImage(castle2, 580, 20, 300, 300);
         } else {
-            canvas.getGraphicsContext2D().drawImage(castle_destroyed1, 580, 20, 300, 300);
+            canvas.getGraphicsContext2D().drawImage(castle_destroyed2, 580, 20, 300, 300);
         }
         if (gm.getPlayers().get(2).getBase().getHealthPoints() > 0) {
-            canvas.getGraphicsContext2D().drawImage(castle1, 580, 580, 300, 300);
+            canvas.getGraphicsContext2D().drawImage(castle3, 580, 580, 300, 300);
         } else {
-            canvas.getGraphicsContext2D().drawImage(castle_destroyed1, 580, 580, 300, 300);
+            canvas.getGraphicsContext2D().drawImage(castle_destroyed3, 580, 580, 300, 300);
         }
         if (gm.getPlayers().get(3).getBase().getHealthPoints() > 0) {
-            canvas.getGraphicsContext2D().drawImage(castle1, 20, 580, 300, 300);
+            canvas.getGraphicsContext2D().drawImage(castle4, 20, 580, 300, 300);
         } else {
-            canvas.getGraphicsContext2D().drawImage(castle_destroyed1, 20, 580, 300, 300);
+            canvas.getGraphicsContext2D().drawImage(castle_destroyed4, 20, 580, 300, 300);
         }
         //Draw health castles
         canvas.getGraphicsContext2D().setFill(Color.RED);
@@ -220,35 +223,35 @@ public class FXMLGameViewController implements Initializable {
                 //Set color
                 canvas.getGraphicsContext2D().setFill(Color.RED);
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(0)) {
-                    canvas.getGraphicsContext2D().fillOval((float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 84, 20, 20);
+                    canvas.getGraphicsContext2D().drawImage(unitBlueR, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 84, 40, 40);
                 }
                 //Lane 1
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(1)) {
-                    canvas.getGraphicsContext2D().fillOval((float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 118, 20, 20);
+                    canvas.getGraphicsContext2D().drawImage(unitBlueR, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 118, 40, 40);
                 }
                 //Lane 2
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(2)) {
-                    canvas.getGraphicsContext2D().fillOval((float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 156, 20, 20);
+                    canvas.getGraphicsContext2D().drawImage(unitBlueR, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 156, 40, 40);
                 }
                 //Lane 3
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(3)) {
-                    canvas.getGraphicsContext2D().fillOval((float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 201, 20, 20);
+                    canvas.getGraphicsContext2D().drawImage(unitBlueR, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 201, 40, 40);
                 }
                 //Lane 4
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(4)) {
-                    canvas.getGraphicsContext2D().fillOval(83, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 20, 20);
+                    canvas.getGraphicsContext2D().drawImage(unitBlueB, 83, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
                 }
                 //Lane 5
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(5)) {
-                    canvas.getGraphicsContext2D().fillOval(115, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 20, 20);
+                    canvas.getGraphicsContext2D().drawImage(unitBlueB, 115, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
                 }
                 //Lane 6
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(6)) {
-                    canvas.getGraphicsContext2D().fillOval(154, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 20, 20);
+                    canvas.getGraphicsContext2D().drawImage(unitBlueB, 154, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
                 }
                 //Lane 7
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(7)) {
-                    canvas.getGraphicsContext2D().fillOval(189, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 20, 20);
+                    canvas.getGraphicsContext2D().drawImage(unitBlueB, 189, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
                 }
                 //Set color
                 canvas.getGraphicsContext2D().setFill(Color.BLACK);
