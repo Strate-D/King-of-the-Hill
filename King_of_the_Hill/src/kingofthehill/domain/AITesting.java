@@ -19,7 +19,7 @@ public class AITesting {
         GameManager gm = new GameManager(new Player("Host", 20));
         //gm.setDebugLevelAI(true);
         AI ai1 = (AI)(gm.getPlayers().get(1));
-        ai1.setAIType(AIState.AGRESSIVE);
+        ai1.setAIType(AIState.MODERNATE);
         ai1.setPrintDebug(true);
         
         AI ai = (AI)gm.getPlayers().get(1);

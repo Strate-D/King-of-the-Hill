@@ -67,9 +67,9 @@ public class FXMLGameViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         //Create the game
         IPlayer p = new Player("Jur", 10);
-        //AI a = new AI("ArtificialIntelligence0");
-        //a.setAIType(AIState.AGRESSIVE);
-        gm = new GameManager(p);
+        AI a = new AI("ArtificialIntelligence0");
+        a.setAIType(AIState.AGRESSIVE);
+        gm = new GameManager(a);
 
         isMouseOnCanvas = false;
 
