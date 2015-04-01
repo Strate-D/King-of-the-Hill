@@ -30,14 +30,18 @@ public class Mysterybox {
      * negative number!
      * @param upgrade Optional upgrade in the mysterybox. May be null.
      * @param unitType Optional unittype in the mysterybox. May be null.
-     * @param amount Optional amount of units in the mysterybox. May be null if unittype is null.
+     * @param amount Optional amount of units in the mysterybox. May be 0 if unittype is null.
      */
     public Mysterybox(int resources, Upgrade upgrade, UnitType unitType, int amount) {
         //Check input
         if (resources < 0) {
             throw new IllegalArgumentException("Amount of resources may not be lower than 0");
         }
-
+        
+        if(unitType != null && amount < 1){
+            throw new IllegalArgumentException("Amount of units must 1 or more if unittype is not null");
+        }
+        
         //Set fields
         this.resourceAmount = resources;
         this.upgrade = upgrade;
@@ -46,6 +50,11 @@ public class Mysterybox {
         this.higestBid = 0;
     }
     
+    /**
+     * Bid on the mysterybox
+     * @param bidder player that bids on the mysterybox
+     * @param bid amount of gold the bidder bid on the mysterybox 
+     */
     public void Bid(IPlayer bidder, int bid){
         if(bidder != null){
             if(bid > higestBid){
