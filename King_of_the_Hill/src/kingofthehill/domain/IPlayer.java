@@ -31,6 +31,11 @@ public interface IPlayer {
     public int getScore();
     
     /**
+     * Adds an upgrade to a player
+     */
+    public void addUpgrade(Upgrade upgrade);
+     
+    /**
      * 
      * @return All the upgrades the players has.
      */

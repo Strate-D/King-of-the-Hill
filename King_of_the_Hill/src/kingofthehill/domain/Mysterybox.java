@@ -17,8 +17,11 @@ public class Mysterybox {
 
     private int resourceAmount;
     private Upgrade upgrade;
-    private List<Unit> units;
+    private UnitType unitType;
+    private int amount;
     private static final int duration = 1800;
+    private IPlayer highestBidder;
+    private int higestBid;
 
     /**
      * Creates a new Mysterybox object that contains info about the mysterybox.
@@ -26,9 +29,10 @@ public class Mysterybox {
      * @param resources Amount of resources in the mysterybox. May not be a
      * negative number!
      * @param upgrade Optional upgrade in the mysterybox. May be null.
-     * @param units Optional list of units in the mysterybox. May be null.
+     * @param unitType Optional unittype in the mysterybox. May be null.
+     * @param amount Optional amount of units in the mysterybox. May be null if unittype is null.
      */
-    public Mysterybox(int resources, Upgrade upgrade, List<Unit> units) {
+    public Mysterybox(int resources, Upgrade upgrade, UnitType unitType, int amount) {
         //Check input
         if (resources < 0) {
             throw new IllegalArgumentException("Amount of resources may not be lower than 0");
@@ -37,9 +41,20 @@ public class Mysterybox {
         //Set fields
         this.resourceAmount = resources;
         this.upgrade = upgrade;
-        this.units = units;
+        this.unitType = unitType;
+        this.amount = amount;
+        this.higestBid = 0;
     }
-
+    
+    public void Bid(IPlayer bidder, int bid){
+        if(bidder != null){
+            if(bid > higestBid){
+                this.highestBidder = bidder;
+                this.higestBid = bid;
+            }
+        }
+    }
+    
     /**
      * Gets the amount of resources in the mysterybox.
      * @return The amount of resources. Always 0 or higher.
@@ -55,14 +70,6 @@ public class Mysterybox {
     public Upgrade getUpgrade() {
         return this.upgrade;
     }
-
-    /**
-     * Gets the units in the mysterbox
-     * @return The list of units. Can be null.
-     */
-    public List<Unit> getUnits() {
-        return Collections.unmodifiableList(units);
-    }
     
     /**
      * Returns the duration of the mysterybox in frames. (amount of seconds times 60)
@@ -70,5 +77,21 @@ public class Mysterybox {
      */
     public int getDuration(){
         return this.duration;
+    }
+    
+    /**
+     * Returns the type of unit that the mysterybox contains
+     * @return Returns the UnitType
+     */
+    public UnitType getUnitType(){
+        return this.unitType;
+    }
+    
+    /**
+     * Returns the amount of units that the mysterybox contains
+     * @return Returns the amount of units
+     */
+    public int getAmount(){
+        return this.amount;
     }
 }

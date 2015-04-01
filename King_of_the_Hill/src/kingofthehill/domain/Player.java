@@ -62,6 +62,11 @@ public class Player implements IPlayer{
     }
 
     @Override
+    public void addUpgrade(Upgrade upgrade){
+        upgrades.add(upgrade);
+    }
+    
+    @Override
     public List<Upgrade> getUpgrades() {
         return Collections.unmodifiableList(upgrades);
     }

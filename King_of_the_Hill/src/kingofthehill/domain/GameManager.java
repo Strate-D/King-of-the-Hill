@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+import kingofthehill.upgradeinfo.UpgradeInfo;
 
 /**
  * Class that manages the game. Contains all the units and objects that are part
@@ -161,7 +163,62 @@ public class GameManager {
      * TODO
      */
     private void generateMysterybox() {
-        throw new UnsupportedOperationException("TODO generateMysterybox");
+        //throw new UnsupportedOperationException("TODO generateMysterybox");
+        Random random = new Random();
+        UnitType unitType = null;
+        
+        //random choose unittype for upgrade
+        switch(random.nextInt(2)){
+            //defence
+            case 0:
+                unitType = UnitType.DEFENCE;
+                break;
+            //melee
+            case 1:
+                unitType = UnitType.MELEE;
+                break;
+            //ranged
+            case 2:
+                unitType = UnitType.RANGED;
+                break;
+            }
+        
+        //random generate content mysterybox
+        switch(random.nextInt(2)){
+            //mysterybox has resource
+            case 0:
+                mysterybox = new Mysterybox(random.nextInt(90) + 10, null, null, 0);
+                break;
+            //mysterybox has upgrade
+            case 1:
+                if(unitType != null){
+                    UpgradeInfo upgradeInfo = null;
+                    //random choose upgradetype
+                    switch(random.nextInt(2)){
+                    //weak upgrade
+                    case 0:
+                        upgradeInfo = UpgradeInfo.getWeakUpgrade(unitType);
+                        break;      
+                    //normap upgrade
+                    case 1:
+                        upgradeInfo = UpgradeInfo.getNormalUpgrade(unitType);
+                        break;    
+                    //strong upgrade
+                    case 2:
+                        upgradeInfo = UpgradeInfo.getStrongUpgrade(unitType);
+                        break;
+                    }
+                
+                    if(upgradeInfo != null){
+                        mysterybox = new Mysterybox(0, upgradeInfo.getUpgrade(), null, 0); 
+                    }
+                }
+                break;
+            //Mysterybox has unit(s)
+            case 2:
+                mysterybox = new Mysterybox(0, null, unitType, random.nextInt(9) + 1);        
+                break;
+        }
     }
 
     /**
