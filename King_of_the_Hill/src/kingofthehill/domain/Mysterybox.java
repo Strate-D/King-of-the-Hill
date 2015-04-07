@@ -5,9 +5,6 @@
  */
 package kingofthehill.domain;
 
-import java.util.Collections;
-import java.util.List;
-
 /**
  * Object that contains all the info about the mystery box in the game.
  *
@@ -60,8 +57,15 @@ public class Mysterybox {
     public void Bid(IPlayer bidder, int bid) {
         if (bidder != null) {
             if (bid > higestBid) {
+                //give money back to previous higest bidder
+                highestBidder.addMoney(bid);         
+                
+                //set new higest bidder and bid
                 this.highestBidder = bidder;
                 this.higestBid = bid;
+                
+                //take money from new higest bidder
+                highestBidder.payMoney(bid);  
             }
         }
     }

@@ -164,12 +164,11 @@ public class GameManager {
      * TODO
      */
     private void generateMysterybox() {
-        //throw new UnsupportedOperationException("TODO generateMysterybox");
-        Random random = new Random();
+        Random r = new Random();
         UnitType unitType = null;
         
         //random choose unittype for upgrade
-        switch(random.nextInt(2)){
+        switch(r.nextInt(2)){
             //defence
             case 0:
                 unitType = UnitType.DEFENCE;
@@ -182,34 +181,45 @@ public class GameManager {
             case 2:
                 unitType = UnitType.RANGED;
                 break;
-            }
+        }
         
         //random generate content mysterybox
-        switch(random.nextInt(2)){
+        switch(r.nextInt(2)){
             //mysterybox has resource
             case 0:
-                mysterybox = new Mysterybox(random.nextInt(90) + 10, null, null, 0);
+                mysterybox = new Mysterybox(r.nextInt(90) + 10, null, null, 0);
                 break;
             //mysterybox has upgrade
             case 1:
                 if(unitType != null){
                     UpgradeInfo upgradeInfo = null;
                     //random choose upgradetype
-                    switch(random.nextInt(2)){
+                    switch(r.nextInt(5)){
                     //weak upgrade
                     case 0:
                         upgradeInfo = UpgradeInfo.getWeakUpgrade(unitType);
-                        break;      
-                    //normap upgrade
+                        break;
+                    //weak-normal upgrade
                     case 1:
-                        upgradeInfo = UpgradeInfo.getNormalUpgrade(unitType);
-                        break;    
-                    //strong upgrade
+                        upgradeInfo = UpgradeInfo.getWeakNormalUpgrade(unitType);
+                        break; 
+                    //normal upgrade
                     case 2:
+                        upgradeInfo = UpgradeInfo.getNormalUpgrade(unitType);
+                        break;
+                    //normal-strong upgrade
+                    case 3:
+                        upgradeInfo = UpgradeInfo.getNormalStrongUpgrade(unitType);
+                        break;   
+                    //strong upgrade
+                    case 4:
                         upgradeInfo = UpgradeInfo.getStrongUpgrade(unitType);
                         break;
+                    case 5:
+                        upgradeInfo = UpgradeInfo.getUberUpgrade(unitType);
+                        break;
                     }
-                
+                    
                     if(upgradeInfo != null){
                         mysterybox = new Mysterybox(0, upgradeInfo.getUpgrade(), null, 0); 
                     }
@@ -217,7 +227,7 @@ public class GameManager {
                 break;
             //Mysterybox has unit(s)
             case 2:
-                mysterybox = new Mysterybox(0, null, unitType, random.nextInt(9) + 1);        
+                mysterybox = new Mysterybox(0, null, unitType, r.nextInt(9) + 1);        
                 break;
         }
     }
