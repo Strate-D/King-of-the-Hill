@@ -335,27 +335,8 @@ public class AI implements IPlayer {
             AIAttackInfo info = new AIAttackInfo(i);
             AttackInfo.add(info);
 
-            //int ownUnits = this.getAttackAtLane(i);//0;
-            //int enemyUnits = this.getBase().getLane(i).getUnits().size() - ownUnits;//0;
-//            for (Unit u : this.getBase().getLane(i).getUnits()) {
-//                if (u.getOwner() == this) {
-//                    ownUnits++;
-//                } else {
-//                    enemyUnits++;
-//                }
-//            }
-            //info.setDefendingUnits(ownUnits);
             info.setDefendingUnits(this.getAttackAtLane(i));
-            //info.setUpcomingUnits(enemyUnits);
             info.setUpcomingUnits(this.getBase().getLane(i).getUnits().size() - info.getDefendinUnits());
-
-            //int defenceUnits = this.getDefenceAtLane(i);//0;
-//            for (int j = 0; j < 4; j++) {
-//                if (this.getBase().getUnit(j) != null) {
-//                    defenceUnits++;
-//                }
-//            }
-            //info.setDefence(defenceUnits);
             info.setDefence(this.getDefenceAtLane(i));
         }
 
@@ -404,12 +385,8 @@ public class AI implements IPlayer {
         for (int i = 0; i < AttackInfo.size(); i++) {
             if (this.getAIType() == AIState.AGRESSIVE) {
                 // Spawn a Melee and a Ranged unit to defend against upcoming units
-                //if (canPlaceUnit(UnitType.MELEE)) {
                 this.spawnUnit(UnitType.MELEE, AttackInfo.get(i).getLane() * 4 + 3);
-                //}
-                //if (canPlaceUnit(UnitType.RANGED)) {
                 this.spawnUnit(UnitType.RANGED, AttackInfo.get(i).getLane() * 4 + 3);
-                //}
             } else if (this.getAIType() == AIState.MODERNATE) {
                 // Spawn a Melee or a Ranged unit. If not possible, decide if
                 // a defence unit is an option
@@ -427,8 +404,6 @@ public class AI implements IPlayer {
             } else if (this.getAIType() == AIState.DEFENSIVE) {
             }
         }
-
-        //gc();
     }
 
     /**
@@ -647,14 +622,6 @@ public class AI implements IPlayer {
         return (int) (Math.random() * this.getRandomSeed()) % ((high - low) + 1) + low;
     }
 
-    private void OutputDebugInfo(String pretext, Object data) {
-        if (getPrintDebug()) {
-            if (this.getName().equals("AI1")) {
-                System.out.println(pretext + data.toString());
-            }
-        }
-    }
-
     private boolean canPlaceUnit(UnitType unit) {
         if (unit == UnitType.DEFENCE) {
             if (this.stepsSinceLastDefence <= 0) {
@@ -714,14 +681,12 @@ public class AI implements IPlayer {
         // Check if the AI has enough money to bid on the mysterybox
         // If the AI as just enough money it will not bid because it needs it to
         // spawn units
-        if(this.getMoney() + 5 <= gm.getMysterybox().getHighestBid())
-        {
+        if (this.getMoney() + 5 <= gm.getMysterybox().getHighestBid()) {
             return;
         }
-        
+
         double chance = getNextRandom(0, 1000) / 10;
-        if(chance < 30)
-        {
+        if (chance < 30) {
             gm.getMysterybox().Bid(this, gm.getMysterybox().getHighestBid() + getNextRandom(0, 5));
         }
     }
