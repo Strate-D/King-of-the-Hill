@@ -24,6 +24,7 @@ public class GameManager {
     private Mysterybox mysterybox;
     private GameMode gameMode;
     private int resourceTimer;
+    private int mysteryboxTimer;
 
     private boolean DebugLevelAI = false;
 
@@ -160,9 +161,6 @@ public class GameManager {
         return list.iterator();
     }
 
-    /**
-     * TODO
-     */
     private void generateMysterybox() {
         Random r = new Random();
         UnitType unitType = null;
@@ -184,7 +182,7 @@ public class GameManager {
         }
         
         //random generate content mysterybox
-        switch(r.nextInt(2)){
+        switch(r.nextInt(1)){
             //mysterybox has resource
             case 0:
                 mysterybox = new Mysterybox(r.nextInt(90) + 10, null, null, 0);
@@ -215,6 +213,7 @@ public class GameManager {
                     case 4:
                         upgradeInfo = UpgradeInfo.getStrongUpgrade(unitType);
                         break;
+                    //uber upgrade
                     case 5:
                         upgradeInfo = UpgradeInfo.getUberUpgrade(unitType);
                         break;
@@ -250,7 +249,7 @@ public class GameManager {
             giveResources();
             this.resourceTimer = 0;
         }
-
+        
         //Operate all units
         operateUnits();
 
@@ -262,9 +261,34 @@ public class GameManager {
                 operateAIPlayer((AI) player);
             }
         }
+        
+        //Generate mysterybox
+        if(mysteryboxTimer > 3600){
+            generateMysterybox();
+            mysteryboxTimer = 0;
+        }
+        
+        //Unpack mysterybox
+        if(mysterybox != null){
+            if(mysteryboxTimer > mysterybox.getDuration()){
+                IPlayer higestBidder = mysterybox.getHigestBidder();
+                if(higestBidder != null){
+                    if(mysterybox.getResourceAmount() != 0){
+                        higestBidder.addMoney(mysterybox.getResourceAmount());
+                    }
+                    else if(mysterybox.getUpgrade() != null){
+                        higestBidder.addUpgrade(mysterybox.getUpgrade());
+                    }
+                    else if(mysterybox.getUnitType() != null){
+                        //todo
+                    }
+                }
+            }
+        }
 
         //Keep track of timers
         this.resourceTimer++;
+        this.mysteryboxTimer++;
     }
 
     /**
