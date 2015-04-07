@@ -341,12 +341,9 @@ public class GameManager {
     public List<IPlayer> getPlayers() {
         return Collections.unmodifiableList(players);
     }
-
-    public void setDebugLevelAI(boolean value) {
-        this.DebugLevelAI = value;
-    }
-
-    public boolean getDebugLevelAI() {
-        return DebugLevelAI;
+    
+    public Mysterybox getMysterybox()
+    {
+        return this.mysterybox;
     }
 }

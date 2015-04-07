@@ -95,10 +95,10 @@ public class AI implements IPlayer {
     }
 
     @Override
-    public void addUpgrade(Upgrade upgrade){
+    public void addUpgrade(Upgrade upgrade) {
         upgrades.add(upgrade);
     }
-    
+
     @Override
     public List<Upgrade> getUpgrades() {
         return Collections.unmodifiableList(upgrades);
@@ -280,7 +280,7 @@ public class AI implements IPlayer {
             fightOffEnemyUnits();
 
             // 4. Do the next thing you like
-            //doRandomAction();
+            doRandomAction(gm);
         }
 
         // The cooldown for placing units
@@ -293,15 +293,15 @@ public class AI implements IPlayer {
     private boolean spawnUnits(GameManager gm) {
         boolean hasPlacedUnits = false;
 
-        if(stepsSinceLastSpawn > 0)
+        if (stepsSinceLastSpawn > 0) {
             return true;
-        else if(stepsSinceLastSpawn < 0)
+        } else if (stepsSinceLastSpawn < 0) {
             stepsSinceLastSpawn = 0;
-        
+        }
+
         int index = -1;
         if (this.stillToSpawn.size() > 0) {
-            for(int i = 0; i<this.stillToSpawn.size(); i++)
-            {
+            for (int i = 0; i < this.stillToSpawn.size(); i++) {
                 if (canPlaceUnit(this.stillToSpawn.get(i).getUnitType())) {
                     createUnitAtLane(this.stillToSpawn.get(i).getUnitType(), gm, this.stillToSpawn.get(i).getSpawnPoint());
                     index = i;
@@ -311,9 +311,10 @@ public class AI implements IPlayer {
                 }
             }
         }
-        
-        if(index != -1)
+
+        if (index != -1) {
             this.stillToSpawn.remove(this.stillToSpawn.get(index));
+        }
 
         return hasPlacedUnits;
     }
@@ -343,7 +344,6 @@ public class AI implements IPlayer {
 //                    enemyUnits++;
 //                }
 //            }
-
             //info.setDefendingUnits(ownUnits);
             info.setDefendingUnits(this.getAttackAtLane(i));
             //info.setUpcomingUnits(enemyUnits);
@@ -405,10 +405,10 @@ public class AI implements IPlayer {
             if (this.getAIType() == AIState.AGRESSIVE) {
                 // Spawn a Melee and a Ranged unit to defend against upcoming units
                 //if (canPlaceUnit(UnitType.MELEE)) {
-                    this.spawnUnit(UnitType.MELEE, AttackInfo.get(i).getLane() * 4 + 3);
+                this.spawnUnit(UnitType.MELEE, AttackInfo.get(i).getLane() * 4 + 3);
                 //}
                 //if (canPlaceUnit(UnitType.RANGED)) {
-                    this.spawnUnit(UnitType.RANGED, AttackInfo.get(i).getLane() * 4 + 3);
+                this.spawnUnit(UnitType.RANGED, AttackInfo.get(i).getLane() * 4 + 3);
                 //}
             } else if (this.getAIType() == AIState.MODERNATE) {
                 // Spawn a Melee or a Ranged unit. If not possible, decide if
@@ -427,7 +427,7 @@ public class AI implements IPlayer {
             } else if (this.getAIType() == AIState.DEFENSIVE) {
             }
         }
-        
+
         //gc();
     }
 
@@ -438,7 +438,7 @@ public class AI implements IPlayer {
      * @return If the AI has placed units in this method it return true;
      * otherwise false
      */
-    private boolean doRandomAction() {
+    private boolean doRandomAction(GameManager gm) {
         double choicePer = getNextRandom(0, 1000) / 10;
 
         if (choicePer < chances[0]) {
@@ -452,6 +452,7 @@ public class AI implements IPlayer {
             // Do Upgrade
         } else {
             // Bid on Mysterybox
+            bidOnMysterybox(gm);
         }
 
         return true;
@@ -706,6 +707,22 @@ public class AI implements IPlayer {
                 gm.placeUnitAtBase(this, ui.getUnit(), spawnPoint, ui.getKosten());
                 stepsSinceLastRanged = (int) (ui.getCooldown());
                 break;
+        }
+    }
+
+    private void bidOnMysterybox(GameManager gm) {
+        // Check if the AI has enough money to bid on the mysterybox
+        // If the AI as just enough money it will not bid because it needs it to
+        // spawn units
+        if(this.getMoney() + 5 <= gm.getMysterybox().getHighestBid())
+        {
+            return;
+        }
+        
+        double chance = getNextRandom(0, 1000) / 10;
+        if(chance < 30)
+        {
+            gm.getMysterybox().Bid(this, gm.getMysterybox().getHighestBid() + getNextRandom(0, 5));
         }
     }
 }

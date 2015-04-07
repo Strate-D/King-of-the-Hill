@@ -30,18 +30,19 @@ public class Mysterybox {
      * negative number!
      * @param upgrade Optional upgrade in the mysterybox. May be null.
      * @param unitType Optional unittype in the mysterybox. May be null.
-     * @param amount Optional amount of units in the mysterybox. May be 0 if unittype is null.
+     * @param amount Optional amount of units in the mysterybox. May be 0 if
+     * unittype is null.
      */
     public Mysterybox(int resources, Upgrade upgrade, UnitType unitType, int amount) {
         //Check input
         if (resources < 0) {
             throw new IllegalArgumentException("Amount of resources may not be lower than 0");
         }
-        
-        if(unitType != null && amount < 1){
+
+        if (unitType != null && amount < 1) {
             throw new IllegalArgumentException("Amount of units must 1 or more if unittype is not null");
         }
-        
+
         //Set fields
         this.resourceAmount = resources;
         this.upgrade = upgrade;
@@ -49,23 +50,25 @@ public class Mysterybox {
         this.amount = amount;
         this.higestBid = 0;
     }
-    
+
     /**
      * Bid on the mysterybox
+     *
      * @param bidder player that bids on the mysterybox
-     * @param bid amount of gold the bidder bid on the mysterybox 
+     * @param bid amount of gold the bidder bid on the mysterybox
      */
-    public void Bid(IPlayer bidder, int bid){
-        if(bidder != null){
-            if(bid > higestBid){
+    public void Bid(IPlayer bidder, int bid) {
+        if (bidder != null) {
+            if (bid > higestBid) {
                 this.highestBidder = bidder;
                 this.higestBid = bid;
             }
         }
     }
-    
+
     /**
      * Gets the amount of resources in the mysterybox.
+     *
      * @return The amount of resources. Always 0 or higher.
      */
     public int getResourceAmount() {
@@ -74,33 +77,46 @@ public class Mysterybox {
 
     /**
      * Gets the upgrade in the mysterybox.
+     *
      * @return The upgrade in the mysterybox. Can be null.
      */
     public Upgrade getUpgrade() {
         return this.upgrade;
     }
-    
+
     /**
-     * Returns the duration of the mysterybox in frames. (amount of seconds times 60)
+     * Returns the duration of the mysterybox in frames. (amount of seconds
+     * times 60)
+     *
      * @return Returns the duration
      */
-    public int getDuration(){
+    public int getDuration() {
         return this.duration;
     }
-    
+
     /**
      * Returns the type of unit that the mysterybox contains
+     *
      * @return Returns the UnitType
      */
-    public UnitType getUnitType(){
+    public UnitType getUnitType() {
         return this.unitType;
     }
-    
+
     /**
      * Returns the amount of units that the mysterybox contains
+     *
      * @return Returns the amount of units
      */
-    public int getAmount(){
+    public int getAmount() {
         return this.amount;
+    }
+
+    /**
+     * Return the highest bid
+     * @return Returns the highest bid
+     */
+    public int getHighestBid() {
+        return this.higestBid;
     }
 }
