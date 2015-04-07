@@ -33,9 +33,10 @@ public class AI implements IPlayer {
     private int stepsSinceLastDefence;
     private int stepsSinceLastMelee;
     private int stepsSinceLastRanged;
+    private int stepsSinceLastSpawn;
     private int defenceAtLanes[];
     private int attackAtLanes[];
-    private int randomSeed;
+    private int randomSeed = 123456789;
     private AIState aiType;
     private boolean debugInfo;
     private double[] chances;
@@ -64,9 +65,10 @@ public class AI implements IPlayer {
         this.stepsSinceLastDefence = 0;
         this.stepsSinceLastMelee = 0;
         this.stepsSinceLastRanged = 0;
+        this.stepsSinceLastSpawn = 0;
         this.defenceAtLanes = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
         this.attackAtLanes = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
-        this.randomSeed = 123456789;
+        this.randomSeed = this.getNextRandom(0, 999999999);
         setAIType(AIState.DEFENSIVE);
         this.debugInfo = false;
         this.stillToSpawn = new ArrayList<>();
@@ -272,24 +274,30 @@ public class AI implements IPlayer {
         spawnUnits(gm);
         if (this.stillToSpawn.isEmpty()) {
             // 2. Place defence at lanes
-            //defendBase(gm);
+            //defendBase();
 
             // 3. Check if there are attack unit coming
-            fightOffEnemyUnits(gm);
+            fightOffEnemyUnits();
 
             // 4. Do the next thing you like
-            doRandomAction(gm);
+            //doRandomAction();
         }
 
         // The cooldown for placing units
         stepsSinceLastDefence--;
         stepsSinceLastMelee--;
         stepsSinceLastRanged--;
+        stepsSinceLastSpawn--;
     }
 
     private boolean spawnUnits(GameManager gm) {
         boolean hasPlacedUnits = false;
 
+        if(stepsSinceLastSpawn > 0)
+            return true;
+        else if(stepsSinceLastSpawn < 0)
+            stepsSinceLastSpawn = 0;
+        
         int index = -1;
         if (this.stillToSpawn.size() > 0) {
             for(int i = 0; i<this.stillToSpawn.size(); i++)
@@ -298,6 +306,7 @@ public class AI implements IPlayer {
                     createUnitAtLane(this.stillToSpawn.get(i).getUnitType(), gm, this.stillToSpawn.get(i).getSpawnPoint());
                     index = i;
                     hasPlacedUnits = true;
+                    stepsSinceLastSpawn = 0;
                     break;
                 }
             }
@@ -317,7 +326,7 @@ public class AI implements IPlayer {
      * @return If the AI has placed units in this method it return true;
      * otherwise false
      */
-    private void fightOffEnemyUnits(GameManager gm) {
+    private void fightOffEnemyUnits() {
         // Check on every lane if there are attack units coming towards the base
         // Save the lanes with upcoming units in a list
         ArrayList<AIAttackInfo> AttackInfo = new ArrayList<>();
@@ -325,26 +334,29 @@ public class AI implements IPlayer {
             AIAttackInfo info = new AIAttackInfo(i);
             AttackInfo.add(info);
 
-            int ownUnits = 0;
-            int enemyUnits = 0;
-            for (Unit u : this.getBase().getLane(i).getUnits()) {
-                if (u.getOwner() == this) {
-                    ownUnits++;
-                } else {
-                    enemyUnits++;
-                }
-            }
+            //int ownUnits = this.getAttackAtLane(i);//0;
+            //int enemyUnits = this.getBase().getLane(i).getUnits().size() - ownUnits;//0;
+//            for (Unit u : this.getBase().getLane(i).getUnits()) {
+//                if (u.getOwner() == this) {
+//                    ownUnits++;
+//                } else {
+//                    enemyUnits++;
+//                }
+//            }
 
-            info.setUpcomingUnits(enemyUnits);
-            info.setDefendingUnits(ownUnits);
+            //info.setDefendingUnits(ownUnits);
+            info.setDefendingUnits(this.getAttackAtLane(i));
+            //info.setUpcomingUnits(enemyUnits);
+            info.setUpcomingUnits(this.getBase().getLane(i).getUnits().size() - info.getDefendinUnits());
 
-            int defenceUnits = 0;
-            for (int j = 0; j < 4; j++) {
-                if (this.getBase().getUnit(j) != null) {
-                    defenceUnits++;
-                }
-            }
-            info.setDefence(defenceUnits);
+            //int defenceUnits = this.getDefenceAtLane(i);//0;
+//            for (int j = 0; j < 4; j++) {
+//                if (this.getBase().getUnit(j) != null) {
+//                    defenceUnits++;
+//                }
+//            }
+            //info.setDefence(defenceUnits);
+            info.setDefence(this.getDefenceAtLane(i));
         }
 
         // Remove attack info where there are more defending units than attacking
@@ -352,13 +364,10 @@ public class AI implements IPlayer {
         ArrayList<AIAttackInfo> toRemove = new ArrayList<>();
         for (AIAttackInfo aia : AttackInfo) {
             if (aia.getUpcomingUnits() <= aia.getDefendinUnits() + aia.getDefence()) {
-                //AttackInfo.remove(AttackInfo.indexOf(aia));
                 toRemove.add(aia);
-                //continue;
             }
             if (aia.getUpcomingUnits() == 0) {
                 toRemove.add(aia);
-                //AttackInfo.remove(AttackInfo.indexOf(aia));
             }
         }
 
@@ -395,12 +404,12 @@ public class AI implements IPlayer {
         for (int i = 0; i < AttackInfo.size(); i++) {
             if (this.getAIType() == AIState.AGRESSIVE) {
                 // Spawn a Melee and a Ranged unit to defend against upcoming units
-                if (canPlaceUnit(UnitType.MELEE)) {
+                //if (canPlaceUnit(UnitType.MELEE)) {
                     this.spawnUnit(UnitType.MELEE, AttackInfo.get(i).getLane() * 4 + 3);
-                }
-                if (canPlaceUnit(UnitType.RANGED)) {
+                //}
+                //if (canPlaceUnit(UnitType.RANGED)) {
                     this.spawnUnit(UnitType.RANGED, AttackInfo.get(i).getLane() * 4 + 3);
-                }
+                //}
             } else if (this.getAIType() == AIState.MODERNATE) {
                 // Spawn a Melee or a Ranged unit. If not possible, decide if
                 // a defence unit is an option
@@ -419,7 +428,7 @@ public class AI implements IPlayer {
             }
         }
         
-        gc();
+        //gc();
     }
 
     /**
@@ -429,16 +438,16 @@ public class AI implements IPlayer {
      * @return If the AI has placed units in this method it return true;
      * otherwise false
      */
-    private boolean doRandomAction(GameManager gm) {
+    private boolean doRandomAction() {
         double choicePer = getNextRandom(0, 1000) / 10;
 
         if (choicePer < chances[0]) {
             // Place Defence
-            placeDefenceUnit(gm);
+            placeDefenceUnit();
         } else if (choicePer < chances[0] + chances[1]) {
             // Place Attack
-            placeMeleeUnit(gm);
-            placeRangedUnit(gm);
+            placeMeleeUnit();
+            placeRangedUnit();
         } else if (choicePer < chances[0] + chances[1] + chances[2]) {
             // Do Upgrade
         } else {
@@ -454,7 +463,7 @@ public class AI implements IPlayer {
      * @param gm The gamemanager object needed to spawn units
      * @return Return true if the AI has spawned units; otherwise false
      */
-    private void defendBase(GameManager gm) {
+    private void defendBase() {
         if (this.aiType == AIState.DEFENSIVE) {
             // Defensive AI always checks if it has at least 2 defensive units
             // at each lane. If it has not at least 2 defensive units, it will
@@ -462,7 +471,7 @@ public class AI implements IPlayer {
             // If it is detected that a defensive unit was killed, the defensive
             // AI will also spawn a melee unit to help it protect himself
 
-            placeDefenceAtBase(gm, 2);
+            placeDefenceAtBase(2);
 
         } else if (this.aiType == AIState.AGRESSIVE) {
             // Agressive AI does not need that much defence. The Agressive AI 
@@ -477,7 +486,7 @@ public class AI implements IPlayer {
             // the defencive AI places at least 2 units at every lane, the 
             // Modernate AI places only one unit at every lane
 
-            placeDefenceAtBase(gm, 1);
+            placeDefenceAtBase(1);
         }
     }
 
@@ -490,7 +499,7 @@ public class AI implements IPlayer {
      * @param gm GameManager that controls the units spawning
      * @param defenceWidth The amount of units per lane
      */
-    private void placeDefenceAtBase(GameManager gm, int defenceWidth) {
+    private void placeDefenceAtBase(int defenceWidth) {
         // Check the amount of defensive units at each lane
         for (int i = 0; i < 8; i++) {
 
@@ -513,12 +522,8 @@ public class AI implements IPlayer {
 
                 // Create the unit object
                 this.spawnUnit(UnitType.DEFENCE, newSpot);
-                //this.createUnitAtLane(UnitType.DEFENCE, gm, newSpot);
-                //hasPlacedUnits = true;
             }
         }
-
-        //return hasPlacedUnits;
     }
 
     /**
@@ -526,7 +531,7 @@ public class AI implements IPlayer {
      *
      * @param gm The gamemanager object to spawn a unit
      */
-    private void placeDefenceUnit(GameManager gm) {
+    private void placeDefenceUnit() {
         // Check if the enemy still exsits
         int[] laneRange = baseLanesToDefend();
 
@@ -558,7 +563,6 @@ public class AI implements IPlayer {
 
             // Create the unit object
             this.spawnUnit(UnitType.DEFENCE, newSpot);
-            //this.createUnitAtLane(UnitType.DEFENCE, gm, newSpot);
         }
     }
 
@@ -567,7 +571,7 @@ public class AI implements IPlayer {
      *
      * @param gm The gamemanager object to spawn a unit
      */
-    private void placeMeleeUnit(GameManager gm) {
+    private void placeMeleeUnit() {
 
         // Check if the enemy still exsits
         int[] laneRange = baseLanesToDefend();
@@ -579,8 +583,7 @@ public class AI implements IPlayer {
         if (this.getBase().getUnit(lane * 4 + 3) == null) {
             // Place an extra attack unit
 
-            // Create the unit object            
-            //this.createUnitAtLane(UnitType.MELEE, gm, 3 + lane * 4);
+            // Create the unit object
             this.spawnUnit(UnitType.MELEE, 3 + lane * 4);
         }
     }
@@ -590,7 +593,7 @@ public class AI implements IPlayer {
      *
      * @param gm The gamemanager object to spawn a unit
      */
-    private void placeRangedUnit(GameManager gm) {
+    private void placeRangedUnit() {
 
         // Check if the enemy still exsits
         int[] laneRange = baseLanesToDefend();
@@ -603,7 +606,6 @@ public class AI implements IPlayer {
             // Place an extra attack unit
 
             // Create the unit object            
-            //this.createUnitAtLane(UnitType.RANGED, gm, 3 + lane * 4);
             this.spawnUnit(UnitType.RANGED, 3 + lane * 4);
         }
     }
@@ -692,17 +694,17 @@ public class AI implements IPlayer {
             case DEFENCE:
                 ui = UnitInfo.getDefenceUnit(this);
                 gm.placeUnitAtBase(this, ui.getUnit(), spawnPoint, ui.getKosten());
-                stepsSinceLastDefence = (int) (ui.getCooldown() * 1.5);
+                stepsSinceLastDefence = (int) (ui.getCooldown());
                 break;
             case MELEE:
                 ui = UnitInfo.getMeleeUnit(this);
                 gm.placeUnitAtBase(this, ui.getUnit(), spawnPoint, ui.getKosten());
-                stepsSinceLastMelee = (int) (ui.getCooldown() * 1.5);
+                stepsSinceLastMelee = (int) (ui.getCooldown());
                 break;
             case RANGED:
                 ui = UnitInfo.getRangeUnit(this);
                 gm.placeUnitAtBase(this, ui.getUnit(), spawnPoint, ui.getKosten());
-                stepsSinceLastRanged = (int) (ui.getCooldown() * 1.5);
+                stepsSinceLastRanged = (int) (ui.getCooldown());
                 break;
         }
     }

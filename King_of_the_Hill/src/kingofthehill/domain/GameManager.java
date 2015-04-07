@@ -44,12 +44,12 @@ public class GameManager {
         this.players.add(player);
         this.players.add(new AI("ArtificialIntelligence1"));
         ((AI)(this.players.get(1))).setAIType(AIState.AGRESSIVE);
-        ((AI)(this.players.get(1))).setRandomSeed(1524625152);
+        //((AI)(this.players.get(1))).setRandomSeed(1524625152);
         ((AI)(this.players.get(1))).setPrintDebug(true);
         this.players.add(new AI("ArtificialIntelligence2"));
-        ((AI)(this.players.get(2))).setAIType(AIState.MODERNATE);
+        ((AI)(this.players.get(2))).setAIType(AIState.AGRESSIVE);
         this.players.add(new AI("ArtificialIntelligence3"));
-        ((AI)(this.players.get(3))).setAIType(AIState.MODERNATE);
+        ((AI)(this.players.get(3))).setAIType(AIState.AGRESSIVE);
 
         //Create teams
         Team team1 = new Team(1, new ArrayList<>());

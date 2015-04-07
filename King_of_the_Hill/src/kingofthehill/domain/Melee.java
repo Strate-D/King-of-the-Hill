@@ -47,13 +47,11 @@ public class Melee extends Unit {
                 if (targetUnit.canAttackUnit() == this) {
                     if(this.receiveDamage(targetUnit.getAttack())){
                         targetUnit.getOwner().addPoints(5);
-                        this.getOwner().addPoints(-5);
                     }
                 }
                 //Deal damage
                 if(targetUnit.receiveDamage(this.getAttack())){
                     targetUnit.getOwner().addPoints(-5);
-                    this.getOwner().addPoints(5);
                 }
                 lastAction = 20;
 
