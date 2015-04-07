@@ -687,6 +687,8 @@ public class AI implements IPlayer {
             return;
         }
 
+        // Make a chance calculation to 'make the decicion' on bidding on the
+        // Mysterybox
         double chance = getNextRandom(0, 1000) / 10;
         if (chance < 30) {
             gm.getMysterybox().Bid(this, gm.getMysterybox().getHighestBid() + getNextRandom(0, 5));
