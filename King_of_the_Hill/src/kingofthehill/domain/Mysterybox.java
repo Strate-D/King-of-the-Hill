@@ -123,4 +123,12 @@ public class Mysterybox {
     public int getHighestBid() {
         return this.higestBid;
     }
+    
+    /**
+     * Return the higest bidder
+     * @return Returns the player that has the highest bid
+     */
+    public IPlayer getHigestBidder(){
+        return this.highestBidder;
+    }
 }

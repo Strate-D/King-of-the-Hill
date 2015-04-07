@@ -96,7 +96,9 @@ public class AI implements IPlayer {
 
     @Override
     public void addUpgrade(Upgrade upgrade) {
-        upgrades.add(upgrade);
+        if(upgrade != null){
+            upgrades.add(upgrade); 
+        }
     }
 
     @Override
