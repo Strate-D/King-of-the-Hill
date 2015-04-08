@@ -683,7 +683,17 @@ public class AI implements IPlayer {
         // Check if the AI has enough money to bid on the mysterybox
         // If the AI as just enough money it will not bid because it needs it to
         // spawn units
+       
+        // Check if there is a mysterybox availible
+        if(gm.getMysterybox() == null)
+        {
+            // There is no mysterybox, quit the method
+            return;
+        }
+        
+        // Check if you have enough money to bid on the mysterybox
         if (this.getMoney() + 5 <= gm.getMysterybox().getHighestBid()) {
+            // Not enough money, quit the method
             return;
         }
 

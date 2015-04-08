@@ -18,7 +18,7 @@ public class Mysterybox {
     private int amount;
     private static final int duration = 1800;
     private IPlayer highestBidder;
-    private int higestBid;
+    private int highestBid;
 
     /**
      * Creates a new Mysterybox object that contains info about the mysterybox.
@@ -45,7 +45,7 @@ public class Mysterybox {
         this.upgrade = upgrade;
         this.unitType = unitType;
         this.amount = amount;
-        this.higestBid = 0;
+        this.highestBid = 0;
     }
 
     /**
@@ -56,13 +56,13 @@ public class Mysterybox {
      */
     public void Bid(IPlayer bidder, int bid) {
         if (bidder != null) {
-            if (bid > higestBid) {
+            if (bid > highestBid) {
                 //give money back to previous higest bidder
                 highestBidder.addMoney(bid);         
                 
                 //set new higest bidder and bid
                 this.highestBidder = bidder;
-                this.higestBid = bid;
+                this.highestBid = bid;
                 
                 //take money from new higest bidder
                 highestBidder.payMoney(bid);  
@@ -121,7 +121,7 @@ public class Mysterybox {
      * @return Returns the highest bid
      */
     public int getHighestBid() {
-        return this.higestBid;
+        return this.highestBid;
     }
     
     /**
