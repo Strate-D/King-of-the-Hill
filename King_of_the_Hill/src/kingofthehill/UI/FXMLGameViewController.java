@@ -57,6 +57,7 @@ public class FXMLGameViewController implements Initializable {
     GameManager gm;
     AnimationTimer antimer;
     boolean isMouseOnCanvas;
+    boolean isMouseClicked = false;
 
     double scrollPosX, scrollPosY, lastMousePosx, lastMousePosy;
 
@@ -176,7 +177,6 @@ public class FXMLGameViewController implements Initializable {
             }
         };
         antimer.start();
-
     }
 
     /**
@@ -231,7 +231,6 @@ public class FXMLGameViewController implements Initializable {
         canvas.getGraphicsContext2D().drawImage(corner4, 0, 870, 30, 30);
         //Draw background
         canvas.getGraphicsContext2D().drawImage(background, 8, 8, 884, 884);
-
     }
 
     /**
@@ -323,8 +322,9 @@ public class FXMLGameViewController implements Initializable {
         drawField();
         canvas.getGraphicsContext2D().fillText("Drawing time: " + (System.currentTimeMillis() - start) + "milliseconds", 460, 460);
         canvas.getGraphicsContext2D().fillText("x: " + e.getX() + " y: " + e.getY(), 450, 450);
+        
     }
-
+     
     /**
      * Draws all the units on the field
      */
@@ -490,8 +490,9 @@ public class FXMLGameViewController implements Initializable {
     public void placeRangeUnit() {
         // TODO: Code to place unit on correct lane
         IPlayer p = gm.getPlayers().get(0);
+        int lane = 0;
         if(p instanceof Player) {
-            gm.placeUnitAtLane(p, UnitInfo.getRangeUnit(p).getUnit(), 0, UnitInfo.getRangeUnit(p).getKosten());
+            gm.placeUnitAtLane(p, UnitInfo.getRangeUnit(p).getUnit(), lane, UnitInfo.getRangeUnit(p).getKosten());
         }
     }
     /**
@@ -500,8 +501,20 @@ public class FXMLGameViewController implements Initializable {
     public void placeMeleeUnit() {
         // TODO: Code to place unit on correct lane
         IPlayer p = gm.getPlayers().get(0);
+        int lane = 0;
         if(p instanceof Player) {
-            gm.placeUnitAtLane(p, UnitInfo.getMeleeUnit(p).getUnit(), 0, UnitInfo.getMeleeUnit(p).getKosten());
+            gm.placeUnitAtLane(p, UnitInfo.getMeleeUnit(p).getUnit(), lane, UnitInfo.getMeleeUnit(p).getKosten());
+        }
+    }
+    /**
+     * Place a Defence unit in a lane
+     */
+    public void placeDefenceUnit() {
+        // TODO: Code to place unit on correct spot
+        IPlayer p = gm.getPlayers().get(0);
+        int lane = 0;
+        if(p instanceof Player) {
+            gm.placeUnitAtBase(p, UnitInfo.getDefenceUnit(p).getUnit(), lane, UnitInfo.getDefenceUnit(p).getKosten());
         }
     }
     
