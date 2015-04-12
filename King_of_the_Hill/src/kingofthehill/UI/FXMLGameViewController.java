@@ -80,7 +80,7 @@ public class FXMLGameViewController implements Initializable {
         IPlayer p = new Player("Jur", 10);
         AI a = new AI("ArtificialIntelligence0");
         a.setAIType(AIState.AGRESSIVE);
-        gm = new GameManager(a);
+        gm = new GameManager(p);
         isMouseOnCanvas = false;
         selectedUnit = null;
 
