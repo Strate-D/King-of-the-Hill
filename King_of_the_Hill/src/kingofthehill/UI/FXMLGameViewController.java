@@ -61,6 +61,8 @@ public class FXMLGameViewController implements Initializable {
     //Button sprites
     Image buttonMelee;
     Image buttonRanged;
+    //Mysterybox sprites
+    Image mysterybox;
 
     GameManager gm;
     AnimationTimer antimer;
@@ -123,6 +125,7 @@ public class FXMLGameViewController implements Initializable {
         selector = new Image("kingofthehill/UI/field/selector.png");
         buttonMelee = new Image("kingofthehill/UI/field/button-melee.png");
         buttonRanged = new Image("kingofthehill/UI/field/button-ranged.png");
+        mysterybox = new Image("kingofthehill/UI/field/mysterybox.png");
         //Draw field
         drawBackground();
         drawField();
@@ -384,7 +387,11 @@ public class FXMLGameViewController implements Initializable {
                 canvas.getGraphicsContext2D().drawImage(selector, 189, 318, 22, 264);
             }
         }
-
+        
+        //Draw mysterybox when available
+        if(gm.getMysterybox() != null){
+            canvas.getGraphicsContext2D().drawImage(mysterybox, (canvas.getWidth()-mysterybox.getWidth()) / 2, (canvas.getHeight()-mysterybox.getHeight()) / 2.4);
+        }
     }
 
     /**
