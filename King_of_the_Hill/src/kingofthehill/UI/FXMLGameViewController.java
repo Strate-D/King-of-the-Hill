@@ -27,7 +27,9 @@ import kingofthehill.domain.AI;
 import kingofthehill.domain.AIState;
 import kingofthehill.domain.GameManager;
 import kingofthehill.domain.IPlayer;
+import kingofthehill.domain.Melee;
 import kingofthehill.domain.Player;
+import kingofthehill.domain.Ranged;
 import kingofthehill.domain.Unit;
 import kingofthehill.unitinfo.UnitInfo;
 
@@ -42,10 +44,10 @@ public class FXMLGameViewController implements Initializable {
     private Canvas canvas;
 
     //Player unit sprites
-    Image unitBlueR, unitBlueB;
-    Image unitGreenL, unitGreenB;
-    Image unitPurpleT, unitPurpleL;
-    Image unitRedT, unitRedR;
+    Image meleeBlueR, meleeBlueB, rangedBlueR, rangedBlueB;
+    Image meleeGreenL, meleeGreenB, rangedGreenL, rangedGreenB;
+    Image meleePurpleT, meleePurpleL, rangedPurpleT, rangedPurpleL;
+    Image meleeRedT, meleeRedR, rangedRedT, rangedRedR;
     //Castle sprites
     Image castle1, castle2, castle3, castle4;
     Image castle_destroyed1, castle_destroyed2, castle_destroyed3, castle_destroyed4;
@@ -75,14 +77,22 @@ public class FXMLGameViewController implements Initializable {
         isMouseOnCanvas = false;
 
         //Load all sprites
-        unitBlueR = new Image("kingofthehill/UI/Units/Blue/BlueKnightR.png");
-        unitBlueB = new Image("kingofthehill/UI/Units/Blue/BlueKnightB.png");
-        unitGreenL = new Image("kingofthehill/UI/Units/Green/GreenKnightL.png");
-        unitGreenB = new Image("kingofthehill/UI/Units/Green/GreenKnightB.png");
-        unitPurpleL = new Image("kingofthehill/UI/Units/Purple/PurpleKnightL.png");
-        unitPurpleT = new Image("kingofthehill/UI/Units/Purple/PurpleKnightT.png");
-        unitRedR = new Image("kingofthehill/UI/Units/Red/RedKnightR.png");
-        unitRedT = new Image("kingofthehill/UI/Units/Red/RedKnightT.png");
+        meleeBlueR = new Image("kingofthehill/UI/Units/Blue/BlueKnightR.png");
+        meleeBlueB = new Image("kingofthehill/UI/Units/Blue/BlueKnightB.png");
+        meleeGreenL = new Image("kingofthehill/UI/Units/Green/GreenKnightL.png");
+        meleeGreenB = new Image("kingofthehill/UI/Units/Green/GreenKnightB.png");
+        meleePurpleL = new Image("kingofthehill/UI/Units/Purple/PurpleKnightL.png");
+        meleePurpleT = new Image("kingofthehill/UI/Units/Purple/PurpleKnightT.png");
+        meleeRedR = new Image("kingofthehill/UI/Units/Red/RedKnightR.png");
+        meleeRedT = new Image("kingofthehill/UI/Units/Red/RedKnightT.png");
+        rangedBlueR = new Image("kingofthehill/UI/Units/Blue/BlueArcherR.png");
+        rangedBlueB = new Image("kingofthehill/UI/Units/Blue/BlueArcherB.png");
+        rangedGreenL = new Image("kingofthehill/UI/Units/Green/GreenArcherL.png");
+        rangedGreenB = new Image("kingofthehill/UI/Units/Green/GreenArcherB.png");
+        rangedPurpleL = new Image("kingofthehill/UI/Units/Purple/PurpleArcherL.png");
+        rangedPurpleT = new Image("kingofthehill/UI/Units/Purple/PurpleArcherT.png");
+        rangedRedR = new Image("kingofthehill/UI/Units/Red/RedArcherR.png");
+        rangedRedT = new Image("kingofthehill/UI/Units/Red/RedArcherT.png");
         castle1 = new Image("kingofthehill/UI/field/castle1.png");
         castle2 = new Image("kingofthehill/UI/field/castle2.png");
         castle3 = new Image("kingofthehill/UI/field/castle3.png");
@@ -329,158 +339,209 @@ public class FXMLGameViewController implements Initializable {
      * Draws all the units on the field
      */
     private void drawUnits() {
+        Image drawingImage = null;
         Iterator<Unit> i = gm.getUnits();
         while (i.hasNext()) {
             Unit u = i.next();
             ///////////////////////////Draw for player 0///////////////////////////
-            //Lane 0
             if (u.getOwner() == gm.getPlayers().get(0)) {
+                //Check which sprite to use
+                if(u instanceof Melee){
+                    if(gm.getPlayers().get(0).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                        drawingImage = meleeBlueR;
+                    } else {
+                        drawingImage = meleeBlueB;
+                    }
+                } else if (u instanceof Ranged) {
+                    if(gm.getPlayers().get(0).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                        drawingImage = rangedBlueR;
+                    } else {
+                        drawingImage = rangedBlueB;
+                    }
+                }
+                //Draw unit
+                //Lane 0
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(0)) {
-                    canvas.getGraphicsContext2D().drawImage(unitBlueR, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 74, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 74, 40, 40);
                 }
                 //Lane 1
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(1)) {
-                    canvas.getGraphicsContext2D().drawImage(unitBlueR, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 109, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 109, 40, 40);
                 }
                 //Lane 2
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(2)) {
-                    canvas.getGraphicsContext2D().drawImage(unitBlueR, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 146, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 146, 40, 40);
                 }
                 //Lane 3
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(3)) {
-                    canvas.getGraphicsContext2D().drawImage(unitBlueR, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 186, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 186, 40, 40);
                 }
                 //Lane 4
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(4)) {
-                    canvas.getGraphicsContext2D().drawImage(unitBlueB, 74, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 74, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
                 }
                 //Lane 5
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(5)) {
-                    canvas.getGraphicsContext2D().drawImage(unitBlueB, 105, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 105, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
                 }
                 //Lane 6
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(6)) {
-                    canvas.getGraphicsContext2D().drawImage(unitBlueB, 144, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 144, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
                 }
                 //Lane 7
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(7)) {
-                    canvas.getGraphicsContext2D().drawImage(unitBlueB, 179, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 179, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
                 }
             }
             ///////////////////////////Draw for player 1///////////////////////////
-            //Lane 0
             if (u.getOwner() == gm.getPlayers().get(1)) {
-                //Set color
-                canvas.getGraphicsContext2D().setFill(Color.BLUE);
+                //Check which sprite to use
+                if(u instanceof Melee){
+                    if(gm.getPlayers().get(1).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                        drawingImage = meleeGreenB;
+                    } else {
+                        drawingImage = meleeGreenL;
+                    }
+                } else if (u instanceof Ranged) {
+                    if(gm.getPlayers().get(1).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                        drawingImage = rangedGreenB;
+                    } else {
+                        drawingImage = rangedGreenL;
+                    }
+                }
+                //Draw unit
+                //Lane 0
                 if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(0)) {
-                    canvas.getGraphicsContext2D().drawImage(unitGreenB, 679, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 679, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
                 }
                 //Lane 1
                 if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(1)) {
-                    canvas.getGraphicsContext2D().drawImage(unitGreenB, 711, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 711, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
                 }
                 //Lane 2
                 if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(2)) {
-                    canvas.getGraphicsContext2D().drawImage(unitGreenB, 749, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 749, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
                 }
                 //Lane 3
                 if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(3)) {
-                    canvas.getGraphicsContext2D().drawImage(unitGreenB, 782, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 782, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
                 }
                 //Lane 4
                 if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(4)) {
-                    canvas.getGraphicsContext2D().drawImage(unitGreenL, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 74, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 74, 40, 40);
                 }
                 //Lane 5
                 if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(5)) {
-                    canvas.getGraphicsContext2D().drawImage(unitGreenL, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 108, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 108, 40, 40);
                 }
                 //Lane 6
                 if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(6)) {
-                    canvas.getGraphicsContext2D().drawImage(unitGreenL, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 146, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 146, 40, 40);
                 }
                 //Lane 7
                 if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(7)) {
-                    canvas.getGraphicsContext2D().drawImage(unitGreenL, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 181, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 181, 40, 40);
                 }
             }
             ///////////////////////////Draw for player 2///////////////////////////
-            //Lane 0
             if (u.getOwner() == gm.getPlayers().get(2)) {
-                //Set color
-                canvas.getGraphicsContext2D().setFill(Color.RED);
+                //Check which sprite to use
+                if(u instanceof Melee){
+                    if(gm.getPlayers().get(2).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                        drawingImage = meleePurpleL;
+                    } else {
+                        drawingImage = meleePurpleT;
+                    }
+                } else if (u instanceof Ranged) {
+                    if(gm.getPlayers().get(2).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                        drawingImage = rangedPurpleL;
+                    } else {
+                        drawingImage = rangedPurpleT;
+                    }
+                }
+                //Draw unit
+                //Lane 0
                 if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(0)) {
-                    canvas.getGraphicsContext2D().drawImage(unitPurpleL, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 679, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 679, 40, 40);
                 }
                 //Lane 1
                 if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(1)) {
-                    canvas.getGraphicsContext2D().drawImage(unitPurpleL, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 711, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 711, 40, 40);
                 }
                 //Lane 2
                 if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(2)) {
-                    canvas.getGraphicsContext2D().drawImage(unitPurpleL, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 749, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 749, 40, 40);
                 }
                 //Lane 3
                 if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(3)) {
-                    canvas.getGraphicsContext2D().drawImage(unitPurpleL, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 782, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 782, 40, 40);
                 }
                 //Lane 4
                 if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(4)) {
-                    canvas.getGraphicsContext2D().drawImage(unitPurpleT, 679, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 679, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
                 }
                 //Lane 5
                 if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(5)) {
-                    canvas.getGraphicsContext2D().drawImage(unitPurpleT, 711, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 711, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
                 }
                 //Lane 6
                 if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(6)) {
-                    canvas.getGraphicsContext2D().drawImage(unitPurpleT, 749, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 749, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
                 }
                 //Lane 7
                 if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(7)) {
-                    canvas.getGraphicsContext2D().drawImage(unitPurpleT, 782, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 782, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
                 }
-                //Set color
-                canvas.getGraphicsContext2D().setFill(Color.BLACK);
             }
             ///////////////////////////Draw for player 3///////////////////////////
-            //Lane 0
             if (u.getOwner() == gm.getPlayers().get(3)) {
-                //Set color
-                canvas.getGraphicsContext2D().setFill(Color.BLUE);
+                //Check which sprite to use
+                if(u instanceof Melee){
+                    if(gm.getPlayers().get(3).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                        drawingImage = meleeRedT;
+                    } else {
+                        drawingImage = meleeRedR;
+                    }
+                } else if (u instanceof Ranged) {
+                    if(gm.getPlayers().get(3).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                        drawingImage = rangedRedT;
+                    } else {
+                        drawingImage = rangedRedR;
+                    }
+                }
+                //Draw unit
+                //Lane 0
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(0)) {
-                    canvas.getGraphicsContext2D().drawImage(unitRedT, 73, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 73, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
                 }
                 //Lane 1
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(1)) {
-                    canvas.getGraphicsContext2D().drawImage(unitRedT, 105, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 105, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
                 }
                 //Lane 2
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(2)) {
-                    canvas.getGraphicsContext2D().drawImage(unitRedT, 144, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 144, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
                 }
                 //Lane 3
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(3)) {
-                    canvas.getGraphicsContext2D().drawImage(unitRedT, 179, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 179, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
                 }
                 //Lane 4
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(4)) {
-                    canvas.getGraphicsContext2D().drawImage(unitRedR, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 679, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 679, 40, 40);
                 }
                 //Lane 5
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(5)) {
-                    canvas.getGraphicsContext2D().drawImage(unitRedR, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 711, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 711, 40, 40);
                 }
                 //Lane 6
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(6)) {
-                    canvas.getGraphicsContext2D().drawImage(unitRedR, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 749, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 749, 40, 40);
                 }
                 //Lane 7
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(7)) {
-                    canvas.getGraphicsContext2D().drawImage(unitRedR, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 782, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 782, 40, 40);
                 }
-                //Set color
-                canvas.getGraphicsContext2D().setFill(Color.BLACK);
             }
         }
     }
