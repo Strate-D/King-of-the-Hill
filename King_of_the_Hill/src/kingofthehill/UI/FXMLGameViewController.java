@@ -422,7 +422,7 @@ public class FXMLGameViewController implements Initializable {
             } else //Lane 3
             if (lastRealMousePosx >= 318 && lastRealMousePosx <= 582
                     && lastRealMousePosy >= 189 && lastRealMousePosy <= 213) {
-                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit, 1, selectedUnit.getCost());
+                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit, 3, selectedUnit.getCost());
                 selectedUnit = null;
             } else //Lane 4
             if (lastRealMousePosx >= 83 && lastRealMousePosx <= 105
