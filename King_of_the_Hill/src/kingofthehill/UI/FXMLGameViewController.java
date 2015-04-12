@@ -56,12 +56,20 @@ public class FXMLGameViewController implements Initializable {
     Image corner1, corner2, corner3, corner4;
     Image side1, side2, side3, side4;
     Image background;
+    // Selector sprite
+    Image selector;
+    //Button sprites
+    Image buttonMelee;
+    Image buttonRanged;
+
     GameManager gm;
     AnimationTimer antimer;
     boolean isMouseOnCanvas;
     boolean isMouseClicked = false;
 
-    double scrollPosX, scrollPosY, lastMousePosx, lastMousePosy;
+    double scrollPosX, scrollPosY, lastMousePosx, lastMousePosy, lastRealMousePosx, lastRealMousePosy;
+
+    Unit selectedUnit;
 
     /**
      * Initializes the controller class.
@@ -73,8 +81,8 @@ public class FXMLGameViewController implements Initializable {
         AI a = new AI("ArtificialIntelligence0");
         a.setAIType(AIState.AGRESSIVE);
         gm = new GameManager(a);
-
         isMouseOnCanvas = false;
+        selectedUnit = null;
 
         //Load all sprites
         meleeBlueR = new Image("kingofthehill/UI/Units/Blue/BlueKnightR.png");
@@ -112,6 +120,9 @@ public class FXMLGameViewController implements Initializable {
         side2 = new Image("kingofthehill/UI/field/background/side2.png");
         side3 = new Image("kingofthehill/UI/field/background/side3.png");
         side4 = new Image("kingofthehill/UI/field/background/side4.png");
+        selector = new Image("kingofthehill/UI/field/selector.png");
+        buttonMelee = new Image("kingofthehill/UI/field/button-melee.png");
+        buttonRanged = new Image("kingofthehill/UI/field/button-ranged.png");
         //Draw field
         drawBackground();
         drawField();
@@ -214,6 +225,9 @@ public class FXMLGameViewController implements Initializable {
         isMouseOnCanvas = true;
         lastMousePosx = e.getX();
         lastMousePosy = e.getY();
+        lastRealMousePosx = e.getX() / 1.5 - scrollPosX;
+        lastRealMousePosy = e.getY() / 1.5 - scrollPosY;
+        System.out.println(lastRealMousePosx + "    " + lastRealMousePosy);
     }
 
     /**
@@ -319,22 +333,121 @@ public class FXMLGameViewController implements Initializable {
         canvas.getGraphicsContext2D().drawImage(dirtField2, 75, 317, 145, 265);
         canvas.getGraphicsContext2D().drawImage(dirtField2, 680, 317, 145, 265);
 
+        //Draw buttons for player
+        canvas.getGraphicsContext2D().drawImage(buttonMelee, 100, 150, 30, 30);
+        canvas.getGraphicsContext2D().drawImage(buttonRanged, 150, 150, 30, 30);
+
+        //Draw selector for buttons
+        //Melee button
+        if (lastRealMousePosx >= 100 && lastRealMousePosx <= 130
+                && lastRealMousePosy >= 150 && lastRealMousePosy <= 180 || selectedUnit instanceof Melee) {
+            canvas.getGraphicsContext2D().drawImage(selector, 100, 150, 30, 30);
+        }
+        //Ranged button
+        if (lastRealMousePosx >= 150 && lastRealMousePosx <= 180
+                && lastRealMousePosy >= 150 && lastRealMousePosy <= 180 || selectedUnit instanceof Ranged) {
+            canvas.getGraphicsContext2D().drawImage(selector, 150, 150, 30, 30);
+        }
+        //Lanes when unit is selected
+        if (selectedUnit != null) {
+            //Lane 0
+            if (lastRealMousePosx >= 318 && lastRealMousePosx <= 582
+                    && lastRealMousePosy >= 83 && lastRealMousePosy <= 105) {
+                canvas.getGraphicsContext2D().drawImage(selector, 318, 83, 264, 22);
+            } else //Lane 1
+            if (lastRealMousePosx >= 318 && lastRealMousePosx <= 582
+                    && lastRealMousePosy >= 115 && lastRealMousePosy <= 142) {
+                canvas.getGraphicsContext2D().drawImage(selector, 318, 115, 264, 22);
+            } else //Lane 2
+            if (lastRealMousePosx >= 318 && lastRealMousePosx <= 582
+                    && lastRealMousePosy >= 154 && lastRealMousePosy <= 179) {
+                canvas.getGraphicsContext2D().drawImage(selector, 318, 154, 264, 22);
+            } else //Lane 3
+            if (lastRealMousePosx >= 318 && lastRealMousePosx <= 582
+                    && lastRealMousePosy >= 189 && lastRealMousePosy <= 213) {
+                canvas.getGraphicsContext2D().drawImage(selector, 318, 189, 264, 22);
+            } else //Lane 4
+            if (lastRealMousePosx >= 83 && lastRealMousePosx <= 105
+                    && lastRealMousePosy >= 318 && lastRealMousePosy <= 582) {
+                canvas.getGraphicsContext2D().drawImage(selector, 83, 318, 22, 264);
+            } else //Lane 5
+            if (lastRealMousePosx >= 115 && lastRealMousePosx <= 142
+                    && lastRealMousePosy >= 318 && lastRealMousePosy <= 582) {
+                canvas.getGraphicsContext2D().drawImage(selector, 115, 318, 22, 264);
+            } else //Lane 6
+            if (lastRealMousePosx >= 154 && lastRealMousePosx <= 179
+                    && lastRealMousePosy >= 318 && lastRealMousePosy <= 582) {
+                canvas.getGraphicsContext2D().drawImage(selector, 154, 318, 22, 264);
+            } else //Lane 7
+            if (lastRealMousePosx >= 189 && lastRealMousePosx <= 213
+                    && lastRealMousePosy >= 318 && lastRealMousePosy <= 582) {
+                canvas.getGraphicsContext2D().drawImage(selector, 189, 318, 22, 264);
+            }
+        }
+
     }
 
     /**
-     * Gives the coordinates where the mouse is clicked
+     * Selects a unit to be placed, or a lane to place the selected unit at
      *
      * @param e
      */
-    public void giveCoordinates(MouseEvent e) {
-        long start = System.currentTimeMillis();
-        drawBackground();
-        drawField();
-        canvas.getGraphicsContext2D().fillText("Drawing time: " + (System.currentTimeMillis() - start) + "milliseconds", 460, 460);
-        canvas.getGraphicsContext2D().fillText("x: " + e.getX() + " y: " + e.getY(), 450, 450);
-        
+    public void handleMouseClick(MouseEvent e) {
+        if (selectedUnit == null) {
+            //Select unit
+            if (lastRealMousePosx >= 100 && lastRealMousePosx <= 130
+                    && lastRealMousePosy >= 150 && lastRealMousePosy <= 180) {
+                selectedUnit = UnitInfo.getMeleeUnit(gm.getPlayers().get(0)).getUnit();
+            } else if (lastRealMousePosx >= 150 && lastRealMousePosx <= 180
+                    && lastRealMousePosy >= 150 && lastRealMousePosy <= 180 || selectedUnit instanceof Ranged) {
+                selectedUnit = UnitInfo.getRangeUnit(gm.getPlayers().get(0)).getUnit();
+            }
+        } else {
+            //Place unit
+            //Lane 0
+            if (lastRealMousePosx >= 318 && lastRealMousePosx <= 582
+                    && lastRealMousePosy >= 83 && lastRealMousePosy <= 105) {
+                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit, 0, selectedUnit.getCost());
+                selectedUnit = null;
+            } else //Lane 1
+            if (lastRealMousePosx >= 318 && lastRealMousePosx <= 582
+                    && lastRealMousePosy >= 115 && lastRealMousePosy <= 142) {
+                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit, 1, selectedUnit.getCost());
+                selectedUnit = null;
+            } else //Lane 2
+            if (lastRealMousePosx >= 318 && lastRealMousePosx <= 582
+                    && lastRealMousePosy >= 154 && lastRealMousePosy <= 179) {
+                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit, 2, selectedUnit.getCost());
+                selectedUnit = null;
+            } else //Lane 3
+            if (lastRealMousePosx >= 318 && lastRealMousePosx <= 582
+                    && lastRealMousePosy >= 189 && lastRealMousePosy <= 213) {
+                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit, 1, selectedUnit.getCost());
+                selectedUnit = null;
+            } else //Lane 4
+            if (lastRealMousePosx >= 83 && lastRealMousePosx <= 105
+                    && lastRealMousePosy >= 318 && lastRealMousePosy <= 582) {
+                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit, 4, selectedUnit.getCost());
+                selectedUnit = null;
+            } else //Lane 5
+            if (lastRealMousePosx >= 115 && lastRealMousePosx <= 142
+                    && lastRealMousePosy >= 318 && lastRealMousePosy <= 582) {
+                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit, 5, selectedUnit.getCost());
+                selectedUnit = null;
+            } else //Lane 6
+            if (lastRealMousePosx >= 154 && lastRealMousePosx <= 179
+                    && lastRealMousePosy >= 318 && lastRealMousePosy <= 582) {
+                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit, 6, selectedUnit.getCost());
+                selectedUnit = null;
+            } else //Lane 7
+            if (lastRealMousePosx >= 189 && lastRealMousePosx <= 213
+                    && lastRealMousePosy >= 318 && lastRealMousePosy <= 582) {
+                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit, 7, selectedUnit.getCost());
+                selectedUnit = null;
+            }
+        }
     }
-     
+
     /**
      * Draws all the units on the field
      */
@@ -346,14 +459,14 @@ public class FXMLGameViewController implements Initializable {
             ///////////////////////////Draw for player 0///////////////////////////
             if (u.getOwner() == gm.getPlayers().get(0)) {
                 //Check which sprite to use
-                if(u instanceof Melee){
-                    if(gm.getPlayers().get(0).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                if (u instanceof Melee) {
+                    if (gm.getPlayers().get(0).getBase().getLanes().indexOf(u.getLane()) < 4) {
                         drawingImage = meleeBlueR;
                     } else {
                         drawingImage = meleeBlueB;
                     }
                 } else if (u instanceof Ranged) {
-                    if(gm.getPlayers().get(0).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                    if (gm.getPlayers().get(0).getBase().getLanes().indexOf(u.getLane()) < 4) {
                         drawingImage = rangedBlueR;
                     } else {
                         drawingImage = rangedBlueB;
@@ -396,14 +509,14 @@ public class FXMLGameViewController implements Initializable {
             ///////////////////////////Draw for player 1///////////////////////////
             if (u.getOwner() == gm.getPlayers().get(1)) {
                 //Check which sprite to use
-                if(u instanceof Melee){
-                    if(gm.getPlayers().get(1).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                if (u instanceof Melee) {
+                    if (gm.getPlayers().get(1).getBase().getLanes().indexOf(u.getLane()) < 4) {
                         drawingImage = meleeGreenB;
                     } else {
                         drawingImage = meleeGreenL;
                     }
                 } else if (u instanceof Ranged) {
-                    if(gm.getPlayers().get(1).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                    if (gm.getPlayers().get(1).getBase().getLanes().indexOf(u.getLane()) < 4) {
                         drawingImage = rangedGreenB;
                     } else {
                         drawingImage = rangedGreenL;
@@ -446,14 +559,14 @@ public class FXMLGameViewController implements Initializable {
             ///////////////////////////Draw for player 2///////////////////////////
             if (u.getOwner() == gm.getPlayers().get(2)) {
                 //Check which sprite to use
-                if(u instanceof Melee){
-                    if(gm.getPlayers().get(2).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                if (u instanceof Melee) {
+                    if (gm.getPlayers().get(2).getBase().getLanes().indexOf(u.getLane()) < 4) {
                         drawingImage = meleePurpleL;
                     } else {
                         drawingImage = meleePurpleT;
                     }
                 } else if (u instanceof Ranged) {
-                    if(gm.getPlayers().get(2).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                    if (gm.getPlayers().get(2).getBase().getLanes().indexOf(u.getLane()) < 4) {
                         drawingImage = rangedPurpleL;
                     } else {
                         drawingImage = rangedPurpleT;
@@ -496,14 +609,14 @@ public class FXMLGameViewController implements Initializable {
             ///////////////////////////Draw for player 3///////////////////////////
             if (u.getOwner() == gm.getPlayers().get(3)) {
                 //Check which sprite to use
-                if(u instanceof Melee){
-                    if(gm.getPlayers().get(3).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                if (u instanceof Melee) {
+                    if (gm.getPlayers().get(3).getBase().getLanes().indexOf(u.getLane()) < 4) {
                         drawingImage = meleeRedT;
                     } else {
                         drawingImage = meleeRedR;
                     }
                 } else if (u instanceof Ranged) {
-                    if(gm.getPlayers().get(3).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                    if (gm.getPlayers().get(3).getBase().getLanes().indexOf(u.getLane()) < 4) {
                         drawingImage = rangedRedT;
                     } else {
                         drawingImage = rangedRedR;
@@ -544,81 +657,5 @@ public class FXMLGameViewController implements Initializable {
                 }
             }
         }
-    }
-    /**
-     * Place a Range Unit in a lane
-     */
-    public void placeRangeUnit() {
-        // TODO: Code to place unit on correct lane
-        IPlayer p = gm.getPlayers().get(0);
-        int lane = 0;
-        if(p instanceof Player) {
-            gm.placeUnitAtLane(p, UnitInfo.getRangeUnit(p).getUnit(), lane, UnitInfo.getRangeUnit(p).getKosten());
-        }
-    }
-    /**
-     * Place a Melee unit in a lane
-     */
-    public void placeMeleeUnit() {
-        // TODO: Code to place unit on correct lane
-        IPlayer p = gm.getPlayers().get(0);
-        int lane = 0;
-        if(p instanceof Player) {
-            gm.placeUnitAtLane(p, UnitInfo.getMeleeUnit(p).getUnit(), lane, UnitInfo.getMeleeUnit(p).getKosten());
-        }
-    }
-    /**
-     * Place a Defence unit in a lane
-     */
-    public void placeDefenceUnit() {
-        // TODO: Code to place unit on correct spot
-        IPlayer p = gm.getPlayers().get(0);
-        int lane = 0;
-        if(p instanceof Player) {
-            gm.placeUnitAtBase(p, UnitInfo.getDefenceUnit(p).getUnit(), lane, UnitInfo.getDefenceUnit(p).getKosten());
-        }
-    }
-    
-    /**
-     * Test all drawing by placing units in all lanes
-     */
-    public void placeTestUnit0() {
-        gm.placeUnitAtLane(gm.getPlayers().get(0),
-                UnitInfo.getMeleeUnit(gm.getPlayers().get(0)).getUnit(), 0, 1);
-    }
-
-    public void placeTestUnit1() {
-        gm.placeUnitAtLane(gm.getPlayers().get(0),
-                UnitInfo.getMeleeUnit(gm.getPlayers().get(0)).getUnit(), 1, 1);
-    }
-
-    public void placeTestUnit2() {
-        gm.placeUnitAtLane(gm.getPlayers().get(0),
-                UnitInfo.getMeleeUnit(gm.getPlayers().get(0)).getUnit(), 2, 1);
-    }
-
-    public void placeTestUnit3() {
-        gm.placeUnitAtLane(gm.getPlayers().get(0),
-                UnitInfo.getMeleeUnit(gm.getPlayers().get(0)).getUnit(), 3, 1);
-    }
-
-    public void placeTestUnit4() {
-        gm.placeUnitAtLane(gm.getPlayers().get(0),
-                UnitInfo.getMeleeUnit(gm.getPlayers().get(0)).getUnit(), 4, 1);
-    }
-
-    public void placeTestUnit5() {
-        gm.placeUnitAtLane(gm.getPlayers().get(0),
-                UnitInfo.getMeleeUnit(gm.getPlayers().get(0)).getUnit(), 5, 1);
-    }
-
-    public void placeTestUnit6() {
-        gm.placeUnitAtLane(gm.getPlayers().get(0),
-                UnitInfo.getMeleeUnit(gm.getPlayers().get(0)).getUnit(), 6, 1);
-    }
-
-    public void placeTestUnit7() {
-        gm.placeUnitAtLane(gm.getPlayers().get(0),
-                UnitInfo.getMeleeUnit(gm.getPlayers().get(0)).getUnit(), 7, 1);
     }
 }
