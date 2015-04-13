@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
  */
 package kingofthehill.upgradeinfo;
 
@@ -10,20 +8,33 @@ import kingofthehill.domain.UnitType;
 import kingofthehill.domain.Upgrade;
 
 /**
- *
+ * Creates and stores upgrade information
  * @author Dennis
  */
 public class UpgradeInfo {
     private final Upgrade upgrade;
     
+    /**
+     * Returns the upgrade
+     * @return The created upgrade
+     */
     public Upgrade getUpgrade(){
        return upgrade;
     }
     
+    /**
+     * Creates a new UpgradeInfo object
+     * @param upgrade 
+     */
     private UpgradeInfo(Upgrade upgrade){
         this.upgrade = upgrade;
     }
     
+    /**
+     * Creates a new upgrade for the unitType
+     * @param targetUnit UnitType to upgrade
+     * @return A new upgrade object with the upgrade
+     */
     public static UpgradeInfo getWeakUpgrade(UnitType targetUnit){ 
         final double HEALTH = 1;
         final double ATTACK = 1;
@@ -34,6 +45,11 @@ public class UpgradeInfo {
         return new UpgradeInfo(weakUpgrade);
     }
     
+    /**
+     * Creates a new upgrade for the unitType
+     * @param targetUnit UnitType to upgrade
+     * @return A new upgrade object with the upgrade
+     */
     public static UpgradeInfo getWeakNormalUpgrade(UnitType targetUnit){
         final double HEALTH = 2;
         final double ATTACK = 2;
@@ -44,6 +60,11 @@ public class UpgradeInfo {
         return new UpgradeInfo(normalUpgrade);
     }
     
+    /**
+     * Creates a new upgrade for the unitType
+     * @param targetUnit UnitType to upgrade
+     * @return A new upgrade object with the upgrade
+     */
     public static UpgradeInfo getNormalUpgrade(UnitType targetUnit){
         final double HEALTH = 3;
         final double ATTACK = 3;
@@ -54,6 +75,11 @@ public class UpgradeInfo {
         return new UpgradeInfo(normalUpgrade);
     }
     
+    /**
+     * Creates a new upgrade for the unitType
+     * @param targetUnit UnitType to upgrade
+     * @return A new upgrade object with the upgrade
+     */
     public static UpgradeInfo getNormalStrongUpgrade(UnitType targetUnit){
         final double HEALTH = 4;
         final double ATTACK = 4;
@@ -64,6 +90,11 @@ public class UpgradeInfo {
         return new UpgradeInfo(normalUpgrade);
     }
     
+    /**
+     * Creates a new upgrade for the unitType
+     * @param targetUnit UnitType to upgrade
+     * @return A new upgrade object with the upgrade
+     */
     public static UpgradeInfo getStrongUpgrade(UnitType targetUnit){
         final double HEALTH = 5;
         final double ATTACK = 5;
@@ -74,6 +105,11 @@ public class UpgradeInfo {
         return new UpgradeInfo(strongUpgrade);
     }
     
+    /**
+     * Creates a new upgrade for the unitType
+     * @param targetUnit UnitType to upgrade
+     * @return A new upgrade object with the upgrade
+     */
     public static UpgradeInfo getUberUpgrade(UnitType targetUnit){
         final double HEALTH = 6;
         final double ATTACK = 6;
