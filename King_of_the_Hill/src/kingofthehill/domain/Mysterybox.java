@@ -16,8 +16,7 @@ public class Mysterybox {
     private Upgrade upgrade;
     private UnitType unitType;
     private int amount;
-    //1800
-    private static final int duration = 250;
+    private static final int duration = 1000;
     private IPlayer highestBidder;
     private int highestBid;
 

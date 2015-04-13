@@ -395,7 +395,6 @@ public class FXMLGameViewController implements Initializable {
                 canvas.getGraphicsContext2D().drawImage(selector, 189, 318, 22, 264);
             }
         }
-<<<<<<< HEAD
         
         //Draw mysterybox and text when mysterybox is available
         if(gm.getMysterybox() != null){
@@ -408,12 +407,6 @@ public class FXMLGameViewController implements Initializable {
                 canvas.getGraphicsContext2D().fillText("Higest bidder: " + gm.getMysterybox().getHigestBidder().getName(), (canvas.getWidth()-mysterybox.getWidth()) / 2, (canvas.getHeight()-mysterybox.getHeight()) / 2.4 + 300);
             }
             canvas.getGraphicsContext2D().fillText("Next bid: " + gm.getMysterybox().getNewHighestBid(), (canvas.getWidth()-mysterybox.getWidth()) / 2, (canvas.getHeight()-mysterybox.getHeight()) / 2.4 + 350);
-=======
-
-        //Draw mysterybox when available
-        if (gm.getMysterybox() != null) {
-            canvas.getGraphicsContext2D().drawImage(mysterybox, (canvas.getWidth() - mysterybox.getWidth()) / 2, (canvas.getHeight() - mysterybox.getHeight()) / 2.4);
->>>>>>> origin/master
         }
     }
 
