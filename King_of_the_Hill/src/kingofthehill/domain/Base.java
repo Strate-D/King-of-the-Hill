@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
  */
 package kingofthehill.domain;
 
@@ -22,7 +20,6 @@ public class Base {
 
     /**
      * Creates a new base with the given owner.
-     *
      * @param owner May not be null!
      */
     public Base(IPlayer owner) {
@@ -37,7 +34,6 @@ public class Base {
 
     /**
      * Gets the amount of health the base has left
-     *
      * @return 0 or higher with max 100.
      */
     public int getHealthPoints() {
@@ -46,7 +42,6 @@ public class Base {
 
     /**
      * Gets the owner of the base
-     *
      * @return Cannot be null!
      */
     public IPlayer getOwner() {
@@ -55,7 +50,6 @@ public class Base {
 
     /**
      * Gets the lane of the given index
-     *
      * @param index Number between 0 and 7, with 0 to 3 being a group of lanes
      * and 4 to 7. 0 to 3 is the group of lanes where this base is baseEnd1.
      * @return Returns the lane if there is one on the given index, else null.
@@ -70,7 +64,6 @@ public class Base {
 
     /**
      * Sets the lane on the given index.
-     *
      * @param index Number between 0 and 7. 0 to 3 for baseEnd1 and 4 to 7 for
      * baseEnd2.
      * @param lane The lane that needs to be set.
@@ -92,7 +85,6 @@ public class Base {
 
     /**
      * Gets the unit on the given index
-     *
      * @param index Number between 0 and 31. 0 to 3 for lane[0], 4 to 7 for
      * lane[1] etc..
      * @return The unit on the given index can be null
@@ -107,7 +99,6 @@ public class Base {
 
     /**
      * Sets the unit on the given index
-     *
      * @param index Number between 0 and 31. 0 to 3 for lane[0], 4 to 7 for
      * lane[1] etc..
      * @param unit The unit that has to be set on the given index, can be null.
@@ -115,12 +106,16 @@ public class Base {
      * placed
      */
     public boolean setUnit(int index, Unit unit) {
-        //Check if index is not occupied.
+        /**
+         * Check if index is not occupied.
+         */
         if (getUnit(index) != null) {
             return false;
         }
 
-        //Place unit
+        /**
+         * Place unit
+         */
         try {
             if(unit != null){
                 this.units[index] = unit;
@@ -137,7 +132,6 @@ public class Base {
 
     /**
      * Removes the given unit from the base
-     *
      * @param unit The unit that has to be removed
      */
     public void removeUnit(Unit unit) {
@@ -156,7 +150,6 @@ public class Base {
 
     /**
      * Gets all the active units at the base
-     *
      * @return List, can be empty, will not be null, will not have null objects
      * in it.
      */
@@ -172,7 +165,6 @@ public class Base {
 
     /**
      * Lower the health of the base with the given value
-     *
      * @param damage Must be positive
      */
     public void receiveDamage(int damage) {
@@ -201,6 +193,11 @@ public class Base {
         return list;
     }
     
+    /**
+     * Gets the lane of the specified unit
+     * @param u The unit to find the lane of
+     * @return The lane-object of the unit
+     */
     public Lane getLane(Unit u)
     {
         int index = java.util.Arrays.asList(units).indexOf(u);

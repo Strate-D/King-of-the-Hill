@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
  */
 package kingofthehill.domain;
 
@@ -13,31 +11,32 @@ import java.util.List;
  */
 public interface IPlayer {
     /**
-     * 
+     * Returns the name of the player
      * @return The name of the player
      */
     public String getName();
     
     /**
-     * 
+     * Returns the experiance points the player has gained
      * @return The total exp points of the player
      */
     public int getExp();
     
     /**
-     * 
+     * Returns the total score of the player in the current game
      * @return The score of the player in the current game
      */
     public int getScore();
     
     /**
      * Adds an upgrade to a player
+     * @param upgrade Specifies the upgrade that needs to be added
      */
     public void addUpgrade(Upgrade upgrade);
      
     /**
-     * 
-     * @return All the upgrades the players has.
+     * Returns all the upgrades the player has in the current game
+     * @return All the upgrades the player has.
      */
     public List<Upgrade> getUpgrades();
     

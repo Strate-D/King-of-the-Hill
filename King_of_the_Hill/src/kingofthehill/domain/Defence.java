@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
  */
 package kingofthehill.domain;
 
@@ -13,7 +11,6 @@ public class Defence extends Unit{
     /**
      * Creates a new defensive unit with the given parameters. Unit has to be set to
      * a lane or base manually!
-     * 
      * @param health Amount of health the unit has. Must be positive.
      * @param attack Amount of attack the unit has. Must be positive.
      * @param armor Amount of armor the unit has. Must be 0 or positive.

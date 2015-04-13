@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
  */
 package kingofthehill.domain;
 
@@ -20,6 +18,11 @@ public class Lane {
     private final Base baseEnd2;
     private ArrayList<Unit> units;
 
+    /**
+     * Creates a new lane object
+     * @param end1 The base at end 1 of the lane
+     * @param end2 The base at the other end of the lane
+     */
     public Lane(Base end1, Base end2){
         if (end1 == null || end2 == null){
             throw new IllegalArgumentException("Lane couldn't be made, ends cannot be null");
@@ -31,7 +34,6 @@ public class Lane {
     
     /**
      * Gets the base which is at the first end of the lane
-     *
      * @return A base object, cannot be null.
      */
     public Base getBaseEnd1() {
@@ -40,7 +42,6 @@ public class Lane {
 
     /**
      * Gets the base which is at the second end of the lane
-     *
      * @return A base object, cannot be null
      */
     public Base getBaseEnd2() {
@@ -49,7 +50,6 @@ public class Lane {
 
     /**
      * Gets a list of all the units in the lane
-     *
      * @return A unmodifiable list
      */
     public List<Unit> getUnits() {
@@ -58,7 +58,6 @@ public class Lane {
 
     /**
      * Adds the given unit to the lane and sets the lane of the unit
-     *
      * @param unit The unit that has to be added, may not be null.
      */
     public void addUnit(Unit unit) {

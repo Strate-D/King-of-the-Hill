@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
  */
 package kingofthehill.domain;
 
@@ -16,7 +14,7 @@ import kingofthehill.unitinfo.UnitsToSpawn;
 /**
  * Class containing all the information about a AI. Implements IPlayer. Contains
  * AI algoritm.
- *
+
  * @author Jur
  */
 public class AI implements IPlayer {
@@ -29,7 +27,9 @@ public class AI implements IPlayer {
     private int money;
     private Base base;
 
-    // AI memory for calculating the next step
+    /**
+     * AI memory for calculating the next step
+     */
     private int stepsSinceLastDefence;
     private int stepsSinceLastMelee;
     private int stepsSinceLastRanged;

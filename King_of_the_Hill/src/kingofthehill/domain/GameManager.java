@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
  */
 package kingofthehill.domain;
 
@@ -30,17 +28,20 @@ public class GameManager {
 
     /**
      * Creates a new gameManager, also creating a new game with it.
-     *
      * @param player The player that is playing may not be null.
      */
     public GameManager(IPlayer player) {
-        //Set resourceTimer to 0
+        /**
+         * Set resourceTimer to 0
+         */
         resourceTimer = 0;
 
         if (player == null) {
             throw new IllegalArgumentException("Player may not be null");
         }
-        //Add players
+        /**
+         * Add players
+         */
         this.players = new ArrayList<>();
         this.players.add(player);
         this.players.add(new AI("ArtificialIntelligence1"));
@@ -51,7 +52,9 @@ public class GameManager {
         this.players.add(new AI("ArtificialIntelligence3"));
         ((AI)(this.players.get(3))).setAIType(AIState.AGRESSIVE);
 
-        //Create teams
+        /**
+         * Create teams
+         */
         Team team1 = new Team(1, new ArrayList<>());
         Team team2 = new Team(2, new ArrayList<>());
         boolean firstTeam = true;
@@ -65,15 +68,22 @@ public class GameManager {
             }
         }
 
-        //Give players bases;
+        /**
+         * Give players bases
+         */
         for (IPlayer p : this.players) {
             Base b = new Base(p);
             p.setBase(b);
         }
-        //Give the bases lanes
+        
+        /**
+         * Give the bases lanes
+         */
         int i = 0;
         for (IPlayer p : this.players) {
-            //Get bases at ends of the lanes
+            /**
+             * Get bases at ends of the lanes
+             */
             Base base1 = p.getBase();
             Base base2;
             if (i + 1 >= this.players.size()) {
@@ -81,7 +91,10 @@ public class GameManager {
             } else {
                 base2 = this.players.get(i + 1).getBase();
             }
-            //Set lanes
+            
+            /**
+             * Set lanes
+             */
             for (int j = 0; j < 4; j++) {
                 Lane lane = new Lane(base1, base2);
                 base1.setLane(j, lane);
@@ -99,11 +112,6 @@ public class GameManager {
             Base b = p.getBase();
             if (b != null) {
                 for (Lane l : b.getLanes()) {
-//                    for (Unit u : l.getUnits()) {
-//                        u.doNextAction();
-//                    }
-
-                    //Bas C code
                     List<Unit> doneUnits = new ArrayList<>();
                     while (doneUnits.size() < l.getUnits().size()) {
                         try {
@@ -118,12 +126,7 @@ public class GameManager {
                     }
 
                 }
-
-//                for(Unit u : b.getUnits())
-//                {
-//                    u.doNextAction();
-//                }
-                //Bas C code
+                
                 List<Unit> doneUnits = new ArrayList<>();
                 while (doneUnits.size() < b.getUnits().size()) {
                     try {
@@ -142,7 +145,6 @@ public class GameManager {
 
     /**
      * Get all the units for drawing purposes
-     *
      * @return A iterator of units
      */
     public Iterator<Unit> getUnits() {
@@ -164,55 +166,83 @@ public class GameManager {
         Random r = new Random();
         UnitType unitType = null;
         
-        //random choose unittype for upgrade
+        /**
+         * Random choose unittype for upgrade
+         */
         switch(r.nextInt(2)){
-            //defence
+            /**
+             * Defence
+             */
             case 0:
                 unitType = UnitType.DEFENCE;
                 break;
-            //melee
+            /**
+             * Melee
+             */
             case 1:
                 unitType = UnitType.MELEE;
                 break;
-            //ranged
+            /**
+             * Ranged
+             */
             case 2:
                 unitType = UnitType.RANGED;
                 break;
         }
         
-        //random generate content mysterybox
+        /**
+         * Random generate content mysterybox
+         */
         switch(r.nextInt(1)){
-            //mysterybox has resource
+            /**
+             * Mysterybox has resources
+             */
             case 0:
                 mysterybox = new Mysterybox(r.nextInt(90) + 10, null, null, 0);
                 break;
-            //mysterybox has upgrade
+            /**
+             * Mysterybox has upgrade
+             */
             case 1:
                 if(unitType != null){
                     UpgradeInfo upgradeInfo = null;
-                    //random choose upgradetype
+                    /**
+                     * Random choose upgradetype
+                     */
                     switch(r.nextInt(5)){
-                    //weak upgrade
+                    /**
+                     * Weak upgrade
+                     */
                     case 0:
                         upgradeInfo = UpgradeInfo.getWeakUpgrade(unitType);
                         break;
-                    //weak-normal upgrade
+                    /**
+                     * Weak-normal upgrade
+                     */
                     case 1:
                         upgradeInfo = UpgradeInfo.getWeakNormalUpgrade(unitType);
                         break; 
-                    //normal upgrade
+                    /**
+                     * Normal upgrade
+                     */
                     case 2:
                         upgradeInfo = UpgradeInfo.getNormalUpgrade(unitType);
                         break;
-                    //normal-strong upgrade
+                    /**
+                     * Normal-strong upgrade
+                     */
                     case 3:
                         upgradeInfo = UpgradeInfo.getNormalStrongUpgrade(unitType);
                         break;   
-                    //strong upgrade
+                    /**
+                     * Strong upgrade
+                     */
                     case 4:
                         upgradeInfo = UpgradeInfo.getStrongUpgrade(unitType);
                         break;
-                    //uber upgrade
+                    /**
+                     * Uber upgrade
+                     */
                     case 5:
                         upgradeInfo = UpgradeInfo.getUberUpgrade(unitType);
                         break;
@@ -223,7 +253,9 @@ public class GameManager {
                     }
                 }
                 break;
-            //Mysterybox has unit(s)
+            /**
+             * Mysterybox has unit(s)
+             */
             case 2:
                 mysterybox = new Mysterybox(0, null, unitType, r.nextInt(9) + 1);        
                 break;
@@ -232,10 +264,12 @@ public class GameManager {
 
     /**
      * Does actions for the AI player.
-     *
-     * @param player The AI player that needs to do something
+     * @param player The AI player that needs to do something. Cannot be null
      */
     private void operateAIPlayer(AI player) {
+        if(player == null) {
+            throw new IllegalArgumentException("Player cannot be null");
+        }
         player.doNextAction(this);
     }
 
@@ -243,31 +277,44 @@ public class GameManager {
      * Does a step in the game (1/30 of a second).
      */
     public void doStep() {
-        //Check if players should get resources.
+        /**
+         * Check if players should get resources.
+         */
         if (this.resourceTimer > 600) {
             giveResources();
             this.resourceTimer = 0;
         }
         
-        //Operate all units
+        /**
+         * Operate all units
+         */
         operateUnits();
 
-        //Operate all AI's
-        //Check if there are any AI players
+        /**
+         * Operate all AI's
+         * Check if there are any AI players
+         */
         for (IPlayer player : players) {
-            if (player instanceof AI) // The IPlayer is AI. Operate the AI player
+            if (player instanceof AI) 
             {
+                /**
+                 * The IPlayer is AI. Operate the AI player
+                 */
                 operateAIPlayer((AI) player);
             }
         }
         
-        //Generate mysterybox
+        /**
+         * Generate mysterybox
+         */
         if(mysteryboxTimer > 3600){
             generateMysterybox();
             mysteryboxTimer = 0;
         }
         
-        //Unpack mysterybox
+        /**
+         * Unpack mysterybox
+         */
         if(mysterybox != null){
             if(mysteryboxTimer > mysterybox.getDuration()){
                 IPlayer higestBidder = mysterybox.getHigestBidder();
@@ -286,7 +333,9 @@ public class GameManager {
             }
         }
 
-        //Keep track of timers
+        /**
+         * Keep track of timers
+         */
         this.resourceTimer++;
         this.mysteryboxTimer++;
     }
@@ -303,7 +352,6 @@ public class GameManager {
 
     /**
      * Places a unit at the selected lane
-     *
      * @param player The player that places the unit. May not be null.
      * @param unit The unit that has to be placed. May not be null.
      * @param index Number between 0 and 7, with 0 to 3 being a group of lanes
@@ -313,15 +361,23 @@ public class GameManager {
      * @return true if unit is placed at lane, else false
      */
     public boolean placeUnitAtLane(IPlayer player, Unit unit, int index, int cost) {
-        //Check input
+        /**
+         * Check input
+         */
         if (player == null || unit == null || index < 0 || index > 7 || cost < 1 || player.getBase().getHealthPoints() <= 0) {
             return false;
         }
-        //Check if player has enough money
+        
+        /**
+         * Check if player has enough money
+         */
         if (player.getMoney() < cost) {
             return false;
         }
-        //Place unit if possible
+        
+        /**
+         * Place unit if possible
+         */
         Base base = player.getBase();
         if (base != null) {
             Lane l = base.getLane(index);
@@ -336,7 +392,6 @@ public class GameManager {
 
     /**
      * Adds a defencive unit to the base on the given place.
-     *
      * @param player The player that places the unit, may not be null.
      * @param unit The unit that has to be placed, may not be null.
      * @param index The index for the unit, must be between 0 and 31. 0 to 15
@@ -346,15 +401,23 @@ public class GameManager {
      * @return true if unit is placed at base, else false
      */
     public boolean placeUnitAtBase(IPlayer player, Unit unit, int index, int cost) {
-        //Check input
+        /**
+         * Check input
+         */
         if (player == null || unit == null || index > 31 || index < 0 || cost < 1 || player.getBase().getHealthPoints() <= 0) {
             return false;
         }
-        //Check if player has enough money
+        
+        /**
+         * Check if player has enough money
+         */
         if (player.getMoney() < cost) {
             return false;
         }
-        //Place unit if possible
+        
+        /**
+         * Place unit if possible
+         */
         Base b = player.getBase();
         if (b != null) {
             if (b.setUnit(index, unit)) {
@@ -369,13 +432,16 @@ public class GameManager {
 
     /**
      * Gets all the players in this game
-     *
      * @return A unmodifiable list, will never be empty
      */
     public List<IPlayer> getPlayers() {
         return Collections.unmodifiableList(players);
     }
     
+    /**
+     * Returns the mysterybox object
+     * @return The mysterybox object currently active in the game
+     */
     public Mysterybox getMysterybox()
     {
         return this.mysterybox;

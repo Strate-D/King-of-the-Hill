@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ *
  */
 package kingofthehill.domain;
 
@@ -17,7 +15,6 @@ public class Melee extends Unit {
     /**
      * Creates a new melee unit with the given parameters. Unit has to be set to
      * a lane or base manually!
-     *
      * @param health Amount of health the unit has. Must be positive.
      * @param attack Amount of attack the unit has. Must be positive.
      * @param armor Amount of armor the unit has. Must be 0 or positive.
@@ -31,25 +28,33 @@ public class Melee extends Unit {
 
     @Override
     public void doNextAction() {
-        // Check if the unit is in one of the base spots
+        /**
+         * Check if the unit is in one of the base spots
+         */
         if (lastAction == 0) {
             if (this.getBase() != null) {
                 Lane newLane = this.getBase().getLane(this);
                 this.getBase().removeUnit(this);
-                //this.setLane(newLane);
                 newLane.addUnit(this);
             }
 
             Unit targetUnit = this.canAttackUnit();
-            //Check if it is possible to attack
+            /**
+             * Check if it is possible to attack
+             */
             if (targetUnit != null) {
-                //Check if target unit can attack back, to make combat fair
+                /**
+                 * Check if target unit can attack back, to make combat fair
+                 */
                 if (targetUnit.canAttackUnit() == this) {
                     if(this.receiveDamage(targetUnit.getAttack())){
                         targetUnit.getOwner().addPoints(5);
                     }
                 }
-                //Deal damage
+                
+                /**
+                 * Deal damage
+                 */
                 if(targetUnit.receiveDamage(this.getAttack())){
                     targetUnit.getOwner().addPoints(-5);
                 }
@@ -71,15 +76,19 @@ public class Melee extends Unit {
             return null;
         } else {
             IPlayer owner = this.getOwner();
-            //Check to which side the unit is moving
-            //and find the closest unit
+            /**
+             * Check to which side the unit is moving
+             * and find the closest unit
+             */
             int closestDistance = -1;
             Unit closestUnit = null;
             if (lane.getBaseEnd1().getOwner() == owner) {
                 for (Unit u : lane.getUnits()) {
                     if ((u.getPosition() - this.getPosition() < closestDistance
                             || closestDistance == -1)) {
-                        //Check if unit is not friendly
+                        /**
+                         * Check if unit is not friendly
+                         */
                         if (u.getOwner() != this.getOwner()) {
                             closestDistance = u.getPosition() - this.getPosition();
                             closestUnit = u;
@@ -90,7 +99,9 @@ public class Melee extends Unit {
                 for (Unit u : lane.getUnits()) {
                     if ((this.getPosition() - u.getPosition() < closestDistance
                             || closestDistance == -1)) {
-                        //Check if unit is not friendly
+                        /**
+                         * Check if unit is not friendly
+                         */
                         if (u.getOwner() != this.getOwner()) {
                             closestDistance = this.getPosition() - u.getPosition();
                             closestUnit = u;
@@ -98,7 +109,9 @@ public class Melee extends Unit {
                     }
                 }
             }
-            //Check if the unit is within attack range
+            /**
+             * Check if the unit is within attack range
+             */
             if (closestDistance != -1 && closestDistance <= 50) {
                 return closestUnit;
             }
