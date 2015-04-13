@@ -10,6 +10,7 @@ import kingofthehill.domain.IPlayer;
 import kingofthehill.domain.Melee;
 import kingofthehill.domain.Ranged;
 import kingofthehill.domain.Unit;
+import kingofthehill.domain.UnitType;
 
 /**
  *
@@ -17,13 +18,14 @@ import kingofthehill.domain.Unit;
  */
 public class UnitInfo 
 {
-    private int kosten;
+    private int cost;
     private Unit unit;
     private int cool;
+    private UnitType type;
     
-    public int getKosten()
+    public int getCost()
     {
-        return kosten;
+        return cost;
     }
     
     public Unit getUnit()
@@ -36,11 +38,17 @@ public class UnitInfo
         return cool;
     }
     
-    private UnitInfo(int kosten, Unit unit, int cooldown)
+    public UnitType getUnitType()
     {
-        this.kosten = kosten;
+        return type;
+    }
+    
+    private UnitInfo(int kosten, Unit unit, int cooldown, UnitType type)
+    {
+        this.cost = kosten;
         this.unit = unit;
         this.cool = cooldown;
+        this.type = type;
     }
     
     public static UnitInfo getDefenceUnit(IPlayer owner)
@@ -53,7 +61,7 @@ public class UnitInfo
         final int COOL = 30;
         
         Unit def = new Defence(HP, ATK, AMR, SPD, owner);
-        return new UnitInfo(COST, def, COOL);
+        return new UnitInfo(COST, def, COOL, UnitType.DEFENCE);
     }
     
     public static UnitInfo getMeleeUnit(IPlayer owner)
@@ -66,10 +74,10 @@ public class UnitInfo
         final int COOL = 80;
         
         Unit mel = new Melee(HP, ATK, AMR, SPD, owner);
-        return new UnitInfo(COST, mel, COOL);
+        return new UnitInfo(COST, mel, COOL, UnitType.MELEE);
     }
     
-    public static UnitInfo getRangeUnit(IPlayer owner)
+    public static UnitInfo getRangedUnit(IPlayer owner)
     {
         final int HP = 50;
         final int ATK = 10;
@@ -80,6 +88,6 @@ public class UnitInfo
         final int COOL = 120;
         
         Unit rang = new Ranged(HP, ATK, AMR, SPD, owner, RAN);
-        return new UnitInfo(COST, rang, COOL);
+        return new UnitInfo(COST, rang, COOL, UnitType.RANGED);
     }
 }
