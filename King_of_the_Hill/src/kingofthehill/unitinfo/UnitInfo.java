@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
  */
 package kingofthehill.unitinfo;
 
@@ -13,7 +11,7 @@ import kingofthehill.domain.Unit;
 import kingofthehill.domain.UnitType;
 
 /**
- *
+ * Contains unit information to spawn a unit
  * @author Bas
  */
 public class UnitInfo 
@@ -23,26 +21,49 @@ public class UnitInfo
     private int cool;
     private UnitType type;
     
+    /**
+     * Returns the cost of the new unit
+     * @return the cost of the new unit
+     */
     public int getCost()
     {
         return cost;
     }
     
+    /**
+     * Returns the created unit
+     * @return the newly created unit
+     */
     public Unit getUnit()
     {
         return unit;
     }
     
+    /**
+     * Returns the cooldown for the unittype
+     * @return The cooldown for the unittype
+     */
     public int getCooldown()
     {
         return cool;
     }
     
+    /**
+     * Returns the Unittype
+     * @return The unittype
+     */
     public UnitType getUnitType()
     {
         return type;
     }
     
+    /**
+     * Creates a new UnitInfo object containning unit info
+     * @param kosten
+     * @param unit
+     * @param cooldown
+     * @param type 
+     */
     private UnitInfo(int kosten, Unit unit, int cooldown, UnitType type)
     {
         this.cost = kosten;
@@ -51,6 +72,11 @@ public class UnitInfo
         this.type = type;
     }
     
+    /**
+     * Creates a new Defence unit
+     * @param owner The new owner of the unit
+     * @return The unitinformation, including the unit
+     */
     public static UnitInfo getDefenceUnit(IPlayer owner)
     {
         final int HP = 100;
@@ -64,6 +90,11 @@ public class UnitInfo
         return new UnitInfo(COST, def, COOL, UnitType.DEFENCE);
     }
     
+    /**
+     * Creates a new Melee unit
+     * @param owner The new owner of the unit
+     * @return The unitinformation, including the unit
+     */
     public static UnitInfo getMeleeUnit(IPlayer owner)
     {
         final int HP = 50;
@@ -77,6 +108,11 @@ public class UnitInfo
         return new UnitInfo(COST, mel, COOL, UnitType.MELEE);
     }
     
+    /**
+     * Create a new Ranged unit
+     * @param owner The new owner of the unit
+     * @return The unitinformation, including the unit
+     */
     public static UnitInfo getRangedUnit(IPlayer owner)
     {
         final int HP = 50;
