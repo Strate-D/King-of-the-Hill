@@ -490,35 +490,35 @@ public class FXMLGameViewController implements Initializable {
                 //Draw unit
                 //Lane 0
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(0)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 74, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 1000 * (float) 262 + (float) 308, 74, 40, 40);
                 }
                 //Lane 1
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(1)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 109, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 1000 * (float) 262 + (float) 308, 109, 40, 40);
                 }
                 //Lane 2
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(2)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 146, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 1000 * (float) 262 + (float) 308, 146, 40, 40);
                 }
                 //Lane 3
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(3)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 186, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 1000 * (float) 262 + (float) 308, 186, 40, 40);
                 }
                 //Lane 4
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(4)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, 74, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 74, (float) 570 - (float) u.getPosition() / (float) 1000 * (float) 262, 40, 40);
                 }
                 //Lane 5
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(5)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, 105, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 105, (float) 570 - (float) u.getPosition() / (float) 1000 * (float) 262, 40, 40);
                 }
                 //Lane 6
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(6)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, 144, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 144, (float) 570 - (float) u.getPosition() / (float) 1000 * (float) 262, 40, 40);
                 }
                 //Lane 7
                 if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(7)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, 179, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 179, (float) 570 - (float) u.getPosition() / (float) 1000 * (float) 262, 40, 40);
                 }
             }
             ///////////////////////////Draw for player 1///////////////////////////
@@ -540,35 +540,35 @@ public class FXMLGameViewController implements Initializable {
                 //Draw unit
                 //Lane 0
                 if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(0)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, 679, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 679, (float) u.getPosition() / (float) 1000 * (float) 262 + (float) 308, 40, 40);
                 }
                 //Lane 1
                 if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(1)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, 711, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 711, (float) u.getPosition() / (float) 1000 * (float) 262 + (float) 308, 40, 40);
                 }
                 //Lane 2
                 if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(2)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, 749, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 749, (float) u.getPosition() / (float) 1000 * (float) 262 + (float) 308, 40, 40);
                 }
                 //Lane 3
                 if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(3)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, 782, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 782, (float) u.getPosition() / (float) 1000 * (float) 262 + (float) 308, 40, 40);
                 }
                 //Lane 4
                 if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(4)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 74, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 1000 * (float) 262 + (float) 308, 74, 40, 40);
                 }
                 //Lane 5
                 if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(5)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 108, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 1000 * (float) 262 + (float) 308, 108, 40, 40);
                 }
                 //Lane 6
                 if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(6)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 146, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 1000 * (float) 262 + (float) 308, 146, 40, 40);
                 }
                 //Lane 7
                 if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(7)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 181, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) u.getPosition() / (float) 1000 * (float) 262 + (float) 308, 181, 40, 40);
                 }
             }
             ///////////////////////////Draw for player 2///////////////////////////
@@ -590,35 +590,35 @@ public class FXMLGameViewController implements Initializable {
                 //Draw unit
                 //Lane 0
                 if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(0)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 679, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 1000 * (float) 262, 679, 40, 40);
                 }
                 //Lane 1
                 if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(1)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 711, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 1000 * (float) 262, 711, 40, 40);
                 }
                 //Lane 2
                 if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(2)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 749, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 1000 * (float) 262, 749, 40, 40);
                 }
                 //Lane 3
                 if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(3)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 782, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 1000 * (float) 262, 782, 40, 40);
                 }
                 //Lane 4
                 if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(4)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, 679, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 679, (float) u.getPosition() / (float) 1000 * (float) 262 + (float) 308, 40, 40);
                 }
                 //Lane 5
                 if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(5)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, 711, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 711, (float) u.getPosition() / (float) 1000 * (float) 262 + (float) 308, 40, 40);
                 }
                 //Lane 6
                 if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(6)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, 749, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 749, (float) u.getPosition() / (float) 1000 * (float) 262 + (float) 308, 40, 40);
                 }
                 //Lane 7
                 if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(7)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, 782, (float) u.getPosition() / (float) 100 * (float) 262 + (float) 308, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 782, (float) u.getPosition() / (float) 1000 * (float) 262 + (float) 308, 40, 40);
                 }
             }
             ///////////////////////////Draw for player 3///////////////////////////
@@ -640,35 +640,35 @@ public class FXMLGameViewController implements Initializable {
                 //Draw unit
                 //Lane 0
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(0)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, 73, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 73, (float) 570 - (float) u.getPosition() / (float) 1000 * (float) 262, 40, 40);
                 }
                 //Lane 1
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(1)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, 105, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 105, (float) 570 - (float) u.getPosition() / (float) 1000 * (float) 262, 40, 40);
                 }
                 //Lane 2
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(2)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, 144, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 144, (float) 570 - (float) u.getPosition() / (float) 1000 * (float) 262, 40, 40);
                 }
                 //Lane 3
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(3)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, 179, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, 179, (float) 570 - (float) u.getPosition() / (float) 1000 * (float) 262, 40, 40);
                 }
                 //Lane 4
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(4)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 679, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 1000 * (float) 262, 679, 40, 40);
                 }
                 //Lane 5
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(5)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 711, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 1000 * (float) 262, 711, 40, 40);
                 }
                 //Lane 6
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(6)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 749, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 1000 * (float) 262, 749, 40, 40);
                 }
                 //Lane 7
                 if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(7)) {
-                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 100 * (float) 262, 782, 40, 40);
+                    canvas.getGraphicsContext2D().drawImage(drawingImage, (float) 570 - (float) u.getPosition() / (float) 1000 * (float) 262, 782, 40, 40);
                 }
             }
         }

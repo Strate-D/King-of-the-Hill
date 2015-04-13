@@ -214,7 +214,7 @@ public abstract class Unit {
             if (lane.getBaseEnd1().getOwner() == this.getOwner()) {
                 this.position = 0;
             } else {
-                this.position = 100;
+                this.position = 1000;
             }
         }
     }
@@ -280,7 +280,7 @@ public abstract class Unit {
                 this.position -= this.getMovementSpeed();
             }
             //Check if unit has reached the base, if so, do damage
-            if (this.position > 100) {
+            if (this.position > 1000) {
                 lane.getBaseEnd2().receiveDamage(this.getAttack());
                 this.killUnit();
             } else if (this.position < 0) {

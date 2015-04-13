@@ -57,7 +57,7 @@ public class Melee extends Unit {
 
             } else {
                 this.moveUnit();
-                lastAction = 10;
+                lastAction = 2;
             }
         } else {
             lastAction--;
@@ -99,7 +99,7 @@ public class Melee extends Unit {
                 }
             }
             //Check if the unit is within attack range
-            if (closestDistance != -1 && closestDistance <= 5) {
+            if (closestDistance != -1 && closestDistance <= 50) {
                 return closestUnit;
             }
             return null;

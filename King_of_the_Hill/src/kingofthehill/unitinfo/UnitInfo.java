@@ -84,7 +84,7 @@ public class UnitInfo
         final int AMR = 3;
         final int SPD = 2;
         final int COST = 3;
-        final int RAN = 30;
+        final int RAN = 300;
         final int COOL = 120;
         
         Unit rang = new Ranged(HP, ATK, AMR, SPD, owner, RAN);

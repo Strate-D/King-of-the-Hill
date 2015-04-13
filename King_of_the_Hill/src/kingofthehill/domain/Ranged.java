@@ -64,7 +64,7 @@ public class Ranged extends Unit {
                 lastAction = 60;
             } else {
                 this.moveUnit();
-                lastAction = 10;
+                lastAction = 2;
             }
         } else {
             lastAction--;
