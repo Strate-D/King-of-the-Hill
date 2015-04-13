@@ -308,7 +308,7 @@ public class AI implements IPlayer {
                     createUnitAtLane(this.stillToSpawn.get(i).getUnitType(), gm, this.stillToSpawn.get(i).getSpawnPoint());
                     index = i;
                     hasPlacedUnits = true;
-                    stepsSinceLastSpawn = 0;
+                    stepsSinceLastSpawn = 120;
                     break;
                 }
             }
