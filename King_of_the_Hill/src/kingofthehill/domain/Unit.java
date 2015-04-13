@@ -1,8 +1,7 @@
-/*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
+/**
+ *
+ */
+
 package kingofthehill.domain;
 /**
 * Abstract class as template for all units
@@ -24,6 +23,15 @@ public abstract class Unit {
     private Base base;
     private Lane lane;
 
+    /**
+     * Creates a new Unit object
+     * @param health The healthpoints of the new unit
+     * @param attack The attack of the new unit
+     * @param armor The armor of the new unit
+     * @param unittype The type op the new unit
+     * @param movementSpeed The speed of the unit of the lanes
+     * @param owner The owner of the unit
+     */
     public Unit(int health, int attack, int armor,
         UnitType unittype, int movementSpeed, IPlayer owner) {
             if (health < 1 || attack < 1 || armor < 0 || unittype == null || movementSpeed < 0 || owner == null) {
@@ -40,7 +48,6 @@ public abstract class Unit {
     }
     /**
     * Calculates the health of the unit with all the upgrades
-    *
     * @return The health of the unit. Is at least 1.
     */
     public int getHealth() {
@@ -59,7 +66,6 @@ public abstract class Unit {
     }
     /**
     * Calculates the attack of the unit with all the upgrades
-    *
     * @return The attack of the unit. Is at least 1.
     */
     public int getAttack() {
@@ -78,7 +84,6 @@ public abstract class Unit {
     }
     /**
     * Calculates the armor of the unit with all the upgrades
-    *
     * @return The armor of the unit. Will never be negative
     */
     public int getArmor() {
@@ -97,7 +102,6 @@ public abstract class Unit {
     }
     /**
     * Calculates the movement speed of the unit with all the upgrades
-    *
     * @return The movement speed of the unit. Will never be negative
     */
     public int getMovementSpeed() {
@@ -118,12 +122,13 @@ public abstract class Unit {
     * Let's the unit perform its next action
     */
     public abstract void doNextAction();
+    
     /**
     * Checks if this unit can attack a enemy unit
-    *
     * @return The unit it can attack, can be null.
     */
     public abstract Unit canAttackUnit();
+    
     /**
     * Kills this unit
     */
@@ -137,7 +142,6 @@ public abstract class Unit {
     }
     /**
     * Adds a amount of damage to the Unit
-     *
     * @param damagepoints Amount of damage that is dealt.
     * @return If the unit is killed or not
     */
@@ -159,7 +163,6 @@ public abstract class Unit {
     }
     /**
     * Returns the cost of the unit
-    *
     * @return The cost of the unit. Will always be positive.
     */
     public int getCost() {
@@ -172,7 +175,6 @@ public abstract class Unit {
 
     /**
     * Returns the damage that was done to the unit
-     *
     * @return The damage done to the unit.
     */
     public int getDamage() {
@@ -181,16 +183,15 @@ public abstract class Unit {
 
     /**
     * Returns the base object of the unit.
-    *
     * @return Can be null.
     */
     public Base getBase() {
         return this.base;
     }
+    
     /**
     * Sets the base of the unit If the lane was not null, it will be set to
     * null.
-    *
     * @param base The new base of the unit
     */
     public void setBase(Base base) {
@@ -200,11 +201,11 @@ public abstract class Unit {
            this.lane = null;
         }
     }
+    
     /**
     * Sets the new lane of the unit If the base was not null, it will be set to
-     * null Also changes the position of the unit as close as possible to his
-     * own base.
-     *
+    * null Also changes the position of the unit as close as possible to his
+    * own base.
     * @param lane The new lane of the unit
     */
     public void setLane(Lane lane) {
@@ -218,25 +219,25 @@ public abstract class Unit {
             }
         }
     }
+    
     /**
      * Returns the lane object in which the unit is placed.
-    *
     * @return Can be null
     */
     public Lane getLane() {
     return this.lane;
     }
+    
     /**
     * Returns the position of the unit on a lane
-    *
     * @return Int between 0 and 100. -1 if unit is placed on a base.
     */
     public int getPosition() {
     return this.position;
     }
+    
     /**
     * Gets the cooldown time of a unit
-    *
     * @return Always a positive int
     */
     public int getCooldown() {
@@ -246,9 +247,9 @@ public abstract class Unit {
             return 1;
         }
     }
+    
     /**
     * Gets the view range of the unit
-    *
     * @return Always a positive int
     */
     public int getViewRange() {
@@ -258,20 +259,23 @@ public abstract class Unit {
             return 1;
         }
     }
+    
     /**
     * Gets the owner of the unit.
-    *
     * @return Cannot be null
     */
     public IPlayer getOwner() {
     return this.owner;
     }
+    
     /**
-     * Moves the unit with use of the movementspeed If the unit reaches the base
-     * on the other side, the unit will be destroyed and damage will be dealt.
+    * Moves the unit with use of the movementspeed If the unit reaches the base
+    * on the other side, the unit will be destroyed and damage will be dealt.
     */
     public void moveUnit() {
-        //Get lane and check wich way the unit has to move and move the unit
+        /**
+         * Get lane and check wich way the unit has to move and move the unit
+         */
         Lane lane = this.getLane();
         if (lane != null) {
             if (lane.getBaseEnd1().getOwner() == this.getOwner()) {
@@ -279,7 +283,10 @@ public abstract class Unit {
             } else {
                 this.position -= this.getMovementSpeed();
             }
-            //Check if unit has reached the base, if so, do damage
+            
+            /**
+             * Check if unit has reached the base, if so, do damage
+             */
             if (this.position > 1000) {
                 lane.getBaseEnd2().receiveDamage(this.getAttack());
                 this.killUnit();

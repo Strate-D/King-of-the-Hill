@@ -1,8 +1,5 @@
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
  */
 package kingofthehill.domain;
 
@@ -27,12 +24,16 @@ public class Upgrade {
      * @throws IllegalArgumentException 
      */
     public Upgrade(Double modHealth, Double modAttack, Double modArmor, Double modMovementSpeed, UnitType targetUnit) throws IllegalArgumentException{
-        //Check input
+        /**
+         * Check input
+         */
         if(modHealth == null || modAttack == null || modArmor == null || modMovementSpeed == null || targetUnit == null){
             throw new IllegalArgumentException("Variable must have a value!");
         }
         
-        //Fill fields
+        /**
+         * Fill fields
+         */
         this.modHealth = modHealth;
         this.modAttack = modAttack;
         this.modArmor = modArmor;

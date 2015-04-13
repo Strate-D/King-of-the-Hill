@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
  */
 package kingofthehill.domain;
 
@@ -22,7 +20,6 @@ public class Mysterybox {
 
     /**
      * Creates a new Mysterybox object that contains info about the mysterybox.
-     *
      * @param resources Amount of resources in the mysterybox. May not be a
      * negative number!
      * @param upgrade Optional upgrade in the mysterybox. May be null.
@@ -31,7 +28,9 @@ public class Mysterybox {
      * unittype is null.
      */
     public Mysterybox(int resources, Upgrade upgrade, UnitType unitType, int amount) {
-        //Check input
+        /**
+         * Check input
+         */
         if (resources < 0) {
             throw new IllegalArgumentException("Amount of resources may not be lower than 0");
         }
@@ -40,7 +39,9 @@ public class Mysterybox {
             throw new IllegalArgumentException("Amount of units must 1 or more if unittype is not null");
         }
 
-        //Set fields
+        /**
+         * Set fields
+         */
         this.resourceAmount = resources;
         this.upgrade = upgrade;
         this.unitType = unitType;
@@ -51,23 +52,28 @@ public class Mysterybox {
 
     /**
      * Bid on the mysterybox
-     *
      * @param bidder player that bids on the mysterybox
      * @param bid amount of gold the bidder bid on the mysterybox
      */
     public void Bid(IPlayer bidder, int bid) {
         if (bidder != null) {
             if (bid > highestBid && highestBidder != bidder) {
-                //give money back to previous higest bidder
+                /**
+                 * Give money back to previous higest bidder
+                 */
                 if(highestBidder != null){
                     highestBidder.addMoney(bid);
                 }
                 
-                //set new higest bidder and bid
+                /**
+                 * Set new higest bidder and bid
+                 */
                 this.highestBidder = bidder;
                 this.highestBid = bid;
                 
-                //take money from new higest bidder
+                /**
+                 * Take money from new higest bidder
+                 */
                 if(highestBidder != null){
                     highestBidder.payMoney(bid);
                 }
@@ -77,7 +83,6 @@ public class Mysterybox {
 
     /**
      * Gets the amount of resources in the mysterybox.
-     *
      * @return The amount of resources. Always 0 or higher.
      */
     public int getResourceAmount() {
@@ -86,7 +91,6 @@ public class Mysterybox {
 
     /**
      * Gets the upgrade in the mysterybox.
-     *
      * @return The upgrade in the mysterybox. Can be null.
      */
     public Upgrade getUpgrade() {
@@ -96,7 +100,6 @@ public class Mysterybox {
     /**
      * Returns the duration of the mysterybox in frames. (amount of seconds
      * times 60)
-     *
      * @return Returns the duration
      */
     public int getDuration() {
@@ -105,7 +108,6 @@ public class Mysterybox {
 
     /**
      * Returns the type of unit that the mysterybox contains
-     *
      * @return Returns the UnitType
      */
     public UnitType getUnitType() {
@@ -114,7 +116,6 @@ public class Mysterybox {
 
     /**
      * Returns the amount of units that the mysterybox contains
-     *
      * @return Returns the amount of units
      */
     public int getAmount() {
