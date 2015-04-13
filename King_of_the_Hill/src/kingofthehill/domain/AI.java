@@ -308,7 +308,7 @@ public class AI implements IPlayer {
                     createUnitAtLane(this.stillToSpawn.get(i).getUnitType(), gm, this.stillToSpawn.get(i).getSpawnPoint());
                     index = i;
                     hasPlacedUnits = true;
-                    stepsSinceLastSpawn = 0;
+                    stepsSinceLastSpawn = 120;
                     break;
                 }
             }
@@ -663,17 +663,17 @@ public class AI implements IPlayer {
         switch (unit) {
             case DEFENCE:
                 ui = UnitInfo.getDefenceUnit(this);
-                gm.placeUnitAtBase(this, ui.getUnit(), spawnPoint, ui.getKosten());
+                gm.placeUnitAtBase(this, ui.getUnit(), spawnPoint, ui.getCost());
                 stepsSinceLastDefence = (int) (ui.getCooldown());
                 break;
             case MELEE:
                 ui = UnitInfo.getMeleeUnit(this);
-                gm.placeUnitAtBase(this, ui.getUnit(), spawnPoint, ui.getKosten());
+                gm.placeUnitAtBase(this, ui.getUnit(), spawnPoint, ui.getCost());
                 stepsSinceLastMelee = (int) (ui.getCooldown());
                 break;
             case RANGED:
-                ui = UnitInfo.getRangeUnit(this);
-                gm.placeUnitAtBase(this, ui.getUnit(), spawnPoint, ui.getKosten());
+                ui = UnitInfo.getRangedUnit(this);
+                gm.placeUnitAtBase(this, ui.getUnit(), spawnPoint, ui.getCost());
                 stepsSinceLastRanged = (int) (ui.getCooldown());
                 break;
         }
