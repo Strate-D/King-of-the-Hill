@@ -79,7 +79,7 @@ public class FXMLGameViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //Create the game
-        IPlayer p = new Player("Jur", 10);
+        IPlayer p = new Player("Player1", 10);
         AI a = new AI("ArtificialIntelligence0");
         a.setAIType(AIState.AGRESSIVE);
         gm = new GameManager(p);
@@ -388,9 +388,17 @@ public class FXMLGameViewController implements Initializable {
             }
         }
         
-        //Draw mysterybox when available
+        //Draw mysterybox and text when mysterybox is available
         if(gm.getMysterybox() != null){
             canvas.getGraphicsContext2D().drawImage(mysterybox, (canvas.getWidth()-mysterybox.getWidth()) / 2, (canvas.getHeight()-mysterybox.getHeight()) / 2.4);
+            
+            canvas.getGraphicsContext2D().setFill(Color.WHITE);
+            canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.BOLD, 20));
+            if(gm.getMysterybox().getHigestBidder() != null)
+            {
+                canvas.getGraphicsContext2D().fillText("Higest bidder: " + gm.getMysterybox().getHigestBidder().getName(), (canvas.getWidth()-mysterybox.getWidth()) / 2, (canvas.getHeight()-mysterybox.getHeight()) / 2.4 + 300);
+            }
+            canvas.getGraphicsContext2D().fillText("Next bid: " + gm.getMysterybox().getNewHighestBid(), (canvas.getWidth()-mysterybox.getWidth()) / 2, (canvas.getHeight()-mysterybox.getHeight()) / 2.4 + 350);
         }
     }
 
@@ -451,6 +459,14 @@ public class FXMLGameViewController implements Initializable {
                     && lastRealMousePosy >= 318 && lastRealMousePosy <= 582) {
                 gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit, 7, selectedUnit.getCost());
                 selectedUnit = null;
+            }
+        }
+        
+        //handle mouseclick on mysterybox when mysterybox is available
+        if(lastRealMousePosx >= (canvas.getWidth() / 2) -mysterybox.getWidth() && lastRealMousePosx <= (canvas.getWidth() / 2) + mysterybox.getWidth()
+            && lastRealMousePosy >= (canvas.getHeight() /2) -mysterybox.getHeight() && lastRealMousePosy <= (canvas.getHeight() / 2) + mysterybox.getHeight()) {
+            if(gm.getMysterybox() != null){
+                gm.getMysterybox().Bid(gm.getPlayers().get(0), gm.getMysterybox().getNewHighestBid());
             }
         }
     }

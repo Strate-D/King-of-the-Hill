@@ -17,7 +17,7 @@ public class Mysterybox {
     private UnitType unitType;
     private int amount;
     //1800
-    private static final int duration = 100;
+    private static final int duration = 250;
     private IPlayer highestBidder;
     private int highestBid;
 
@@ -47,6 +47,7 @@ public class Mysterybox {
         this.unitType = unitType;
         this.amount = amount;
         this.highestBid = 0;
+        this.highestBidder = null;
     }
 
     /**
@@ -57,7 +58,7 @@ public class Mysterybox {
      */
     public void Bid(IPlayer bidder, int bid) {
         if (bidder != null) {
-            if (bid > highestBid) {
+            if (bid > highestBid && highestBidder != bidder) {
                 //give money back to previous higest bidder
                 if(highestBidder != null){
                     highestBidder.addMoney(bid);
@@ -127,6 +128,14 @@ public class Mysterybox {
      */
     public int getHighestBid() {
         return this.highestBid;
+    }
+    
+    /**
+     * Return the new highest bid
+     * @return Returns the new highest bid
+     */
+    public int getNewHighestBid(){
+        return this.highestBid + 10;
     }
     
     /**
