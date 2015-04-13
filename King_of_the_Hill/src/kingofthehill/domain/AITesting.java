@@ -22,7 +22,6 @@ public class AITesting {
         //gm.setDebugLevelAI(true);
         AI ai1 = (AI)(gm.getPlayers().get(1));
         ai1.setAIType(AIState.AGRESSIVE);
-        ai1.setPrintDebug(true);
         
         AI ai = (AI)gm.getPlayers().get(1);
         for(int i = 0; i<500; i++)
