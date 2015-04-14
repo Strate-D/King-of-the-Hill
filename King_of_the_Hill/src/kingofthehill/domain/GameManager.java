@@ -307,7 +307,7 @@ public class GameManager {
         /**
          * Generate mysterybox
          */
-        if(mysteryboxTimer > 500){
+        if(mysteryboxTimer > 3600){
             generateMysterybox();
             mysteryboxTimer = 0;
         }
