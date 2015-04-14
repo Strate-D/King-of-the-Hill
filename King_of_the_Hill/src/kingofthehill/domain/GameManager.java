@@ -363,8 +363,8 @@ public class GameManager {
     public boolean placeUnitAtLane(IPlayer player, Unit unit, int index, int cost) {
         /**
          * Check input
-         */
-        if (player == null || unit == null || index < 0 || index > 7 || cost < 1 || player.getBase().getHealthPoints() <= 0) {
+         */    
+        if (player == null || player.getBase() == null || unit == null || index < 0 || index > 7 || cost < 1 || player.getBase().getHealthPoints() <= 0) {
             return false;
         }
         
@@ -404,7 +404,7 @@ public class GameManager {
         /**
          * Check input
          */
-        if (player == null || unit == null || index > 31 || index < 0 || cost < 1 || player.getBase().getHealthPoints() <= 0) {
+        if (player == null || player.getBase() == null || unit == null || index > 31 || index < 0 || cost < 1 || player.getBase().getHealthPoints() <= 0) {
             return false;
         }
         

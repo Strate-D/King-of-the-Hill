@@ -38,7 +38,7 @@ public class IPlayerTest
         // 2: normal ai test
         IPlayer ai = new AI(name);
         assertEquals(name, ai.getName());
-        assertEquals(12, ai.getExp());
+        assertEquals(0, ai.getExp());
         assertEquals(0, ai.getScore());
         assertTrue(ai.getUpgrades().isEmpty());
         assertNull(ai.getTeam());
