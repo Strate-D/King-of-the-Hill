@@ -22,5 +22,9 @@
             <Font size="45.0" />
          </font>
       </Button>
+         <font>
+            <Font size="24.0" />
+         </font>
+      </TextField>
    </children>
 </AnchorPane>

@@ -76,7 +76,7 @@ public class FXMLGameViewController implements Initializable {
     double scrollPosX, scrollPosY, lastMousePosx, lastMousePosy, lastRealMousePosx, lastRealMousePosy;
 
     UnitInfo selectedUnit;
-    
+
     String mysteryboxWinner = "";
     String mysteryboxContent = "";
 
@@ -86,7 +86,7 @@ public class FXMLGameViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //Create the game
-        IPlayer p = new Player("Player1", 10);
+        IPlayer p = new Player(King_of_the_Hill.context.getPlayerName(), 10);
         AI a = new AI("ArtificialIntelligence0");
         a.setAIType(AIState.AGRESSIVE);
         gm = new GameManager(p);
@@ -244,17 +244,16 @@ public class FXMLGameViewController implements Initializable {
         isMouseOnCanvas = true;
         lastMousePosx = e.getX();
         lastMousePosy = e.getY();
-        
+
         lastRealMousePosx = (e.getX() - scrollPosX) / 1.5;
         lastRealMousePosy = (e.getY() - scrollPosY) / 1.5;
-        
+
         //check if mouse is floating over mysterybox
-        if(lastRealMousePosx >= 325 && lastRealMousePosx <= 700
-            && lastRealMousePosy >= 325 && lastRealMousePosy <= 700) {
+        if (lastRealMousePosx >= 325 && lastRealMousePosx <= 700
+                && lastRealMousePosy >= 325 && lastRealMousePosy <= 700) {
             Cursor c = Cursor.HAND;
             canvas.setCursor(c);
-        }
-        else{
+        } else {
             canvas.setCursor(Cursor.DEFAULT);
         }
     }
@@ -388,7 +387,7 @@ public class FXMLGameViewController implements Initializable {
         //Draw cooldown for units
         if (meleeCooldown > 0) {
             canvas.getGraphicsContext2D().drawImage(cooldown, 100, 150, 30, 30);
-        } 
+        }
         if (rangedCooldown > 0) {
             canvas.getGraphicsContext2D().drawImage(cooldown, 150, 150, 30, 30);
         }
@@ -430,33 +429,29 @@ public class FXMLGameViewController implements Initializable {
         }
 
         //Draw mysterybox and text when mysterybox is available
-        if(gm.getMysterybox() != null){
-            canvas.getGraphicsContext2D().drawImage(mysterybox, (canvas.getWidth()-mysterybox.getWidth()) / 2, (canvas.getHeight()-mysterybox.getHeight()) / 2.2);
-            
+        if (gm.getMysterybox() != null) {
+            canvas.getGraphicsContext2D().drawImage(mysterybox, (canvas.getWidth() - mysterybox.getWidth()) / 2, (canvas.getHeight() - mysterybox.getHeight()) / 2.2);
+
             canvas.getGraphicsContext2D().setFill(Color.WHITE);
             canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.BOLD, 20));
-            if(gm.getMysterybox().getHigestBidder() != null)
-            {
-                canvas.getGraphicsContext2D().fillText("Hoogste bieder: " + gm.getMysterybox().getHigestBidder().getName(), (canvas.getWidth()-mysterybox.getWidth()) / 2, (canvas.getHeight()-mysterybox.getHeight()) / 2.2 + 325);
+            if (gm.getMysterybox().getHigestBidder() != null) {
+                canvas.getGraphicsContext2D().fillText("Hoogste bieder: " + gm.getMysterybox().getHigestBidder().getName(), (canvas.getWidth() - mysterybox.getWidth()) / 2, (canvas.getHeight() - mysterybox.getHeight()) / 2.2 + 325);
             }
-            canvas.getGraphicsContext2D().fillText("Volgend bod: " + gm.getMysterybox().getNewHighestBid(), (canvas.getWidth()-mysterybox.getWidth()) / 2, (canvas.getHeight()-mysterybox.getHeight()) / 2.2 + 350);
-            
-            if(gm.getMysterybox().getHigestBidder() != null){
+            canvas.getGraphicsContext2D().fillText("Volgend bod: " + gm.getMysterybox().getNewHighestBid(), (canvas.getWidth() - mysterybox.getWidth()) / 2, (canvas.getHeight() - mysterybox.getHeight()) / 2.2 + 350);
+
+            if (gm.getMysterybox().getHigestBidder() != null) {
                 mysteryboxWinner = "Winnaar mysterybox: " + gm.getMysterybox().getHigestBidder().getName();
-                
-                if(gm.getMysterybox().getResourceAmount() != 0){
-                mysteryboxContent = "Inhoud: " + gm.getMysterybox().getResourceAmount() + " resources";
-                }
-                else if(gm.getMysterybox().getUpgrade() != null){
+
+                if (gm.getMysterybox().getResourceAmount() != 0) {
+                    mysteryboxContent = "Inhoud: " + gm.getMysterybox().getResourceAmount() + " resources";
+                } else if (gm.getMysterybox().getUpgrade() != null) {
                     mysteryboxContent = "Inhoud: " + gm.getMysterybox().getUpgrade().toString() + " upgrade";
                 }
-            }
-            else{
+            } else {
                 mysteryboxWinner = "";
                 mysteryboxContent = "";
             }
-        }
-        else{
+        } else {
             canvas.getGraphicsContext2D().setFill(Color.WHITE);
             canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.BOLD, 20));
             canvas.getGraphicsContext2D().fillText(mysteryboxWinner, 250, 595);
@@ -484,57 +479,65 @@ public class FXMLGameViewController implements Initializable {
             //Lane 0
             if (lastRealMousePosx >= 318 && lastRealMousePosx <= 582
                     && lastRealMousePosy >= 83 && lastRealMousePosy <= 105) {
-                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit.getUnit(), 0, selectedUnit.getCost());
-                setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                if (gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit.getUnit(), 0, selectedUnit.getCost())) {
+                    setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                }
                 selectedUnit = null;
             } else //Lane 1
             if (lastRealMousePosx >= 318 && lastRealMousePosx <= 582
                     && lastRealMousePosy >= 115 && lastRealMousePosy <= 142) {
-                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit.getUnit(), 1, selectedUnit.getCost());
-                setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                if (gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit.getUnit(), 1, selectedUnit.getCost())) {
+                    setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                }
                 selectedUnit = null;
             } else //Lane 2
             if (lastRealMousePosx >= 318 && lastRealMousePosx <= 582
                     && lastRealMousePosy >= 154 && lastRealMousePosy <= 179) {
-                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit.getUnit(), 2, selectedUnit.getCost());
-                setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                if (gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit.getUnit(), 2, selectedUnit.getCost())) {
+                    setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                }
                 selectedUnit = null;
             } else //Lane 3
             if (lastRealMousePosx >= 318 && lastRealMousePosx <= 582
                     && lastRealMousePosy >= 189 && lastRealMousePosy <= 213) {
-                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit.getUnit(), 3, selectedUnit.getCost());
-                setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                if (gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit.getUnit(), 3, selectedUnit.getCost())) {
+                    setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                }
                 selectedUnit = null;
             } else //Lane 4
             if (lastRealMousePosx >= 83 && lastRealMousePosx <= 105
                     && lastRealMousePosy >= 318 && lastRealMousePosy <= 582) {
-                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit.getUnit(), 4, selectedUnit.getCost());
-                setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                if (gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit.getUnit(), 4, selectedUnit.getCost())) {
+                    setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                }
                 selectedUnit = null;
             } else //Lane 5
             if (lastRealMousePosx >= 115 && lastRealMousePosx <= 142
                     && lastRealMousePosy >= 318 && lastRealMousePosy <= 582) {
-                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit.getUnit(), 5, selectedUnit.getCost());
-                setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                if (gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit.getUnit(), 5, selectedUnit.getCost())) {
+                    setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                }
                 selectedUnit = null;
             } else //Lane 6
             if (lastRealMousePosx >= 154 && lastRealMousePosx <= 179
                     && lastRealMousePosy >= 318 && lastRealMousePosy <= 582) {
-                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit.getUnit(), 6, selectedUnit.getCost());
-                setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                if (gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit.getUnit(), 6, selectedUnit.getCost())) {
+                    setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                }
                 selectedUnit = null;
             } else //Lane 7
             if (lastRealMousePosx >= 189 && lastRealMousePosx <= 213
                     && lastRealMousePosy >= 318 && lastRealMousePosy <= 582) {
-                gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit.getUnit(), 7, selectedUnit.getCost());
-                setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                if (gm.placeUnitAtLane(gm.getPlayers().get(0), selectedUnit.getUnit(), 7, selectedUnit.getCost())) {
+                    setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                }
                 selectedUnit = null;
             }
         }
 
         //handle mouseclick on mysterybox when mysterybox is available
-        if(lastRealMousePosx >= 325 && lastRealMousePosx <= 700 && lastRealMousePosy >= 325 && lastRealMousePosy <= 700) {
-            if(gm.getMysterybox() != null){
+        if (lastRealMousePosx >= 325 && lastRealMousePosx <= 700 && lastRealMousePosy >= 325 && lastRealMousePosy <= 700) {
+            if (gm.getMysterybox() != null) {
                 gm.getMysterybox().Bid(gm.getPlayers().get(0), gm.getMysterybox().getNewHighestBid());
             }
         }

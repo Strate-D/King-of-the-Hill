@@ -18,10 +18,12 @@ import javafx.stage.Stage;
  */
 public class King_of_the_Hill extends Application {
     public static Stage currentStage;
+    public static ApplicationContext context;
 
     @Override
     public void start(Stage stage) throws IOException {
         currentStage = stage;
+        context = new ApplicationContext();
         Parent root = FXMLLoader.load(getClass().getResource("FXMLMain.fxml"));
         stage.setScene(new Scene(root));
         stage.setFullScreen(true);

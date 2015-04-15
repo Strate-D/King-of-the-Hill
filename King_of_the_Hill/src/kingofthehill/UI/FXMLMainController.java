@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -26,6 +27,9 @@ public class FXMLMainController implements Initializable {
 
     @FXML
     private AnchorPane content;
+    
+    @FXML
+    private TextField playerName;
 
     /**
      * Initializes the controller class.
@@ -34,6 +38,7 @@ public class FXMLMainController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         //Collect garbage
         System.gc();
+        playerName.setText(King_of_the_Hill.context.getPlayerName());
     }
 
     /**
@@ -42,6 +47,8 @@ public class FXMLMainController implements Initializable {
      * @param e
      */
     public void handlePlayButton(ActionEvent e) {
+        //Set the player name
+        King_of_the_Hill.context.setPlayerName(playerName.getText());
         try {
             //Load next window
             Parent window1;
