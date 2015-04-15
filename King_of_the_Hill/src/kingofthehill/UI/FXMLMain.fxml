@@ -22,6 +22,7 @@
             <Font size="45.0" />
          </font>
       </Button>
+      <TextField fx:id="playerName" layoutX="645.0" layoutY="515.0" prefHeight="51.0" prefWidth="466.0" promptText="Enter your name" text="Player 1">
          <font>
             <Font size="24.0" />
          </font>
