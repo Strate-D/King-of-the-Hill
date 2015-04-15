@@ -30,7 +30,7 @@ public class AITest
         
         // 1: normal test
         IPlayer player1 = new AI("computer1");
-        assertEquals(12, player1.getExp());
+        assertEquals(0, player1.getExp());
         assertEquals(0, player1.getScore());
         assertEquals(new ArrayList<>(), player1.getUpgrades());
         assertEquals(null, player1.getTeam());

@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
@@ -75,6 +76,9 @@ public class FXMLGameViewController implements Initializable {
     double scrollPosX, scrollPosY, lastMousePosx, lastMousePosy, lastRealMousePosx, lastRealMousePosy;
 
     UnitInfo selectedUnit;
+    
+    String mysteryboxWinner = "";
+    String mysteryboxContent = "";
 
     /**
      * Initializes the controller class.
@@ -240,8 +244,19 @@ public class FXMLGameViewController implements Initializable {
         isMouseOnCanvas = true;
         lastMousePosx = e.getX();
         lastMousePosy = e.getY();
+        
         lastRealMousePosx = (e.getX() - scrollPosX) / 1.5;
         lastRealMousePosy = (e.getY() - scrollPosY) / 1.5;
+        
+        //check if mouse is floating over mysterybox
+        if(lastRealMousePosx >= 325 && lastRealMousePosx <= 700
+            && lastRealMousePosy >= 325 && lastRealMousePosy <= 700) {
+            Cursor c = Cursor.HAND;
+            canvas.setCursor(c);
+        }
+        else{
+            canvas.setCursor(Cursor.DEFAULT);
+        }
     }
 
     /**
@@ -415,15 +430,37 @@ public class FXMLGameViewController implements Initializable {
         }
 
         //Draw mysterybox and text when mysterybox is available
-        if (gm.getMysterybox() != null) {
-            canvas.getGraphicsContext2D().drawImage(mysterybox, (canvas.getWidth() - mysterybox.getWidth()) / 2, (canvas.getHeight() - mysterybox.getHeight()) / 2.4);
-
+        if(gm.getMysterybox() != null){
+            canvas.getGraphicsContext2D().drawImage(mysterybox, (canvas.getWidth()-mysterybox.getWidth()) / 2, (canvas.getHeight()-mysterybox.getHeight()) / 2.2);
+            
             canvas.getGraphicsContext2D().setFill(Color.WHITE);
             canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.BOLD, 20));
-            if (gm.getMysterybox().getHigestBidder() != null) {
-                canvas.getGraphicsContext2D().fillText("Higest bidder: " + gm.getMysterybox().getHigestBidder().getName(), (canvas.getWidth() - mysterybox.getWidth()) / 2, (canvas.getHeight() - mysterybox.getHeight()) / 2.4 + 300);
+            if(gm.getMysterybox().getHigestBidder() != null)
+            {
+                canvas.getGraphicsContext2D().fillText("Hoogste bieder: " + gm.getMysterybox().getHigestBidder().getName(), (canvas.getWidth()-mysterybox.getWidth()) / 2, (canvas.getHeight()-mysterybox.getHeight()) / 2.2 + 325);
             }
-            canvas.getGraphicsContext2D().fillText("Next bid: " + gm.getMysterybox().getNewHighestBid(), (canvas.getWidth() - mysterybox.getWidth()) / 2, (canvas.getHeight() - mysterybox.getHeight()) / 2.4 + 350);
+            canvas.getGraphicsContext2D().fillText("Volgend bod: " + gm.getMysterybox().getNewHighestBid(), (canvas.getWidth()-mysterybox.getWidth()) / 2, (canvas.getHeight()-mysterybox.getHeight()) / 2.2 + 350);
+            
+            if(gm.getMysterybox().getHigestBidder() != null){
+                mysteryboxWinner = "Winnaar mysterybox: " + gm.getMysterybox().getHigestBidder().getName();
+                
+                if(gm.getMysterybox().getResourceAmount() != 0){
+                mysteryboxContent = "Inhoud: " + gm.getMysterybox().getResourceAmount() + " resources";
+                }
+                else if(gm.getMysterybox().getUpgrade() != null){
+                    mysteryboxContent = "Inhoud: " + gm.getMysterybox().getUpgrade().toString() + " upgrade";
+                }
+            }
+            else{
+                mysteryboxWinner = "";
+                mysteryboxContent = "";
+            }
+        }
+        else{
+            canvas.getGraphicsContext2D().setFill(Color.WHITE);
+            canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.BOLD, 20));
+            canvas.getGraphicsContext2D().fillText(mysteryboxWinner, 250, 595);
+            canvas.getGraphicsContext2D().fillText(mysteryboxContent, 250, 620);
         }
     }
 
@@ -496,9 +533,8 @@ public class FXMLGameViewController implements Initializable {
         }
 
         //handle mouseclick on mysterybox when mysterybox is available
-        if (lastRealMousePosx >= (canvas.getWidth() / 2) - mysterybox.getWidth() && lastRealMousePosx <= (canvas.getWidth() / 2) + mysterybox.getWidth()
-                && lastRealMousePosy >= (canvas.getHeight() / 2) - mysterybox.getHeight() && lastRealMousePosy <= (canvas.getHeight() / 2) + mysterybox.getHeight()) {
-            if (gm.getMysterybox() != null) {
+        if(lastRealMousePosx >= 325 && lastRealMousePosx <= 700 && lastRealMousePosy >= 325 && lastRealMousePosy <= 700) {
+            if(gm.getMysterybox() != null){
                 gm.getMysterybox().Bid(gm.getPlayers().get(0), gm.getMysterybox().getNewHighestBid());
             }
         }
