@@ -97,12 +97,12 @@ public class UnitInfo
      */
     public static UnitInfo getMeleeUnit(IPlayer owner)
     {
-        final int HP = 50;
+        final int HP = 70;
         final int ATK = 15;
-        final int AMR = 5;
+        final int AMR = 7;
         final int SPD = 1;
-        final int COST = 2;
-        final int COOL = 80;
+        final int COST = 7;
+        final int COOL = 100;
         
         Unit mel = new Melee(HP, ATK, AMR, SPD, owner);
         return new UnitInfo(COST, mel, COOL, UnitType.MELEE);
@@ -119,9 +119,9 @@ public class UnitInfo
         final int ATK = 10;
         final int AMR = 3;
         final int SPD = 2;
-        final int COST = 3;
+        final int COST = 15;
         final int RAN = 300;
-        final int COOL = 120;
+        final int COOL = 200;
         
         Unit rang = new Ranged(HP, ATK, AMR, SPD, owner, RAN);
         return new UnitInfo(COST, rang, COOL, UnitType.RANGED);
