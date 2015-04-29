@@ -296,4 +296,16 @@ public abstract class Unit {
             }
         }
     }
+    
+    /**
+     * Sets the new position of the unit to the given value
+     * @param newPos The new position of the unit, must be positive and lower than 1000!
+     */
+    public void setPosition(int newPos) {
+        if(newPos < 0 || newPos >= 1000) {
+            //do nothing
+        } else {
+            this.position = newPos;
+        }
+    }
 }

@@ -15,6 +15,7 @@ public class Melee extends Unit {
     /**
      * Creates a new melee unit with the given parameters. Unit has to be set to
      * a lane or base manually!
+     *
      * @param health Amount of health the unit has. Must be positive.
      * @param attack Amount of attack the unit has. Must be positive.
      * @param armor Amount of armor the unit has. Must be 0 or positive.
@@ -29,13 +30,22 @@ public class Melee extends Unit {
     @Override
     public void doNextAction() {
         /**
-         * Check if the unit is in one of the base spots
+         * Check if unit may do an action
          */
         if (lastAction == 0) {
+            /**
+             * Check if the unit is in one of the base spots
+             */
             if (this.getBase() != null) {
+                int pos = this.getBase().getUnitIndex(this) % 4;
                 Lane newLane = this.getBase().getLane(this);
                 this.getBase().removeUnit(this);
                 newLane.addUnit(this);
+                if (newLane.getBaseEnd1() == this.getOwner().getBase()) {
+                    this.setPosition(pos * 55);
+                } else {
+                    this.setPosition(1000 - pos * 55);
+                }
             }
 
             Unit targetUnit = this.canAttackUnit();
@@ -47,15 +57,15 @@ public class Melee extends Unit {
                  * Check if target unit can attack back, to make combat fair
                  */
                 if (targetUnit.canAttackUnit() == this) {
-                    if(this.receiveDamage(targetUnit.getAttack())){
+                    if (this.receiveDamage(targetUnit.getAttack())) {
                         targetUnit.getOwner().addPoints(5);
                     }
                 }
-                
+
                 /**
                  * Deal damage
                  */
-                if(targetUnit.receiveDamage(this.getAttack())){
+                if (targetUnit.receiveDamage(this.getAttack())) {
                     targetUnit.getOwner().addPoints(-5);
                 }
                 lastAction = 20;
@@ -77,8 +87,7 @@ public class Melee extends Unit {
         } else {
             IPlayer owner = this.getOwner();
             /**
-             * Check to which side the unit is moving
-             * and find the closest unit
+             * Check to which side the unit is moving and find the closest unit
              */
             int closestDistance = -1;
             Unit closestUnit = null;

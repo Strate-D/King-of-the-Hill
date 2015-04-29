@@ -43,9 +43,15 @@ public class Ranged extends Unit {
              * Check if the unit is in one of the base spots
              */
             if (this.getBase() != null) {
+                int pos = this.getBase().getUnitIndex(this) % 4;
                 Lane newLane = this.getBase().getLane(this);
                 this.getBase().removeUnit(this);
                 newLane.addUnit(this);
+                if(newLane.getBaseEnd1() == this.getOwner().getBase()) {
+                    this.setPosition(pos * 55);
+                } else {
+                    this.setPosition(1000 - pos * 55);
+                }
             }
 
             Unit targetUnit = this.canAttackUnit();
