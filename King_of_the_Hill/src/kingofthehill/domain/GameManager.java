@@ -23,6 +23,8 @@ public class GameManager {
     private GameMode gameMode;
     private int resourceTimer;
     private int mysteryboxTimer;
+    private int mysteryboxTime;
+    private Random mysteryboxRandom;
 
     private boolean DebugLevelAI = false;
 
@@ -102,6 +104,12 @@ public class GameManager {
             }
             i++;
         }
+        
+        /**
+         * Set mysteryboxtime at random for the first time
+         */
+        mysteryboxRandom = new Random();
+        mysteryboxTime = mysteryboxRandom.nextInt(1800) + 1800;
     }
 
     /**
@@ -193,7 +201,7 @@ public class GameManager {
         /**
          * Random generate content mysterybox
          */
-        switch(r.nextInt(1)){
+        switch(r.nextInt(2)){
             /**
              * Mysterybox has resources
              */
@@ -209,7 +217,7 @@ public class GameManager {
                     /**
                      * Random choose upgradetype
                      */
-                    switch(r.nextInt(5)){
+                    switch(r.nextInt(6)){
                     /**
                      * Weak upgrade
                      */
@@ -307,9 +315,10 @@ public class GameManager {
         /**
          * Generate mysterybox
          */
-        if(mysteryboxTimer > 3600){
+        if(mysteryboxTimer > mysteryboxTime){
             generateMysterybox();
             mysteryboxTimer = 0;
+            mysteryboxTime = mysteryboxRandom.nextInt(1800) + 1800;
         }
         
         /**

@@ -3,7 +3,6 @@
  */
 package kingofthehill.upgradeinfo;
 
-import java.util.Random;
 import kingofthehill.domain.UnitType;
 import kingofthehill.domain.Upgrade;
 
