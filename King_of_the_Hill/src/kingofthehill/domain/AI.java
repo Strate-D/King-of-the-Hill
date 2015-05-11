@@ -444,8 +444,12 @@ public class AI implements IPlayer {
                     /**
                      * Find a suitable spot to spawn a defence unit
                      */
+                    int newSpot = -1;
+                    while (newSpot == -1 || this.getBase().getUnit(newSpot) != null) {
+                        newSpot = getNextRandom(0, 3) + AttackInfo.get(i).getLane() * 4;
+                    }
                     
-                    this.spawnUnit(UnitType.DEFENCE, AttackInfo.get(i).getLane() * 4 + 3);
+                    this.spawnUnit(UnitType.DEFENCE, newSpot);
                 }
             } else if (this.getAIType() == AIState.DEFENSIVE) {
             }
