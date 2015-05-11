@@ -16,7 +16,7 @@ import kingofthehill.upgradeinfo.UpgradeInfo;
  *
  * @author Jur
  */
-public class GameManager {
+public class GameManager implements IGameInfo{
 
     private List<IPlayer> players;
     private Mysterybox mysterybox;
@@ -25,6 +25,7 @@ public class GameManager {
     private int mysteryboxTimer;
     private int mysteryboxTime;
     private Random mysteryboxRandom;
+    private GameInfo gameInfo;
 
     private boolean DebugLevelAI = false;
 
@@ -110,6 +111,12 @@ public class GameManager {
          */
         mysteryboxRandom = new Random();
         mysteryboxTime = mysteryboxRandom.nextInt(1800) + 1800;
+        
+        /**
+         * 
+         */
+        gameInfo = new GameInfo();
+        gameInfo.setInfo(players, mysterybox, resourceTimer, mysteryboxTimer, mysteryboxTime);
     }
 
     /**
@@ -454,5 +461,10 @@ public class GameManager {
     public Mysterybox getMysterybox()
     {
         return this.mysterybox;
+    }
+
+    @Override
+    public GameInfo getGameInfo() {
+        return gameInfo;
     }
 }

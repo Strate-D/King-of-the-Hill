@@ -26,8 +26,8 @@ public class UnitUnitTest
         Unit m2 = new Melee(11, 11, 11, 11, player);
         Unit r1 = new Ranged(12, 12, 12, 12, ai, 12);
         Unit r2 = new Ranged(13, 13, 13, 13, player, 13);
-        Unit d1 = new Defence(14, 14, 14, 14, ai);
-        Unit d2 = new Defence(15, 15, 15 ,15, player);
+        Unit d1 = new Defence(14, 14, 14, ai);
+        Unit d2 = new Defence(15, 15 ,15, player);
  //       m1.setBase(b1);
         m1.setLane(l);
 //        r1.setBase(b2);
@@ -68,7 +68,7 @@ public class UnitUnitTest
         assertNull(u1.getBase());
         
         // 2: normal test
-        Unit u2 = new Defence(20, 20, 20, 20, player1);
+        Unit u2 = new Defence(20, 20, 20, player1);
         u2.setLane(l);
         assertEquals(null, u2.getBase());
         assertEquals(1000, u2.getPosition());
@@ -102,8 +102,8 @@ public class UnitUnitTest
         Unit m2 = new Melee(11, 11, 11, 11, player);
         Unit r1 = new Ranged(12, 12, 12, 12, ai, 12);
         Unit r2 = new Ranged(13, 13, 13, 13, player, 13);
-        Unit d1 = new Defence(14, 14, 14, 14, ai);
-        Unit d2 = new Defence(15, 15, 15 ,15, player);
+        Unit d1 = new Defence(14, 14, 14, ai);
+        Unit d2 = new Defence(15, 15 ,15, player);
         // Melee Unit Tests
         // m1
         try {
@@ -183,8 +183,8 @@ public class UnitUnitTest
         Unit m2 = new Melee(11, 11, 11, 11, player);
         Unit r1 = new Ranged(12, 12, 12, 12, ai, 12);
         Unit r2 = new Ranged(13, 13, 13, 13, player, 13);
-        Unit d1 = new Defence(14, 14, 14, 14, ai);
-        Unit d2 = new Defence(15, 15, 15 ,15, player);
+        Unit d1 = new Defence(14, 14, 14, ai);
+        Unit d2 = new Defence(15, 15 ,15, player);
         // Melee Unit Tests
         // m1
         try {
