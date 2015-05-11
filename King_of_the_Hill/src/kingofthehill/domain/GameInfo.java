@@ -5,19 +5,21 @@
  */
 package kingofthehill.domain;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author Dennis
  */
-public class GameInfo {
+public class GameInfo implements IGameInfo, Serializable{
     private List<IPlayer> players;
     private Mysterybox mbox;
     private int resourcetimer;
     private int mysteryboxtimer;
     private int mysteryboxtime;
     
+    @Override
     public void setInfo(List<IPlayer> players, Mysterybox mbox, int resourcetimer, int mysteryboxtimer, int mysteryboxtime){
         this.players = players;
         this.mbox = mbox;

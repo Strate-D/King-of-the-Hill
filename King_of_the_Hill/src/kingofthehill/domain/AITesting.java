@@ -5,7 +5,7 @@
  */
 package kingofthehill.domain;
 
-import kingofthehill.unitinfo.UnitInfo;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -16,9 +16,9 @@ public class AITesting {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) 
+    public static void main(String[] args) throws RemoteException 
     {
-        GameManager gm = new GameManager(new Player("Host", 20));
+        GameManager gm = new GameManager();
         //gm.setDebugLevelAI(true);
         AI ai1 = (AI)(gm.getPlayers().get(1));
         ai1.setAIType(AIState.AGRESSIVE);

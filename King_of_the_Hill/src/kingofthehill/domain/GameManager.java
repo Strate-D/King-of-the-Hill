@@ -3,6 +3,8 @@
  */
 package kingofthehill.domain;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -16,7 +18,7 @@ import kingofthehill.upgradeinfo.UpgradeInfo;
  *
  * @author Jur
  */
-public class GameManager implements IGameInfo{
+public class GameManager extends UnicastRemoteObject implements IGameManager{
 
     private List<IPlayer> players;
     private Mysterybox mysterybox;
@@ -25,36 +27,41 @@ public class GameManager implements IGameInfo{
     private int mysteryboxTimer;
     private int mysteryboxTime;
     private Random mysteryboxRandom;
-    private GameInfo gameInfo;
+    private IGameInfo gameInfo;
 
     private boolean DebugLevelAI = false;
 
     /**
      * Creates a new gameManager, also creating a new game with it.
-     * @param player The player that is playing may not be null.
      */
-    public GameManager(IPlayer player) {
+    public GameManager() throws RemoteException{
         /**
          * Set resourceTimer to 0
          */
-        resourceTimer = 0;
-
-        if (player == null) {
-            throw new IllegalArgumentException("Player may not be null");
-        }
-        /**
-         * Add players
-         */
         this.players = new ArrayList<>();
-        this.players.add(player);
-        this.players.add(new AI("ArtificialIntelligence1"));
-        ((AI)(this.players.get(1))).setAIType(AIState.DEFENSIVE);
-        //((AI)(this.players.get(1))).setRandomSeed(1524625152);
-        this.players.add(new AI("ArtificialIntelligence2"));
-        ((AI)(this.players.get(2))).setAIType(AIState.MODERNATE);
-        this.players.add(new AI("ArtificialIntelligence3"));
-        ((AI)(this.players.get(3))).setAIType(AIState.AGRESSIVE);
-
+        this.resourceTimer = 0;
+        this.mysteryboxTimer = 0;
+        this.mysteryboxTime = 0;
+    }
+    
+    /**
+     * Add player to game
+     * @param player player to add to the game
+     */
+    public void addPlayer(IPlayer player){
+        if (player != null) {
+            this.players.add(player);
+        }
+        
+        if(players.size() > 3){
+            startGame();
+        }
+    }
+    
+    /**
+     * Start game when all players are 
+     */
+    private void startGame(){
         /**
          * Create teams
          */
@@ -464,7 +471,7 @@ public class GameManager implements IGameInfo{
     }
 
     @Override
-    public GameInfo getGameInfo() {
+    public IGameInfo getGameInfo() throws RemoteException{
         return gameInfo;
     }
 }

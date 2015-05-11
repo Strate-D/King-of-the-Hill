@@ -5,6 +5,7 @@
  */
 package kingofthehill.domain;
 
+import java.rmi.RemoteException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -14,7 +15,7 @@ import static org.junit.Assert.*;
  */
 public class GameManagerTest 
 {
-    @Test public void testGetters()
+    @Test public void testGetters() throws RemoteException
     {
         /**
          * Test the constructor and the getPlayers() method
@@ -22,7 +23,7 @@ public class GameManagerTest
         
         //default value
         Player bas = new Player("Bas", 100);
-        GameManager gm = new GameManager(bas);
+        GameManager gm = new GameManager();
                 
         // normal test
         assertEquals(bas, gm.getPlayers().get(0));
@@ -35,25 +36,25 @@ public class GameManagerTest
         
         // normal test
         AI rick = new AI("Rick");
-        gm = new GameManager(rick);
+        gm = new GameManager();
         assertEquals(rick, gm.getPlayers().get(0));
         assertEquals(1, gm.getPlayers().get(0).getTeam().getNr());
         
         // fail test
         try
         {
-            gm = new GameManager(null);
+            gm = new GameManager();
             fail("GameManager cannot have an null player");
         }
         catch (IllegalArgumentException ecx) {}
     }
 
-    @Test public void testPlaceUnitAtLane()
+    @Test public void testPlaceUnitAtLane() throws RemoteException
     {
         // create values
         IPlayer ai = new AI("AI1");
         Unit def = new Defence(10, 10, 10, ai);
-        GameManager gm = new GameManager(new Player("Bas", 10));
+        GameManager gm = new GameManager();
         Base base1 = new Base(ai);
         IPlayer player = new Player("Henkie", 100);
         Base base2 = new Base(player);
@@ -73,12 +74,12 @@ public class GameManagerTest
         assertFalse(gm.placeUnitAtLane(null, null, 2, 10));
     }
     
-    @Test public void testPlaceUnitAtBase()
+    @Test public void testPlaceUnitAtBase() throws RemoteException
     {
         // create values
         IPlayer ai = new AI("AI1");
         Unit def = new Defence(10, 10, 10, ai);
-        GameManager gm = new GameManager(new Player("Bas", 10));
+        GameManager gm = new GameManager();
         Base base = new Base(ai);
         
         // normal test

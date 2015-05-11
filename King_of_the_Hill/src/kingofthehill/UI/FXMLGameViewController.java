@@ -7,6 +7,7 @@ package kingofthehill.UI;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -90,7 +91,11 @@ public class FXMLGameViewController implements Initializable {
         IPlayer p = new Player(King_of_the_Hill.context.getPlayerName(), 10);
         AI a = new AI("ArtificialIntelligence0");
         a.setAIType(AIState.AGRESSIVE);
-        gm = new GameManager(p);
+        try {
+            gm = new GameManager();
+        } catch (RemoteException ex) {
+            Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         isMouseOnCanvas = false;
         selectedUnit = null;
 

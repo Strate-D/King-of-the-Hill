@@ -5,10 +5,94 @@
  */
 package kingofthehill.server;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import kingofthehill.domain.GameManager;
+import kingofthehill.domain.IGameManager;
+
 /**
  *
  * @author Dennis
  */
 public class RMIserver {
+    // Set port number
+    private static final int portNumber = 9999;
+
+    // Set binding name for student administration
+    private static final String bindingName = "GameInfo";
+
+    // References to registry and student administration
+    private Registry registry = null;
+    private IGameManager gameManager = null;
+    
+    public RMIserver() {
+        // Print port number for registry
+        System.out.println("Server: Port number " + portNumber);
+        
+        // Create student administration
+        try {
+            gameManager = new GameManager();
+            System.out.println("Server: Game created");
+        } catch (RemoteException ex) {
+            System.out.println("Server: Cannot create game");
+            System.out.println("Server: RemoteException: " + ex.getMessage());
+            gameManager = null;
+        }
+
+        // Create registry at port number
+        try {
+            registry = LocateRegistry.createRegistry(portNumber);
+            System.out.println("Server: Registry created on port number " + portNumber);
+        } catch (RemoteException ex) {
+            System.out.println("Server: Cannot create registry");
+            System.out.println("Server: RemoteException: " + ex.getMessage());
+            registry = null;
+        }
+
+        // Bind student administration using registry
+        try {
+            registry.rebind(bindingName, gameManager);
+        } catch (RemoteException ex) {
+            System.out.println("Server: Cannot bind student administration");
+            System.out.println("Server: RemoteException: " + ex.getMessage());
+        }
+    }
+    
+    // Print IP addresses and network interfaces
+    private static void printIPAddresses() {
+        try {
+            InetAddress localhost = InetAddress.getLocalHost();
+            System.out.println("Server: IP Address: " + localhost.getHostAddress());
+            // Just in case this host has multiple IP addresses....
+            InetAddress[] allMyIps = InetAddress.getAllByName(localhost.getCanonicalHostName());
+            if (allMyIps != null && allMyIps.length > 1) {
+                System.out.println("Server: Full list of IP addresses:");
+                for (InetAddress allMyIp : allMyIps) {
+                    System.out.println("    " + allMyIp);
+                }
+            }
+        } catch (UnknownHostException ex) {
+            System.out.println("Server: Cannot get IP address of local host");
+            System.out.println("Server: UnknownHostException: " + ex.getMessage());
+        }
+    }
+    
+    /**
+    * @param args the command line arguments
+    */
+    public static void main(String[] args) {
+
+        // Welcome message
+        System.out.println("SERVER USING REGISTRY");
+
+        // Print IP addresses and network interfaces
+        printIPAddresses();
+
+        // Create server
+        RMIserver server = new RMIserver();
+    }
     
 }

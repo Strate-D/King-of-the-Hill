@@ -5,12 +5,13 @@
  */
 package kingofthehill.domain;
 
-import java.util.List;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 /**
  *
  * @author Dennis
  */
-public interface IGameInfo{ 
-    public void setInfo(List<IPlayer> players, Mysterybox mbox, int resourcetimer, int mysteryboxtimer, int mysteryboxtime);
+public interface IGameManager extends Remote{
+    public IGameInfo getGameInfo() throws RemoteException;
 }
