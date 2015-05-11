@@ -80,4 +80,9 @@ public class Upgrade {
     public UnitType getTargetUnit(){
         return this.targetUnit;
     }
+    
+    @Override
+    public String toString(){
+        return "Upgrade voor " + targetUnit + ": +" + modHealth + " health, +" + modAttack + " attack, +" + modArmor + " armor, +" + modMovementSpeed + " speed";
+    }
 }

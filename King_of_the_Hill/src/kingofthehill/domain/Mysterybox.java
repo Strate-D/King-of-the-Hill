@@ -3,6 +3,8 @@
  */
 package kingofthehill.domain;
 
+import java.util.Random;
+
 /**
  * Object that contains all the info about the mystery box in the game.
  *
@@ -14,7 +16,7 @@ public class Mysterybox {
     private Upgrade upgrade;
     private UnitType unitType;
     private int amount;
-    private static final int duration = 1800;
+    private int duration;
     private IPlayer highestBidder;
     private int highestBid;
 
@@ -38,7 +40,12 @@ public class Mysterybox {
         if (unitType != null && amount < 1) {
             throw new IllegalArgumentException("Amount of units must 1 or more if unittype is not null");
         }
-
+        
+        /**
+         * initialize random
+         */
+        Random mysteryboxRandom = new Random();
+        
         /**
          * Set fields
          */
@@ -48,6 +55,7 @@ public class Mysterybox {
         this.amount = amount;
         this.highestBid = 0;
         this.highestBidder = null;
+        this.duration = mysteryboxRandom.nextInt(600) + 600;
     }
 
     /**
@@ -103,7 +111,7 @@ public class Mysterybox {
      * @return Returns the duration
      */
     public int getDuration() {
-        return Mysterybox.duration;
+        return this.duration;
     }
 
     /**

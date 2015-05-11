@@ -422,12 +422,12 @@ public class FXMLGameViewController implements Initializable {
         if (gm.getMysterybox() != null) {
             canvas.getGraphicsContext2D().drawImage(mysterybox, (canvas.getWidth() - mysterybox.getWidth()) / 2, (canvas.getHeight() - mysterybox.getHeight()) / 2.2);
 
-            canvas.getGraphicsContext2D().setFill(Color.WHITE);
-            canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.BOLD, 20));
+            //canvas.getGraphicsContext2D().setFill(Color);
+            canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.BOLD, 12));
             if (gm.getMysterybox().getHigestBidder() != null) {
                 canvas.getGraphicsContext2D().fillText("Hoogste bieder: " + gm.getMysterybox().getHigestBidder().getName(), (canvas.getWidth() - mysterybox.getWidth()) / 2, (canvas.getHeight() - mysterybox.getHeight()) / 2.2 + 325);
             }
-            canvas.getGraphicsContext2D().fillText("Volgend bod: " + gm.getMysterybox().getNewHighestBid(), (canvas.getWidth() - mysterybox.getWidth()) / 2, (canvas.getHeight() - mysterybox.getHeight()) / 2.2 + 350);
+            canvas.getGraphicsContext2D().fillText("Volgend bod: " + gm.getMysterybox().getNewHighestBid() + " resources", (canvas.getWidth() - mysterybox.getWidth()) / 2, (canvas.getHeight() - mysterybox.getHeight()) / 2.2 + 350);
 
             if (gm.getMysterybox().getHigestBidder() != null) {
                 mysteryboxWinner = "Winnaar mysterybox: " + gm.getMysterybox().getHigestBidder().getName();
@@ -435,15 +435,15 @@ public class FXMLGameViewController implements Initializable {
                 if (gm.getMysterybox().getResourceAmount() != 0) {
                     mysteryboxContent = "Inhoud: " + gm.getMysterybox().getResourceAmount() + " resources";
                 } else if (gm.getMysterybox().getUpgrade() != null) {
-                    mysteryboxContent = "Inhoud: " + gm.getMysterybox().getUpgrade().toString() + " upgrade";
+                    mysteryboxContent = "Inhoud: " + gm.getMysterybox().getUpgrade().toString();
                 }
             } else {
                 mysteryboxWinner = "";
                 mysteryboxContent = "";
             }
         } else {
-            canvas.getGraphicsContext2D().setFill(Color.WHITE);
-            canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.BOLD, 20));
+            //canvas.getGraphicsContext2D().setFill(Color.WHITE);
+            canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.BOLD, 12));
             canvas.getGraphicsContext2D().fillText(mysteryboxWinner, 250, 595);
             canvas.getGraphicsContext2D().fillText(mysteryboxContent, 250, 620);
         }
