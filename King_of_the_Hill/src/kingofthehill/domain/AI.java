@@ -299,7 +299,7 @@ public class AI implements IPlayer {
             /**
              * 2. Place defence at lanes
              */
-            //defendBase();
+            defendBase();
 
             /**
              * 3. Check if there are attack unit coming

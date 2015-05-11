@@ -82,11 +82,10 @@ public class UnitInfo
         final int HP = 100;
         final int ATK = 10;
         final int AMR = 10;
-        final int SPD = 0;
         final int COST = 1;
         final int COOL = 30;
         
-        Unit def = new Defence(HP, ATK, AMR, SPD, owner);
+        Unit def = new Defence(HP, ATK, AMR, owner);
         return new UnitInfo(COST, def, COOL, UnitType.DEFENCE);
     }
     
