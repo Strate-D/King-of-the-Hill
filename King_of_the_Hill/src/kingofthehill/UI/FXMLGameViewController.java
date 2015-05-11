@@ -95,22 +95,22 @@ public class FXMLGameViewController implements Initializable {
         selectedUnit = null;
 
         //Load all sprites
-        meleeBlueR = new Image("kingofthehill/UI/Units/Blue/BlueKnightR.png");
-        meleeBlueB = new Image("kingofthehill/UI/Units/Blue/BlueKnightB.png");
-        meleeGreenL = new Image("kingofthehill/UI/Units/Green/GreenKnightL.png");
-        meleeGreenB = new Image("kingofthehill/UI/Units/Green/GreenKnightB.png");
-        meleePurpleL = new Image("kingofthehill/UI/Units/Purple/PurpleKnightL.png");
-        meleePurpleT = new Image("kingofthehill/UI/Units/Purple/PurpleKnightT.png");
-        meleeRedR = new Image("kingofthehill/UI/Units/Red/RedKnightR.png");
-        meleeRedT = new Image("kingofthehill/UI/Units/Red/RedKnightT.png");
-        rangedBlueR = new Image("kingofthehill/UI/Units/Blue/BlueArcherR.png");
-        rangedBlueB = new Image("kingofthehill/UI/Units/Blue/BlueArcherB.png");
-        rangedGreenL = new Image("kingofthehill/UI/Units/Green/GreenArcherL.png");
-        rangedGreenB = new Image("kingofthehill/UI/Units/Green/GreenArcherB.png");
-        rangedPurpleL = new Image("kingofthehill/UI/Units/Purple/PurpleArcherL.png");
-        rangedPurpleT = new Image("kingofthehill/UI/Units/Purple/PurpleArcherT.png");
-        rangedRedR = new Image("kingofthehill/UI/Units/Red/RedArcherR.png");
-        rangedRedT = new Image("kingofthehill/UI/Units/Red/RedArcherT.png");
+        meleeBlueR = new Image("kingofthehill/UI/Units/Blue/BlueKnightNewR.png");
+        meleeBlueB = new Image("kingofthehill/UI/Units/Blue/BlueKnightNewF.png");
+        meleeGreenL = new Image("kingofthehill/UI/Units/Green/GreenKnightNewL.png");
+        meleeGreenB = new Image("kingofthehill/UI/Units/Green/GreenKnightNewF.png");
+        meleePurpleL = new Image("kingofthehill/UI/Units/Purple/PurpleKnightNewL.png");
+        meleePurpleT = new Image("kingofthehill/UI/Units/Purple/PurpleKnightNewB.png");
+        meleeRedR = new Image("kingofthehill/UI/Units/Red/RedKnightNewR.png");
+        meleeRedT = new Image("kingofthehill/UI/Units/Red/RedKnightNewB.png");
+        rangedBlueR = new Image("kingofthehill/UI/Units/Blue/BlueArcherNewR.png");
+        rangedBlueB = new Image("kingofthehill/UI/Units/Blue/BlueArcherNewF.png");
+        rangedGreenL = new Image("kingofthehill/UI/Units/Green/GreenArcherNewL.png");
+        rangedGreenB = new Image("kingofthehill/UI/Units/Green/GreenArcherNewF.png");
+        rangedPurpleL = new Image("kingofthehill/UI/Units/Purple/PurpleArcherNewL.png");
+        rangedPurpleT = new Image("kingofthehill/UI/Units/Purple/PurpleArcherNewB.png");
+        rangedRedR = new Image("kingofthehill/UI/Units/Red/RedArcherNewR.png");
+        rangedRedT = new Image("kingofthehill/UI/Units/Red/RedArcherNewB.png");
         castle1 = new Image("kingofthehill/UI/field/castle1.png");
         castle2 = new Image("kingofthehill/UI/field/castle2.png");
         castle3 = new Image("kingofthehill/UI/field/castle3.png");
@@ -401,19 +401,19 @@ public class FXMLGameViewController implements Initializable {
         if (rangedCooldown > 0) {
             canvas.getGraphicsContext2D().drawImage(cooldown, 150, 150, 30, 30);
         }
-        //Lanes when unit is selected
+        //SpotsLanes when unit is selected
         if (selectedUnit != null) {
             //Lane 0 to 3
             if (lastRealMousePosx >= 215 && lastRealMousePosx <= 320
                     && lastRealMousePosy >= 52 && lastRealMousePosy <= 157) {
-                int posX = ((int) lastRealMousePosx - 215) / 26;
-                int posY = ((int) lastRealMousePosy - 52) / 26;
+                int posX = ((int) lastRealMousePosx - 215) / 27;
+                int posY = ((int) lastRealMousePosy - 52) / 27;
                 canvas.getGraphicsContext2D().drawImage(selector, 218 + posX * 25, 55 + posY * 25, 25, 25);
             } else //Lane 4 to 7
             if (lastRealMousePosx >= 52 && lastRealMousePosx <= 157
                     && lastRealMousePosy >= 215 && lastRealMousePosy <= 320) {
-                int posX = ((int) lastRealMousePosx - 52) / 26;
-                int posY = ((int) lastRealMousePosy - 215) / 26;
+                int posX = ((int) lastRealMousePosx - 52) / 27;
+                int posY = ((int) lastRealMousePosy - 215) / 27;
                 canvas.getGraphicsContext2D().drawImage(selector, 55 + posX * 26, 218 + posY * 26, 25, 25);
             }
         }
@@ -459,7 +459,8 @@ public class FXMLGameViewController implements Initializable {
             //Select unit
             if (lastRealMousePosx >= 100 && lastRealMousePosx <= 130
                     && lastRealMousePosy >= 150 && lastRealMousePosy <= 180 && meleeCooldown <= 0) {
-                selectedUnit = UnitInfo.getMeleeUnit(gm.getPlayers().get(0));
+                //selectedUnit = UnitInfo.getMeleeUnit(gm.getPlayers().get(0));
+                selectedUnit = UnitInfo.getDefenceUnit(gm.getPlayers().get(0));
             } else if (lastRealMousePosx >= 150 && lastRealMousePosx <= 180
                     && lastRealMousePosy >= 150 && lastRealMousePosy <= 180 && rangedCooldown <= 0) {
                 selectedUnit = UnitInfo.getRangedUnit(gm.getPlayers().get(0));
@@ -498,7 +499,7 @@ public class FXMLGameViewController implements Initializable {
      */
     private void drawUnits() {
         Image drawingImage = null;
-        Iterator<Unit> i = gm.getUnits();
+        Iterator<Unit> i = gm.getLaneUnits();
         while (i.hasNext()) {
             Unit u = i.next();
             double x = 0, y = 0;
@@ -739,7 +740,104 @@ public class FXMLGameViewController implements Initializable {
             canvas.getGraphicsContext2D().setFill(Color.RED);
             canvas.getGraphicsContext2D().fillRect(x, y - 5, 30, 4);
             canvas.getGraphicsContext2D().setFill(Color.GREEN);
-            canvas.getGraphicsContext2D().fillRect(x, y - 5, 30 - (double)u.getDamage()/(double)u.getHealth() * 30, 4);
+            canvas.getGraphicsContext2D().fillRect(x, y - 5, 30 - (double) u.getDamage() / (double) u.getHealth() * 30, 4);
+            canvas.getGraphicsContext2D().setFill(Color.BLACK);
+        }
+        ////////////////// Draw defence units //////////////////////
+        for (int j = 0; j < 4; j++) {
+            IPlayer p = gm.getPlayers().get(j);
+            //Set start values
+            double x1, y1, x2, y2;
+            if (j == 0) {
+                x1 = 215;
+                y1 = 52;
+                x2 = 52;
+                y2 = 215;
+            } else if (j == 1) {
+                x1 = 580;
+                y1 = 52;
+                x2 = 742;
+                y2 = 215;
+            } else if (j == 2) {
+                x1 = 742;
+                y1 = 580;
+                x2 = 580;
+                y2 = 742;
+            } else {
+                x1 = 215;
+                y1 = 742;
+                x2 = 52;
+                y2 = 580;
+            }
+            for (Unit u : p.getBase().getUnits()) {
+                //Get the position of the unit
+                int index = u.getBase().getUnitIndex(u);
+                int posLane = index % 4;
+                int laneIndex = index / 4;
+                Image sprite = cooldown;
+
+                if(j == 0) {
+                    if(laneIndex < 4) {
+                        canvas.getGraphicsContext2D().drawImage(sprite, 
+                                x1 + posLane * 26, 
+                                y1 + laneIndex * 26,
+                                30,
+                                30);
+                    } else {
+                        laneIndex -= 4;
+                        canvas.getGraphicsContext2D().drawImage(sprite, 
+                                x2 + laneIndex * 26, 
+                                y2 + posLane * 26,
+                                30,
+                                30);
+                    }
+                } else if (j == 1) {
+                    if(laneIndex < 4) {
+                        canvas.getGraphicsContext2D().drawImage(sprite, 
+                                x1 + laneIndex * 26, 
+                                y1 + posLane * 26,
+                                30,
+                                30);
+                    } else {
+                        laneIndex -= 4;
+                        canvas.getGraphicsContext2D().drawImage(sprite, 
+                                x1 + 78 - posLane * 26, 
+                                y1 + laneIndex * 26,
+                                30,
+                                30);
+                    }
+                } else if (j ==2) {
+                    if(laneIndex < 4) {
+                        canvas.getGraphicsContext2D().drawImage(sprite, 
+                                x1 + 78 - posLane * 26, 
+                                y1 + laneIndex * 26,
+                                30,
+                                30);
+                    } else {
+                        laneIndex -= 4;
+                        canvas.getGraphicsContext2D().drawImage(sprite, 
+                                x1 + laneIndex * 26, 
+                                y1 + 78 - posLane * 26,
+                                30,
+                                30);
+                    }
+                } else if (j == 3) {
+                    if(laneIndex < 4) {
+                        canvas.getGraphicsContext2D().drawImage(sprite, 
+                                x1 + laneIndex * 26, 
+                                y1 + 78 - posLane * 26,
+                                30,
+                                30);
+                    } else {
+                        laneIndex -= 4;
+                        canvas.getGraphicsContext2D().drawImage(sprite, 
+                                x1 + posLane * 26, 
+                                y1 + laneIndex * 26,
+                                30,
+                                30);
+                    }
+                }
+            }
         }
     }
 
@@ -760,4 +858,5 @@ public class FXMLGameViewController implements Initializable {
             }
         }
     }
+
 }

@@ -14,30 +14,73 @@ public class Defence extends Unit{
      * @param health Amount of health the unit has. Must be positive.
      * @param attack Amount of attack the unit has. Must be positive.
      * @param armor Amount of armor the unit has. Must be 0 or positive.
-     * @param movementSpeed Movementspeed of the unit. Must be positive.
      * @param owner Owner of the unit, may not be null.    
     */
-    public Defence(int health, int attack, int armor, int movementSpeed, IPlayer owner) {
-        super(health, attack, armor, UnitType.DEFENCE, movementSpeed, owner);
-        //TODO
+    public Defence(int health, int attack, int armor, IPlayer owner) {
+        super(health, attack, armor, UnitType.DEFENCE, 1, owner);
     }
 
     @Override
     public void doNextAction() {
-        Unit targetUnit = this.canAttackUnit();
-        if (targetUnit != null){
-            targetUnit.receiveDamage(this.getAttack());
-            
-            if(targetUnit.canAttackUnit() == this) {
-                this.receiveDamage(targetUnit.getAttack());
-            }
-        }
-        
+//        Unit targetUnit = this.canAttackUnit();
+//        if (targetUnit != null){
+//            targetUnit.receiveDamage(this.getAttack());
+//            
+//            if(targetUnit.canAttackUnit() == this) {
+//                this.receiveDamage(targetUnit.getAttack());
+//            }
+//        }
+        //Just sit around
     }
 
     @Override
     public Unit canAttackUnit() {
-        return null;
-        //return u;
+        int unitIndex = this.getBase().getUnitIndex(this);
+        Lane lane = this.getBase().getLane(unitIndex / 4);
+        int unitPosition = unitIndex % 4 * 55;
+        if (lane == null) {
+            return null;
+        } else {
+            IPlayer owner = this.getOwner();
+            /**
+             * Check to which side the unit is moving and find the closest unit
+             */
+            int closestDistance = -1;
+            Unit closestUnit = null;
+            if (lane.getBaseEnd1().getOwner() == owner) {
+                for (Unit u : lane.getUnits()) {
+                    if ((u.getPosition() - unitPosition < closestDistance
+                            || closestDistance == -1)) {
+                        /**
+                         * Check if unit is not friendly
+                         */
+                        if (u.getOwner() != this.getOwner()) {
+                            closestDistance = u.getPosition() - unitPosition;
+                            closestUnit = u;
+                        }
+                    }
+                }
+            } else {
+                for (Unit u : lane.getUnits()) {
+                    if ((unitPosition - u.getPosition() < closestDistance
+                            || closestDistance == -1)) {
+                        /**
+                         * Check if unit is not friendly
+                         */
+                        if (u.getOwner() != this.getOwner()) {
+                            closestDistance = this.getPosition() - u.getPosition();
+                            closestUnit = u;
+                        }
+                    }
+                }
+            }
+            /**
+             * Check if the unit is within attack range
+             */
+            if (closestDistance != -1 && closestDistance <= 50) {
+                return closestUnit;
+            }
+            return null;
+        }
     }
 }

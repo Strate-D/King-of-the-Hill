@@ -47,10 +47,10 @@ public class GameManager {
         this.players = new ArrayList<>();
         this.players.add(player);
         this.players.add(new AI("ArtificialIntelligence1"));
-        ((AI)(this.players.get(1))).setAIType(AIState.AGRESSIVE);
+        ((AI)(this.players.get(1))).setAIType(AIState.DEFENSIVE);
         //((AI)(this.players.get(1))).setRandomSeed(1524625152);
         this.players.add(new AI("ArtificialIntelligence2"));
-        ((AI)(this.players.get(2))).setAIType(AIState.AGRESSIVE);
+        ((AI)(this.players.get(2))).setAIType(AIState.MODERNATE);
         this.players.add(new AI("ArtificialIntelligence3"));
         ((AI)(this.players.get(3))).setAIType(AIState.AGRESSIVE);
 
@@ -155,7 +155,7 @@ public class GameManager {
      * Get all the units for drawing purposes
      * @return A iterator of units
      */
-    public Iterator<Unit> getUnits() {
+    public Iterator<Unit> getLaneUnits() {
         ArrayList<Unit> list = new ArrayList<>();
         for (IPlayer p : players) {
             Base b = p.getBase();
