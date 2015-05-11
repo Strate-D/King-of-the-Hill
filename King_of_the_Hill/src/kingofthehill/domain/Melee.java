@@ -108,7 +108,7 @@ public class Melee extends Unit {
                 //Check the defence spots
                 for (Unit u : lane.getBaseEnd2().getUnits()) {
                     int index = lane.getBaseEnd2().getUnitIndex(u);
-                    int pos = 1000 - index % 4 * 55;
+                    int pos = 1000 - (index % 4 * 55);
                     int laneIndex = index / 4;
                     if (this.getLane() == lane.getBaseEnd2().getLane(laneIndex)) {
                         if(pos - this.getPosition() < closestDistance || closestDistance == -1) {
@@ -133,11 +133,11 @@ public class Melee extends Unit {
                 //Check the defence spots
                 for (Unit u : lane.getBaseEnd1().getUnits()) {
                     int index = lane.getBaseEnd1().getUnitIndex(u);
-                    int pos = 1000 - index % 4 * 55;
+                    int pos = (index % 4 * 55);
                     int laneIndex = index / 4;
                     if (this.getLane() == lane.getBaseEnd1().getLane(laneIndex)) {
                         if(this.getPosition() - pos  < closestDistance || closestDistance == -1) {
-                            closestDistance = - this.getPosition() - pos; 
+                            closestDistance = this.getPosition() - pos; 
                             closestUnit = u;
                         }
                     }

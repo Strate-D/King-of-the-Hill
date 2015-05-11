@@ -50,6 +50,7 @@ public class FXMLGameViewController implements Initializable {
     Image meleeGreenL, meleeGreenB, rangedGreenL, rangedGreenB;
     Image meleePurpleT, meleePurpleL, rangedPurpleT, rangedPurpleL;
     Image meleeRedT, meleeRedR, rangedRedT, rangedRedR;
+    Image defenceSide, defenceUpDown;
     //Castle sprites
     Image castle1, castle2, castle3, castle4;
     Image castle_destroyed1, castle_destroyed2, castle_destroyed3, castle_destroyed4;
@@ -111,6 +112,8 @@ public class FXMLGameViewController implements Initializable {
         rangedPurpleT = new Image("kingofthehill/UI/Units/Purple/PurpleArcherNewB.png");
         rangedRedR = new Image("kingofthehill/UI/Units/Red/RedArcherNewR.png");
         rangedRedT = new Image("kingofthehill/UI/Units/Red/RedArcherNewB.png");
+        defenceSide = new Image("kingofthehill/UI/Units/Defence/SideWall.png");
+        defenceUpDown = new Image("kingofthehill/UI/Units/Defence/UpDownWall.png");
         castle1 = new Image("kingofthehill/UI/field/castle1.png");
         castle2 = new Image("kingofthehill/UI/field/castle2.png");
         castle3 = new Image("kingofthehill/UI/field/castle3.png");
@@ -754,85 +757,85 @@ public class FXMLGameViewController implements Initializable {
                 x2 = 52;
                 y2 = 215;
             } else if (j == 1) {
-                x1 = 580;
-                y1 = 52;
-                x2 = 742;
-                y2 = 215;
-            } else if (j == 2) {
                 x1 = 742;
-                y1 = 580;
+                y1 = 215;
                 x2 = 580;
-                y2 = 742;
-            } else {
-                x1 = 215;
+                y2 = 52;
+            } else if (j == 2) {
+                x1 = 580;
                 y1 = 742;
-                x2 = 52;
+                x2 = 742;
                 y2 = 580;
+            } else {
+                x1 = 52;
+                y1 = 580;
+                x2 = 215;
+                y2 = 742;
             }
             for (Unit u : p.getBase().getUnits()) {
                 //Get the position of the unit
                 int index = u.getBase().getUnitIndex(u);
                 int posLane = index % 4;
                 int laneIndex = index / 4;
-                Image sprite = cooldown;
+                Image sprite = selector;
 
-                if(j == 0) {
-                    if(laneIndex < 4) {
-                        canvas.getGraphicsContext2D().drawImage(sprite, 
-                                x1 + posLane * 26, 
+                if (j == 0) {
+                    if (laneIndex < 4) {
+                        canvas.getGraphicsContext2D().drawImage(sprite,
+                                x1 + posLane * 26,
                                 y1 + laneIndex * 26,
                                 30,
                                 30);
                     } else {
                         laneIndex -= 4;
-                        canvas.getGraphicsContext2D().drawImage(sprite, 
-                                x2 + laneIndex * 26, 
+                        canvas.getGraphicsContext2D().drawImage(sprite,
+                                x2 + laneIndex * 26,
                                 y2 + posLane * 26,
                                 30,
                                 30);
                     }
                 } else if (j == 1) {
-                    if(laneIndex < 4) {
-                        canvas.getGraphicsContext2D().drawImage(sprite, 
-                                x1 + laneIndex * 26, 
+                    if (laneIndex < 4) {
+                        canvas.getGraphicsContext2D().drawImage(sprite,
+                                x1 + laneIndex * 26,
                                 y1 + posLane * 26,
                                 30,
                                 30);
                     } else {
                         laneIndex -= 4;
-                        canvas.getGraphicsContext2D().drawImage(sprite, 
-                                x1 + 78 - posLane * 26, 
-                                y1 + laneIndex * 26,
+                        canvas.getGraphicsContext2D().drawImage(sprite,
+                                x2 + 78 - posLane * 26,
+                                y2 + laneIndex * 26,
                                 30,
                                 30);
                     }
-                } else if (j ==2) {
-                    if(laneIndex < 4) {
-                        canvas.getGraphicsContext2D().drawImage(sprite, 
-                                x1 + 78 - posLane * 26, 
+                } else if (j == 2) {
+                    if (laneIndex < 4) {
+                        canvas.getGraphicsContext2D().drawImage(sprite,
+                                x1 + 78 - posLane * 26,
                                 y1 + laneIndex * 26,
                                 30,
                                 30);
                     } else {
                         laneIndex -= 4;
-                        canvas.getGraphicsContext2D().drawImage(sprite, 
-                                x1 + laneIndex * 26, 
-                                y1 + 78 - posLane * 26,
+                        canvas.getGraphicsContext2D().drawImage(sprite,
+                                x2 + laneIndex * 26,
+                                y2 + 78 - posLane * 26,
                                 30,
                                 30);
                     }
                 } else if (j == 3) {
-                    if(laneIndex < 4) {
-                        canvas.getGraphicsContext2D().drawImage(sprite, 
-                                x1 + laneIndex * 26, 
+                    if (laneIndex < 4) {
+                        canvas.getGraphicsContext2D().drawImage(sprite,
+                                x1 + laneIndex * 26,
                                 y1 + 78 - posLane * 26,
                                 30,
                                 30);
                     } else {
                         laneIndex -= 4;
-                        canvas.getGraphicsContext2D().drawImage(sprite, 
-                                x1 + posLane * 26, 
-                                y1 + laneIndex * 26,
+                        canvas.getGraphicsContext2D().drawImage(sprite,
+                                x2 + posLane * 26,
+                                y2 + laneIndex * 26,
                                 30,
                                 30);
                     }

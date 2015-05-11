@@ -37,7 +37,6 @@ public class Defence extends Unit{
     public Unit canAttackUnit() {
         int unitIndex = this.getBase().getUnitIndex(this);
         Lane lane = this.getBase().getLane(unitIndex / 4);
-        int unitPosition = unitIndex % 4 * 55;
         if (lane == null) {
             return null;
         } else {
@@ -48,6 +47,7 @@ public class Defence extends Unit{
             int closestDistance = -1;
             Unit closestUnit = null;
             if (lane.getBaseEnd1().getOwner() == owner) {
+                int unitPosition = unitIndex % 4 * 55;
                 for (Unit u : lane.getUnits()) {
                     if ((u.getPosition() - unitPosition < closestDistance
                             || closestDistance == -1)) {
@@ -61,6 +61,7 @@ public class Defence extends Unit{
                     }
                 }
             } else {
+                int unitPosition = 1000 - (unitIndex % 4 * 55);
                 for (Unit u : lane.getUnits()) {
                     if ((unitPosition - u.getPosition() < closestDistance
                             || closestDistance == -1)) {
@@ -68,7 +69,7 @@ public class Defence extends Unit{
                          * Check if unit is not friendly
                          */
                         if (u.getOwner() != this.getOwner()) {
-                            closestDistance = this.getPosition() - u.getPosition();
+                            closestDistance = unitPosition - u.getPosition();
                             closestUnit = u;
                         }
                     }

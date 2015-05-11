@@ -139,11 +139,11 @@ public class Ranged extends Unit {
                 //Check the defence spots
                 for (Unit u : lane.getBaseEnd1().getUnits()) {
                     int index = lane.getBaseEnd1().getUnitIndex(u);
-                    int pos = 1000 - index % 4 * 55;
+                    int pos = (index % 4 * 55);
                     int laneIndex = index / 4;
                     if (this.getLane() == lane.getBaseEnd1().getLane(laneIndex)) {
                         if(this.getPosition() - pos  < closestDistance || closestDistance == -1) {
-                            closestDistance = - this.getPosition() - pos; 
+                            closestDistance = this.getPosition() - pos; 
                             closestUnit = u;
                         }
                     }
