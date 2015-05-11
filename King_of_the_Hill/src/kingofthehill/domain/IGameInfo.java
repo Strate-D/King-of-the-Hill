@@ -5,6 +5,7 @@
  */
 package kingofthehill.domain;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -12,5 +13,15 @@ import java.util.List;
  * @author Dennis
  */
 public interface IGameInfo{ 
-    public void setInfo(List<IPlayer> players, Mysterybox mbox, int resourcetimer, int mysteryboxtimer, int mysteryboxtime);
+    public List<IPlayer> getPlayers();
+    
+    public Mysterybox getMysterybox();
+    
+    public int getResourcetimer();
+    
+    public int getMysteryboxtimer();
+    
+    public int getMysteryboxtime();
+    
+    public Iterator<Unit> getLaneUnits();
 }

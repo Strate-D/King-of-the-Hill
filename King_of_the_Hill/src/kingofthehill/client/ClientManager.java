@@ -1,10 +1,10 @@
-/**
- * 
- */
-package kingofthehill.domain;
+package kingofthehill.client;
 
+import java.rmi.NotBoundException;
+import kingofthehill.domain.*;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -18,7 +18,7 @@ import kingofthehill.upgradeinfo.UpgradeInfo;
  *
  * @author Jur
  */
-public class GameManager extends UnicastRemoteObject implements IGameManager{
+public class ClientManager{
 
     private List<IPlayer> players;
     private Mysterybox mysterybox;
@@ -27,119 +27,75 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
     private int mysteryboxTimer;
     private int mysteryboxTime;
     private Random mysteryboxRandom;
-    private GameInfo gameInfo;
-
-    private boolean DebugLevelAI = false;
+    
+    private IGameManager gm;
+    private Registry registry = null;
+    private int portNumber = 9999;
+    private static final String bindingName = "GameInfo";
 
     /**
-     * Creates a new gameManager, also creating a new game with it.
-     * @throws java.rmi.RemoteException
+     * Gets gamemanager object from registery
+     * @param ipAddress ip adress of the remote registery
      */
-    public GameManager() throws RemoteException{
+    public ClientManager(String ipAddress){
         /**
-         * Set resourceTimer to 0
+         * Print IP address and port number for registry
          */
-        this.players = new ArrayList<>();
-        this.resourceTimer = 0;
-        this.mysteryboxTimer = 0;
-        this.mysteryboxTime = 0;
+        System.out.println("Client: IP Address: " + ipAddress);
+        System.out.println("Client: Port number " + portNumber);
         
         /**
-         * Add AI for testing
+         * Locate registry at IP address and port number
          */
-        this.players.add(new AI("ArtificialIntelligence1"));
-        ((AI)(this.players.get(0))).setAIType(AIState.DEFENSIVE);
-        //((AI)(this.players.get(1))).setRandomSeed(1524625152);
-        this.players.add(new AI("ArtificialIntelligence2"));
-        ((AI)(this.players.get(1))).setAIType(AIState.MODERNATE);
-        this.players.add(new AI("ArtificialIntelligence3"));
-        ((AI)(this.players.get(2))).setAIType(AIState.AGRESSIVE);
+        try {
+            registry = LocateRegistry.getRegistry(ipAddress, portNumber);
+        } catch (RemoteException ex) {
+            System.out.println("Client: Cannot locate registry");
+            System.out.println("Client: RemoteException: " + ex.getMessage());
+            registry = null;
+        }
+
+        /**
+         * Print result locating registry
+         */
+        if (registry != null) {
+            System.out.println("Client: Registry located");
+        } else {
+            System.out.println("Client: Cannot locate registry");
+            System.out.println("Client: Registry is null pointer");
+        }
+        
+        /**
+         * Bind student administration using registry
+         */
+        if (registry != null) {
+            try {
+                gm = (IGameManager) registry.lookup(bindingName);
+            } catch (RemoteException ex) {
+                System.out.println("Client: Cannot bind student administration");
+                System.out.println("Client: RemoteException: " + ex.getMessage());
+                gm = null;
+            } catch (NotBoundException ex) {
+                System.out.println("Client: Cannot bind student administration");
+                System.out.println("Client: NotBoundException: " + ex.getMessage());
+                gm = null;
+            }
+        }
+        
+        /**
+         * Print result binding student administration
+         */
+        if (gm != null) {
+            System.out.println("Client: Student administration bound");
+        } else {
+            System.out.println("Client: Student administration is null pointer");
+        }
     }
     
-    /**
-     * Add player to game
-     * @param player player to add to the game
-     * @throws java.rmi.RemoteException
-     */
-    @Override
-    public void addPlayer(IPlayer player) throws RemoteException{
-        if (player != null) {
-            this.players.add(player);
-        }
-        
-        if(players.size() > 3){
-            startGame();
-        }
+    public IGameManager getGameManager(){
+        return this.gm;
     }
     
-    /**
-     * Start game when all players are 
-     */
-    private void startGame(){
-        /**
-         * Create teams
-         */
-        Team team1 = new Team(1, new ArrayList<>());
-        Team team2 = new Team(2, new ArrayList<>());
-        boolean firstTeam = true;
-        for (IPlayer p : this.players) {
-            if (firstTeam) {
-                team1.addPlayer(p);
-                firstTeam = false;
-            } else {
-                team2.addPlayer(p);
-                firstTeam = true;
-            }
-        }
-
-        /**
-         * Give players bases
-         */
-        for (IPlayer p : this.players) {
-            Base b = new Base(p);
-            p.setBase(b);
-        }
-        
-        /**
-         * Give the bases lanes
-         */
-        int i = 0;
-        for (IPlayer p : this.players) {
-            /**
-             * Get bases at ends of the lanes
-             */
-            Base base1 = p.getBase();
-            Base base2;
-            if (i + 1 >= this.players.size()) {
-                base2 = this.players.get(0).getBase();
-            } else {
-                base2 = this.players.get(i + 1).getBase();
-            }
-            
-            /**
-             * Set lanes
-             */
-            for (int j = 0; j < 4; j++) {
-                Lane lane = new Lane(base1, base2);
-                base1.setLane(j, lane);
-                base2.setLane(j + 4, lane);
-            }
-            i++;
-        }
-        
-        /**
-         * Set mysteryboxtime at random for the first time
-         */
-        mysteryboxRandom = new Random();
-        mysteryboxTime = mysteryboxRandom.nextInt(1800) + 1800;
-        
-        /**
-         * 
-         */
-        gameInfo = new GameInfo();
-        gameInfo.setInfo(players, mysterybox, resourceTimer, mysteryboxTimer, mysteryboxTime);
-    }
-
     /**
      * Let all the units do their next action.
      */
@@ -306,15 +262,13 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
         if(player == null) {
             throw new IllegalArgumentException("Player cannot be null");
         }
-        player.doNextAction(this);
+        //player.doNextAction(this);
     }
 
     /**
      * Does a step in the game (1/30 of a second).
      */
     public void doStep() {
-        gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
-           
         /**
          * Check if players should get resources.
          */
@@ -439,7 +393,6 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
      * @param cost The cost of the unit, must be higher than 0.
      * @return true if unit is placed at base, else false
      */
-    @Override
     public boolean placeUnitAtBase(IPlayer player, Unit unit, int index, int cost) {
         /**
          * Check input
@@ -485,10 +438,5 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
     public Mysterybox getMysterybox()
     {
         return this.mysterybox;
-    }
-
-    @Override
-    public IGameInfo getGameInfo() throws RemoteException{
-        return this.gameInfo;
     }
 }

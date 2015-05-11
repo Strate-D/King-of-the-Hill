@@ -3,12 +3,13 @@
  */
 package kingofthehill.domain;
 
+
 /**
  * Class containing all the information about the ranged unit Extends Unit
  *
  * @author Jur
  */
-public class Ranged extends Unit {
+public class Ranged extends Unit{
 
     private final int attackRange;
     private int lastAction;

@@ -3,11 +3,13 @@
  */
 package kingofthehill.domain;
 
+import java.io.Serializable;
+
 /**
  * Contains information about a certain upgrade for units.
  * @author Jur
  */
-public class Upgrade {
+public class Upgrade implements Serializable{
     private double modHealth;
     private double modAttack;
     private double modArmor;

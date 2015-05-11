@@ -6,6 +6,8 @@
 package kingofthehill.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -19,7 +21,6 @@ public class GameInfo implements IGameInfo, Serializable{
     private int mysteryboxtimer;
     private int mysteryboxtime;
     
-    @Override
     public void setInfo(List<IPlayer> players, Mysterybox mbox, int resourcetimer, int mysteryboxtimer, int mysteryboxtime){
         this.players = players;
         this.mbox = mbox;
@@ -28,23 +29,45 @@ public class GameInfo implements IGameInfo, Serializable{
         this.mysteryboxtime = mysteryboxtime;
     }
 
+    
+    @Override
     public List<IPlayer> getPlayers() {
         return players;
     }
 
-    public Mysterybox getMbox() {
+    @Override
+    public Mysterybox getMysterybox() {
         return mbox;
     }
 
+    @Override
     public int getResourcetimer() {
         return resourcetimer;
     }
 
+    @Override
     public int getMysteryboxtimer() {
         return mysteryboxtimer;
     }
 
+    @Override
     public int getMysteryboxtime() {
         return mysteryboxtime;
+    }
+    
+    @Override
+    public Iterator<Unit> getLaneUnits() {
+        ArrayList<Unit> list = new ArrayList<>();
+        for (IPlayer p : players) {
+            Base b = p.getBase();
+            if (b != null) {
+                for (Lane l : b.getLanes()) {
+                    for (Unit u : l.getUnits()) {
+                        list.add(u);
+                    }
+                }
+            }
+        }
+        return list.iterator();
     }
 }

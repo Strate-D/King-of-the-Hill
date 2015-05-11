@@ -3,6 +3,7 @@
  */
 package kingofthehill.domain;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Random;
  *
  * @author Jur
  */
-public class Mysterybox {
+public class Mysterybox implements Serializable {
 
     private int resourceAmount;
     private Upgrade upgrade;

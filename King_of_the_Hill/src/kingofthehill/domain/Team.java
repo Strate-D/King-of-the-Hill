@@ -3,6 +3,7 @@
  */
 package kingofthehill.domain;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * Object that contains information about the team
  * @author Jur
  */
-public class Team {
+public class Team implements Serializable {
     private int nr;
     private List<IPlayer> players;
     

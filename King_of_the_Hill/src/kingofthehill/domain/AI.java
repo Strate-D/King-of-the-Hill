@@ -3,6 +3,7 @@
  */
 package kingofthehill.domain;
 
+import java.io.Serializable;
 import static java.lang.System.gc;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +18,7 @@ import kingofthehill.unitinfo.UnitsToSpawn;
  *
  * @author Jur
  */
-public class AI implements IPlayer {
+public class AI implements IPlayer, Serializable {
 
     private String name;
     private int exp;

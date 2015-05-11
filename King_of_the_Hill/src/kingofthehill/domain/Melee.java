@@ -3,12 +3,14 @@
  */
 package kingofthehill.domain;
 
+import java.io.Serializable;
+
 /**
  * Class containing all the information about a Melee unit. Extends Unit.
  *
  * @author Jur
  */
-public class Melee extends Unit {
+public class Melee extends Unit implements Serializable {
 
     int lastAction;
 

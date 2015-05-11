@@ -3,6 +3,7 @@
  */
 package kingofthehill.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * @author Jur
  */
-public class Lane {
+public class Lane implements Serializable{
 
     private final Base baseEnd1;
     private final Base baseEnd2;

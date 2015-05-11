@@ -3,13 +3,14 @@
  */
 package kingofthehill.unitinfo;
 
+import java.io.Serializable;
 import kingofthehill.domain.UnitType;
 
 /**
  * Creates a new object to store units that need to be spawned
  * @author Bas
  */
-public class UnitsToSpawn {
+public class UnitsToSpawn implements Serializable{
 
     private int spawnPoint;
     private UnitType unitType;
