@@ -299,7 +299,7 @@ public class AI implements IPlayer {
             /**
              * 2. Place defence at lanes
              */
-            //defendBase();
+            defendBase();
 
             /**
              * 3. Check if there are attack unit coming
@@ -439,12 +439,14 @@ public class AI implements IPlayer {
                 } else if (canPlaceUnit(UnitType.RANGED)) {
                     this.spawnUnit(UnitType.RANGED, AttackInfo.get(i).getLane() * 4 + 3);
                 }
-                //else if(canPlaceUnit(UnitType.DEFENCE) && !hasPlacedUnits)
-                //{
-                //this.spawnUnit(UnitType.DEFENCE, AttackInfo.get(i).getLane() * 4 + 3);
-                //createUnitAtLane(UnitType.DEFENCE, gm, AttackInfo.get(i).getLane() * 4 + 3);
-                //hasPlacedUnits = true;
-                //}
+                else if(canPlaceUnit(UnitType.DEFENCE))
+                {
+                    /**
+                     * Find a suitable spot to spawn a defence unit
+                     */
+                    
+                    this.spawnUnit(UnitType.DEFENCE, AttackInfo.get(i).getLane() * 4 + 3);
+                }
             } else if (this.getAIType() == AIState.DEFENSIVE) {
             }
         }
