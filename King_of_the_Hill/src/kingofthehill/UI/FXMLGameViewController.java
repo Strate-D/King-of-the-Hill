@@ -102,16 +102,26 @@ public class FXMLGameViewController implements Initializable {
         Scanner input = new Scanner(System.in);
         System.out.print("Client: Enter IP address of server: ");
         String ipAddress = input.nextLine();
-        
+
         ClientManager cm = new ClientManager(ipAddress);
         gm = cm.getGameManager();
         try {
             gm.addPlayer(p);
+            AI ai1 = new AI("ArtificialIntelligence1");
+            ai1.setAIType(AIState.DEFENSIVE);
+            gm.addPlayer(ai1);
+            AI ai2 = new AI("ArtificialIntelligence2");
+            ai2.setAIType(AIState.MODERNATE);
+            gm.addPlayer(ai2);
+            AI ai3 = new AI("ArtificialIntelligence3");
+            ai3.setAIType(AIState.AGRESSIVE);
+            gm.addPlayer(ai3);
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         try {
-            gameInfo = gm.getGameInfo();
+            getGameInfo();
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -170,8 +180,12 @@ public class FXMLGameViewController implements Initializable {
 
             @Override
             public void handle(long now) {
-                // Update JavaFX Scene Graph
-                //gm.doStep();
+
+                try {
+                    getGameInfo();
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 drawBackground();
                 drawField();
                 drawUnits();
@@ -244,6 +258,10 @@ public class FXMLGameViewController implements Initializable {
             }
         };
         antimer.start();
+    }
+
+    private void getGameInfo() throws RemoteException {
+        gameInfo = gm.getGameInfo();
     }
 
     /**

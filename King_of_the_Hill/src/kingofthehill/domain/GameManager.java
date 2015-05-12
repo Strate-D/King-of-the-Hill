@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
 import kingofthehill.upgradeinfo.UpgradeInfo;
 
 /**
@@ -28,6 +29,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
     private int mysteryboxTime;
     private Random mysteryboxRandom;
     private GameInfo gameInfo;
+    private Timer timer;
 
     private boolean DebugLevelAI = false;
 
@@ -47,13 +49,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
         /**
          * Add AI for testing
          */
-        this.players.add(new AI("ArtificialIntelligence1"));
-        ((AI)(this.players.get(0))).setAIType(AIState.DEFENSIVE);
-        //((AI)(this.players.get(1))).setRandomSeed(1524625152);
-        this.players.add(new AI("ArtificialIntelligence2"));
-        ((AI)(this.players.get(1))).setAIType(AIState.MODERNATE);
-        this.players.add(new AI("ArtificialIntelligence3"));
-        ((AI)(this.players.get(2))).setAIType(AIState.AGRESSIVE);
+
     }
     
     /**
@@ -73,7 +69,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
     }
     
     /**
-     * Start game when all players are 
+     * Start game when there are a total of 4 players
      */
     private void startGame(){
         /**
@@ -134,10 +130,23 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
         mysteryboxTime = mysteryboxRandom.nextInt(1800) + 1800;
         
         /**
-         * 
+         * Create new GameInfo object and set the info for the first time;
          */
         gameInfo = new GameInfo();
         gameInfo.setInfo(players, mysterybox, resourceTimer, mysteryboxTimer, mysteryboxTime);
+        
+        /**
+         * Create and schedule timer for dostep method
+         */
+        timer = new Timer();
+        timer.schedule(new GameLoop(), 0, 1000 / 60);
+    }
+    
+    private class GameLoop extends java.util.TimerTask{
+        @Override
+        public void run() {
+            doStep();
+        } 
     }
 
     /**
@@ -312,7 +321,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
     /**
      * Does a step in the game (1/30 of a second).
      */
-    public void doStep() {
+    private void doStep() {
         gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
            
         /**

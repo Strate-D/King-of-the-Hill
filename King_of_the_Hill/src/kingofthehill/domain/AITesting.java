@@ -31,7 +31,7 @@ public class AITesting {
 
             
             System.out.println("Turn: " + (i + 1));
-            gm.doStep();
+            //gm.doStep();
             
             System.out.println(" -------------- ");
             System.out.println("|              |");
