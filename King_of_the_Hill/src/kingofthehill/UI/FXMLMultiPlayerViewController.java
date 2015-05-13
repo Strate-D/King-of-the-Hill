@@ -30,7 +30,7 @@ import kingofthehill.client.ClientManager;
 import kingofthehill.domain.AI;
 import kingofthehill.domain.AIState;
 import kingofthehill.domain.GameManager;
-import kingofthehill.domain.IGameInfo;
+import kingofthehill.rmimultiplayer.IGameInfo;
 import kingofthehill.domain.IGameManager;
 import kingofthehill.domain.IPlayer;
 import kingofthehill.domain.Melee;
@@ -104,160 +104,163 @@ public class FXMLMultiPlayerViewController implements Initializable {
         String ipAddress = input.nextLine();
 
         ClientManager cm = new ClientManager(ipAddress);
-        gm = cm.getGameManager();
-        try {
-            gm.addPlayer(p);
-            AI ai1 = new AI("ArtificialIntelligence1");
-            ai1.setAIType(AIState.DEFENSIVE);
-            gm.addPlayer(ai1);
-            AI ai2 = new AI("ArtificialIntelligence2");
-            ai2.setAIType(AIState.MODERNATE);
-            gm.addPlayer(ai2);
-            AI ai3 = new AI("ArtificialIntelligence3");
-            ai3.setAIType(AIState.AGRESSIVE);
-            gm.addPlayer(ai3);
-        } catch (RemoteException ex) {
-            Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
-        try {
-            getGameInfo();
-        } catch (RemoteException ex) {
-            Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        if (cm.locate()) {
+            gm = cm.getGameManager();
+            try {
+                gm.addPlayer(p);
+                AI ai1 = new AI("ArtificialIntelligence1");
+                ai1.setAIType(AIState.DEFENSIVE);
+                gm.addPlayer(ai1);
+                AI ai2 = new AI("ArtificialIntelligence2");
+                ai2.setAIType(AIState.MODERNATE);
+                gm.addPlayer(ai2);
+                AI ai3 = new AI("ArtificialIntelligence3");
+                ai3.setAIType(AIState.AGRESSIVE);
+                gm.addPlayer(ai3);
+            } catch (RemoteException ex) {
+                Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-        isMouseOnCanvas = false;
-        selectedUnit = null;
+            try {
+                getGameInfo();
+            } catch (RemoteException ex) {
+                Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-        //Load all sprites
-        meleeBlueR = new Image("kingofthehill/UI/Units/Blue/BlueKnightNewR.png");
-        meleeBlueB = new Image("kingofthehill/UI/Units/Blue/BlueKnightNewF.png");
-        meleeGreenL = new Image("kingofthehill/UI/Units/Green/GreenKnightNewL.png");
-        meleeGreenB = new Image("kingofthehill/UI/Units/Green/GreenKnightNewF.png");
-        meleePurpleL = new Image("kingofthehill/UI/Units/Purple/PurpleKnightNewL.png");
-        meleePurpleT = new Image("kingofthehill/UI/Units/Purple/PurpleKnightNewB.png");
-        meleeRedR = new Image("kingofthehill/UI/Units/Red/RedKnightNewR.png");
-        meleeRedT = new Image("kingofthehill/UI/Units/Red/RedKnightNewB.png");
-        rangedBlueR = new Image("kingofthehill/UI/Units/Blue/BlueArcherNewR.png");
-        rangedBlueB = new Image("kingofthehill/UI/Units/Blue/BlueArcherNewF.png");
-        rangedGreenL = new Image("kingofthehill/UI/Units/Green/GreenArcherNewL.png");
-        rangedGreenB = new Image("kingofthehill/UI/Units/Green/GreenArcherNewF.png");
-        rangedPurpleL = new Image("kingofthehill/UI/Units/Purple/PurpleArcherNewL.png");
-        rangedPurpleT = new Image("kingofthehill/UI/Units/Purple/PurpleArcherNewB.png");
-        rangedRedR = new Image("kingofthehill/UI/Units/Red/RedArcherNewR.png");
-        rangedRedT = new Image("kingofthehill/UI/Units/Red/RedArcherNewB.png");
-        castle1 = new Image("kingofthehill/UI/field/castle1.png");
-        castle2 = new Image("kingofthehill/UI/field/castle2.png");
-        castle3 = new Image("kingofthehill/UI/field/castle3.png");
-        castle4 = new Image("kingofthehill/UI/field/castle4.png");
-        castle_destroyed1 = new Image("kingofthehill/UI/field/castle_destroyed1.png");
-        castle_destroyed2 = new Image("kingofthehill/UI/field/castle_destroyed2.png");
-        castle_destroyed3 = new Image("kingofthehill/UI/field/castle_destroyed3.png");
-        castle_destroyed4 = new Image("kingofthehill/UI/field/castle_destroyed4.png");
-        dirtField1 = new Image("kingofthehill/UI/field/dirt1.png");
-        dirtField2 = new Image("kingofthehill/UI/field/dirt2.png");
-        defenceSpots = new Image("kingofthehill/UI/field/grass_final.png");
-        background = new Image("kingofthehill/UI/field/background/desert.jpg");
-        corner1 = new Image("kingofthehill/UI/field/background/corner1.png");
-        corner2 = new Image("kingofthehill/UI/field/background/corner2.png");
-        corner3 = new Image("kingofthehill/UI/field/background/corner3.png");
-        corner4 = new Image("kingofthehill/UI/field/background/corner4.png");
-        side1 = new Image("kingofthehill/UI/field/background/side1.png");
-        side2 = new Image("kingofthehill/UI/field/background/side2.png");
-        side3 = new Image("kingofthehill/UI/field/background/side3.png");
-        side4 = new Image("kingofthehill/UI/field/background/side4.png");
-        selector = new Image("kingofthehill/UI/field/selector.png");
-        cooldown = new Image("kingofthehill/UI/field/cooldown.png");
-        buttonMelee = new Image("kingofthehill/UI/field/button-melee.png");
-        buttonRanged = new Image("kingofthehill/UI/field/button-ranged.png");
-        mysterybox = new Image("kingofthehill/UI/field/mysterybox.png");
-        //Draw field
-        drawBackground();
-        drawField();
+            isMouseOnCanvas = false;
+            selectedUnit = null;
 
-        //Start animation timer
-        antimer = new AnimationTimer() {
+            //Load all sprites
+            meleeBlueR = new Image("kingofthehill/UI/Units/Blue/BlueKnightNewR.png");
+            meleeBlueB = new Image("kingofthehill/UI/Units/Blue/BlueKnightNewF.png");
+            meleeGreenL = new Image("kingofthehill/UI/Units/Green/GreenKnightNewL.png");
+            meleeGreenB = new Image("kingofthehill/UI/Units/Green/GreenKnightNewF.png");
+            meleePurpleL = new Image("kingofthehill/UI/Units/Purple/PurpleKnightNewL.png");
+            meleePurpleT = new Image("kingofthehill/UI/Units/Purple/PurpleKnightNewB.png");
+            meleeRedR = new Image("kingofthehill/UI/Units/Red/RedKnightNewR.png");
+            meleeRedT = new Image("kingofthehill/UI/Units/Red/RedKnightNewB.png");
+            rangedBlueR = new Image("kingofthehill/UI/Units/Blue/BlueArcherNewR.png");
+            rangedBlueB = new Image("kingofthehill/UI/Units/Blue/BlueArcherNewF.png");
+            rangedGreenL = new Image("kingofthehill/UI/Units/Green/GreenArcherNewL.png");
+            rangedGreenB = new Image("kingofthehill/UI/Units/Green/GreenArcherNewF.png");
+            rangedPurpleL = new Image("kingofthehill/UI/Units/Purple/PurpleArcherNewL.png");
+            rangedPurpleT = new Image("kingofthehill/UI/Units/Purple/PurpleArcherNewB.png");
+            rangedRedR = new Image("kingofthehill/UI/Units/Red/RedArcherNewR.png");
+            rangedRedT = new Image("kingofthehill/UI/Units/Red/RedArcherNewB.png");
+            castle1 = new Image("kingofthehill/UI/field/castle1.png");
+            castle2 = new Image("kingofthehill/UI/field/castle2.png");
+            castle3 = new Image("kingofthehill/UI/field/castle3.png");
+            castle4 = new Image("kingofthehill/UI/field/castle4.png");
+            castle_destroyed1 = new Image("kingofthehill/UI/field/castle_destroyed1.png");
+            castle_destroyed2 = new Image("kingofthehill/UI/field/castle_destroyed2.png");
+            castle_destroyed3 = new Image("kingofthehill/UI/field/castle_destroyed3.png");
+            castle_destroyed4 = new Image("kingofthehill/UI/field/castle_destroyed4.png");
+            dirtField1 = new Image("kingofthehill/UI/field/dirt1.png");
+            dirtField2 = new Image("kingofthehill/UI/field/dirt2.png");
+            defenceSpots = new Image("kingofthehill/UI/field/grass_final.png");
+            background = new Image("kingofthehill/UI/field/background/desert.jpg");
+            corner1 = new Image("kingofthehill/UI/field/background/corner1.png");
+            corner2 = new Image("kingofthehill/UI/field/background/corner2.png");
+            corner3 = new Image("kingofthehill/UI/field/background/corner3.png");
+            corner4 = new Image("kingofthehill/UI/field/background/corner4.png");
+            side1 = new Image("kingofthehill/UI/field/background/side1.png");
+            side2 = new Image("kingofthehill/UI/field/background/side2.png");
+            side3 = new Image("kingofthehill/UI/field/background/side3.png");
+            side4 = new Image("kingofthehill/UI/field/background/side4.png");
+            selector = new Image("kingofthehill/UI/field/selector.png");
+            cooldown = new Image("kingofthehill/UI/field/cooldown.png");
+            buttonMelee = new Image("kingofthehill/UI/field/button-melee.png");
+            buttonRanged = new Image("kingofthehill/UI/field/button-ranged.png");
+            mysterybox = new Image("kingofthehill/UI/field/mysterybox.png");
+            //Draw field
+            drawBackground();
+            drawField();
 
-            @Override
-            public void handle(long now) {
+            //Start animation timer
+            antimer = new AnimationTimer() {
 
-                try {
-                    getGameInfo();
-                } catch (RemoteException ex) {
-                    Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                drawBackground();
-                drawField();
-                drawUnits();
+                @Override
+                public void handle(long now) {
 
-                // Check and handle mouse scrolling
-                if (isMouseOnCanvas) {
-                    if (lastMousePosx > 800) {
-                        if (scrollPosX < -443) {
-                            scrollPosX = -450;
-                        } else {
-                            scrollPosX = scrollPosX - 7;
-                        }
-                    } else if (lastMousePosx < 100) {
-                        if (scrollPosX > -7) {
-                            scrollPosX = 0;
-                        } else {
-                            scrollPosX = scrollPosX + 7;
-                        }
+                    try {
+                        getGameInfo();
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    if (lastMousePosy > 800) {
-                        if (scrollPosY < -443) {
-                            scrollPosY = -450;
-                        } else {
-                            scrollPosY = scrollPosY - 7;
-                        }
-                    } else if (lastMousePosy < 100) {
-                        if (scrollPosY > -7) {
-                            scrollPosY = 0;
-                        } else {
-                            scrollPosY = scrollPosY + 7;
-                        }
-                    }
-                }
-                //If mouse on canvas, zoom in
-                if (isMouseOnCanvas) {
-                    canvas.getGraphicsContext2D().setTransform(1.5, 0, 0, 1.5, scrollPosX, scrollPosY);
-                } else {
-                    canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
-                }
-
-                //Check if game ended
-                if (gameInfo.getPlayers().get(0).getBase().getHealthPoints() == 0 && gameInfo.getPlayers().get(2).getBase().getHealthPoints() == 0) {
-                    canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
                     drawBackground();
                     drawField();
                     drawUnits();
-                    canvas.getGraphicsContext2D().fillText("Team blue won!", 450, 450);
-                    this.stop();
-                } else if (gameInfo.getPlayers().get(1).getBase().getHealthPoints() == 0 && gameInfo.getPlayers().get(3).getBase().getHealthPoints() == 0) {
-                    canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
-                    drawBackground();
-                    drawField();
-                    drawUnits();
-                    canvas.getGraphicsContext2D().fillText("Team red won!", 450, 450);
-                    this.stop();
+
+                    // Check and handle mouse scrolling
+                    if (isMouseOnCanvas) {
+                        if (lastMousePosx > 800) {
+                            if (scrollPosX < -443) {
+                                scrollPosX = -450;
+                            } else {
+                                scrollPosX = scrollPosX - 7;
+                            }
+                        } else if (lastMousePosx < 100) {
+                            if (scrollPosX > -7) {
+                                scrollPosX = 0;
+                            } else {
+                                scrollPosX = scrollPosX + 7;
+                            }
+                        }
+                        if (lastMousePosy > 800) {
+                            if (scrollPosY < -443) {
+                                scrollPosY = -450;
+                            } else {
+                                scrollPosY = scrollPosY - 7;
+                            }
+                        } else if (lastMousePosy < 100) {
+                            if (scrollPosY > -7) {
+                                scrollPosY = 0;
+                            } else {
+                                scrollPosY = scrollPosY + 7;
+                            }
+                        }
+                    }
+                    //If mouse on canvas, zoom in
+                    if (isMouseOnCanvas) {
+                        canvas.getGraphicsContext2D().setTransform(1.5, 0, 0, 1.5, scrollPosX, scrollPosY);
+                    } else {
+                        canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
+                    }
+
+                    //Check if game ended
+                    if (gameInfo.getPlayers().get(0).getBase().getHealthPoints() == 0 && gameInfo.getPlayers().get(2).getBase().getHealthPoints() == 0) {
+                        canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
+                        drawBackground();
+                        drawField();
+                        drawUnits();
+                        canvas.getGraphicsContext2D().fillText("Team blue won!", 450, 450);
+                        this.stop();
+                    } else if (gameInfo.getPlayers().get(1).getBase().getHealthPoints() == 0 && gameInfo.getPlayers().get(3).getBase().getHealthPoints() == 0) {
+                        canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
+                        drawBackground();
+                        drawField();
+                        drawUnits();
+                        canvas.getGraphicsContext2D().fillText("Team red won!", 450, 450);
+                        this.stop();
+                    }
+
+                    //Handle cooldown of units
+                    if (meleeCooldown > 0) {
+                        meleeCooldown--;
+                    }
+                    if (rangedCooldown > 0) {
+                        rangedCooldown--;
+                    }
                 }
 
-                //Handle cooldown of units
-                if (meleeCooldown > 0) {
-                    meleeCooldown--;
+                @Override
+                public void start() {
+                    super.start();
                 }
-                if (rangedCooldown > 0) {
-                    rangedCooldown--;
-                }
-            }
-
-            @Override
-            public void start() {
-                super.start();
-            }
-        };
-        antimer.start();
+            };
+            antimer.start();
+        }
     }
 
     private void getGameInfo() throws RemoteException {

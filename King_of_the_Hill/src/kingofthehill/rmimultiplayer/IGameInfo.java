@@ -3,10 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package kingofthehill.domain;
+package kingofthehill.rmimultiplayer;
 
 import java.util.Iterator;
 import java.util.List;
+import kingofthehill.domain.IPlayer;
+import kingofthehill.domain.Mysterybox;
+import kingofthehill.domain.Unit;
 
 /**
  *
@@ -24,4 +27,6 @@ public interface IGameInfo{
     public int getMysteryboxtime();
     
     public Iterator<Unit> getLaneUnits();
+    
+    public void setFirstPlayer(String name);
 }

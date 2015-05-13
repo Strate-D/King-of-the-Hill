@@ -849,4 +849,19 @@ public class AI implements IPlayer, Serializable {
             gm.getMysterybox().Bid(this, gm.getMysterybox().getHighestBid() + getNextRandom(0, 5));
         }
     }
+
+    @Override
+    public int getConnectionTimer() {
+        return -1;
+    }
+
+    @Override
+    public void resetConnectionTimer() {
+        //Do nothing
+    }
+
+    @Override
+    public void lowerConnectionTimer() {
+        //Do nothing
+    }
 }

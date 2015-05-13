@@ -3,12 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package kingofthehill.domain;
+package kingofthehill.rmimultiplayer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import kingofthehill.domain.Base;
+import kingofthehill.domain.IPlayer;
+import kingofthehill.domain.Lane;
+import kingofthehill.domain.Mysterybox;
+import kingofthehill.domain.Unit;
 
 /**
  *
@@ -69,5 +74,14 @@ public class GameInfo implements IGameInfo, Serializable{
             }
         }
         return list.iterator();
+    }
+
+    @Override
+    public void setFirstPlayer(String name) {
+        while(!this.getPlayers().get(0).getName().equals(name)){
+            IPlayer buffer = this.getPlayers().get(0);
+            this.getPlayers().remove(buffer);
+            this.getPlayers().add(buffer);
+        }
     }
 }

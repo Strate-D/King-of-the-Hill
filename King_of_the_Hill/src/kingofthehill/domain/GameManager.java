@@ -3,6 +3,8 @@
  */
 package kingofthehill.domain;
 
+import kingofthehill.rmimultiplayer.IGameInfo;
+import kingofthehill.rmimultiplayer.GameInfo;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -45,11 +47,6 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
         this.resourceTimer = 0;
         this.mysteryboxTimer = 0;
         this.mysteryboxTime = 0;
-        
-        /**
-         * Add AI for testing
-         */
-
     }
     
     /**
@@ -319,10 +316,19 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
     }
 
     /**
-     * Does a step in the game (1/30 of a second).
+     * Does a step in the game (1/60 of a second).
      */
     private void doStep() {
+        //Create game info for clients
         gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
+        
+        //Check player connections
+        for(IPlayer p : this.players) {
+            p.lowerConnectionTimer();
+            if(p.getConnectionTimer() == 0) {
+                //replace player with si
+            }
+        }
            
         /**
          * Check if players should get resources.

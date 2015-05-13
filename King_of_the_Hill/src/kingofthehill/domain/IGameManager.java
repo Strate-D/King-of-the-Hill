@@ -5,6 +5,7 @@
  */
 package kingofthehill.domain;
 
+import kingofthehill.rmimultiplayer.IGameInfo;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 

@@ -22,6 +22,7 @@ public class Player implements IPlayer, Serializable{
     private Team team;
     private int money;
     private Base base;
+    private int connectionTimer;
     
     /**
      * Creates a new player object
@@ -39,6 +40,7 @@ public class Player implements IPlayer, Serializable{
         this.team = null;
         this.money = 100;
         this.base = null;
+        this.connectionTimer = 600;
     }
 
     @Override
@@ -126,6 +128,23 @@ public class Player implements IPlayer, Serializable{
     @Override
     public void addPoints(int points) {
         this.score += points;
+    }
+
+    @Override
+    public int getConnectionTimer() {
+        return this.connectionTimer;
+    }
+
+    @Override
+    public void resetConnectionTimer() {
+        this.connectionTimer = 600;
+    }
+
+    @Override
+    public void lowerConnectionTimer() {
+        if(this.connectionTimer > 0) {
+            this.connectionTimer--;
+        }
     }
     
 }

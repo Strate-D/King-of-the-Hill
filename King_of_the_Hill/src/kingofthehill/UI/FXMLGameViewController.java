@@ -10,7 +10,6 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
@@ -26,11 +25,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import kingofthehill.client.ClientManager;
 import kingofthehill.domain.AI;
 import kingofthehill.domain.AIState;
 import kingofthehill.domain.GameManager;
-import kingofthehill.domain.IGameInfo;
+import kingofthehill.rmimultiplayer.IGameInfo;
 import kingofthehill.domain.IGameManager;
 import kingofthehill.domain.IPlayer;
 import kingofthehill.domain.Melee;
@@ -499,7 +497,7 @@ public class FXMLGameViewController implements Initializable {
             //Select unit
             if (lastRealMousePosx >= 100 && lastRealMousePosx <= 130
                     && lastRealMousePosy >= 150 && lastRealMousePosy <= 180 && meleeCooldown <= 0) {
-                //selectedUnit = UnitInfo.getMeleeUnit(gm.getPlayers().get(0));
+                //selectedUnit = UnitInfo.getMeleeUnit(gameInfo.getPlayers().get(0));
                 selectedUnit = UnitInfo.getDefenceUnit(gameInfo.getPlayers().get(0));
             } else if (lastRealMousePosx >= 150 && lastRealMousePosx <= 180
                     && lastRealMousePosy >= 150 && lastRealMousePosy <= 180 && rangedCooldown <= 0) {

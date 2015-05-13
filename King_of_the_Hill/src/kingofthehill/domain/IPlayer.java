@@ -95,4 +95,25 @@ public interface IPlayer {
      * @param points The amount of points that has to be added, can be negative
      */
     public void addPoints(int points);
+    
+    /**
+     * Gets the connectionTimer of the player.
+     * -1 means it's an AI so there is no connection
+     * 0 means connection has timed out, so player has to be replaced with AI
+     * Higher then 0 means amount of frames left till timeout
+     * @return The connectiontimer value
+     */
+    public int getConnectionTimer();
+    
+    /**
+     * Resets the connectiontimer. Has to be called by the client, so that the server
+     * knows that the connection is still alive.
+     */
+    public void resetConnectionTimer();
+    
+    /**
+     * Lower the connectiontimer. Is called each frame by the server to make sure that
+     * the client is still connected.
+     */
+    public void lowerConnectionTimer();
 }
