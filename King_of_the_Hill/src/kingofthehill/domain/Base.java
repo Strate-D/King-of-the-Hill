@@ -170,6 +170,13 @@ public class Base {
         return list;
     }
 
+    /**
+     * Gets the unit index of the defence unit
+     * 
+     * @param unit Can be null
+     * @return The index of the unit, 0 - 15 for lane where this base is baseEnd1
+     * is -1 when unit not found.
+     */
     public int getUnitIndex(Unit unit) {
         for (int i = 0;  i <= 32; i++) {
             if(unit == this.units[i]){

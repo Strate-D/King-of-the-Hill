@@ -79,11 +79,11 @@ public class UnitInfo
      */
     public static UnitInfo getDefenceUnit(IPlayer owner)
     {
-        final int HP = 100;
-        final int ATK = 10;
-        final int AMR = 10;
+        final int HP = 200;
+        final int ATK = 5;
+        final int AMR = 5;
         final int COST = 1;
-        final int COOL = 30;
+        final int COOL = 150;
         
         Unit def = new Defence(HP, ATK, AMR, owner);
         return new UnitInfo(COST, def, COOL, UnitType.DEFENCE);
