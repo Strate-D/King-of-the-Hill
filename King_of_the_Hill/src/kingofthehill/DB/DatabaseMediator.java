@@ -37,13 +37,13 @@ public class DatabaseMediator {
     String password = "proftaak";
 
     public DatabaseMediator() {
-        Connect();
+        connect();
     }
 
     /**
      * Opens the connection to the database
      */
-    private void Connect() {
+    private void connect() {
         try {
             con = DriverManager.getConnection(url, user, password);
         } catch (Exception e) {
@@ -56,9 +56,9 @@ public class DatabaseMediator {
      *
      * @param username
      * @param password
-     * @return true if logged in
+     * @return True if logged in
      */
-    public boolean DBLogin(String username, String password) {
+    public boolean dBLogin(String username, String password) {
         try {
             if (getPlayer(username, password) != null) {
                 return true;
@@ -88,11 +88,12 @@ public class DatabaseMediator {
     }
     /**
      * Change the score of the player in the DB
+     * 
      * @param player
      * @param score
      * @throws SQLException 
      */
-    public void ChangeScore(String name, int score) throws SQLException {
+    public void changeScore(String name, int score) throws SQLException {
         PreparedStatement pst1 = con.prepareStatement("SELECT score FROM Player WHERE name = " + name);
         rs = pst1.executeQuery();
         
@@ -103,10 +104,10 @@ public class DatabaseMediator {
     /**
      * Gets the score of the player in the DB
      * @param name
-     * @return
+     * @return Score of player
      * @throws SQLException 
      */
-    public int GetScore(String name) throws SQLException {
+    public int getScore(String name) throws SQLException {
         PreparedStatement pst = con.prepareStatement("SELECT score FROM Player WHERE name = " + name);
         rs = pst.executeQuery();
         
@@ -114,11 +115,12 @@ public class DatabaseMediator {
     }
     /**
      * Gets the 10 best scoring players in the DB
+     * 
      * @return 10 best scoring players
      * @throws SQLException 
      */
     public List<IPlayer> getHighscores() throws SQLException {
-        PreparedStatement pst = con.prepareStatement("SELECT name, score FROM Player ORDER BY score DESC lmit 10");
+        PreparedStatement pst = con.prepareStatement("SELECT name, score FROM Player ORDER BY score DESC limit 10");
         rs = pst.executeQuery();
         
         List<IPlayer> highscores = new ArrayList<IPlayer>(10);
@@ -130,13 +132,22 @@ public class DatabaseMediator {
     }
     /**
      * Add a new player to the DB
+     * 
      * @param newName
      * @param newPassword
+     * @return True if added
      * @throws SQLException 
      */
-    public void AddNewPlayer(String newName, String newPassword) throws SQLException{
-        PreparedStatement pst = con.prepareStatement("INSERT INTO Player (id, name, password, score) values (player_seq.nextval," + newName + "," + newPassword + ", 0)");
-        pst.executeQuery();
+    public boolean addNewPlayer(String newName, String newPassword) throws SQLException{
+        if(getPlayer(newName, newPassword) != null) {
+            return false;
+        }
+        else {
+            PreparedStatement pst = con.prepareStatement("INSERT INTO Player (id, name, password, score) values (player_seq.nextval," + newName + "," + newPassword + ", 0)");
+            pst.executeQuery();
+            return true;
+        }
+        
     }
     
     
