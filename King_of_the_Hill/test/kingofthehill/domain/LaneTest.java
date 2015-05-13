@@ -56,7 +56,7 @@ public class LaneTest
         Base base1 = new Base(player1);
         Base base2 = new Base(new Player("Baske", 2123));
         Lane l = new Lane(base1, base2);
-        Unit u = new Defence(12, 12, 12, 12, player1);
+        Unit u = new Defence(12, 12, 12, player1);
         
         // 1: normal test
         assertEquals(0, l.getUnits().size());
@@ -79,7 +79,7 @@ public class LaneTest
         Base base1 = new Base(player1);
         Base base2 = new Base(new Player("Dennis", 2123));
         Lane l = new Lane(base1, base2);
-        Unit u = new Defence(12, 12, 12, 12, player1);
+        Unit u = new Defence(12, 12, 12, player1);
         l.addUnit(u);
         l.addUnit(u);
         

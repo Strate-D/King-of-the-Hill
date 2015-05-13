@@ -52,7 +52,7 @@ public class GameManagerTest
     {
         // create values
         IPlayer ai = new AI("AI1");
-        Unit def = new Defence(10, 10, 10, 10, ai);
+        Unit def = new Defence(10, 10, 10, ai);
         GameManager gm = new GameManager(new Player("Bas", 10));
         Base base1 = new Base(ai);
         IPlayer player = new Player("Henkie", 100);
@@ -77,7 +77,7 @@ public class GameManagerTest
     {
         // create values
         IPlayer ai = new AI("AI1");
-        Unit def = new Defence(10, 10, 10, 10, ai);
+        Unit def = new Defence(10, 10, 10, ai);
         GameManager gm = new GameManager(new Player("Bas", 10));
         Base base = new Base(ai);
         
