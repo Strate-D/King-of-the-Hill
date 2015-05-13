@@ -1,21 +1,24 @@
 /**
- * 
+ *
  */
 package kingofthehill.domain;
 
 /**
  * Class containing all the info about a Defencive unit. Extends Unit.
+ *
  * @author Jur
  */
-public class Defence extends Unit{
+public class Defence extends Unit {
+
     /**
-     * Creates a new defensive unit with the given parameters. Unit has to be set to
-     * a lane or base manually!
+     * Creates a new defensive unit with the given parameters. Unit has to be
+     * set to a lane or base manually!
+     *
      * @param health Amount of health the unit has. Must be positive.
      * @param attack Amount of attack the unit has. Must be positive.
      * @param armor Amount of armor the unit has. Must be 0 or positive.
-     * @param owner Owner of the unit, may not be null.    
-    */
+     * @param owner Owner of the unit, may not be null.
+     */
     public Defence(int health, int attack, int armor, IPlayer owner) {
         super(health, attack, armor, UnitType.DEFENCE, 1, owner);
     }
@@ -61,7 +64,7 @@ public class Defence extends Unit{
                     }
                 }
             } else {
-                int unitPosition = 1000 - (unitIndex % 4 * 55);
+                int unitPosition = 950 - (unitIndex % 4 * 55);
                 for (Unit u : lane.getUnits()) {
                     if ((unitPosition - u.getPosition() < closestDistance
                             || closestDistance == -1)) {
@@ -79,9 +82,27 @@ public class Defence extends Unit{
              * Check if the unit is within attack range
              */
             if (closestDistance != -1 && closestDistance <= 50) {
-                return closestUnit;
+                if (lane.getBaseEnd1().getOwner() == this.getOwner()) {
+                    if (this.getPosition() <= closestUnit.getPosition()) {
+                        return closestUnit;
+                    }
+                } else {
+                    if (this.getPosition() >= closestUnit.getPosition()) {
+                        return closestUnit;
+                    }
+                }
             }
             return null;
+        }
+    }
+
+    @Override
+    public int getPosition() {
+        int index = this.getBase().getUnitIndex(this);
+        if (index < 16) {
+            return (index % 4 * 55);
+        } else {
+            return 950 - (index % 4 * 55);
         }
     }
 }

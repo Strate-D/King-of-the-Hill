@@ -113,7 +113,7 @@ public class Ranged extends Unit {
                 //Check the defence spots
                 for (Unit u : lane.getBaseEnd2().getUnits()) {
                     int index = lane.getBaseEnd2().getUnitIndex(u);
-                    int pos = 1000 - index % 4 * 55;
+                    int pos = 950 - index % 4 * 55;
                     int laneIndex = index / 4;
                     if (this.getLane() == lane.getBaseEnd2().getLane(laneIndex)) {
                         if(pos - this.getPosition() < closestDistance || closestDistance == -1) {
@@ -153,7 +153,15 @@ public class Ranged extends Unit {
              * Check if the unit is within attack range
              */
             if (closestDistance != -1 && closestDistance <= this.attackRange) {
-                return closestUnit;
+                if (lane.getBaseEnd1().getOwner() == this.getOwner()) {
+                    if (this.getPosition() <= closestUnit.getPosition()) {
+                        return closestUnit;
+                    }
+                } else {
+                    if (this.getPosition() >= closestUnit.getPosition()) {
+                        return closestUnit;
+                    }
+                }
             }
             return null;
         }

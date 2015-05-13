@@ -35,10 +35,10 @@ public class UpgradeInfo {
      * @return A new upgrade object with the upgrade
      */
     public static UpgradeInfo getWeakUpgrade(UnitType targetUnit){ 
-        final double HEALTH = 1;
-        final double ATTACK = 1;
-        final double ARMOR = 1;
-        final double SPEED = 1;
+        final double HEALTH = 0.1;
+        final double ATTACK = 0;
+        final double ARMOR = 0.2;
+        final double SPEED = 0;
         
         Upgrade weakUpgrade = new Upgrade(HEALTH, ATTACK, ARMOR, SPEED, targetUnit);
         return new UpgradeInfo(weakUpgrade);
@@ -50,10 +50,10 @@ public class UpgradeInfo {
      * @return A new upgrade object with the upgrade
      */
     public static UpgradeInfo getWeakNormalUpgrade(UnitType targetUnit){
-        final double HEALTH = 2;
-        final double ATTACK = 2;
-        final double ARMOR = 2;
-        final double SPEED = 2;
+        final double HEALTH = 0.1;
+        final double ATTACK = 0.1;
+        final double ARMOR = 0.2;
+        final double SPEED = 0.1;
         
         Upgrade normalUpgrade = new Upgrade(HEALTH, ATTACK, ARMOR, SPEED, targetUnit);
         return new UpgradeInfo(normalUpgrade);
@@ -65,10 +65,10 @@ public class UpgradeInfo {
      * @return A new upgrade object with the upgrade
      */
     public static UpgradeInfo getNormalUpgrade(UnitType targetUnit){
-        final double HEALTH = 3;
-        final double ATTACK = 3;
-        final double ARMOR = 3;
-        final double SPEED = 3;
+        final double HEALTH = 0.2;
+        final double ATTACK = 0.2;
+        final double ARMOR = 0.2;
+        final double SPEED = 0.2;
         
         Upgrade normalUpgrade = new Upgrade(HEALTH, ATTACK, ARMOR, SPEED, targetUnit);
         return new UpgradeInfo(normalUpgrade);
@@ -80,10 +80,10 @@ public class UpgradeInfo {
      * @return A new upgrade object with the upgrade
      */
     public static UpgradeInfo getNormalStrongUpgrade(UnitType targetUnit){
-        final double HEALTH = 4;
-        final double ATTACK = 4;
-        final double ARMOR = 4;
-        final double SPEED = 4;
+        final double HEALTH = 0.3;
+        final double ATTACK = 0.3;
+        final double ARMOR = 0.2;
+        final double SPEED = -0.1;
         
         Upgrade normalUpgrade = new Upgrade(HEALTH, ATTACK, ARMOR, SPEED, targetUnit);
         return new UpgradeInfo(normalUpgrade);
@@ -95,10 +95,10 @@ public class UpgradeInfo {
      * @return A new upgrade object with the upgrade
      */
     public static UpgradeInfo getStrongUpgrade(UnitType targetUnit){
-        final double HEALTH = 5;
-        final double ATTACK = 5;
-        final double ARMOR = 5;
-        final double SPEED = 5;
+        final double HEALTH = 0.35;
+        final double ATTACK = 0.35;
+        final double ARMOR = 0.2;
+        final double SPEED = -0.1;
         
         Upgrade strongUpgrade = new Upgrade(HEALTH, ATTACK, ARMOR, SPEED, targetUnit);
         return new UpgradeInfo(strongUpgrade);
@@ -110,10 +110,10 @@ public class UpgradeInfo {
      * @return A new upgrade object with the upgrade
      */
     public static UpgradeInfo getUberUpgrade(UnitType targetUnit){
-        final double HEALTH = 6;
-        final double ATTACK = 6;
-        final double ARMOR = 6;
-        final double SPEED = 6;
+        final double HEALTH = 0.4;
+        final double ATTACK = 0.4;
+        final double ARMOR = 0.3;
+        final double SPEED = -0.1;
         
         Upgrade strongUpgrade = new Upgrade(HEALTH, ATTACK, ARMOR, SPEED, targetUnit);
         return new UpgradeInfo(strongUpgrade);

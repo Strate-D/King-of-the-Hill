@@ -63,8 +63,7 @@ public class FXMLGameViewController implements Initializable {
     // Selector sprite and cooldown sprite
     Image selector, cooldown;
     //Button sprites
-    Image buttonMelee;
-    Image buttonRanged;
+    Image buttonMelee, buttonRanged, buttonDefence;
     //Mysterybox sprites
     Image mysterybox;
 
@@ -73,7 +72,7 @@ public class FXMLGameViewController implements Initializable {
     boolean isMouseOnCanvas;
     boolean isMouseClicked = false;
 
-    int meleeCooldown, rangedCooldown;
+    int meleeCooldown, rangedCooldown, defenceCooldown;
 
     double scrollPosX, scrollPosY, lastMousePosx, lastMousePosy, lastRealMousePosx, lastRealMousePosy;
 
@@ -138,6 +137,7 @@ public class FXMLGameViewController implements Initializable {
         cooldown = new Image("kingofthehill/UI/field/cooldown.png");
         buttonMelee = new Image("kingofthehill/UI/field/button-melee.png");
         buttonRanged = new Image("kingofthehill/UI/field/button-ranged.png");
+        buttonDefence = new Image("kingofthehill/UI/field/button-defence.png");
         mysterybox = new Image("kingofthehill/UI/field/mysterybox.png");
         //Draw field
         drawBackground();
@@ -213,6 +213,9 @@ public class FXMLGameViewController implements Initializable {
                 }
                 if (rangedCooldown > 0) {
                     rangedCooldown--;
+                }
+                if (defenceCooldown > 0) {
+                    defenceCooldown--;
                 }
             }
 
@@ -317,45 +320,36 @@ public class FXMLGameViewController implements Initializable {
         }
         //Draw health castles
         canvas.getGraphicsContext2D().setFill(Color.RED);
-        canvas.getGraphicsContext2D().fillRect(100, 75, 100, 5);
-        canvas.getGraphicsContext2D().fillRect(705, 75, 100, 5);
-        canvas.getGraphicsContext2D().fillRect(705, 680, 100, 5);
-        canvas.getGraphicsContext2D().fillRect(100, 680, 100, 5);
+        canvas.getGraphicsContext2D().fillRect(55, 70, 100, 5);
+        canvas.getGraphicsContext2D().fillRect(745, 70, 100, 5);
+        canvas.getGraphicsContext2D().fillRect(745, 760, 100, 5);
+        canvas.getGraphicsContext2D().fillRect(55, 760, 100, 5);
         canvas.getGraphicsContext2D().setFill(Color.GREEN);
-        canvas.getGraphicsContext2D().fillRect(100, 75, (float) gm.getPlayers().get(0).getBase().getHealthPoints(), 5);
-        canvas.getGraphicsContext2D().fillRect(705, 75, (float) gm.getPlayers().get(1).getBase().getHealthPoints(), 5);
-        canvas.getGraphicsContext2D().fillRect(705, 680, (float) gm.getPlayers().get(2).getBase().getHealthPoints(), 5);
-        canvas.getGraphicsContext2D().fillRect(100, 680, (float) gm.getPlayers().get(3).getBase().getHealthPoints(), 5);
+        canvas.getGraphicsContext2D().fillRect(55, 70, (float) gm.getPlayers().get(0).getBase().getHealthPoints(), 5);
+        canvas.getGraphicsContext2D().fillRect(745, 70, (float) gm.getPlayers().get(1).getBase().getHealthPoints(), 5);
+        canvas.getGraphicsContext2D().fillRect(745, 760, (float) gm.getPlayers().get(2).getBase().getHealthPoints(), 5);
+        canvas.getGraphicsContext2D().fillRect(55, 760, (float) gm.getPlayers().get(3).getBase().getHealthPoints(), 5);
         //Draw name
         canvas.getGraphicsContext2D().setFill(Color.BLACK);
         canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.BOLD, 12));
-        canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(0).getName(), 90, 50);
-        canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(1).getName(), 695, 50);
-        canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(2).getName(), 695, 860);
-        canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(3).getName(), 90, 860);
+        canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(0).getName(), 70, 65);
+        canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(1).getName(), 760, 65);
+        canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(2).getName(), 760, 755);
+        canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(3).getName(), 70, 755);
         //Draw money
         canvas.getGraphicsContext2D().setFill(Color.GOLD);
-        canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(0).getMoney(), 100, 110);
-        canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(1).getMoney(), 705, 110);
-        canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(2).getMoney(), 705, 715);
-        canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(3).getMoney(), 100, 715);
-        //Draw exp
-        canvas.getGraphicsContext2D().setFill(Color.AQUA);
-        canvas.getGraphicsContext2D().fillRect(100, 85, 100, 5);
-        canvas.getGraphicsContext2D().fillRect(705, 85, 100, 5);
-        canvas.getGraphicsContext2D().fillRect(705, 690, 100, 5);
-        canvas.getGraphicsContext2D().fillRect(100, 690, 100, 5);
-        canvas.getGraphicsContext2D().setFill(Color.BLUE);
-        canvas.getGraphicsContext2D().fillRect(100, 85, (float) gm.getPlayers().get(0).getExp(), 5);
-        canvas.getGraphicsContext2D().fillRect(705, 85, (float) gm.getPlayers().get(1).getExp(), 5);
-        canvas.getGraphicsContext2D().fillRect(705, 690, (float) gm.getPlayers().get(2).getExp(), 5);
-        canvas.getGraphicsContext2D().fillRect(100, 690, (float) gm.getPlayers().get(3).getExp(), 5);
+        canvas.getGraphicsContext2D().fillText("# gold: " + gm.getPlayers().get(0).getMoney(), 55, 100);
         //Draw score
-        canvas.getGraphicsContext2D().setFill(Color.BLACK);
-        canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(0).getScore(), 120, 110);
-        canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(1).getScore(), 725, 110);
-        canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(2).getScore(), 725, 715);
-        canvas.getGraphicsContext2D().fillText("" + gm.getPlayers().get(3).getScore(), 120, 715);
+        canvas.getGraphicsContext2D().setFill(Color.AQUA);
+        canvas.getGraphicsContext2D().fillRect(55, 80, 100, 5);
+        canvas.getGraphicsContext2D().fillRect(745, 80, 100, 5);
+        canvas.getGraphicsContext2D().fillRect(745, 770, 100, 5);
+        canvas.getGraphicsContext2D().fillRect(55, 770, 100, 5);
+        canvas.getGraphicsContext2D().setFill(Color.BLUE);
+        canvas.getGraphicsContext2D().fillRect(105, 80, (float) gm.getPlayers().get(0).getScore() / 2, 5);
+        canvas.getGraphicsContext2D().fillRect(795, 80, (float) gm.getPlayers().get(1).getScore() / 2, 5);
+        canvas.getGraphicsContext2D().fillRect(795, 770, (float) gm.getPlayers().get(2).getScore() / 2, 5);
+        canvas.getGraphicsContext2D().fillRect(105, 770, (float) gm.getPlayers().get(3).getScore() / 2, 5);
 
         //Set color back
         canvas.getGraphicsContext2D().setFill(Color.BLACK);
@@ -375,34 +369,45 @@ public class FXMLGameViewController implements Initializable {
         canvas.getGraphicsContext2D().drawImage(defenceSpots, 52, 215, 105, 105);
         canvas.getGraphicsContext2D().drawImage(defenceSpots, 52, 580, 105, 105);
         //Draw buttons for player
-        canvas.getGraphicsContext2D().drawImage(buttonMelee, 100, 150, 30, 30);
-        canvas.getGraphicsContext2D().drawImage(buttonRanged, 150, 150, 30, 30);
+        canvas.getGraphicsContext2D().drawImage(buttonMelee, 55, 105, 30, 30);
+        canvas.getGraphicsContext2D().drawImage(buttonRanged, 90, 105, 30, 30);
+        canvas.getGraphicsContext2D().drawImage(buttonDefence, 125, 105, 30, 30);
 
         //Draw selector for buttons
         //Melee button
-        if (lastRealMousePosx >= 100 && lastRealMousePosx <= 130
-                && lastRealMousePosy >= 150 && lastRealMousePosy <= 180 && meleeCooldown <= 0) {
-            canvas.getGraphicsContext2D().drawImage(selector, 100, 150, 30, 30);
+        if (lastRealMousePosx >= 55 && lastRealMousePosx <= 85
+                && lastRealMousePosy >= 105 && lastRealMousePosy <= 135 && meleeCooldown <= 0) {
+            canvas.getGraphicsContext2D().drawImage(selector, 55, 105, 30, 30);
         }
         //Ranged button
-        if (lastRealMousePosx >= 150 && lastRealMousePosx <= 180
-                && lastRealMousePosy >= 150 && lastRealMousePosy <= 180 && rangedCooldown <= 0) {
-            canvas.getGraphicsContext2D().drawImage(selector, 150, 150, 30, 30);
+        if (lastRealMousePosx >= 90 && lastRealMousePosx <= 120
+                && lastRealMousePosy >= 105 && lastRealMousePosy <= 135 && rangedCooldown <= 0) {
+            canvas.getGraphicsContext2D().drawImage(selector, 90, 105, 30, 30);
+        }
+        //Defence button
+        if (lastRealMousePosx >= 125 && lastRealMousePosx <= 155
+                && lastRealMousePosy >= 105 && lastRealMousePosy <= 135 && rangedCooldown <= 0) {
+            canvas.getGraphicsContext2D().drawImage(selector, 125, 105, 30, 30);
         }
         //Draw selector for selected unit
         if (selectedUnit != null) {
             if (selectedUnit.getUnitType() == UnitType.MELEE) {
-                canvas.getGraphicsContext2D().drawImage(selector, 100, 150, 30, 30);
+                canvas.getGraphicsContext2D().drawImage(selector, 55, 105, 30, 30);
             } else if (selectedUnit.getUnitType() == UnitType.RANGED) {
-                canvas.getGraphicsContext2D().drawImage(selector, 150, 150, 30, 30);
+                canvas.getGraphicsContext2D().drawImage(selector, 90, 105, 30, 30);
+            } else if (selectedUnit.getUnitType() == UnitType.DEFENCE) {
+                canvas.getGraphicsContext2D().drawImage(selector, 125, 105, 30, 30);
             }
         }
         //Draw cooldown for units
         if (meleeCooldown > 0) {
-            canvas.getGraphicsContext2D().drawImage(cooldown, 100, 150, 30, 30);
+            canvas.getGraphicsContext2D().drawImage(cooldown, 55, 105, 30, 30);
         }
         if (rangedCooldown > 0) {
-            canvas.getGraphicsContext2D().drawImage(cooldown, 150, 150, 30, 30);
+            canvas.getGraphicsContext2D().drawImage(cooldown, 90, 105, 30, 30);
+        }
+        if (defenceCooldown > 0) {
+            canvas.getGraphicsContext2D().drawImage(cooldown, 125, 105, 30, 30);
         }
         //SpotsLanes when unit is selected
         if (selectedUnit != null) {
@@ -458,38 +463,43 @@ public class FXMLGameViewController implements Initializable {
      * @param e
      */
     public void handleMouseClick(MouseEvent e) {
-        if (selectedUnit == null) {
-            //Select unit
-            if (lastRealMousePosx >= 100 && lastRealMousePosx <= 130
-                    && lastRealMousePosy >= 150 && lastRealMousePosy <= 180 && meleeCooldown <= 0) {
-                //selectedUnit = UnitInfo.getMeleeUnit(gm.getPlayers().get(0));
-                selectedUnit = UnitInfo.getDefenceUnit(gm.getPlayers().get(0));
-            } else if (lastRealMousePosx >= 150 && lastRealMousePosx <= 180
-                    && lastRealMousePosy >= 150 && lastRealMousePosy <= 180 && rangedCooldown <= 0) {
-                selectedUnit = UnitInfo.getRangedUnit(gm.getPlayers().get(0));
-            }
-        } else {
+        //Change selected unit
+        if (lastRealMousePosx >= 55 && lastRealMousePosx <= 85
+                && lastRealMousePosy >= 105 && lastRealMousePosy <= 135 && meleeCooldown <= 0) {
+            //selectedUnit = UnitInfo.getMeleeUnit(gm.getPlayers().get(0));
+            selectedUnit = UnitInfo.getMeleeUnit(gm.getPlayers().get(0));
+        } else if (lastRealMousePosx >= 90 && lastRealMousePosx <= 120
+                && lastRealMousePosy >= 105 && lastRealMousePosy <= 135 && rangedCooldown <= 0) {
+            selectedUnit = UnitInfo.getRangedUnit(gm.getPlayers().get(0));
+        } else if (lastRealMousePosx >= 125 && lastRealMousePosx <= 155
+                && lastRealMousePosy >= 105 && lastRealMousePosy <= 135 && defenceCooldown <= 0) {
+            selectedUnit = UnitInfo.getDefenceUnit(gm.getPlayers().get(0));
+        }
+        //Check if unit has to be placed
+        if (selectedUnit != null) {
             //Place unit
             //Lane 0 to 3
             if (lastRealMousePosx >= 215 && lastRealMousePosx <= 320
                     && lastRealMousePosy >= 52 && lastRealMousePosy <= 157) {
                 int posX = ((int) lastRealMousePosx - 215) / 26;
                 int posY = ((int) lastRealMousePosy - 52) / 26;
-                gm.placeUnitAtBase(gm.getPlayers().get(0), selectedUnit.getUnit(), posY * 4 + posX, selectedUnit.getCost());
-                setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
-                selectedUnit = null;
+                if (gm.placeUnitAtBase(gm.getPlayers().get(0), selectedUnit.getUnit(), posY * 4 + posX, selectedUnit.getCost())) {
+                    setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                    selectedUnit = null;
+                }
             } else //Lane 4 to 7
             if (lastRealMousePosx >= 52 && lastRealMousePosx <= 157
                     && lastRealMousePosy >= 215 && lastRealMousePosy <= 320) {
                 int posY = ((int) lastRealMousePosx - 52) / 26;
                 int posX = ((int) lastRealMousePosy - 215) / 26;
-                gm.placeUnitAtBase(gm.getPlayers().get(0), selectedUnit.getUnit(), 16 + posY * 4 + posX, selectedUnit.getCost());
-                setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
-                selectedUnit = null;
+                if (gm.placeUnitAtBase(gm.getPlayers().get(0), selectedUnit.getUnit(), 16 + posY * 4 + posX, selectedUnit.getCost())) {
+                    setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
+                    selectedUnit = null;
+                }
             }
         }
 
-        //handle mouseclick on mysterybox when mysterybox is available
+        //Handle mouseclick on mysterybox when mysterybox is available
         if (lastRealMousePosx >= 325 && lastRealMousePosx <= 700 && lastRealMousePosy >= 325 && lastRealMousePosy <= 700) {
             if (gm.getMysterybox() != null) {
                 gm.getMysterybox().Bid(gm.getPlayers().get(0), gm.getMysterybox().getNewHighestBid());
@@ -777,18 +787,17 @@ public class FXMLGameViewController implements Initializable {
                 int index = u.getBase().getUnitIndex(u);
                 int posLane = index % 4;
                 int laneIndex = index / 4;
-                Image sprite = selector;
 
                 if (j == 0) {
                     if (laneIndex < 4) {
-                        canvas.getGraphicsContext2D().drawImage(sprite,
+                        canvas.getGraphicsContext2D().drawImage(defenceSide,
                                 x1 + posLane * 26,
                                 y1 + laneIndex * 26,
                                 30,
                                 30);
                     } else {
                         laneIndex -= 4;
-                        canvas.getGraphicsContext2D().drawImage(sprite,
+                        canvas.getGraphicsContext2D().drawImage(defenceSide,
                                 x2 + laneIndex * 26,
                                 y2 + posLane * 26,
                                 30,
@@ -796,14 +805,14 @@ public class FXMLGameViewController implements Initializable {
                     }
                 } else if (j == 1) {
                     if (laneIndex < 4) {
-                        canvas.getGraphicsContext2D().drawImage(sprite,
+                        canvas.getGraphicsContext2D().drawImage(defenceSide,
                                 x1 + laneIndex * 26,
                                 y1 + posLane * 26,
                                 30,
                                 30);
                     } else {
                         laneIndex -= 4;
-                        canvas.getGraphicsContext2D().drawImage(sprite,
+                        canvas.getGraphicsContext2D().drawImage(defenceSide,
                                 x2 + 78 - posLane * 26,
                                 y2 + laneIndex * 26,
                                 30,
@@ -811,14 +820,14 @@ public class FXMLGameViewController implements Initializable {
                     }
                 } else if (j == 2) {
                     if (laneIndex < 4) {
-                        canvas.getGraphicsContext2D().drawImage(sprite,
+                        canvas.getGraphicsContext2D().drawImage(defenceSide,
                                 x1 + 78 - posLane * 26,
                                 y1 + laneIndex * 26,
                                 30,
                                 30);
                     } else {
                         laneIndex -= 4;
-                        canvas.getGraphicsContext2D().drawImage(sprite,
+                        canvas.getGraphicsContext2D().drawImage(defenceSide,
                                 x2 + laneIndex * 26,
                                 y2 + 78 - posLane * 26,
                                 30,
@@ -826,14 +835,14 @@ public class FXMLGameViewController implements Initializable {
                     }
                 } else if (j == 3) {
                     if (laneIndex < 4) {
-                        canvas.getGraphicsContext2D().drawImage(sprite,
+                        canvas.getGraphicsContext2D().drawImage(defenceSide,
                                 x1 + laneIndex * 26,
                                 y1 + 78 - posLane * 26,
                                 30,
                                 30);
                     } else {
                         laneIndex -= 4;
-                        canvas.getGraphicsContext2D().drawImage(sprite,
+                        canvas.getGraphicsContext2D().drawImage(defenceSide,
                                 x2 + posLane * 26,
                                 y2 + laneIndex * 26,
                                 30,
@@ -858,6 +867,12 @@ public class FXMLGameViewController implements Initializable {
                 meleeCooldown = cooldown;
             } else if (unittype == UnitType.RANGED) {
                 rangedCooldown = cooldown;
+            } else if (unittype == UnitType.DEFENCE) {
+                defenceCooldown = cooldown;
+            } else if (unittype == UnitType.ALL) {
+                meleeCooldown = cooldown;
+                rangedCooldown = cooldown;
+                defenceCooldown = cooldown;
             }
         }
     }

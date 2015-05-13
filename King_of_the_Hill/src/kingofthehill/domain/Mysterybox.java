@@ -65,12 +65,12 @@ public class Mysterybox {
      */
     public void Bid(IPlayer bidder, int bid) {
         if (bidder != null) {
-            if (bid > highestBid && highestBidder != bidder) {
+            if (bid > highestBid && highestBidder != bidder && bidder.getMoney() > bid) {
                 /**
                  * Give money back to previous higest bidder
                  */
                 if(highestBidder != null){
-                    highestBidder.addMoney(bid);
+                    highestBidder.addMoney(highestBid);
                 }
                 
                 /**
