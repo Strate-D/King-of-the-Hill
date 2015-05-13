@@ -58,6 +58,8 @@ public class FXMLMainController implements Initializable {
             Logger.getLogger(FXMLMainController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
 
     /**
      * Exit game when pressed on the button

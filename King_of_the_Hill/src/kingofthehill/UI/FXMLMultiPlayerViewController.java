@@ -45,7 +45,7 @@ import kingofthehill.unitinfo.UnitInfo;
  *
  * @author Jur
  */
-public class FXMLSinglePlayerViewController implements Initializable {
+public class FXMLMultiPlayerViewController implements Initializable {
 
     @FXML
     private Canvas canvas;
@@ -95,13 +95,16 @@ public class FXMLSinglePlayerViewController implements Initializable {
         //Create the game
         IPlayer p = new Player(King_of_the_Hill.context.getPlayerName(), 10);
 
-        GameManager gm = null;
-        try {
-            gm = new GameManager();
-        } catch (RemoteException ex) {
-            Logger.getLogger(FXMLSinglePlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        // Welcome message
+        System.out.println("CLIENT USING REGISTRY");
+
+        // Get ip address of server
+        Scanner input = new Scanner(System.in);
+        System.out.print("Client: Enter IP address of server: ");
+        String ipAddress = input.nextLine();
+
+        ClientManager cm = new ClientManager(ipAddress);
+        gm = cm.getGameManager();
         try {
             gm.addPlayer(p);
             AI ai1 = new AI("ArtificialIntelligence1");
@@ -114,7 +117,13 @@ public class FXMLSinglePlayerViewController implements Initializable {
             ai3.setAIType(AIState.AGRESSIVE);
             gm.addPlayer(ai3);
         } catch (RemoteException ex) {
-            Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            getGameInfo();
+        } catch (RemoteException ex) {
+            Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         isMouseOnCanvas = false;
@@ -175,7 +184,7 @@ public class FXMLSinglePlayerViewController implements Initializable {
                 try {
                     getGameInfo();
                 } catch (RemoteException ex) {
-                    Logger.getLogger(FXMLSinglePlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 drawBackground();
                 drawField();

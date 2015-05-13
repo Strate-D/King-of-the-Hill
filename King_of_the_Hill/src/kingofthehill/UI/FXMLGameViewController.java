@@ -95,16 +95,13 @@ public class FXMLGameViewController implements Initializable {
         //Create the game
         IPlayer p = new Player(King_of_the_Hill.context.getPlayerName(), 10);
 
-        // Welcome message
-        System.out.println("CLIENT USING REGISTRY");
-
-        // Get ip address of server
-        Scanner input = new Scanner(System.in);
-        System.out.print("Client: Enter IP address of server: ");
-        String ipAddress = input.nextLine();
-
-        ClientManager cm = new ClientManager(ipAddress);
-        gm = cm.getGameManager();
+        gm = null;
+        try {
+            gm = new GameManager();
+        } catch (RemoteException ex) {
+            Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         try {
             gm.addPlayer(p);
             AI ai1 = new AI("ArtificialIntelligence1");
@@ -117,9 +114,9 @@ public class FXMLGameViewController implements Initializable {
             ai3.setAIType(AIState.AGRESSIVE);
             gm.addPlayer(ai3);
         } catch (RemoteException ex) {
-            Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         try {
             getGameInfo();
         } catch (RemoteException ex) {
