@@ -5,27 +5,18 @@ import kingofthehill.domain.*;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import kingofthehill.upgradeinfo.UpgradeInfo;
 
 /**
- * Class that manages the game. Contains all the units and objects that are part
- * of it.
+ * Class that manages the rmi connection of the client
  *
  * @author Jur
  */
 public class ClientManager{
     private IGameManager gm;
     private Registry registry = null;
-    private int portNumber = 9999;
+    private final int portNumber = 9999;
     private static final String bindingName = "GameInfo";
-    private String ipAddress;
+    private final String ipAddress;
 
     /**
      * Gets gamemanager object from registery
@@ -35,6 +26,10 @@ public class ClientManager{
         this.ipAddress = ipAddress;
     }
     
+    /**
+     * Tries to locate registery and bind the gamemanager
+     * @return true if the registery is located and the gamemanager is bound, else false
+     */
     public boolean locate(){
         /**
          * Print IP address and port number for registry
@@ -67,34 +62,47 @@ public class ClientManager{
         }
         
         /**
-         * Bind student administration using registry
+         * Bind gamemanager using registry
          */
         if (registry != null) {
             try {
                 gm = (IGameManager) registry.lookup(bindingName);
             } catch (RemoteException ex) {
-                System.out.println("Client: Cannot bind student administration");
+                System.out.println("Client: Cannot bind gamemanager");
                 System.out.println("Client: RemoteException: " + ex.getMessage());
                 gm = null;
             } catch (NotBoundException ex) {
-                System.out.println("Client: Cannot bind student administration");
+                System.out.println("Client: Cannot bind gamemanager");
                 System.out.println("Client: NotBoundException: " + ex.getMessage());
                 gm = null;
             }
         }
         
         /**
-         * Print result binding student administration
+         * Print result binding gamemanager
          */
         if (gm != null) {
-            System.out.println("Client: Student administration bound");
+            System.out.println("Client: Gamemanager bound");
         } else {
-            System.out.println("Client: Student administration is null pointer");
+            System.out.println("Client: Gamemanager is null pointer");
+            return false;
         }
         
         return true;
     }
     
+    /**
+     * Gets the url of the server
+     * @return string with the url of the server
+     */
+    public String getServerUrl(){
+        return ipAddress;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
     public IGameManager getGameManager(){
         return this.gm;
     }

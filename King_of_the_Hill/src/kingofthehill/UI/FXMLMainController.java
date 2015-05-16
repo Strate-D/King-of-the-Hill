@@ -42,7 +42,7 @@ public class FXMLMainController implements Initializable {
     private PasswordField playerPassword;
 
     @FXML
-    private TextField serverIp;
+    private TextField serverUrl;
 
     /**
      * Initializes the controller class.
@@ -55,6 +55,7 @@ public class FXMLMainController implements Initializable {
         //Collect garbage
         System.gc();
         playerName.setText(King_of_the_Hill.context.getPlayerName());
+        serverUrl.setText(King_of_the_Hill.context.getServerUrl());
         errorLabel.setVisible(false);
     }
 
@@ -86,9 +87,10 @@ public class FXMLMainController implements Initializable {
 
         String password = AES.encrypt(playerPassword.getText());
 
-        ClientManager cm = new ClientManager(serverIp.getText());
+        ClientManager cm = new ClientManager(serverUrl.getText());
 
         if (cm.locate()) {
+            King_of_the_Hill.context.setServerUrl(cm.getServerUrl());
             if((AES.decrypt(password).equals("henk"))){
             try {
                 Parent window1;

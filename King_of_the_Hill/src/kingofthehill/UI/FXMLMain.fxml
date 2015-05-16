@@ -43,14 +43,14 @@
             <Font size="24.0" />
          </font>
       </PasswordField>
-      <TextField fx:id="serverIp" layoutX="648.0" layoutY="414.0" prefHeight="51.0" prefWidth="466.0" promptText="Enter server ip">
+      <TextField fx:id="serverUrl" layoutX="648.0" layoutY="414.0" prefHeight="51.0" prefWidth="466.0" promptText="Enter server ip">
          <font>
             <Font size="24.0" />
          </font>
       </TextField>
-      <Label fx:id="errorLabel" layoutX="476.0" layoutY="107.0" text="Label" textFill="#ff0808">
+      <Label fx:id="errorLabel" layoutX="648.0" layoutY="243.0" text="Label" textFill="#ff0808">
          <font>
-            <Font size="86.0" />
+            <Font size="36.0" />
          </font>
       </Label>
    </children>

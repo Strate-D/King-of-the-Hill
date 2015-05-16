@@ -10,7 +10,6 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
@@ -29,7 +28,6 @@ import javafx.scene.text.FontWeight;
 import kingofthehill.client.ClientManager;
 import kingofthehill.domain.AI;
 import kingofthehill.domain.AIState;
-import kingofthehill.domain.GameManager;
 import kingofthehill.rmimultiplayer.IGameInfo;
 import kingofthehill.domain.IGameManager;
 import kingofthehill.domain.IPlayer;
@@ -99,9 +97,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
         System.out.println("CLIENT USING REGISTRY");
 
         // Get ip address of server
-        Scanner input = new Scanner(System.in);
-        System.out.print("Client: Enter IP address of server: ");
-        String ipAddress = input.nextLine();
+        String ipAddress = King_of_the_Hill.context.getServerUrl();
 
         ClientManager cm = new ClientManager(ipAddress);
 
