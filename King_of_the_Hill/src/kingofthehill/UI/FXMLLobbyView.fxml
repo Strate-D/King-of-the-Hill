@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="pane" fx:id="content" prefHeight="1080.0" prefWidth="1920.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kingofthehill.UI.FXMLMainController">
+    <stylesheets>
+        <URL value="@../../../Documents/GitHub/King-of-the-Hill/King_of_the_Hill/src/kingofthehill/UI/fxmlmain.css" />
+    </stylesheets>
+   <children>
+      <Button id="button" layoutX="1392.0" layoutY="973.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="475.0" text="Ready" textFill="#ffcc00">
+         <font>
+            <Font size="45.0" />
+         </font></Button>
+      <Button id="button" layoutX="396.0" layoutY="813.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="475.0" text="Reply" textFill="#ffcc00">
+         <font>
+            <Font size="45.0" />
+         </font>
+      </Button>
+      <Button id="button" layoutX="897.0" layoutY="976.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="475.0" text="Leave lobby" textFill="#ffcc00">
+         <font>
+            <Font size="45.0" />
+         </font>
+      </Button>
+      <ListView layoutX="17.0" layoutY="16.0" prefHeight="728.0" prefWidth="852.0" />
+      <TextField layoutX="15.0" layoutY="754.0" prefHeight="50.0" prefWidth="854.0" />
+      <Pane layoutX="972.0" layoutY="18.0" prefHeight="783.0" prefWidth="941.0" style="-fx-background-color: lightgrey;">
+         <children>
+            <Label layoutX="33.0" layoutY="68.0" text="Lobby eigenaar:">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="210.0" layoutY="68.0" text="Label">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="33.0" layoutY="95.0" text="Player 2:">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="210.0" layoutY="95.0" text="Label">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="209.0" layoutY="127.0" text="Label">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="32.0" layoutY="127.0" text="Player 3:">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
