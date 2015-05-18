@@ -29,6 +29,12 @@ public class RMIserver {
     private IGameManager gameManager = null;
     
     public RMIserver() {
+        // Welcome message
+        System.out.println("SERVER USING REGISTRY");
+        
+        // Print IP addresses and network interfaces
+        printIPAddresses();
+        
         // Print port number for registry
         System.out.println("Server: Port number " + portNumber);
         
@@ -59,10 +65,23 @@ public class RMIserver {
             System.out.println("Server: Cannot bind student administration");
             System.out.println("Server: RemoteException: " + ex.getMessage());
         }
+        
+        // Start an AudioServer for chatting
+        try
+        {
+            VoiceServer as = new VoiceServer(9090);
+            as.start();
+            System.out.println("Server: Audio server started");
+        }
+        catch (Exception ex)
+        {
+            System.out.println("Server: Cannot start the audio server");
+            System.out.println("Server: Exception: " + ex.getMessage());
+        }
     }
     
     // Print IP addresses and network interfaces
-    private static void printIPAddresses() {
+    private void printIPAddresses() {
         try {
             InetAddress localhost = InetAddress.getLocalHost();
             System.out.println("Server: IP Address: " + localhost.getHostAddress());
@@ -84,13 +103,6 @@ public class RMIserver {
     * @param args the command line arguments
     */
     public static void main(String[] args) {
-
-        // Welcome message
-        System.out.println("SERVER USING REGISTRY");
-
-        // Print IP addresses and network interfaces
-        printIPAddresses();
-
         // Create server
         RMIserver server = new RMIserver();
     }

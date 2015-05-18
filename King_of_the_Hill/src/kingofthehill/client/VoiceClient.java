@@ -29,25 +29,33 @@ public class VoiceClient {
 
     private AudioPlayer audioPlayer;
     private AudioCapture audioCapturer;
+    
+    private String ip;
+    private int port;
+    private String nickname;
 
     private int clientID = -1;
 
-    public VoiceClient() {
+    public VoiceClient(String ip, int port, String nickname) {
         audioPlayer = new AudioPlayer();
         audioCapturer = new AudioCapture(this);
+        
+        this.ip = ip;
+        this.port = port;
+        this.nickname = nickname;
     }
 
     public void start() throws IOException {
-        Scanner input = new Scanner(System.in);
-        System.out.print("Client: Enter IP address of server: ");
-        String serverAddress = input.nextLine();
+        //Scanner input = new Scanner(System.in);
+        //System.out.print("Client: Enter IP address of server: ");
+        String serverAddress = ip; //= input.nextLine();
 
-        socket = new Socket(serverAddress, 9090);
+        socket = new Socket(serverAddress, port);
         sender = new ObjectOutputStream(this.socket.getOutputStream());
         reader = new ObjectInputStream(this.socket.getInputStream());
 
-        System.out.print("Client: Enter a nickname for the chat: ");
-        String name = input.nextLine();
+        //System.out.print("Client: Enter a nickname for the chat: ");
+        String name = this.nickname; //= input.nextLine();
         if (name.equals("")) {
             name = "Ballenzuiger";
         }

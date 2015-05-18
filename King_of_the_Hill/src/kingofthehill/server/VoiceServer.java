@@ -24,15 +24,19 @@ public class VoiceServer {
 
     private final List<Client> connectedClients;
     public static List<Message> lastMessages;
+    
+    private int portNumber = 9090;
 
-    public VoiceServer() {
+    public VoiceServer(int portnumber) {
         this.connectedClients = new ArrayList<>();
         VoiceServer.lastMessages = new ArrayList<>();
+        
+        this.portNumber = portnumber;
     }
 
     public void start() {
-        try (ServerSocket listener = new ServerSocket(9090)) {
-            writeMessage("Server is online on IP: " + listener.getInetAddress());
+        Thread t = new Thread(() -> {
+        try (ServerSocket listener = new ServerSocket(portNumber)) {
 
             while (true) {
                 System.out.println("Waiting for clients to connect...");
@@ -60,6 +64,8 @@ public class VoiceServer {
         } catch (InterruptedException | IOException ex) {
             Logger.getLogger(VoiceServer.class.getName()).log(Level.SEVERE, null, ex);
         }
+        });
+        t.start();
     }
 
     public void writeMessage(String message) {

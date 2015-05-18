@@ -101,7 +101,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
 
         ClientManager cm = new ClientManager(ipAddress);
 
-        if (cm.locate()) {
+        if (cm.locate(true)) {
             gm = cm.getGameManager();
             try {
                 gm.addPlayer(p);

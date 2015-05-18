@@ -89,7 +89,7 @@ public class FXMLMainController implements Initializable {
 
         ClientManager cm = new ClientManager(serverUrl.getText());
 
-        if (cm.locate()) {
+        if (cm.locate(false)) {
             King_of_the_Hill.context.setServerUrl(cm.getServerUrl());
             if((AES.decrypt(password).equals("henk"))){
             try {
