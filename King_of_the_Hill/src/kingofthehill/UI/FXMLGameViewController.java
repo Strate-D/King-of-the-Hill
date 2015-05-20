@@ -142,7 +142,7 @@ public class FXMLGameViewController implements Initializable {
         buttonDefence = new Image("kingofthehill/UI/field/button-defence.png");
         buttonResource = new Image("kingofthehill/UI/field/button-munnie.png");
         mysterybox = new Image("kingofthehill/UI/field/mysterybox.png");
-        resource = new Image("kingofthehill/UI/field/mysterybox.png");
+        resource = new Image("kingofthehill/UI/Units/Resource/house.png");
         //Draw field
         drawBackground();
         drawField();
