@@ -14,9 +14,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import kingofthehill.UI.FXMLLobbyViewController;
 
 /**
@@ -42,7 +39,7 @@ public class VoiceClient {
     private int clientID = -1;
 
     public VoiceClient(String ip, int port, String nickname) {
-        audioPlayer = new AudioPlayer();
+        audioPlayer = new AudioPlayer(this);
         audioCapturer = new AudioCapture(this);
 
         this.ip = ip;
@@ -70,11 +67,10 @@ public class VoiceClient {
         try {
             audioPlayer.play();
         } catch (Exception ex) {
-            Logger.getLogger(VoiceClient.class.getName()).log(Level.SEVERE, null, ex);
+            this.printMessage(ex.getMessage());
         }
 
         startMessageReader();
-        //startMessageWriter();
 
         sender.writeObject(new InfoMessage(name, "CLIENT_NAME"));
 
@@ -95,24 +91,24 @@ public class VoiceClient {
                     InfoMessage mess = (InfoMessage) object;
                     if (mess.getDefine().equals("CLIENT_ID")) {
                         this.clientID = (int) mess.getData();
-                        System.out.print("\r<< ClientID received from server >>\n>");
+                        this.printMessage("<< ClientID received from server >>");
                         try {
                             sender.writeObject(new InfoMessage(this.clientID, "GET_LAST_MESSAGES"));
                         } catch (IOException ex) {
                         }
                         continue;
                     } else if (mess.getDefine().equals("KICK")) {
-                        System.out.print("\r<< The host kicked you >>\n>");
+                        this.printMessage("<< The host kicked you >>");
                         break;
                     } else if (mess.getDefine().equals("SEND_LAST_MESSAGES")) {
-                        System.out.print("\r<< Printing previous messages from server >>\n");
+                        this.printMessage("<< Printing previous messages from server >>");
                         for (Message m : (List<Message>) mess.getData()) {
                             try {
-                                this.parent.printMessage(
+                                this.printMessage(
                                         (m.getTime() == null ? "never" : m.getTime()) + ": "
                                         + m.getSenderName() + " says: " + m.getData());
                             } catch (Exception ex) {
-                                System.out.println(ex.getMessage());
+                                this.printMessage(ex.getMessage());
                             }
                         }
                         continue;
@@ -124,16 +120,17 @@ public class VoiceClient {
                 }
 
                 if (this.parent != null) {
-                    this.parent.printMessage(object.getTime() + ": " + object.getSenderName() + " says: " + object.getData());
+                    this.printMessage(object.getTime() + ": " + object.getSenderName() + " says: " + object.getData());
                 }
-                System.out.print("\r" + object.getTime() + ": " + object.getSenderName() + " says: ");
-                System.out.println(object.getData());
-                System.out.print(">");
+//                System.out.print("\r" + object.getTime() + ": " + object.getSenderName() + " says: ");
+//                System.out.println(object.getData());
+//                System.out.print(">");
 
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(VoiceClient.class.getName()).log(Level.SEVERE, null, ex);
+                    //Logger.getLogger(VoiceClient.class.getName()).log(Level.SEVERE, null, ex);
+                    this.printMessage(ex.getMessage());
                 }
             }
 
@@ -142,43 +139,6 @@ public class VoiceClient {
             System.exit(0);
         });
         t.start();
-    }
-
-    private void startMessageWriter() {
-//        Thread t = new Thread(() -> {
-//            while (true) {
-//                try {
-//                    Scanner input = new Scanner(System.in);
-//                    String newMessage = input.nextLine();
-//
-//                    if (newMessage.startsWith("/kick ")) {
-//                        if (this.clientID == 1) {
-//                            sender.writeObject(new InfoMessage(Integer.parseInt(newMessage.replace("/kick ", "")), "KICK_CLIENT"));
-//                        } else {
-//                            System.out.println("<< You are not allowed to do that >>");
-//                        }
-//                    } else if (newMessage.startsWith("/start")) {
-//                        this.audioCapturer.startCapture();
-//                    } else if (newMessage.startsWith("/stop")) {
-//                        this.audioCapturer.stopCapture();
-//
-//                    } else {
-//                        sender.writeObject(new TextMessage(this.clientID, newMessage));
-//                    }
-//
-//                    System.out.print(">");
-//                } catch (Exception ex) {
-//                    System.out.println(ex.getMessage());
-//                }
-//
-//                try {
-//                    Thread.sleep(10);
-//                } catch (InterruptedException ex) {
-//                    Logger.getLogger(VoiceClient.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            }
-//        });
-//        t.start();
     }
 
     public void sendMessage(Message message) {
@@ -190,7 +150,7 @@ public class VoiceClient {
                     if (this.clientID == 1) {
                         sender.writeObject(new InfoMessage(Integer.parseInt(tmessage.getData().toString().replace("/kick ", "")), "KICK_CLIENT"));
                     } else {
-                        this.parent.printMessage("<< You are not allowed to do that >>");
+                        this.printMessage("<< You are not allowed to do that >>");
                     }
                     return;
                 } else if (tmessage.getData().toString().startsWith("/start")) {
@@ -223,5 +183,13 @@ public class VoiceClient {
 
     public void setParent(FXMLLobbyViewController value) {
         this.parent = value;
+    }
+    
+    void printMessage(String message)
+    {
+        if(this.parent != null)
+        {
+            this.parent.printMessage(message);
+        }
     }
 }

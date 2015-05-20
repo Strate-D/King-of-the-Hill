@@ -33,7 +33,7 @@ public class AudioCapture {
             TargetDataLine line = null;
             DataLine.Info info = new DataLine.Info(TargetDataLine.class, StaticAudioAttributes.AudioDataFormat);
             if (!AudioSystem.isLineSupported(info)) {
-                System.out.println("Something went wrong while setting up the audio format");
+                this.client.printMessage("Something went wrong while setting up the audio format");
                 return;
             }
 
@@ -41,12 +41,12 @@ public class AudioCapture {
                 line = (TargetDataLine) AudioSystem.getLine(info);
                 line.open(StaticAudioAttributes.AudioDataFormat);
             } catch (LineUnavailableException ex) {
-                System.out.println("Could not open the microphone line");
+                this.client.printMessage("Could not open the microphone line");
                 return;
             }
 
             if (line == null) {
-                System.out.println("Could not open the microphone line");
+                this.client.printMessage("Could not open the microphone line");
                 return;
             }
 
@@ -60,7 +60,7 @@ public class AudioCapture {
             int volgnummer = 0;
 
             // Here, stopped is a global boolean set by another thread.
-            System.out.println("Started recording");
+            this.client.printMessage("<< Started recording >>");
 
             while (!stopped && line.isRunning()) {
                 // Read the next chunk of data from the TargetDataLine.
@@ -79,8 +79,12 @@ public class AudioCapture {
             }
 
             client.sendMessage(new AudioMessage(client.getClientId(), "reset", volgnummer));
-            
+
             line.close();
+
+            if (stopped) {
+                this.client.printMessage("<< Audio recording stopped >>");
+            }
         });
         t.start();
     }

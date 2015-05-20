@@ -128,7 +128,7 @@ public class Client implements Serializable {
                         c.setClientDead();
                         continue;
                     } else if (mess.getDefine().equals("GET_LAST_MESSAGES")) {
-                        System.out.print("\r<< Sending previous messages to client(" + mess.getSender() + ")");
+                        System.out.println("\r<< Sending previous messages to client(" + mess.getSender() + ")");
                         Client c = getClient((int) mess.getData());
                         c.sendMessageToSingle(new InfoMessage(this.parent.getMessages(), "SEND_LAST_MESSAGES"));
                         continue;

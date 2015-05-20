@@ -44,6 +44,16 @@ public class FXMLLobbyViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ClientManager.AudioChat.setParent(this);
+        
+        try {
+            ClientManager.AudioChat.start();
+            System.out.println("VoiceChat: Voice client started");
+        } catch (Exception ex) {
+            System.out.println("VoiceChat: Cannot start voice client");
+            System.out.println("VoiceChat: Exception: " + ex.getMessage());
+            return;
+        }
+        
         messages = FXCollections.observableArrayList();
         messagesOutput.setItems(messages);
 
