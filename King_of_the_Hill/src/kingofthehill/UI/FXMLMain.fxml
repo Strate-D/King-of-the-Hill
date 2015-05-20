@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.net.*?>
@@ -13,19 +14,44 @@
         <URL value="@fxmlmain.css" />
     </stylesheets>
    <children>
-      <Button id="button" layoutX="642.0" layoutY="590.0" mnemonicParsing="false" onAction="#handlePlayButton" prefHeight="100.0" prefWidth="475.0" text="Play!" textFill="#ffcc00">
+      <Button id="button" layoutX="643.0" layoutY="474.0" mnemonicParsing="false" onAction="#handleLoginButton" prefHeight="100.0" prefWidth="475.0" text="Login" textFill="#ffcc00">
          <font>
             <Font size="45.0" />
          </font></Button>
-      <Button id="button" layoutX="642.0" layoutY="750.0" mnemonicParsing="false" onAction="#handleQuitButton" prefHeight="100.0" prefWidth="475.0" text="Quit" textFill="#ffcc00">
+      <Button id="button" layoutX="643.0" layoutY="816.0" mnemonicParsing="false" onAction="#handleQuitButton" prefHeight="100.0" prefWidth="475.0" text="Quit" textFill="#ffcc00">
          <font>
             <Font size="45.0" />
          </font>
       </Button>
-      <TextField fx:id="playerName" layoutX="645.0" layoutY="515.0" prefHeight="51.0" prefWidth="466.0" promptText="Enter your name" text="Player 1">
+      <TextField fx:id="playerName" layoutX="648.0" layoutY="298.0" prefHeight="51.0" prefWidth="466.0" promptText="Enter your username">
          <font>
             <Font size="24.0" />
          </font>
       </TextField>
+      <Button id="button" layoutX="643.0" layoutY="592.0" mnemonicParsing="false" onAction="#handlePlayButton" prefHeight="100.0" prefWidth="475.0" text="Play!" textFill="#ffcc00">
+         <font>
+            <Font size="45.0" />
+         </font>
+      </Button>
+      <Button id="button" layoutX="643.0" layoutY="704.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="475.0" text="Highscores" textFill="#ffcc00">
+         <font>
+            <Font size="45.0" />
+         </font>
+      </Button>
+      <PasswordField fx:id="playerPassword" layoutX="648.0" layoutY="356.0" prefHeight="51.0" prefWidth="466.0" promptText="Enter your password">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </PasswordField>
+      <TextField fx:id="serverUrl" layoutX="648.0" layoutY="414.0" prefHeight="51.0" prefWidth="466.0" promptText="Enter server ip">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </TextField>
+      <Label fx:id="errorLabel" layoutX="648.0" layoutY="243.0" text="Label" textFill="#ff0808">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

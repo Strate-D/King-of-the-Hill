@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="pane" prefHeight="1080.0" prefWidth="1920.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kingofthehill.UI.FXMLMultiPlayerViewController">
+    <stylesheets>
+        <URL value="@fxmlgameview.css" />
+    </stylesheets>
+   <children>
+      <Button id="button-small" layoutX="1850.0" mnemonicParsing="false" onAction="#handleQuitButton" prefHeight="70.0" prefWidth="70.0" text="X" textFill="#ffcc00">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Button>
+      <Canvas fx:id="canvas" height="900.0" layoutX="510.0" layoutY="90.0" onMouseClicked="#handleMouseClick" onMouseExited="#handleMouseOffCanvas" onMouseMoved="#handleMouseOver" width="900.0" />
+   </children>
+</AnchorPane>

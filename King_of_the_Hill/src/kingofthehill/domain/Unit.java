@@ -3,12 +3,15 @@
  */
 
 package kingofthehill.domain;
+
+import java.io.Serializable;
+
 /**
 * Abstract class as template for all units
 *
 * @author Jur
 */
-public abstract class Unit {
+public abstract class Unit implements Serializable{
     private int health;
     private int attack;
     private int armor;
@@ -307,5 +310,9 @@ public abstract class Unit {
         } else {
             this.position = newPos;
         }
+    }
+    
+    public UnitType getType() {
+        return this.type;
     }
 }

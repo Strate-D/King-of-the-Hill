@@ -3,6 +3,7 @@
  */
 package kingofthehill.domain;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Random;
  *
  * @author Jur
  */
-public class Mysterybox {
+public class Mysterybox implements Serializable {
 
     private int resourceAmount;
     private Upgrade upgrade;
@@ -63,7 +64,7 @@ public class Mysterybox {
      * @param bidder player that bids on the mysterybox
      * @param bid amount of gold the bidder bid on the mysterybox
      */
-    public void Bid(IPlayer bidder, int bid) {
+    public void bid(IPlayer bidder, int bid) {
         if (bidder != null) {
             if (bid > highestBid && highestBidder != bidder && bidder.getMoney() > bid) {
                 /**

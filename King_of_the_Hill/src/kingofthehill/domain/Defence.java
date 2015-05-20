@@ -3,13 +3,14 @@
  */
 package kingofthehill.domain;
 
+import java.io.Serializable;
+
 /**
  * Class containing all the info about a Defencive unit. Extends Unit.
  *
  * @author Jur
  */
-public class Defence extends Unit {
-
+public class Defence extends Unit implements Serializable{
     /**
      * Creates a new defensive unit with the given parameters. Unit has to be
      * set to a lane or base manually!

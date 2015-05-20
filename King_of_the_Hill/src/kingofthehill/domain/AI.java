@@ -3,6 +3,7 @@
  */
 package kingofthehill.domain;
 
+import java.io.Serializable;
 import static java.lang.System.gc;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +18,7 @@ import kingofthehill.unitinfo.UnitsToSpawn;
  *
  * @author Jur
  */
-public class AI implements IPlayer {
+public class AI implements IPlayer, Serializable {
 
     private String name;
     private int exp;
@@ -845,7 +846,22 @@ public class AI implements IPlayer {
          */
         double chance = getNextRandom(0, 1000) / 10;
         if (chance < 30) {
-            gm.getMysterybox().Bid(this, gm.getMysterybox().getHighestBid() + getNextRandom(0, 5));
+            gm.getMysterybox().bid(this, gm.getMysterybox().getHighestBid() + getNextRandom(0, 5));
         }
+    }
+
+    @Override
+    public int getConnectionTimer() {
+        return -1;
+    }
+
+    @Override
+    public void resetConnectionTimer() {
+        //Do nothing
+    }
+
+    @Override
+    public void lowerConnectionTimer() {
+        //Do nothing
     }
 }

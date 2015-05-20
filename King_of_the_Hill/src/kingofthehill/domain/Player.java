@@ -3,6 +3,7 @@
  */
 package kingofthehill.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  * 
  * @author Jur
  */
-public class Player implements IPlayer{
+public class Player implements IPlayer, Serializable{
     
     private String name;
     private int exp;
@@ -21,6 +22,7 @@ public class Player implements IPlayer{
     private Team team;
     private int money;
     private Base base;
+    private int connectionTimer;
     
     /**
      * Creates a new player object
@@ -38,6 +40,7 @@ public class Player implements IPlayer{
         this.team = null;
         this.money = 100;
         this.base = null;
+        this.connectionTimer = 600;
     }
 
     @Override
@@ -125,6 +128,23 @@ public class Player implements IPlayer{
     @Override
     public void addPoints(int points) {
         this.score += points;
+    }
+
+    @Override
+    public int getConnectionTimer() {
+        return this.connectionTimer;
+    }
+
+    @Override
+    public void resetConnectionTimer() {
+        this.connectionTimer = 600;
+    }
+
+    @Override
+    public void lowerConnectionTimer() {
+        if(this.connectionTimer > 0) {
+            this.connectionTimer--;
+        }
     }
     
 }

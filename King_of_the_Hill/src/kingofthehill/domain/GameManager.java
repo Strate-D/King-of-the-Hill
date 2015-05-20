@@ -3,11 +3,17 @@
  */
 package kingofthehill.domain;
 
+import kingofthehill.rmimultiplayer.IGameInfo;
+import kingofthehill.rmimultiplayer.GameInfo;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import kingofthehill.unitinfo.UnitInfo;
 import kingofthehill.upgradeinfo.UpgradeInfo;
 
 /**
@@ -16,43 +22,53 @@ import kingofthehill.upgradeinfo.UpgradeInfo;
  *
  * @author Jur
  */
-public class GameManager {
+public class GameManager extends UnicastRemoteObject implements IGameManager{
 
     private List<IPlayer> players;
     private Mysterybox mysterybox;
-    private GameMode gameMode;
     private int resourceTimer;
     private int mysteryboxTimer;
     private int mysteryboxTime;
     private Random mysteryboxRandom;
+    private GameInfo gameInfo;
+    private Timer timer;
 
     private boolean DebugLevelAI = false;
 
     /**
      * Creates a new gameManager, also creating a new game with it.
-     * @param player The player that is playing may not be null.
+     * @throws java.rmi.RemoteException
      */
-    public GameManager(IPlayer player) {
+    public GameManager() throws RemoteException{
         /**
          * Set resourceTimer to 0
          */
-        resourceTimer = 0;
-
-        if (player == null) {
-            throw new IllegalArgumentException("Player may not be null");
-        }
-        /**
-         * Add players
-         */
         this.players = new ArrayList<>();
-        this.players.add(player);
-        this.players.add(new AI("ArtificialIntelligence1"));
-        ((AI)(this.players.get(1))).setAIType(AIState.DEFENSIVE);
-        //((AI)(this.players.get(1))).setRandomSeed(1524625152);
-        this.players.add(new AI("ArtificialIntelligence2"));
-        ((AI)(this.players.get(2))).setAIType(AIState.MODERNATE);
-        this.players.add(new AI("ArtificialIntelligence3"));
-        ((AI)(this.players.get(3))).setAIType(AIState.AGRESSIVE);
+        this.resourceTimer = 0;
+        this.mysteryboxTimer = 0;
+        this.mysteryboxTime = 0;
+    }
+    
+    /**
+     * Add player to game
+     * @param player player to add to the game
+     * @throws java.rmi.RemoteException
+     */
+    @Override
+    public void addPlayer(IPlayer player) throws RemoteException{
+        if (player != null) {
+            this.players.add(player);
+        }
+        
+        if(players.size() > 3){
+            startGame();
+        }
+    }
+    
+    /**
+     * Start game when there are a total of 4 players
+     */
+    private void startGame(){
         /**
          * Create teams
          */
@@ -109,6 +125,25 @@ public class GameManager {
          */
         mysteryboxRandom = new Random();
         mysteryboxTime = mysteryboxRandom.nextInt(1800) + 1800;
+        
+        /**
+         * Create new GameInfo object and set the info for the first time;
+         */
+        gameInfo = new GameInfo();
+        gameInfo.setInfo(players, mysterybox, resourceTimer, mysteryboxTimer, mysteryboxTime);
+        
+        /**
+         * Create and schedule timer for dostep method
+         */
+        timer = new Timer();
+        timer.schedule(new GameLoop(), 0, 1000 / 60);
+    }
+    
+    private class GameLoop extends java.util.TimerTask{
+        @Override
+        public void run() {
+            doStep();
+        } 
     }
 
     /**
@@ -281,9 +316,20 @@ public class GameManager {
     }
 
     /**
-     * Does a step in the game (1/30 of a second).
+     * Does a step in the game (1/60 of a second).
      */
-    public void doStep() {
+    private void doStep() {
+        //Create game info for clients
+        gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
+        
+        //Check player connections
+        for(IPlayer p : this.players) {
+            p.lowerConnectionTimer();
+            if(p.getConnectionTimer() == 0) {
+                //replace player with si
+            }
+        }
+           
         /**
          * Check if players should get resources.
          */
@@ -403,7 +449,51 @@ public class GameManager {
         }
         return false;
     }
-
+    
+    /**
+     * 
+     * @param name
+     * @return 
+     */
+    private IPlayer getPlayer(String name){
+        for(IPlayer p : players){
+            if(p.getName().equals(name)){
+                return p;
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 
+     * @param playername
+     * @param unit
+     * @param index
+     * @param cost
+     * @return 
+     */
+    @Override
+    public boolean placeUnitAtBaseMulti(String playername, Unit unit, int index, int cost) {
+        IPlayer player = getPlayer(playername);
+        Unit unitNew = null;
+        
+        //Check unittype
+        switch(unit.getType()){
+            case MELEE:
+                unitNew =  UnitInfo.getMeleeUnit(player).getUnit();
+                break;
+            case RANGED:
+                unitNew = UnitInfo.getRangedUnit(player).getUnit();
+                break;
+            case DEFENCE:
+                unitNew = UnitInfo.getDefenceUnit(player).getUnit();
+                break;
+        }
+        
+        return placeUnitAtBase(getPlayer(playername), unitNew, index, cost);
+    }
+    
     /**
      * Adds a defencive unit to the base on the given place.
      * @param player The player that places the unit, may not be null.
@@ -414,6 +504,7 @@ public class GameManager {
      * @param cost The cost of the unit, must be higher than 0.
      * @return true if unit is placed at base, else false
      */
+    @Override
     public boolean placeUnitAtBase(IPlayer player, Unit unit, int index, int cost) {
         /**
          * Check input
@@ -459,5 +550,19 @@ public class GameManager {
     public Mysterybox getMysterybox()
     {
         return this.mysterybox;
+    }
+    
+    @Override
+    public void bidMysteryboxMulti(String playername, int bid){
+        IPlayer player = getPlayer(playername);
+        
+        if(mysterybox != null && player != null){
+            mysterybox.bid(player, bid);
+        }
+    }
+
+    @Override
+    public IGameInfo getGameInfo() throws RemoteException{
+        return this.gameInfo;
     }
 }

@@ -11,8 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Object that keepss all het info about the application
@@ -34,8 +32,11 @@ class ApplicationContext {
             props.load(in);
         } catch (FileNotFoundException ex) {
             props.setProperty("name", "Player");
+            props.setProperty("url", "0.0.0.0");
+            
         } catch (IOException ex) {
             props.setProperty("name", "Player");
+            props.setProperty("url", "0.0.0.0");
         }
     }
     
@@ -86,6 +87,27 @@ class ApplicationContext {
             return;
         }
         props.setProperty("name", newName);
+        saveProps();
+    }
+    
+
+    /**
+     * Gets the url of the server from the properties
+     * @return a string containing the server url
+     */
+    public String getServerUrl() {
+        return props.getProperty("url");
+    }
+    
+    /**
+     * Sets the url of the server in the properties and saves it to the properties file
+     * @param newUrl the new url of the server, cannot be null!
+     */
+    public void setServerUrl(String newUrl) {
+        if(newUrl == null){
+            return;
+        }
+        props.setProperty("url", newUrl);
         saveProps();
     }
 }
