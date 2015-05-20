@@ -489,6 +489,9 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
             case DEFENCE:
                 unitNew = UnitInfo.getDefenceUnit(player).getUnit();
                 break;
+            case RESOURCE:
+                unitNew = UnitInfo.getResourceUnit(player).getUnit();
+                break;
         }
         
         return placeUnitAtBase(getPlayer(playername), unitNew, index, cost);
