@@ -28,15 +28,18 @@ public class Client implements Serializable {
     private List<Client> knownClients;
     private int clientID;
     private String name;
-    private boolean isAlive = true;
+    private boolean isAlive;
+    private VoiceServer parent;
 
     private static int clientCounter = 0;
 
-    public Client(Socket socket, List<Client> knownClients) {
+    public Client(Socket socket, List<Client> knownClients, VoiceServer parent) {
         this.socket = socket;
         clientCounter += 1;
         this.clientID = clientCounter;
         this.knownClients = new ArrayList<>(knownClients);
+        this.parent = parent;
+        this.isAlive = true;
 
         try {
             sender = new ObjectOutputStream(this.socket.getOutputStream());
@@ -83,7 +86,7 @@ public class Client implements Serializable {
         for (Client c : knownClients) {
             if (message.getSender() == c.clientID) {
                 if (!c.isAlive) {
-                    return;
+                    continue;
                 }
                 message.setSenderName(c.name);
                 break;
@@ -104,10 +107,7 @@ public class Client implements Serializable {
 
     private void startMessageReader() {
         Thread t = new Thread(() -> {
-            while (true) {
-                if (!isAlive) {
-                    break;
-                }
+            while (isAlive) {
 
                 Message object = null;
                 try {
@@ -156,9 +156,13 @@ public class Client implements Serializable {
         });
         t.start();
     }
+    
+    
 
     private void setClientDead() {
         this.isAlive = false;
+        this.parent.removeClient(this);
+        
     }
 
     private Client getClient(int id) {
@@ -176,5 +180,10 @@ public class Client implements Serializable {
         }
 
         return null;
+    }
+    
+    public void removeClient(Client toRemove)
+    {
+        this.knownClients.remove(toRemove);
     }
 }
