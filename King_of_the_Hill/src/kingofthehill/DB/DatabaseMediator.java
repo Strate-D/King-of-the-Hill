@@ -37,7 +37,6 @@ public class DatabaseMediator {
     String password = "proftaak";
 
     public DatabaseMediator() {
-        connect();
     }
 
     /**
@@ -59,6 +58,7 @@ public class DatabaseMediator {
      * @return True if logged in
      */
     public boolean dBLogin(String username, String password) {
+        connect();
         try {
             if (getPlayer(username, password) != null) {
                 return true;
@@ -94,6 +94,7 @@ public class DatabaseMediator {
      * @throws SQLException 
      */
     public void changeScore(String name, int score) throws SQLException {
+        connect();
         PreparedStatement pst1 = con.prepareStatement("SELECT score FROM Player WHERE name = " + name);
         rs = pst1.executeQuery();
         
@@ -108,6 +109,7 @@ public class DatabaseMediator {
      * @throws SQLException 
      */
     public int getScore(String name) throws SQLException {
+        connect();
         PreparedStatement pst = con.prepareStatement("SELECT score FROM Player WHERE name = " + name);
         rs = pst.executeQuery();
         
@@ -120,6 +122,7 @@ public class DatabaseMediator {
      * @throws SQLException 
      */
     public List<IPlayer> getHighscores() throws SQLException {
+        connect();
         PreparedStatement pst = con.prepareStatement("SELECT name, score FROM Player ORDER BY score DESC limit 10");
         rs = pst.executeQuery();
         
@@ -139,6 +142,7 @@ public class DatabaseMediator {
      * @throws SQLException 
      */
     public boolean addNewPlayer(String newName, String newPassword) throws SQLException{
+        connect();
         if(getPlayer(newName, newPassword) != null) {
             return false;
         }
