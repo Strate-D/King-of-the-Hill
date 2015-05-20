@@ -48,7 +48,7 @@ public class Client implements Serializable {
         }
 
         try {
-            sender.writeObject(new InfoMessage(clientCounter, "CLIENT_ID"));
+            sender.writeObject(new InfoMessage(this.clientID, "CLIENT_ID"));
         } catch (IOException ex) {
         }
 
@@ -63,13 +63,7 @@ public class Client implements Serializable {
         return this.socket;
     }
 
-    public void sendLastMessages(List<Message> lastMessages) {
-        for (Message m : lastMessages) {
-            this.sendMessage(m);
-        }
-    }
-
-    public void sendMessage(Message message) {
+    public void sendMessageToSingle(Message message) {
         // Message contains a client id
         // replace the client id for a name
         if (message.getSender() == -10) {
@@ -117,35 +111,40 @@ public class Client implements Serializable {
                 }
 
                 SimpleDateFormat dt = new SimpleDateFormat("hh:mm:ss");
-                
-                System.out.println(dt.format(new Date()) + " Message received from " + socket.getInetAddress());
+
+                System.out.println(dt.format(new Date()) + " Message received from " + socket.getInetAddress() + " : " + object.getHeader());
 
                 if (object instanceof InfoMessage) {
                     InfoMessage mess = (InfoMessage) object;
                     if (mess.getDefine().equals("CLIENT_NAME")) {
                         System.out.print("\r<< Client(" + clientID + ") changed name from \'" + name + "\' to \'" + mess.getData() + "\' >>\n");
                         name = (String) mess.getData();
-                        sendMessage(new TextMessage(-10, "Player " + name + " joined the game"));
+                        sendMessageToSingle(new TextMessage(-10, name + " joined the game"));
                         continue;
                     } else if (mess.getDefine().equals("KICK_CLIENT")) {
                         System.out.print("\r<< Client " + mess.getData() + " will be kicked >>\n");
                         Client c = getClient((int) mess.getData());
-                        c.sendMessage(new InfoMessage(null, "KICK"));
+                        c.sendMessageToSingle(new InfoMessage(null, "KICK"));
                         c.setClientDead();
+                        continue;
+                    } else if (mess.getDefine().equals("GET_LAST_MESSAGES")) {
+                        System.out.print("\r<< Sending previous messages to client(" + mess.getSender() + ")");
+                        Client c = getClient((int) mess.getData());
+                        c.sendMessageToSingle(new InfoMessage(this.parent.getMessages(), "SEND_LAST_MESSAGES"));
                         continue;
                     }
                 } else if (object instanceof AudioMessage) {
 
                 } else {
-                    VoiceServer.lastMessages.add(object);
+                    this.parent.addMessage(object);
                 }
 
                 for (Client c : knownClients) {
-                    c.sendMessage(object);
+                    c.sendMessageToSingle(object);
                 }
                 if (object instanceof AudioMessage) {
                 } else {
-                    sendMessage(object);
+                    sendMessageToSingle(object);
                 }
 
                 try {
@@ -156,13 +155,11 @@ public class Client implements Serializable {
         });
         t.start();
     }
-    
-    
 
     private void setClientDead() {
         this.isAlive = false;
         this.parent.removeClient(this);
-        
+
     }
 
     private Client getClient(int id) {
@@ -181,9 +178,8 @@ public class Client implements Serializable {
 
         return null;
     }
-    
-    public void removeClient(Client toRemove)
-    {
+
+    public void removeClient(Client toRemove) {
         this.knownClients.remove(toRemove);
     }
 }

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,7 +74,7 @@ public class VoiceClient {
         }
 
         startMessageReader();
-        startMessageWriter();
+        //startMessageWriter();
 
         sender.writeObject(new InfoMessage(name, "CLIENT_NAME"));
 
@@ -95,10 +96,26 @@ public class VoiceClient {
                     if (mess.getDefine().equals("CLIENT_ID")) {
                         this.clientID = (int) mess.getData();
                         System.out.print("\r<< ClientID received from server >>\n>");
+                        try {
+                            sender.writeObject(new InfoMessage(this.clientID, "GET_LAST_MESSAGES"));
+                        } catch (IOException ex) {
+                        }
                         continue;
                     } else if (mess.getDefine().equals("KICK")) {
                         System.out.print("\r<< The host kicked you >>\n>");
                         break;
+                    } else if (mess.getDefine().equals("SEND_LAST_MESSAGES")) {
+                        System.out.print("\r<< Printing previous messages from server >>\n");
+                        for (Message m : (List<Message>) mess.getData()) {
+                            try {
+                                this.parent.printMessage(
+                                        (m.getTime() == null ? "never" : m.getTime()) + ": "
+                                        + m.getSenderName() + " says: " + m.getData());
+                            } catch (Exception ex) {
+                                System.out.println(ex.getMessage());
+                            }
+                        }
+                        continue;
                     }
                 } else if (object instanceof AudioMessage) {
                     //Send the audio message to the speakers
@@ -128,46 +145,46 @@ public class VoiceClient {
     }
 
     private void startMessageWriter() {
-        Thread t = new Thread(() -> {
-            while (true) {
-                try {
-                    Scanner input = new Scanner(System.in);
-                    String newMessage = input.nextLine();
-
-                    if (newMessage.startsWith("/kick ")) {
-                        if (this.clientID == 1) {
-                            sender.writeObject(new InfoMessage(Integer.parseInt(newMessage.replace("/kick ", "")), "KICK_CLIENT"));
-                        } else {
-                            System.out.println("<< You are not allowed to do that >>");
-                        }
-                    } else if (newMessage.startsWith("/start")) {
-                        this.audioCapturer.startCapture();
-                    } else if (newMessage.startsWith("/stop")) {
-                        this.audioCapturer.stopCapture();
-
-                    } else {
-                        sender.writeObject(new TextMessage(this.clientID, newMessage));
-                    }
-
-                    System.out.print(">");
-                } catch (Exception ex) {
-                    System.out.println(ex.getMessage());
-                }
-
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(VoiceClient.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-        t.start();
+//        Thread t = new Thread(() -> {
+//            while (true) {
+//                try {
+//                    Scanner input = new Scanner(System.in);
+//                    String newMessage = input.nextLine();
+//
+//                    if (newMessage.startsWith("/kick ")) {
+//                        if (this.clientID == 1) {
+//                            sender.writeObject(new InfoMessage(Integer.parseInt(newMessage.replace("/kick ", "")), "KICK_CLIENT"));
+//                        } else {
+//                            System.out.println("<< You are not allowed to do that >>");
+//                        }
+//                    } else if (newMessage.startsWith("/start")) {
+//                        this.audioCapturer.startCapture();
+//                    } else if (newMessage.startsWith("/stop")) {
+//                        this.audioCapturer.stopCapture();
+//
+//                    } else {
+//                        sender.writeObject(new TextMessage(this.clientID, newMessage));
+//                    }
+//
+//                    System.out.print(">");
+//                } catch (Exception ex) {
+//                    System.out.println(ex.getMessage());
+//                }
+//
+//                try {
+//                    Thread.sleep(10);
+//                } catch (InterruptedException ex) {
+//                    Logger.getLogger(VoiceClient.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//        });
+//        t.start();
     }
 
     public void sendMessage(Message message) {
 
         if (message instanceof TextMessage) {
-            TextMessage tmessage = (TextMessage)message;
+            TextMessage tmessage = (TextMessage) message;
             try {
                 if (tmessage.getData().toString().startsWith("/kick ")) {
                     if (this.clientID == 1) {
@@ -182,11 +199,16 @@ public class VoiceClient {
                 } else if (tmessage.getData().toString().startsWith("/stop")) {
                     this.audioCapturer.stopCapture();
                     return;
-                }
-                
+                } 
+
                 sender.writeObject(message);
             } catch (Exception ex) {
-                
+
+            }
+        } else {
+            try {
+                sender.writeObject(message);
+            } catch (IOException ex) {
             }
         }
     }

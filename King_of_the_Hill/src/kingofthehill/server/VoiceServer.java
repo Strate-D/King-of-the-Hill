@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import static java.util.Collections.unmodifiableList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,26 +24,38 @@ import java.util.logging.Logger;
 public class VoiceServer {
 
     private final List<Client> connectedClients;
-    public static List<Message> lastMessages;
+    private List<Message> lastMessages;
 
     private int portNumber = 9090;
 
     public VoiceServer(int portnumber) {
         this.connectedClients = new ArrayList<>();
-        VoiceServer.lastMessages = new ArrayList<>();
+        lastMessages = new ArrayList<>();
 
         this.portNumber = portnumber;
+    }
+    
+    public List<Message> getMessages()
+    {
+        return unmodifiableList(this.lastMessages);
+    }
+    
+    public void addMessage(Message message)
+    {
+        this.lastMessages.add(message);
     }
 
     public void start() {
         Thread t = new Thread(() -> {
             try (ServerSocket listener = new ServerSocket(portNumber)) {
 
+                //writeMessage("Server is running...");
+                
                 while (true) {
                     System.out.println("Waiting for clients to connect...");
 
                     Socket socket = listener.accept();
-                    writeMessage("Client " + socket.getInetAddress() + " connected");
+                    //writeMessage("Client " + socket.getInetAddress() + " connected");
 
                     try {
 
@@ -52,7 +65,7 @@ public class VoiceServer {
                         }
                         connectedClients.add(c);
 
-                        c.sendLastMessages(lastMessages);
+                        //c.sendLastMessages(lastMessages);
                     } catch (Exception ex) {
                     } finally {
                         //socket.close();
