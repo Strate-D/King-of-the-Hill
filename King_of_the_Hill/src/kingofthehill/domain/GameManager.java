@@ -26,7 +26,6 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
 
     private List<IPlayer> players;
     private Mysterybox mysterybox;
-    private GameMode gameMode;
     private int resourceTimer;
     private int mysteryboxTimer;
     private int mysteryboxTime;
