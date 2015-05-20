@@ -16,7 +16,6 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.ObservableList;
 import kingofthehill.UI.FXMLLobbyViewController;
 
 /**
@@ -166,10 +165,29 @@ public class VoiceClient {
     }
 
     public void sendMessage(Message message) {
-        try {
-            sender.writeObject(message);
-        } catch (IOException ex) {
-            Logger.getLogger(VoiceClient.class.getName()).log(Level.SEVERE, null, ex);
+
+        if (message instanceof TextMessage) {
+            TextMessage tmessage = (TextMessage)message;
+            try {
+                if (tmessage.getData().toString().startsWith("/kick ")) {
+                    if (this.clientID == 1) {
+                        sender.writeObject(new InfoMessage(Integer.parseInt(tmessage.getData().toString().replace("/kick ", "")), "KICK_CLIENT"));
+                    } else {
+                        this.parent.printMessage("<< You are not allowed to do that >>");
+                    }
+                    return;
+                } else if (tmessage.getData().toString().startsWith("/start")) {
+                    this.audioCapturer.startCapture();
+                    return;
+                } else if (tmessage.getData().toString().startsWith("/stop")) {
+                    this.audioCapturer.stopCapture();
+                    return;
+                }
+                
+                sender.writeObject(message);
+            } catch (Exception ex) {
+                
+            }
         }
     }
 

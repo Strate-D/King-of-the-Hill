@@ -125,6 +125,7 @@ public class Client implements Serializable {
                     if (mess.getDefine().equals("CLIENT_NAME")) {
                         System.out.print("\r<< Client(" + clientID + ") changed name from \'" + name + "\' to \'" + mess.getData() + "\' >>\n");
                         name = (String) mess.getData();
+                        sendMessage(new TextMessage(-10, "Player " + name + " joined the game"));
                         continue;
                     } else if (mess.getDefine().equals("KICK_CLIENT")) {
                         System.out.print("\r<< Client " + mess.getData() + " will be kicked >>\n");

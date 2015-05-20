@@ -43,11 +43,11 @@ public class FXMLLobbyViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //TODO: Connect the output from the server into the listview for chatting
+        ClientManager.AudioChat.setParent(this);
         messages = FXCollections.observableArrayList();
         messagesOutput.setItems(messages);
 
-        ClientManager.AudioChat.setParent(this);
+        
 
         chatInput.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent E) -> {
             switch (E.getCode()) {
