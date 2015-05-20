@@ -480,7 +480,6 @@ public class FXMLGameViewController implements Initializable {
                 mysteryboxContent = "";
             }
         } else {
-            //canvas.getGraphicsContext2D().setFill(Color.WHITE);
             canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.BOLD, 12));
             canvas.getGraphicsContext2D().fillText(mysteryboxWinner, 250, 595);
             canvas.getGraphicsContext2D().fillText(mysteryboxContent, 250, 620);

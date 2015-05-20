@@ -19,4 +19,6 @@ public interface IGameManager extends Remote{
     public void addPlayer(IPlayer player) throws RemoteException;
     
     public boolean placeUnitAtBase(IPlayer player, Unit unit, int index, int cost) throws RemoteException;
+    
+    public boolean placeUnitMultiplayer(String playername, Unit unit, int index, int cost) throws RemoteException;
 }

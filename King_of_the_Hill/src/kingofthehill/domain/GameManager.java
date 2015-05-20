@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
+import kingofthehill.unitinfo.UnitInfo;
 import kingofthehill.upgradeinfo.UpgradeInfo;
 
 /**
@@ -443,7 +444,51 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
         }
         return false;
     }
-
+    
+    /**
+     * 
+     * @param name
+     * @return 
+     */
+    private IPlayer getPlayer(String name){
+        for(IPlayer p : players){
+            if(p.getName().equals(name)){
+                return p;
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 
+     * @param playername
+     * @param unit
+     * @param index
+     * @param cost
+     * @return 
+     */
+    @Override
+    public boolean placeUnitMultiplayer(String playername, Unit unit, int index, int cost) {
+        IPlayer player = getPlayer(playername);
+        Unit unitNew = null;
+        
+        //Check unittype
+        switch(unit.getType()){
+            case MELEE:
+                unitNew =  UnitInfo.getMeleeUnit(player).getUnit();
+                break;
+            case RANGED:
+                unitNew = UnitInfo.getRangedUnit(player).getUnit();
+                break;
+            case DEFENCE:
+                unitNew = UnitInfo.getDefenceUnit(player).getUnit();
+                break;
+        }
+        
+        return placeUnitAtBase(getPlayer(playername), unitNew, index, cost);
+    }
+    
     /**
      * Adds a defencive unit to the base on the given place.
      * @param player The player that places the unit, may not be null.
@@ -454,7 +499,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
      * @param cost The cost of the unit, must be higher than 0.
      * @return true if unit is placed at base, else false
      */
-    @Override
+    //@Override
     public boolean placeUnitAtBase(IPlayer player, Unit unit, int index, int cost) {
         /**
          * Check input
