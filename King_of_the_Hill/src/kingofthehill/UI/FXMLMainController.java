@@ -91,7 +91,7 @@ public class FXMLMainController implements Initializable {
         ClientManager cm = new ClientManager(serverUrl.getText());
 
         if (cm.locate()) {
-            King_of_the_Hill.context.setServerUrl(cm.getServerUrl());
+            King_of_the_Hill.context.setServerUrl(serverUrl.getText());
             if((AES.decrypt(password).equals("henk"))){
             try {
                 ClientManager.setupAudioChat(cm.getServerUrl(), 9090, playerName.getText());
