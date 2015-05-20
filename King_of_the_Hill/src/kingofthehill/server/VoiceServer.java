@@ -24,46 +24,45 @@ public class VoiceServer {
 
     private final List<Client> connectedClients;
     public static List<Message> lastMessages;
-    
+
     private int portNumber = 9090;
 
     public VoiceServer(int portnumber) {
         this.connectedClients = new ArrayList<>();
         VoiceServer.lastMessages = new ArrayList<>();
-        
+
         this.portNumber = portnumber;
     }
 
     public void start() {
         Thread t = new Thread(() -> {
-        try (ServerSocket listener = new ServerSocket(portNumber)) {
+            try (ServerSocket listener = new ServerSocket(portNumber)) {
 
-            while (true) {
-                System.out.println("Waiting for clients to connect...");
+                while (true) {
+                    System.out.println("Waiting for clients to connect...");
 
-                Socket socket = listener.accept();
-                writeMessage("Client " + socket.getInetAddress() + " connected");
+                    Socket socket = listener.accept();
+                    writeMessage("Client " + socket.getInetAddress() + " connected");
 
-                try {
+                    try {
 
-                    Client c = new Client(socket, connectedClients);
-                    for(Client cli : connectedClients)
-                    {
-                        cli.addClient(c);
+                        Client c = new Client(socket, connectedClients, this);
+                        for (Client cli : connectedClients) {
+                            cli.addClient(c);
+                        }
+                        connectedClients.add(c);
+
+                        c.sendLastMessages(lastMessages);
+                    } catch (Exception ex) {
+                    } finally {
+                        //socket.close();
                     }
-                    connectedClients.add(c);
-                    
-                    c.sendLastMessages(lastMessages);
-                } catch (Exception ex) {
-                } finally {
-                    //socket.close();
+
+                    Thread.sleep(10);
                 }
-                
-                Thread.sleep(10);
+            } catch (InterruptedException | IOException ex) {
+                Logger.getLogger(VoiceServer.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (InterruptedException | IOException ex) {
-            Logger.getLogger(VoiceServer.class.getName()).log(Level.SEVERE, null, ex);
-        }
         });
         t.start();
     }
@@ -71,5 +70,20 @@ public class VoiceServer {
     public void writeMessage(String message) {
         System.out.println(message);
         lastMessages.add(new TextMessage(-10, message));
+    }
+
+    public void removeClient(Client toRemove) {
+        int index = -1;
+        for (int i = 0; i < connectedClients.size(); i++) {
+            if (connectedClients.get(i).equals(toRemove)) {
+                index = i;
+            } else {
+                connectedClients.get(i).removeClient(toRemove);
+            }
+        }
+
+        if (index != -1) {
+            connectedClients.remove(index);
+        }
     }
 }
