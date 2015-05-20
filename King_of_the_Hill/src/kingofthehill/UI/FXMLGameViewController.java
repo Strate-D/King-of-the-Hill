@@ -526,7 +526,7 @@ public class FXMLGameViewController implements Initializable {
         //handle mouseclick on mysterybox when mysterybox is available
         if (lastRealMousePosx >= 325 && lastRealMousePosx <= 700 && lastRealMousePosy >= 325 && lastRealMousePosy <= 700) {
             if (gameInfo.getMysterybox() != null) {
-                gameInfo.getMysterybox().Bid(gameInfo.getPlayers().get(0), gameInfo.getMysterybox().getNewHighestBid());
+                gameInfo.getMysterybox().bid(gameInfo.getPlayers().get(0), gameInfo.getMysterybox().getNewHighestBid());
             }
         }
     }

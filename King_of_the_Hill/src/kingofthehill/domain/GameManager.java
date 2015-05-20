@@ -469,7 +469,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
      * @return 
      */
     @Override
-    public boolean placeUnitMultiplayer(String playername, Unit unit, int index, int cost) {
+    public boolean placeUnitAtBaseMulti(String playername, Unit unit, int index, int cost) {
         IPlayer player = getPlayer(playername);
         Unit unitNew = null;
         
@@ -499,7 +499,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
      * @param cost The cost of the unit, must be higher than 0.
      * @return true if unit is placed at base, else false
      */
-    //@Override
+    @Override
     public boolean placeUnitAtBase(IPlayer player, Unit unit, int index, int cost) {
         /**
          * Check input
@@ -545,6 +545,15 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
     public Mysterybox getMysterybox()
     {
         return this.mysterybox;
+    }
+    
+    @Override
+    public void bidMysteryboxMulti(String playername, int bid){
+        IPlayer player = getPlayer(playername);
+        
+        if(mysterybox != null && player != null){
+            mysterybox.bid(player, bid);
+        }
     }
 
     @Override

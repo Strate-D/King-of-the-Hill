@@ -846,7 +846,7 @@ public class AI implements IPlayer, Serializable {
          */
         double chance = getNextRandom(0, 1000) / 10;
         if (chance < 30) {
-            gm.getMysterybox().Bid(this, gm.getMysterybox().getHighestBid() + getNextRandom(0, 5));
+            gm.getMysterybox().bid(this, gm.getMysterybox().getHighestBid() + getNextRandom(0, 5));
         }
     }
 

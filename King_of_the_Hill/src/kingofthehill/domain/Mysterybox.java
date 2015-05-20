@@ -64,7 +64,7 @@ public class Mysterybox implements Serializable {
      * @param bidder player that bids on the mysterybox
      * @param bid amount of gold the bidder bid on the mysterybox
      */
-    public void Bid(IPlayer bidder, int bid) {
+    public void bid(IPlayer bidder, int bid) {
         if (bidder != null) {
             if (bid > highestBid && highestBidder != bidder) {
                 /**
