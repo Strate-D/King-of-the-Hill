@@ -11,5 +11,6 @@ public enum UnitType {
     DEFENCE,
     MELEE,
     RANGED,
+    RESOURCE,
     ALL;
 }

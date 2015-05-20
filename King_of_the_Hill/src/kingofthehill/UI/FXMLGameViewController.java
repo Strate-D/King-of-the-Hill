@@ -26,6 +26,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import kingofthehill.domain.AI;
 import kingofthehill.domain.AIState;
+import kingofthehill.domain.Defence;
 import kingofthehill.domain.GameManager;
 import kingofthehill.domain.IPlayer;
 import kingofthehill.domain.Melee;
@@ -51,6 +52,7 @@ public class FXMLGameViewController implements Initializable {
     Image meleePurpleT, meleePurpleL, rangedPurpleT, rangedPurpleL;
     Image meleeRedT, meleeRedR, rangedRedT, rangedRedR;
     Image defenceSide, defenceUpDown;
+    Image resource;
     //Castle sprites
     Image castle1, castle2, castle3, castle4;
     Image castle_destroyed1, castle_destroyed2, castle_destroyed3, castle_destroyed4;
@@ -63,7 +65,7 @@ public class FXMLGameViewController implements Initializable {
     // Selector sprite and cooldown sprite
     Image selector, cooldown;
     //Button sprites
-    Image buttonMelee, buttonRanged, buttonDefence;
+    Image buttonMelee, buttonRanged, buttonDefence, buttonResource;
     //Mysterybox sprites
     Image mysterybox;
 
@@ -72,7 +74,7 @@ public class FXMLGameViewController implements Initializable {
     boolean isMouseOnCanvas;
     boolean isMouseClicked = false;
 
-    int meleeCooldown, rangedCooldown, defenceCooldown;
+    int meleeCooldown, rangedCooldown, defenceCooldown, resourceCooldown;
 
     double scrollPosX, scrollPosY, lastMousePosx, lastMousePosy, lastRealMousePosx, lastRealMousePosy;
 
@@ -138,7 +140,9 @@ public class FXMLGameViewController implements Initializable {
         buttonMelee = new Image("kingofthehill/UI/field/button-melee.png");
         buttonRanged = new Image("kingofthehill/UI/field/button-ranged.png");
         buttonDefence = new Image("kingofthehill/UI/field/button-defence.png");
+        buttonResource = new Image("kingofthehill/UI/field/button-munnie.png");
         mysterybox = new Image("kingofthehill/UI/field/mysterybox.png");
+        resource = new Image("kingofthehill/UI/field/mysterybox.png");
         //Draw field
         drawBackground();
         drawField();
@@ -216,6 +220,9 @@ public class FXMLGameViewController implements Initializable {
                 }
                 if (defenceCooldown > 0) {
                     defenceCooldown--;
+                }
+                if (resourceCooldown > 0) {
+                    resourceCooldown--;
                 }
             }
 
@@ -371,7 +378,8 @@ public class FXMLGameViewController implements Initializable {
         //Draw buttons for player
         canvas.getGraphicsContext2D().drawImage(buttonMelee, 55, 105, 30, 30);
         canvas.getGraphicsContext2D().drawImage(buttonRanged, 90, 105, 30, 30);
-        canvas.getGraphicsContext2D().drawImage(buttonDefence, 125, 105, 30, 30);
+        canvas.getGraphicsContext2D().drawImage(buttonDefence, 125, 90, 30, 30);
+        canvas.getGraphicsContext2D().drawImage(buttonResource, 125, 125, 30, 30);
 
         //Draw selector for buttons
         //Melee button
@@ -386,8 +394,13 @@ public class FXMLGameViewController implements Initializable {
         }
         //Defence button
         if (lastRealMousePosx >= 125 && lastRealMousePosx <= 155
-                && lastRealMousePosy >= 105 && lastRealMousePosy <= 135 && rangedCooldown <= 0) {
-            canvas.getGraphicsContext2D().drawImage(selector, 125, 105, 30, 30);
+                && lastRealMousePosy >= 90 && lastRealMousePosy <= 120 && defenceCooldown <= 0) {
+            canvas.getGraphicsContext2D().drawImage(selector, 125, 90, 30, 30);
+        }
+        //Resource button
+        if (lastRealMousePosx >= 125 && lastRealMousePosx <= 155
+                && lastRealMousePosy >= 125 && lastRealMousePosy <= 155 && resourceCooldown <= 0) {
+            canvas.getGraphicsContext2D().drawImage(selector, 125, 125, 30, 30);
         }
         //Draw selector for selected unit
         if (selectedUnit != null) {
@@ -396,7 +409,9 @@ public class FXMLGameViewController implements Initializable {
             } else if (selectedUnit.getUnitType() == UnitType.RANGED) {
                 canvas.getGraphicsContext2D().drawImage(selector, 90, 105, 30, 30);
             } else if (selectedUnit.getUnitType() == UnitType.DEFENCE) {
-                canvas.getGraphicsContext2D().drawImage(selector, 125, 105, 30, 30);
+                canvas.getGraphicsContext2D().drawImage(selector, 125, 90, 30, 30);
+            } else if (selectedUnit.getUnitType() == UnitType.RESOURCE) {
+                canvas.getGraphicsContext2D().drawImage(selector, 125, 125, 30, 30);
             }
         }
         //Draw cooldown for units
@@ -407,7 +422,10 @@ public class FXMLGameViewController implements Initializable {
             canvas.getGraphicsContext2D().drawImage(cooldown, 90, 105, 30, 30);
         }
         if (defenceCooldown > 0) {
-            canvas.getGraphicsContext2D().drawImage(cooldown, 125, 105, 30, 30);
+            canvas.getGraphicsContext2D().drawImage(cooldown, 125, 90, 30, 30);
+        }
+        if (resourceCooldown > 0) {
+            canvas.getGraphicsContext2D().drawImage(cooldown, 125, 125, 30, 30);
         }
         //SpotsLanes when unit is selected
         if (selectedUnit != null) {
@@ -472,8 +490,11 @@ public class FXMLGameViewController implements Initializable {
                 && lastRealMousePosy >= 105 && lastRealMousePosy <= 135 && rangedCooldown <= 0) {
             selectedUnit = UnitInfo.getRangedUnit(gm.getPlayers().get(0));
         } else if (lastRealMousePosx >= 125 && lastRealMousePosx <= 155
-                && lastRealMousePosy >= 105 && lastRealMousePosy <= 135 && defenceCooldown <= 0) {
+                && lastRealMousePosy >= 90 && lastRealMousePosy <= 120 && defenceCooldown <= 0) {
             selectedUnit = UnitInfo.getDefenceUnit(gm.getPlayers().get(0));
+        } else if (lastRealMousePosx >= 125 && lastRealMousePosx <= 155
+                && lastRealMousePosy >= 125 && lastRealMousePosy <= 155 && defenceCooldown <= 0) {
+            selectedUnit = UnitInfo.getResourceUnit(gm.getPlayers().get(0));
         }
         //Check if unit has to be placed
         if (selectedUnit != null) {
@@ -787,17 +808,23 @@ public class FXMLGameViewController implements Initializable {
                 int index = u.getBase().getUnitIndex(u);
                 int posLane = index % 4;
                 int laneIndex = index / 4;
+                Image image = null;
+                if(u instanceof Defence) {
+                    image = defenceSide;
+                } else {
+                    image = resource;
+                }
 
                 if (j == 0) {
                     if (laneIndex < 4) {
-                        canvas.getGraphicsContext2D().drawImage(defenceSide,
+                        canvas.getGraphicsContext2D().drawImage(image,
                                 x1 + posLane * 26,
                                 y1 + laneIndex * 26,
                                 30,
                                 30);
                     } else {
                         laneIndex -= 4;
-                        canvas.getGraphicsContext2D().drawImage(defenceSide,
+                        canvas.getGraphicsContext2D().drawImage(image,
                                 x2 + laneIndex * 26,
                                 y2 + posLane * 26,
                                 30,
@@ -805,14 +832,14 @@ public class FXMLGameViewController implements Initializable {
                     }
                 } else if (j == 1) {
                     if (laneIndex < 4) {
-                        canvas.getGraphicsContext2D().drawImage(defenceSide,
+                        canvas.getGraphicsContext2D().drawImage(image,
                                 x1 + laneIndex * 26,
                                 y1 + posLane * 26,
                                 30,
                                 30);
                     } else {
                         laneIndex -= 4;
-                        canvas.getGraphicsContext2D().drawImage(defenceSide,
+                        canvas.getGraphicsContext2D().drawImage(image,
                                 x2 + 78 - posLane * 26,
                                 y2 + laneIndex * 26,
                                 30,
@@ -820,14 +847,14 @@ public class FXMLGameViewController implements Initializable {
                     }
                 } else if (j == 2) {
                     if (laneIndex < 4) {
-                        canvas.getGraphicsContext2D().drawImage(defenceSide,
+                        canvas.getGraphicsContext2D().drawImage(image,
                                 x1 + 78 - posLane * 26,
                                 y1 + laneIndex * 26,
                                 30,
                                 30);
                     } else {
                         laneIndex -= 4;
-                        canvas.getGraphicsContext2D().drawImage(defenceSide,
+                        canvas.getGraphicsContext2D().drawImage(image,
                                 x2 + laneIndex * 26,
                                 y2 + 78 - posLane * 26,
                                 30,
@@ -835,14 +862,14 @@ public class FXMLGameViewController implements Initializable {
                     }
                 } else if (j == 3) {
                     if (laneIndex < 4) {
-                        canvas.getGraphicsContext2D().drawImage(defenceSide,
+                        canvas.getGraphicsContext2D().drawImage(image,
                                 x1 + laneIndex * 26,
                                 y1 + 78 - posLane * 26,
                                 30,
                                 30);
                     } else {
                         laneIndex -= 4;
-                        canvas.getGraphicsContext2D().drawImage(defenceSide,
+                        canvas.getGraphicsContext2D().drawImage(image,
                                 x2 + posLane * 26,
                                 y2 + laneIndex * 26,
                                 30,
@@ -869,10 +896,13 @@ public class FXMLGameViewController implements Initializable {
                 rangedCooldown = cooldown;
             } else if (unittype == UnitType.DEFENCE) {
                 defenceCooldown = cooldown;
+            } else if (unittype == UnitType.RESOURCE) {
+                resourceCooldown = cooldown;
             } else if (unittype == UnitType.ALL) {
                 meleeCooldown = cooldown;
                 rangedCooldown = cooldown;
                 defenceCooldown = cooldown;
+                resourceCooldown = cooldown;
             }
         }
     }

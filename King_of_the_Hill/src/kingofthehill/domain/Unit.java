@@ -115,7 +115,7 @@ public abstract class Unit {
         if (resultInt > 0) {
             return resultInt;
         } else {
-            return 0;
+            return 1;
         }
     }
     /**

@@ -7,6 +7,7 @@ import kingofthehill.domain.Defence;
 import kingofthehill.domain.IPlayer;
 import kingofthehill.domain.Melee;
 import kingofthehill.domain.Ranged;
+import kingofthehill.domain.Resource;
 import kingofthehill.domain.Unit;
 import kingofthehill.domain.UnitType;
 
@@ -79,10 +80,10 @@ public class UnitInfo
      */
     public static UnitInfo getDefenceUnit(IPlayer owner)
     {
-        final int HP = 200;
-        final int ATK = 5;
+        final int HP = 300;
+        final int ATK = 10;
         final int AMR = 5;
-        final int COST = 1;
+        final int COST = 10;
         final int COOL = 150;
         
         Unit def = new Defence(HP, ATK, AMR, owner);
@@ -124,5 +125,22 @@ public class UnitInfo
         
         Unit rang = new Ranged(HP, ATK, AMR, SPD, owner, RAN);
         return new UnitInfo(COST, rang, COOL, UnitType.RANGED);
+    }
+    
+    /**
+     * Create a new Resource unit
+     * @param owner The new owner of the unit
+     * @return The unitinformation, including the unit
+     */
+    public static UnitInfo getResourceUnit(IPlayer owner) 
+    {
+        final int HP = 50;
+        final int ATK = 1;
+        final int AMR = 5;
+        final int COST = 20;
+        final int COOL = 900;
+        
+        Unit res = new Resource(HP, ATK, AMR, owner);
+        return new UnitInfo(COST, res, COOL, UnitType.RESOURCE);
     }
 }

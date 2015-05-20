@@ -354,7 +354,13 @@ public class GameManager {
      */
     private void giveResources() {
         for (IPlayer p : this.players) {
-            p.addMoney(10);
+            int munnie = 10;
+            for(Unit u : p.getBase().getUnits()) {
+                if(u instanceof Resource) {
+                    munnie += 2;
+                }
+            }
+            p.addMoney(munnie);
         }
     }
 
