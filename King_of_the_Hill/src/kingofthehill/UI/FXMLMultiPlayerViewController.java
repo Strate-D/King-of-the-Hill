@@ -10,6 +10,7 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
@@ -84,6 +85,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
 
     String mysteryboxWinner = "";
     String mysteryboxContent = "";
+    int gameInfoTimer;
 
     /**
      * Initializes the controller class.
@@ -169,6 +171,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
             buttonMelee = new Image("kingofthehill/UI/field/button-melee.png");
             buttonRanged = new Image("kingofthehill/UI/field/button-ranged.png");
             mysterybox = new Image("kingofthehill/UI/field/mysterybox.png");
+            gameInfoTimer = 0;
             //Draw field
             drawBackground();
             drawField();
@@ -179,10 +182,20 @@ public class FXMLMultiPlayerViewController implements Initializable {
                 @Override
                 public void handle(long now) {
 
-                    try {
-                        getGameInfo();
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
+                    if (gameInfoTimer > 10) {
+                        Executors.newSingleThreadExecutor().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    getGameInfo();
+                                } catch (RemoteException ex) {
+                                    Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                        });
+                        gameInfoTimer = 0;
+                    } else {
+                        gameInfo.doStep();
                     }
                     drawBackground();
                     drawField();
@@ -248,9 +261,15 @@ public class FXMLMultiPlayerViewController implements Initializable {
                     if (rangedCooldown > 0) {
                         rangedCooldown--;
                     }
+
+                    /**
+                     * Keep track of timer
+                     */
+                    gameInfoTimer++;
                 }
 
                 @Override
+
                 public void start() {
                     super.start();
                 }
@@ -274,8 +293,10 @@ public class FXMLMultiPlayerViewController implements Initializable {
             Parent window1;
             window1 = FXMLLoader.load(getClass().getResource("FXMLMain.fxml"));
             King_of_the_Hill.currentStage.getScene().setRoot(window1);
+
         } catch (IOException ex) {
-            Logger.getLogger(FXMLMainController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FXMLMainController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
