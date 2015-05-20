@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="pane" fx:id="content" prefHeight="1080.0" prefWidth="1920.0" styleClass="mainFxmlClass" stylesheets="@fxmlmain.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kingofthehill.UI.FXMLLobbyViewController">
+<AnchorPane id="pane" fx:id="content" onKeyPressed="#handleTextFieldKeyPress" prefHeight="1080.0" prefWidth="1920.0" styleClass="mainFxmlClass" stylesheets="@fxmlmain.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kingofthehill.UI.FXMLLobbyViewController">
    <children>
       <Button id="button" layoutX="1392.0" layoutY="973.0" mnemonicParsing="false" onMouseClicked="#handleReadyButton" prefHeight="100.0" prefWidth="475.0" text="Ready" textFill="#ffcc00">
          <font>
@@ -25,8 +25,8 @@
             <Font size="45.0" />
          </font>
       </Button>
-      <ListView layoutX="17.0" layoutY="16.0" prefHeight="728.0" prefWidth="852.0" />
-      <TextField layoutX="15.0" layoutY="754.0" prefHeight="50.0" prefWidth="854.0" />
+      <ListView fx:id="messagesOutput" layoutX="17.0" layoutY="16.0" prefHeight="728.0" prefWidth="852.0" />
+      <TextField fx:id="chatInput" layoutX="15.0" layoutY="754.0" onKeyPressed="#handleTextFieldKeyPress" prefHeight="50.0" prefWidth="854.0" />
       <Pane layoutX="972.0" layoutY="18.0" prefHeight="783.0" prefWidth="941.0" style="-fx-background-color: lightgrey;">
          <children>
             <Label layoutX="33.0" layoutY="68.0" text="Lobby eigenaar:">

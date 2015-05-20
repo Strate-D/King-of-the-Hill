@@ -10,27 +10,57 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import kingofthehill.client.ClientManager;
+import kingofthehill.rmimultiplayer.TextMessage;
 
 /**
  *
  * @author Bas
  */
 public class FXMLLobbyViewController implements Initializable {
+
     @FXML
     private AnchorPane content;
 
+    @FXML
+    private TextField chatInput;
+
+    @FXML
+    private ListView messagesOutput;
+
+    ObservableList<String> messages;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        
+        //TODO: Connect the output from the server into the listview for chatting
+        messages = FXCollections.observableArrayList();
+        messagesOutput.setItems(messages);
+
+        ClientManager.AudioChat.setParent(this);
+
+        chatInput.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent E) -> {
+            switch (E.getCode()) {
+                case ENTER: {
+                    handleSendButton();
+                    break;
+                }
+            }
+        });
     }
-    
-    public void handleReadyButton()
-    {
+
+    @FXML
+    public void handleReadyButton() {
         try {
             //Load next window
             Parent window1;
@@ -40,14 +70,19 @@ public class FXMLLobbyViewController implements Initializable {
             Logger.getLogger(FXMLMainController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void handleSendButton()
-    {
-        
+
+    @FXML
+    public void handleSendButton() {
+        if (!chatInput.getText().equals("")) {
+            if (ClientManager.isAudioChatRunning()) {
+                ClientManager.AudioChat.sendMessage(new TextMessage(ClientManager.AudioChat.getClientId(), chatInput.getText()));
+            }
+        }
+        chatInput.setText("");
     }
-    
-    public void handleQuitButton()
-    {
+
+    @FXML
+    public void handleQuitButton() {
         try {
             //Load next window
             Parent window1;
@@ -57,5 +92,19 @@ public class FXMLLobbyViewController implements Initializable {
             Logger.getLogger(FXMLMainController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+    @FXML
+    public void handleTextFieldKeyPress() {
+
+    }
+
+    public void printMessage(String message) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                messages.add(message);
+                messagesOutput.scrollTo(messages.size() - 1);
+            }
+        });
+    }
 }

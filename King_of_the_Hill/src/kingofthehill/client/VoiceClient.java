@@ -16,6 +16,8 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.ObservableList;
+import kingofthehill.UI.FXMLLobbyViewController;
 
 /**
  *
@@ -29,20 +31,24 @@ public class VoiceClient {
 
     private AudioPlayer audioPlayer;
     private AudioCapture audioCapturer;
-    
+
     private String ip;
     private int port;
     private String nickname;
+
+    private boolean clientStarted;
+    private FXMLLobbyViewController parent;
 
     private int clientID = -1;
 
     public VoiceClient(String ip, int port, String nickname) {
         audioPlayer = new AudioPlayer();
         audioCapturer = new AudioCapture(this);
-        
+
         this.ip = ip;
         this.port = port;
         this.nickname = nickname;
+        this.clientStarted = false;
     }
 
     public void start() throws IOException {
@@ -71,6 +77,8 @@ public class VoiceClient {
         startMessageWriter();
 
         sender.writeObject(new InfoMessage(name, "CLIENT_NAME"));
+
+        this.clientStarted = true;
     }
 
     private void startMessageReader() {
@@ -99,6 +107,9 @@ public class VoiceClient {
                     continue;
                 }
 
+                if (this.parent != null) {
+                    this.parent.printMessage(object.getTime() + ": " + object.getSenderName() + " says: " + object.getData());
+                }
                 System.out.print("\r" + object.getTime() + ": " + object.getSenderName() + " says: ");
                 System.out.println(object.getData());
                 System.out.print(">");
@@ -134,7 +145,7 @@ public class VoiceClient {
                         this.audioCapturer.startCapture();
                     } else if (newMessage.startsWith("/stop")) {
                         this.audioCapturer.stopCapture();
-                        
+
                     } else {
                         sender.writeObject(new TextMessage(this.clientID, newMessage));
                     }
@@ -164,5 +175,13 @@ public class VoiceClient {
 
     public int getClientId() {
         return this.clientID;
+    }
+
+    public boolean isStarted() {
+        return this.clientStarted;
+    }
+
+    public void setParent(FXMLLobbyViewController value) {
+        this.parent = value;
     }
 }
