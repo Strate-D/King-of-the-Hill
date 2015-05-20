@@ -84,7 +84,8 @@ public class FXMLMainController implements Initializable {
      * @throws java.lang.Exception
      */
     public void handleLoginButton(ActionEvent e) throws Exception {
-
+        
+        King_of_the_Hill.context.setPlayerName(playerName.getText());
         String password = AES.encrypt(playerPassword.getText());
 
         ClientManager cm = new ClientManager(serverUrl.getText());

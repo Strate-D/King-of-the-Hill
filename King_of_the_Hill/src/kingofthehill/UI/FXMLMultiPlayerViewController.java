@@ -484,7 +484,6 @@ public class FXMLMultiPlayerViewController implements Initializable {
                 mysteryboxContent = "";
             }
         } else {
-            //canvas.getGraphicsContext2D().setFill(Color.WHITE);
             canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.BOLD, 12));
             canvas.getGraphicsContext2D().fillText(mysteryboxWinner, 250, 595);
             canvas.getGraphicsContext2D().fillText(mysteryboxContent, 250, 620);
@@ -495,6 +494,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
      * Selects a unit to be placed, or a lane to place the selected unit at
      *
      * @param e
+     * @throws java.rmi.RemoteException
      */
     public void handleMouseClick(MouseEvent e) throws RemoteException {
         if (selectedUnit == null) {
@@ -514,7 +514,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
                     && lastRealMousePosy >= 52 && lastRealMousePosy <= 157) {
                 int posX = ((int) lastRealMousePosx - 215) / 26;
                 int posY = ((int) lastRealMousePosy - 52) / 26;
-                gm.placeUnitAtBase(gameInfo.getPlayers().get(0), selectedUnit.getUnit(), posY * 4 + posX, selectedUnit.getCost());
+                gm.placeUnitMultiplayer(gameInfo.getPlayers().get(0).getName(), selectedUnit.getUnit(), posY * 4 + posX, selectedUnit.getCost());
                 setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
                 selectedUnit = null;
             } else //Lane 4 to 7
@@ -522,7 +522,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
                     && lastRealMousePosy >= 215 && lastRealMousePosy <= 320) {
                 int posY = ((int) lastRealMousePosx - 52) / 26;
                 int posX = ((int) lastRealMousePosy - 215) / 26;
-                gm.placeUnitAtBase(gameInfo.getPlayers().get(0), selectedUnit.getUnit(), 16 + posY * 4 + posX, selectedUnit.getCost());
+                gm.placeUnitMultiplayer(gameInfo.getPlayers().get(0).getName(), selectedUnit.getUnit(), 16 + posY * 4 + posX, selectedUnit.getCost());
                 setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
                 selectedUnit = null;
             }

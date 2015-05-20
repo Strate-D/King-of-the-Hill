@@ -311,4 +311,8 @@ public abstract class Unit implements Serializable{
             this.position = newPos;
         }
     }
+    
+    public UnitType getType() {
+        return this.type;
+    }
 }
