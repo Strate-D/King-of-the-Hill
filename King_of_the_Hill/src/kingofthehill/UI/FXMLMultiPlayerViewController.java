@@ -565,7 +565,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
                     && lastRealMousePosy >= 52 && lastRealMousePosy <= 157) {
                 int posX = ((int) lastRealMousePosx - 215) / 26;
                 int posY = ((int) lastRealMousePosy - 52) / 26;
-                if (gm.placeUnitAtBase(gameInfo.getPlayers().get(0), selectedUnit.getUnit(), posY * 4 + posX, selectedUnit.getCost())) {
+                if (gm.placeUnitAtBaseMulti(gameInfo.getPlayers().get(0).getName(), selectedUnit.getUnit(), posY * 4 + posX, selectedUnit.getCost())) {
                     setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
                     selectedUnit = null;
                 }
@@ -574,7 +574,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
                     && lastRealMousePosy >= 215 && lastRealMousePosy <= 320) {
                 int posY = ((int) lastRealMousePosx - 52) / 26;
                 int posX = ((int) lastRealMousePosy - 215) / 26;
-                if (gm.placeUnitAtBase(gameInfo.getPlayers().get(0), selectedUnit.getUnit(), 16 + posY * 4 + posX, selectedUnit.getCost())) {
+                if (gm.placeUnitAtBaseMulti(gameInfo.getPlayers().get(0).getName(), selectedUnit.getUnit(), 16 + posY * 4 + posX, selectedUnit.getCost())) {
                     setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
                     selectedUnit = null;
                 }
@@ -584,7 +584,10 @@ public class FXMLMultiPlayerViewController implements Initializable {
         //Handle mouseclick on mysterybox when mysterybox is available
         if (lastRealMousePosx >= 325 && lastRealMousePosx <= 700 && lastRealMousePosy >= 325 && lastRealMousePosy <= 700) {
             if (gameInfo.getMysterybox() != null) {
-                gameInfo.getMysterybox().bid(gameInfo.getPlayers().get(0), gameInfo.getMysterybox().getNewHighestBid());
+                //gameInfo.getMysterybox().bid(gameInfo.getPlayers().get(0), gameInfo.getMysterybox().getNewHighestBid());
+                IPlayer player = gameInfo.getPlayers().get(0);
+                
+                gm.bidMysteryboxMulti(player.getName(), gameInfo.getMysterybox().getNewHighestBid());
             }
         }
     }
