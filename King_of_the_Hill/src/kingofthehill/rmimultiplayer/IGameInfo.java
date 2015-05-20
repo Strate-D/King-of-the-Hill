@@ -29,4 +29,6 @@ public interface IGameInfo{
     public Iterator<Unit> getLaneUnits();
     
     public void setFirstPlayer(String name);
+    
+    public void doStep();
 }

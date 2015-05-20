@@ -22,16 +22,16 @@ import kingofthehill.domain.Unit;
 public class GameInfo implements IGameInfo, Serializable{
     private List<IPlayer> players;
     private Mysterybox mbox;
-    private int resourcetimer;
-    private int mysteryboxtimer;
-    private int mysteryboxtime;
+    private int resourceTimer;
+    private int mysteryboxTimer;
+    private int mysteryboxTime;
     
     public void setInfo(List<IPlayer> players, Mysterybox mbox, int resourcetimer, int mysteryboxtimer, int mysteryboxtime){
         this.players = players;
         this.mbox = mbox;
-        this.resourcetimer = resourcetimer;
-        this.mysteryboxtimer = mysteryboxtimer;
-        this.mysteryboxtime = mysteryboxtime;
+        this.resourceTimer = resourcetimer;
+        this.mysteryboxTimer = mysteryboxtimer;
+        this.mysteryboxTime = mysteryboxtime;
     }
 
     
@@ -47,17 +47,17 @@ public class GameInfo implements IGameInfo, Serializable{
 
     @Override
     public int getResourcetimer() {
-        return resourcetimer;
+        return resourceTimer;
     }
 
     @Override
     public int getMysteryboxtimer() {
-        return mysteryboxtimer;
+        return mysteryboxTimer;
     }
 
     @Override
     public int getMysteryboxtime() {
-        return mysteryboxtime;
+        return mysteryboxTime;
     }
     
     @Override
@@ -82,6 +82,56 @@ public class GameInfo implements IGameInfo, Serializable{
             IPlayer buffer = this.getPlayers().get(0);
             this.getPlayers().remove(buffer);
             this.getPlayers().add(buffer);
+        }
+    }
+    
+    /**
+     * Does a step in the game (1/60 of a second).
+     */
+    @Override
+    public void doStep() {           
+        /**
+         * Operate all units
+         */
+        operateUnits();
+    }
+    
+    /**
+     * Let all the units do their next action.
+    */
+    private void operateUnits() {
+        for (IPlayer p : players) {
+            Base b = p.getBase();
+            if (b != null) {
+                for (Lane l : b.getLanes()) {
+                    List<Unit> doneUnits = new ArrayList<>();
+                    while (doneUnits.size() < l.getUnits().size()) {
+                        try {
+                            for (Unit u : l.getUnits()) {
+                                if (!doneUnits.contains(u)) {
+                                    u.doNextAction();
+                                    doneUnits.add(u);
+                                }
+                            }
+                        } catch (Exception ecx) {
+                        }
+                    }
+
+                }
+                
+                List<Unit> doneUnits = new ArrayList<>();
+                while (doneUnits.size() < b.getUnits().size()) {
+                    try {
+                        for (Unit u : b.getUnits()) {
+                            if (!doneUnits.contains(u)) {
+                                doneUnits.add(u);
+                                u.doNextAction();
+                            }
+                        }
+                    } catch (Exception ecx) {
+                    }
+                }
+            }
         }
     }
 }
