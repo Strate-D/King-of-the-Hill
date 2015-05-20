@@ -11,32 +11,39 @@ import java.rmi.registry.Registry;
  *
  * @author Jur
  */
-public class ClientManager{
+public class ClientManager {
+
     private IGameManager gm;
     private Registry registry = null;
     private final int portNumber = 9999;
     private static final String bindingName = "GameInfo";
     private final String ipAddress;
 
+    public static VoiceClient AudioChat;
+
     /**
      * Gets gamemanager object from registery
+     *
      * @param ipAddress ip adress of the remote registery
      */
-    public ClientManager(String ipAddress){
+    public ClientManager(String ipAddress) {
         this.ipAddress = ipAddress;
     }
-    
+
     /**
      * Tries to locate registery and bind the gamemanager
-     * @return true if the registery is located and the gamemanager is bound, else false
+     *
+     * @param startVoiceClient
+     * @return true if the registery is located and the gamemanager is bound,
+     * else false
      */
-    public boolean locate(){
+    public boolean locate() {
         /**
          * Print IP address and port number for registry
          */
         System.out.println("Client: IP Address: " + ipAddress);
         System.out.println("Client: Port number " + portNumber);
-        
+
         /**
          * Locate registry at IP address and port number
          */
@@ -60,7 +67,7 @@ public class ClientManager{
             System.out.println("Client: Registry is null pointer");
             return false;
         }
-        
+
         /**
          * Bind gamemanager using registry
          */
@@ -77,7 +84,7 @@ public class ClientManager{
                 gm = null;
             }
         }
-        
+
         /**
          * Print result binding gamemanager
          */
@@ -87,23 +94,53 @@ public class ClientManager{
             System.out.println("Client: Gamemanager is null pointer");
             return false;
         }
-        
+
         return true;
     }
-    
+
     /**
      * Gets the url of the server
+     *
      * @return string with the url of the server
      */
-    public String getServerUrl(){
+    public String getServerUrl() {
         return ipAddress;
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
-    public IGameManager getGameManager(){
+    public IGameManager getGameManager() {
         return this.gm;
+    }
+
+    public static boolean setupAudioChat(String ipAddress, int port, String username) {
+        if (ClientManager.AudioChat == null) {
+            ClientManager.AudioChat = new VoiceClient(ipAddress, port, username);
+        } else {
+            return false;
+        }
+
+        try {
+            ClientManager.AudioChat.start();
+            System.out.println("VoiceChat: Voice client started");
+        } catch (Exception ex) {
+            System.out.println("VoiceChat: Cannot start voice client");
+            System.out.println("VoiceChat: Exception: " + ex.getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean isAudioChatRunning() {
+        if (ClientManager.AudioChat != null) {
+            if (ClientManager.AudioChat.isStarted()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

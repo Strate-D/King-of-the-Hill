@@ -94,8 +94,10 @@ public class FXMLMainController implements Initializable {
             King_of_the_Hill.context.setServerUrl(cm.getServerUrl());
             if((AES.decrypt(password).equals("henk"))){
             try {
+                ClientManager.setupAudioChat(cm.getServerUrl(), 9090, playerName.getText());
                 Parent window1;
-                window1 = FXMLLoader.load(getClass().getResource("FXMLMultiPlayerView.fxml"));
+                //window1 = FXMLLoader.load(getClass().getResource("FXMLMultiPlayerView.fxml"));
+                window1 = FXMLLoader.load(getClass().getResource("FXMLLobbyView.fxml"));
                 King_of_the_Hill.currentStage.getScene().setRoot(window1);
             } catch (IOException ex) {
                 Logger.getLogger(FXMLMainController.class.getName()).log(Level.SEVERE, null, ex);
