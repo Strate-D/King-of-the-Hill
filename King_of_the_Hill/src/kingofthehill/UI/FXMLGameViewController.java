@@ -87,7 +87,7 @@ public class FXMLGameViewController implements Initializable {
 
     String mysteryboxWinner = "";
     String mysteryboxContent = "";
-    
+
     long lastFrame = 1;
 
     /**

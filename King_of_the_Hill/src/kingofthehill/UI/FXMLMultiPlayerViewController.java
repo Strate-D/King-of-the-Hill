@@ -175,7 +175,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
 
                 @Override
                 public void handle(long now) {
-                    if(1000000000/(now - lastFrame) >= 30){
+                    if(1000000000/(now - lastFrame) <= 30){
                         lastFrame = now;
                         //Check if data has te be updated from the server
                         if (gameInfoTimer > 10) {
