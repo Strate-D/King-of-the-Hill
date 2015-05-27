@@ -88,7 +88,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
     String mysteryboxWinner = "";
     String mysteryboxContent = "";
     int gameInfoTimer;
-    long lastFrame = 0;
+    long lastFrame = 1;
 
     /**
      * Initializes the controller class.
@@ -175,7 +175,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
 
                 @Override
                 public void handle(long now) {
-                    if (lastFrame == 0 || now - lastFrame >= 33) {
+                    if(1000000000/(now - lastFrame) >= 30){
                         lastFrame = now;
                         //Check if data has te be updated from the server
                         if (gameInfoTimer > 10) {
