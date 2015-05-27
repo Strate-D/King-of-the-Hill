@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package kingofthehill.domain;
 
@@ -22,9 +22,10 @@ import kingofthehill.upgradeinfo.UpgradeInfo;
  *
  * @author Jur
  */
-public class GameManager extends UnicastRemoteObject implements IGameManager{
+public class GameManager extends UnicastRemoteObject implements IGameManager {
 
     private List<IPlayer> players;
+    private List<String> readyPlayers;
     private Mysterybox mysterybox;
     private int resourceTimer;
     private int mysteryboxTimer;
@@ -32,43 +33,97 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
     private Random mysteryboxRandom;
     private GameInfo gameInfo;
     private Timer timer;
+    private boolean readyGame;
 
     private boolean DebugLevelAI = false;
 
     /**
      * Creates a new gameManager, also creating a new game with it.
+     *
      * @throws java.rmi.RemoteException
      */
-    public GameManager() throws RemoteException{
+    public GameManager() throws RemoteException {
         /**
          * Set resourceTimer to 0
          */
         this.players = new ArrayList<>();
+        this.readyPlayers = new ArrayList<>();
         this.resourceTimer = 0;
         this.mysteryboxTimer = 0;
         this.mysteryboxTime = 0;
+        this.readyGame = false;
     }
-    
+
     /**
-     * Add player to game
-     * @param player player to add to the game
-     * @throws java.rmi.RemoteException
+     *
+     * @param player
+     * @param isAi
+     * @throws RemoteException
      */
     @Override
-    public void addPlayer(IPlayer player) throws RemoteException{
+    public void addPlayer(String player, boolean isAi) throws RemoteException {
         if (player != null) {
-            this.players.add(player);
-        }
-        
-        if(players.size() > 3){
-            startGame();
+            if (isAi) {
+                AI ai;
+                int count = 0;
+
+                for (IPlayer p : players) {
+                    if (p instanceof AI) {
+                        count = +1;
+                    }
+                }
+
+                ai = new AI("ArtificialIntelligence" + count);
+
+                Random random = new Random();
+                switch (random.nextInt(3)) {
+                    case 0:
+                        ai.setAIType(AIState.AGRESSIVE);
+                        break;
+                    case 1:
+                        ai.setAIType(AIState.DEFENSIVE);
+                        break;
+                    case 2:
+                        ai.setAIType(AIState.MODERNATE);
+                        break;
+                }
+
+                players.add(ai);
+                this.setPlayerReady(ai.getName());
+            } else {
+                players.add(new Player(player, 0));
+            }
         }
     }
-    
+
+    /**
+     *
+     * @param player
+     * @return
+     * @throws RemoteException
+     */
+    @Override
+    public boolean setPlayerReady(String player) throws RemoteException {
+        for (String p : readyPlayers) {
+            if (p.equals(player)) {
+                readyPlayers.remove(player);
+                return false;
+            }
+        }
+
+        readyPlayers.add(player);
+
+        if (readyPlayers.size() > 3) {
+            startGame();
+        }
+
+        return true;
+    }
+
     /**
      * Start game when there are a total of 4 players
      */
-    private void startGame(){
+    private void startGame() {
         /**
          * Create teams
          */
@@ -92,7 +147,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
             Base b = new Base(p);
             p.setBase(b);
         }
-        
+
         /**
          * Give the bases lanes
          */
@@ -108,7 +163,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
             } else {
                 base2 = this.players.get(i + 1).getBase();
             }
-            
+
             /**
              * Set lanes
              */
@@ -119,31 +174,39 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
             }
             i++;
         }
-        
+
         /**
          * Set mysteryboxtime at random for the first time
          */
         mysteryboxRandom = new Random();
         mysteryboxTime = mysteryboxRandom.nextInt(1800) + 1800;
-        
+
         /**
          * Create new GameInfo object and set the info for the first time;
          */
         gameInfo = new GameInfo();
         gameInfo.setInfo(players, mysterybox, resourceTimer, mysteryboxTimer, mysteryboxTime);
-        
+
         /**
          * Create and schedule timer for dostep method
          */
         timer = new Timer();
         timer.schedule(new GameLoop(), 0, 1000 / 60);
+
+        readyGame = true;
     }
-    
-    private class GameLoop extends java.util.TimerTask{
+
+    @Override
+    public boolean readyGame() throws RemoteException {
+        return this.readyGame;
+    }
+
+    private class GameLoop extends java.util.TimerTask {
+
         @Override
         public void run() {
             doStep();
-        } 
+        }
     }
 
     /**
@@ -168,7 +231,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
                     }
 
                 }
-                
+
                 List<Unit> doneUnits = new ArrayList<>();
                 while (doneUnits.size() < b.getUnits().size()) {
                     try {
@@ -187,6 +250,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
 
     /**
      * Get all the units for drawing purposes
+     *
      * @return A iterator of units
      */
     public Iterator<Unit> getLaneUnits() {
@@ -207,11 +271,11 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
     private void generateMysterybox() {
         Random r = new Random();
         UnitType unitType = null;
-        
+
         /**
          * Random choose unittype for upgrade
          */
-        switch(r.nextInt(2)){
+        switch (r.nextInt(2)) {
             /**
              * Defence
              */
@@ -231,11 +295,11 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
                 unitType = UnitType.RANGED;
                 break;
         }
-        
+
         /**
          * Random generate content mysterybox
          */
-        switch(r.nextInt(2)){
+        switch (r.nextInt(2)) {
             /**
              * Mysterybox has resources
              */
@@ -246,52 +310,52 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
              * Mysterybox has upgrade
              */
             case 1:
-                if(unitType != null){
+                if (unitType != null) {
                     UpgradeInfo upgradeInfo = null;
                     /**
                      * Random choose upgradetype
                      */
-                    switch(r.nextInt(6)){
-                    /**
-                     * Weak upgrade
-                     */
-                    case 0:
-                        upgradeInfo = UpgradeInfo.getWeakUpgrade(unitType);
-                        break;
-                    /**
-                     * Weak-normal upgrade
-                     */
-                    case 1:
-                        upgradeInfo = UpgradeInfo.getWeakNormalUpgrade(unitType);
-                        break; 
-                    /**
-                     * Normal upgrade
-                     */
-                    case 2:
-                        upgradeInfo = UpgradeInfo.getNormalUpgrade(unitType);
-                        break;
-                    /**
-                     * Normal-strong upgrade
-                     */
-                    case 3:
-                        upgradeInfo = UpgradeInfo.getNormalStrongUpgrade(unitType);
-                        break;   
-                    /**
-                     * Strong upgrade
-                     */
-                    case 4:
-                        upgradeInfo = UpgradeInfo.getStrongUpgrade(unitType);
-                        break;
-                    /**
-                     * Uber upgrade
-                     */
-                    case 5:
-                        upgradeInfo = UpgradeInfo.getUberUpgrade(unitType);
-                        break;
+                    switch (r.nextInt(6)) {
+                        /**
+                         * Weak upgrade
+                         */
+                        case 0:
+                            upgradeInfo = UpgradeInfo.getWeakUpgrade(unitType);
+                            break;
+                        /**
+                         * Weak-normal upgrade
+                         */
+                        case 1:
+                            upgradeInfo = UpgradeInfo.getWeakNormalUpgrade(unitType);
+                            break;
+                        /**
+                         * Normal upgrade
+                         */
+                        case 2:
+                            upgradeInfo = UpgradeInfo.getNormalUpgrade(unitType);
+                            break;
+                        /**
+                         * Normal-strong upgrade
+                         */
+                        case 3:
+                            upgradeInfo = UpgradeInfo.getNormalStrongUpgrade(unitType);
+                            break;
+                        /**
+                         * Strong upgrade
+                         */
+                        case 4:
+                            upgradeInfo = UpgradeInfo.getStrongUpgrade(unitType);
+                            break;
+                        /**
+                         * Uber upgrade
+                         */
+                        case 5:
+                            upgradeInfo = UpgradeInfo.getUberUpgrade(unitType);
+                            break;
                     }
-                    
-                    if(upgradeInfo != null){
-                        mysterybox = new Mysterybox(0, upgradeInfo.getUpgrade(), null, 0); 
+
+                    if (upgradeInfo != null) {
+                        mysterybox = new Mysterybox(0, upgradeInfo.getUpgrade(), null, 0);
                     }
                 }
                 break;
@@ -299,17 +363,18 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
              * Mysterybox has unit(s)
              */
             case 2:
-                mysterybox = new Mysterybox(0, null, unitType, r.nextInt(9) + 1);        
+                mysterybox = new Mysterybox(0, null, unitType, r.nextInt(9) + 1);
                 break;
         }
     }
 
     /**
      * Does actions for the AI player.
+     *
      * @param player The AI player that needs to do something. Cannot be null
      */
     private void operateAIPlayer(AI player) {
-        if(player == null) {
+        if (player == null) {
             throw new IllegalArgumentException("Player cannot be null");
         }
         player.doNextAction(this);
@@ -321,15 +386,15 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
     private void doStep() {
         //Create game info for clients
         gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
-        
+
         //Check player connections
-        for(IPlayer p : this.players) {
+        for (IPlayer p : this.players) {
             p.lowerConnectionTimer();
-            if(p.getConnectionTimer() == 0) {
+            if (p.getConnectionTimer() == 0) {
                 //replace player with si
             }
         }
-           
+
         /**
          * Check if players should get resources.
          */
@@ -337,49 +402,45 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
             giveResources();
             this.resourceTimer = 0;
         }
-        
+
         /**
          * Operate all units
          */
         operateUnits();
 
         /**
-         * Operate all AI's
-         * Check if there are any AI players
+         * Operate all AI's Check if there are any AI players
          */
         for (IPlayer player : players) {
-            if (player instanceof AI) 
-            {
+            if (player instanceof AI) {
                 /**
                  * The IPlayer is AI. Operate the AI player
                  */
                 operateAIPlayer((AI) player);
             }
         }
-        
+
         /**
          * Generate mysterybox
          */
-        if(mysteryboxTimer > mysteryboxTime){
+        if (mysteryboxTimer > mysteryboxTime) {
             generateMysterybox();
             mysteryboxTimer = 0;
             mysteryboxTime = mysteryboxRandom.nextInt(1800) + 1800;
         }
-        
+
         /**
          * Unpack mysterybox
          */
-        if(mysterybox != null){
-            if(mysteryboxTimer > mysterybox.getDuration()){
+        if (mysterybox != null) {
+            if (mysteryboxTimer > mysterybox.getDuration()) {
                 IPlayer higestBidder = mysterybox.getHigestBidder();
-                if(higestBidder != null){
-                    if(mysterybox.getResourceAmount() != 0){
+                if (higestBidder != null) {
+                    if (mysterybox.getResourceAmount() != 0) {
                         higestBidder.addMoney(mysterybox.getResourceAmount());
-                    }
-                    else if(mysterybox.getUpgrade() != null){
+                    } else if (mysterybox.getUpgrade() != null) {
                         higestBidder.addUpgrade(mysterybox.getUpgrade());
-                    }
-                    else if(mysterybox.getUnitType() != null){
+                    } else if (mysterybox.getUnitType() != null) {
                         //todo
                     }
                 }
@@ -401,8 +462,8 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
     private void giveResources() {
         for (IPlayer p : this.players) {
             int munnie = 10;
-            for(Unit u : p.getBase().getUnits()) {
-                if(u instanceof Resource) {
+            for (Unit u : p.getBase().getUnits()) {
+                if (u instanceof Resource) {
                     munnie += 2;
                 }
             }
@@ -412,6 +473,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
 
     /**
      * Places a unit at the selected lane
+     *
      * @param player The player that places the unit. May not be null.
      * @param unit The unit that has to be placed. May not be null.
      * @param index Number between 0 and 7, with 0 to 3 being a group of lanes
@@ -423,18 +485,18 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
     public boolean placeUnitAtLane(IPlayer player, Unit unit, int index, int cost) {
         /**
          * Check input
-         */    
+         */
         if (player == null || player.getBase() == null || unit == null || index < 0 || index > 7 || cost < 1 || player.getBase().getHealthPoints() <= 0) {
             return false;
         }
-        
+
         /**
          * Check if player has enough money
          */
         if (player.getMoney() < cost) {
             return false;
         }
-        
+
         /**
          * Place unit if possible
          */
@@ -449,39 +511,39 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
         }
         return false;
     }
-    
+
     /**
-     * 
+     *
      * @param name
-     * @return 
+     * @return
      */
-    private IPlayer getPlayer(String name){
-        for(IPlayer p : players){
-            if(p.getName().equals(name)){
+    private IPlayer getPlayer(String name) {
+        for (IPlayer p : players) {
+            if (p.getName().equals(name)) {
                 return p;
             }
         }
-        
+
         return null;
     }
-    
+
     /**
-     * 
+     *
      * @param playername
      * @param unit
      * @param index
      * @param cost
-     * @return 
+     * @return
      */
     @Override
     public boolean placeUnitAtBaseMulti(String playername, Unit unit, int index, int cost) {
         IPlayer player = getPlayer(playername);
         Unit unitNew = null;
-        
+
         //Check unittype
-        switch(unit.getType()){
+        switch (unit.getType()) {
             case MELEE:
-                unitNew =  UnitInfo.getMeleeUnit(player).getUnit();
+                unitNew = UnitInfo.getMeleeUnit(player).getUnit();
                 break;
             case RANGED:
                 unitNew = UnitInfo.getRangedUnit(player).getUnit();
@@ -493,12 +555,13 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
                 unitNew = UnitInfo.getResourceUnit(player).getUnit();
                 break;
         }
-        
+
         return placeUnitAtBase(getPlayer(playername), unitNew, index, cost);
     }
-    
+
     /**
      * Adds a defencive unit to the base on the given place.
+     *
      * @param player The player that places the unit, may not be null.
      * @param unit The unit that has to be placed, may not be null.
      * @param index The index for the unit, must be between 0 and 31. 0 to 15
@@ -515,14 +578,14 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
         if (player == null || player.getBase() == null || unit == null || index > 31 || index < 0 || cost < 1 || player.getBase().getHealthPoints() <= 0) {
             return false;
         }
-        
+
         /**
          * Check if player has enough money
          */
         if (player.getMoney() < cost) {
             return false;
         }
-        
+
         /**
          * Place unit if possible
          */
@@ -540,32 +603,33 @@ public class GameManager extends UnicastRemoteObject implements IGameManager{
 
     /**
      * Gets all the players in this game
+     *
      * @return A unmodifiable list, will never be empty
      */
     public List<IPlayer> getPlayers() {
         return Collections.unmodifiableList(players);
     }
-    
+
     /**
      * Returns the mysterybox object
+     *
      * @return The mysterybox object currently active in the game
      */
-    public Mysterybox getMysterybox()
-    {
+    public Mysterybox getMysterybox() {
         return this.mysterybox;
     }
-    
+
     @Override
-    public void bidMysteryboxMulti(String playername, int bid){
+    public void bidMysteryboxMulti(String playername, int bid) {
         IPlayer player = getPlayer(playername);
-        
-        if(mysterybox != null && player != null){
+
+        if (mysterybox != null && player != null) {
             mysterybox.bid(player, bid);
         }
     }
 
     @Override
-    public IGameInfo getGameInfo() throws RemoteException{
+    public IGameInfo getGameInfo() throws RemoteException {
         return this.gameInfo;
     }
 }

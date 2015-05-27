@@ -16,7 +16,11 @@ import java.rmi.RemoteException;
 public interface IGameManager extends Remote{
     public IGameInfo getGameInfo() throws RemoteException;
     
-    public void addPlayer(IPlayer player) throws RemoteException;
+    public void addPlayer(String player, boolean isAi) throws RemoteException;
+    
+    public boolean setPlayerReady(String player) throws RemoteException;
+    
+    public boolean readyGame() throws RemoteException;
     
     public boolean placeUnitAtBase(IPlayer player, Unit unit, int index, int cost) throws RemoteException;
     

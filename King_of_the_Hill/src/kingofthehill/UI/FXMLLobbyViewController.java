@@ -7,9 +7,12 @@ package kingofthehill.UI;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
@@ -39,12 +43,15 @@ public class FXMLLobbyViewController implements Initializable {
     @FXML
     private ListView messagesOutput;
 
+    @FXML
+    private Button buttonReady;
+
     ObservableList<String> messages;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ClientManager.AudioChat.setParent(this);
-        
+
         try {
             ClientManager.AudioChat.start();
             System.out.println("VoiceChat: Voice client started");
@@ -53,11 +60,9 @@ public class FXMLLobbyViewController implements Initializable {
             System.out.println("VoiceChat: Exception: " + ex.getMessage());
             return;
         }
-        
+
         messages = FXCollections.observableArrayList();
         messagesOutput.setItems(messages);
-
-        
 
         chatInput.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent E) -> {
             switch (E.getCode()) {
@@ -72,10 +77,42 @@ public class FXMLLobbyViewController implements Initializable {
     @FXML
     public void handleReadyButton() {
         try {
-            //Load next window
-            Parent window1;
-            window1 = FXMLLoader.load(getClass().getResource("FXMLMultiPlayerView.fxml"));
-            King_of_the_Hill.currentStage.getScene().setRoot(window1);
+            ClientManager cm = new ClientManager(King_of_the_Hill.context.getServerUrl());
+            cm.getGameManager().addPlayer(King_of_the_Hill.context.getPlayerName(), false);
+            if (cm.locate()) {
+                if (cm.getGameManager().setPlayerReady(King_of_the_Hill.context.getPlayerName())) {
+                    buttonReady.setText("Unready");
+                } else {
+                    buttonReady.setText("Ready");
+                }
+            }
+            //Todo thread control
+            Executors.newSingleThreadExecutor().execute(new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        try {
+                            if (cm.getGameManager().readyGame()) {
+                                //Load next window
+                                Parent window1;
+                                window1 = FXMLLoader.load(getClass().getResource("FXMLMultiPlayerView.fxml"));
+                                King_of_the_Hill.currentStage.getScene().setRoot(window1);
+                                break;
+                            }
+                        } catch (RemoteException ex) {
+                            Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            });
         } catch (IOException ex) {
             Logger.getLogger(FXMLMainController.class.getName()).log(Level.SEVERE, null, ex);
         }

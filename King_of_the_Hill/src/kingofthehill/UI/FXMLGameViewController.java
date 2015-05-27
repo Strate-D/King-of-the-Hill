@@ -10,6 +10,7 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
@@ -101,22 +102,28 @@ public class FXMLGameViewController implements Initializable {
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         try {
-            gm.addPlayer(p);
-            AI ai1 = new AI("ArtificialIntelligence1");
-            ai1.setAIType(AIState.DEFENSIVE);
-            gm.addPlayer(ai1);
-            AI ai2 = new AI("ArtificialIntelligence2");
-            ai2.setAIType(AIState.MODERNATE);
-            gm.addPlayer(ai2);
-            AI ai3 = new AI("ArtificialIntelligence3");
-            ai3.setAIType(AIState.AGRESSIVE);
-            gm.addPlayer(ai3);
+            gm.addPlayer(King_of_the_Hill.context.getPlayerName(), false);
+            //AI ai1 = new AI("ArtificialIntelligence1");
+            //ai1.setAIType(AIState.DEFENSIVE);
+            gm.addPlayer("ArtificialIntelligence1", true);
+            //AI ai2 = new AI("ArtificialIntelligence2");
+            //ai2.setAIType(AIState.MODERNATE);
+            gm.addPlayer("ArtificialIntelligence2", true);
+            //AI ai3 = new AI("ArtificialIntelligence3");
+            //ai3.setAIType(AIState.AGRESSIVE);
+            gm.addPlayer("ArtificialIntelligence3", true);
+
+            gm.setPlayerReady(King_of_the_Hill.context.getPlayerName());
+            gm.setPlayerReady("ArtificialIntelligence1");
+            gm.setPlayerReady("ArtificialIntelligence2");
+            gm.setPlayerReady("ArtificialIntelligence3");
+
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         try {
             getGameInfo();
         } catch (RemoteException ex) {
@@ -265,7 +272,27 @@ public class FXMLGameViewController implements Initializable {
                 super.start();
             }
         };
-        antimer.start();
+
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        if (gm.readyGame()) {
+                            antimer.start();
+                            break;
+                        }
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
     }
 
     private void getGameInfo() throws RemoteException {
@@ -844,7 +871,7 @@ public class FXMLGameViewController implements Initializable {
                 int posLane = index % 4;
                 int laneIndex = index / 4;
                 Image image = null;
-                if(u instanceof Defence) {
+                if (u instanceof Defence) {
                     image = defenceSide;
                 } else {
                     image = resource;

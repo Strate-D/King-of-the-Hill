@@ -107,20 +107,6 @@ public class FXMLMultiPlayerViewController implements Initializable {
 
         if (cm.locate()) {
             gm = cm.getGameManager();
-            try {
-                gm.addPlayer(p);
-                AI ai1 = new AI("ArtificialIntelligence1");
-                ai1.setAIType(AIState.DEFENSIVE);
-                gm.addPlayer(ai1);
-                AI ai2 = new AI("ArtificialIntelligence2");
-                ai2.setAIType(AIState.MODERNATE);
-                gm.addPlayer(ai2);
-                AI ai3 = new AI("ArtificialIntelligence3");
-                ai3.setAIType(AIState.AGRESSIVE);
-                gm.addPlayer(ai3);
-            } catch (RemoteException ex) {
-                Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
-            }
 
             try {
                 getGameInfo();
