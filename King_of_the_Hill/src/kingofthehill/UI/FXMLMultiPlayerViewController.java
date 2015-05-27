@@ -187,8 +187,9 @@ public class FXMLMultiPlayerViewController implements Initializable {
                             }
                         });
                         gameInfoTimer = 0;
-                        gameInfo.doStep();
-                    } else {
+                    }
+                    //Check if to do step
+                    if(gameInfoTimer%2 == 0) {
                         gameInfo.doStep();
                     }
                     /**
