@@ -35,6 +35,7 @@ public class AI implements IPlayer, Serializable {
     private int stepsSinceLastMelee;
     private int stepsSinceLastRanged;
     private int stepsSinceLastSpawn;
+    private int stepsSinceLastResource;
     private int randomSeed = 123456789;
     private AIState aiType;
     private double[] chances;
@@ -76,6 +77,7 @@ public class AI implements IPlayer, Serializable {
         this.stepsSinceLastMelee = 0;
         this.stepsSinceLastRanged = 0;
         this.stepsSinceLastSpawn = 0;
+        this.stepsSinceLastResource = 0;
         this.randomSeed = this.getNextRandom(0, 999999999);
         setAIType(AIState.DEFENSIVE);
         this.stillToSpawn = new ArrayList<>();
@@ -226,23 +228,26 @@ public class AI implements IPlayer, Serializable {
         /**
          * Set the values for random choices a.k.a. How much chance is there to
          * spawn defence for AI type Total value must be 100 to work correctly
-         * Chances order: Defence, Attack, Upgrade, Mysterybox
+         * Chances order: Defence, Attack, Upgrade, Mysterybox, Resource
          */
         if (type == AIState.DEFENSIVE) {
-            this.chances = new double[]{65.0, 20.0, 10.0, 5.0};
+            this.chances = new double[]{60.0, 20.0, 8.0, 5.0, 7.0};
+            //this.chances = new double[]{65.0, 20.0, 10.0, 5.0};
         } else if (type == AIState.AGRESSIVE) {
-            this.chances = new double[]{12.5, 70.0, 12.5, 5.0};
+            this.chances = new double[]{10.0, 65.0, 13.0, 7.0, 5.0};
+            //this.chances = new double[]{12.5, 70.0, 12.5, 5.0};
         } else if (type == AIState.MODERNATE) {
-            this.chances = new double[]{40.0, 40.0, 15.0, 5.0};
+            this.chances = new double[]{35.0, 42.5, 10.5, 6.0, 6.0};
+            //this.chances = new double[]{40.0, 40.0, 15.0, 5.0};
         }
 
         /**
          * Check if the chances values are correct
          */
-        if (this.chances.length < 4) {
-            throw new UnsupportedOperationException("AI must ALWAYS have 4 persentage values");
+        if (this.chances.length < 5 || this.chances.length > 5) {
+            throw new UnsupportedOperationException("AI must ALWAYS have 5 persentage values");
         }
-        if (this.chances[0] + this.chances[1] + this.chances[2] + this.chances[3] != 100) {
+        if (this.chances[0] + this.chances[1] + this.chances[2] + this.chances[3] + this.chances[4] != 100) {
             throw new UnsupportedOperationException("AI persentage values must be a total of 100");
         }
 
@@ -328,6 +333,7 @@ public class AI implements IPlayer, Serializable {
         stepsSinceLastMelee--;
         stepsSinceLastRanged--;
         stepsSinceLastSpawn--;
+        stepsSinceLastResource--;
     }
 
     /**
@@ -506,11 +512,16 @@ public class AI implements IPlayer, Serializable {
             /**
              * Do Upgrade
              */
-        } else {
+        } else if (choicePer < chances[0] + chances[1] + chances[2] + chances[3]) {
             /**
              * Bid on Mysterybox
              */
             bidOnMysterybox(gm);
+        } else if (choicePer < chances[0] + chances[1] + chances[2] + chances[3] + chances[4]) {
+            /**
+             * Place a Recource unit
+             */
+            placeResourceUnit();
         }
     }
 
@@ -699,6 +710,67 @@ public class AI implements IPlayer, Serializable {
     }
 
     /**
+     * Places a Resource unit at the base
+     */
+    private void placeResourceUnit() {
+        /**
+         * Check if the enemy still exsits
+         */
+        int[] laneRange = baseLanesToDefend();
+        if (laneRange[0] == 4 && laneRange[1] == 3) {
+            return;
+        }
+
+        /**
+         * Find out if there is a lane with no enemy connected anymore
+         */
+        ArrayList<Integer> allLanes = new ArrayList(Arrays.asList(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7}));
+        int nextLane = 0;
+        while (nextLane < allLanes.size()) {
+            if (allLanes.get(nextLane) < laneRange[0] || allLanes.get(nextLane) > laneRange[1]) {
+                allLanes.remove(nextLane);
+            } else {
+                nextLane++;
+            }
+        }
+
+        /**
+         * Check if the game is ended (a.k.a. no lanes left over)
+         */
+        if (allLanes.isEmpty()) {
+            allLanes = new ArrayList(Arrays.asList(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7}));
+        }
+
+        /**
+         * Get a random lane to place resource units
+         */
+        int lane = allLanes.get(getNextRandom(0, allLanes.size() - 1));
+
+        if (this.getDefenceAtLane(lane) < 3) {
+            /**
+             * Place an extra resource unit
+             *
+             * Get a new "random" position for spawning the unit on the
+             * specified lane. This can be [0, 1, 2], [4, 5, 6] [8, 9, 10], enz
+             */
+            int newSpot = -1;
+
+            /**
+             * Check if the spot is not already taken. If it is taken generate a
+             * new spot
+             */
+            while (newSpot == -1 || this.getBase().getUnit(newSpot) != null) {
+                newSpot = getNextRandom(0, 2) + lane * 4;
+            }
+
+            /**
+             * Create the unit object
+             */
+            this.spawnUnit(UnitType.RESOURCE, newSpot);
+        }
+    }
+
+    /**
      * Check if the enemy bases are still alive
      *
      * @return The minimum and maximum lane index number that still need to be
@@ -795,17 +867,22 @@ public class AI implements IPlayer, Serializable {
             case DEFENCE:
                 ui = UnitInfo.getDefenceUnit(this);
                 gm.placeUnitAtBase(this, ui.getUnit(), spawnPoint, ui.getCost());
-                stepsSinceLastDefence = (int) (ui.getCooldown());
+                stepsSinceLastDefence = ui.getCooldown();
                 break;
             case MELEE:
                 ui = UnitInfo.getMeleeUnit(this);
                 gm.placeUnitAtBase(this, ui.getUnit(), spawnPoint, ui.getCost());
-                stepsSinceLastMelee = (int) (ui.getCooldown());
+                stepsSinceLastMelee = ui.getCooldown();
                 break;
             case RANGED:
                 ui = UnitInfo.getRangedUnit(this);
                 gm.placeUnitAtBase(this, ui.getUnit(), spawnPoint, ui.getCost());
-                stepsSinceLastRanged = (int) (ui.getCooldown());
+                stepsSinceLastRanged = ui.getCooldown();
+                break;
+            case RESOURCE:
+                ui = UnitInfo.getResourceUnit(this);
+                gm.placeUnitAtBase(this, ui.getUnit(), spawnPoint, ui.getCost());
+                stepsSinceLastResource = ui.getCooldown();
                 break;
         }
     }
