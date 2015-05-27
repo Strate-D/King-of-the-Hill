@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import static java.lang.System.gc;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -145,6 +146,8 @@ public class Client implements Serializable {
                     Thread.sleep(10);
                 } catch (InterruptedException ex) {
                 }
+                
+                gc();
             }
         });
         t.start();
