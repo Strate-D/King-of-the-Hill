@@ -22,15 +22,10 @@ public class AIAttackInfo {
      * @param lane The lane of this information
      */
     public AIAttackInfo(int lane) {
-        if (lane > 0 && lane < 9) {
-            this.lane = lane;
-            this.upcomingUnits = 0;
-            this.defendingUnits = 0;
-            this.defence = 0;
-
-        } else {
-            throw new IllegalArgumentException("Lanes have to be between 1 and 8");
-        }
+        this.lane = lane;
+        this.upcomingUnits = 0;
+        this.defendingUnits = 0;
+        this.defence = 0;
     }
 
     /**

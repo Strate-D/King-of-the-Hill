@@ -61,7 +61,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
      * @throws RemoteException
      */
     @Override
-    public void addPlayer(String player, boolean isAi) throws RemoteException {
+    public synchronized void addPlayer(String player, boolean isAi) throws RemoteException {
         if (player != null) {
             if (isAi) {
                 AI ai;
@@ -103,7 +103,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
      * @throws RemoteException
      */
     @Override
-    public boolean setPlayerReady(String player) throws RemoteException {
+    public synchronized boolean setPlayerReady(String player) throws RemoteException {
         for (String p : readyPlayers) {
             if (p.equals(player)) {
                 readyPlayers.remove(player);
@@ -191,7 +191,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
          * Create and schedule timer for dostep method
          */
         timer = new Timer();
-        timer.schedule(new GameLoop(), 0, 1000 / 60);
+        timer.schedule(new GameLoop(), 0, 1000 / 30);
 
         readyGame = true;
     }
@@ -253,7 +253,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
      *
      * @return A iterator of units
      */
-    public Iterator<Unit> getLaneUnits() {
+    public synchronized Iterator<Unit> getLaneUnits() {
         ArrayList<Unit> list = new ArrayList<>();
         for (IPlayer p : players) {
             Base b = p.getBase();
@@ -383,7 +383,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     /**
      * Does a step in the game (1/60 of a second).
      */
-    private void doStep() {
+    private synchronized void doStep() {
         //Create game info for clients
         gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
 
@@ -482,7 +482,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
      * @param cost The cost of the unit, must be higher than 0.
      * @return true if unit is placed at lane, else false
      */
-    public boolean placeUnitAtLane(IPlayer player, Unit unit, int index, int cost) {
+    public synchronized boolean placeUnitAtLane(IPlayer player, Unit unit, int index, int cost) {
         /**
          * Check input
          */
@@ -517,7 +517,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
      * @param name
      * @return
      */
-    private IPlayer getPlayer(String name) {
+    private synchronized IPlayer getPlayer(String name) {
         for (IPlayer p : players) {
             if (p.getName().equals(name)) {
                 return p;
@@ -536,7 +536,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
      * @return
      */
     @Override
-    public boolean placeUnitAtBaseMulti(String playername, Unit unit, int index, int cost) {
+    public synchronized boolean placeUnitAtBaseMulti(String playername, Unit unit, int index, int cost) {
         IPlayer player = getPlayer(playername);
         Unit unitNew = null;
 
@@ -571,7 +571,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
      * @return true if unit is placed at base, else false
      */
     @Override
-    public boolean placeUnitAtBase(IPlayer player, Unit unit, int index, int cost) {
+    public synchronized boolean placeUnitAtBase(IPlayer player, Unit unit, int index, int cost) {
         /**
          * Check input
          */
@@ -606,7 +606,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
      *
      * @return A unmodifiable list, will never be empty
      */
-    public List<IPlayer> getPlayers() {
+    public synchronized List<IPlayer> getPlayers() {
         return Collections.unmodifiableList(players);
     }
 
@@ -615,12 +615,12 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
      *
      * @return The mysterybox object currently active in the game
      */
-    public Mysterybox getMysterybox() {
+    public synchronized Mysterybox getMysterybox() {
         return this.mysterybox;
     }
 
     @Override
-    public void bidMysteryboxMulti(String playername, int bid) {
+    public synchronized void bidMysteryboxMulti(String playername, int bid) {
         IPlayer player = getPlayer(playername);
 
         if (mysterybox != null && player != null) {
@@ -629,7 +629,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     }
 
     @Override
-    public IGameInfo getGameInfo() throws RemoteException {
+    public synchronized IGameInfo getGameInfo() throws RemoteException {
         return this.gameInfo;
     }
 }

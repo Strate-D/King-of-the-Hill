@@ -100,7 +100,8 @@ public class FXMLGameViewController implements Initializable {
         try {
             gm = new GameManager();
         } catch (RemoteException ex) {
-            Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Failed to start game");
+            System.exit(1);
         }
 
         try {
@@ -189,7 +190,7 @@ public class FXMLGameViewController implements Initializable {
 
             @Override
             public void handle(long now) {
-
+                
                 try {
                     getGameInfo();
                 } catch (RemoteException ex) {
@@ -555,7 +556,7 @@ public class FXMLGameViewController implements Initializable {
                 && lastRealMousePosy >= 90 && lastRealMousePosy <= 120 && defenceCooldown <= 0) {
             selectedUnit = UnitInfo.getDefenceUnit(gameInfo.getPlayers().get(0));
         } else if (lastRealMousePosx >= 125 && lastRealMousePosx <= 155
-                && lastRealMousePosy >= 125 && lastRealMousePosy <= 155 && defenceCooldown <= 0) {
+                && lastRealMousePosy >= 125 && lastRealMousePosy <= 155 && resourceCooldown <= 0) {
             selectedUnit = UnitInfo.getResourceUnit(gameInfo.getPlayers().get(0));
         }
         //Check if unit has to be placed
