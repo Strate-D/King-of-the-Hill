@@ -44,7 +44,7 @@ public class FXMLLobbyViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ClientManager.AudioChat.setParent(this);
-        
+
         try {
             ClientManager.AudioChat.start();
             System.out.println("VoiceChat: Voice client started");
@@ -53,16 +53,34 @@ public class FXMLLobbyViewController implements Initializable {
             System.out.println("VoiceChat: Exception: " + ex.getMessage());
             return;
         }
-        
+
         messages = FXCollections.observableArrayList();
         messagesOutput.setItems(messages);
-
-        
 
         chatInput.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent E) -> {
             switch (E.getCode()) {
                 case ENTER: {
                     handleSendButton();
+                    break;
+                }
+            }
+        });
+
+        content.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent E) -> {
+            switch (E.getCode()) {
+                case A:
+                {
+                    if(!ClientManager.AudioChat.isAudioCaptureStarted())
+                        ClientManager.AudioChat.startAudioCapture();
+                    break;
+                }
+            }
+        });
+        content.addEventFilter(KeyEvent.KEY_RELEASED, (KeyEvent E) -> {
+            switch (E.getCode()) {
+                case A:
+                {
+                    ClientManager.AudioChat.stopAudioCapture();
                     break;
                 }
             }

@@ -63,7 +63,8 @@ public class AudioCapture {
             this.client.printMessage("<< Started recording >>");
 
             while (!stopped /*&& line.isRunning()*/) {
-                this.client.printMessage("<< Recording ... >>");
+                //this.client.printMessage("<< Recording ... >>");
+
                 // Read the next chunk of data from the TargetDataLine.
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
 
@@ -90,5 +91,9 @@ public class AudioCapture {
 
     public void stopCapture() {
         this.stopped = true;
+    }
+
+    public boolean isRunning() {
+        return !this.stopped;
     }
 }

@@ -14,6 +14,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kingofthehill.UI.FXMLLobbyViewController;
 
 /**
@@ -136,7 +138,7 @@ public class VoiceClient {
 
             audioPlayer.stopPlayback();
 
-            System.exit(0);
+            //System.exit(0);
         });
         t.start();
     }
@@ -159,7 +161,7 @@ public class VoiceClient {
                 } else if (tmessage.getData().toString().startsWith("/stop")) {
                     this.audioCapturer.stopCapture();
                     return;
-                } 
+                }
 
                 sender.writeObject(message);
             } catch (Exception ex) {
@@ -184,12 +186,25 @@ public class VoiceClient {
     public void setParent(FXMLLobbyViewController value) {
         this.parent = value;
     }
-    
-    void printMessage(String message)
-    {
-        if(this.parent != null)
-        {
+
+    void printMessage(String message) {
+        if (this.parent != null) {
             this.parent.printMessage(message);
         }
+    }
+
+    public boolean isAudioCaptureStarted() {
+        return this.audioCapturer.isRunning();
+    }
+
+    public void startAudioCapture() {
+        try {
+            this.audioCapturer.startCapture();
+        } catch (Exception ex) {
+        }
+    }
+
+    public void stopAudioCapture() {
+        this.audioCapturer.stopCapture();
     }
 }
