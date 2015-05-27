@@ -129,9 +129,7 @@ public class FXMLLobbyViewController implements Initializable {
                             }
                         } catch (RemoteException ex) {
                             Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IOException ex) {
-                            Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        } 
 
                         try {
                             Thread.sleep(10);
