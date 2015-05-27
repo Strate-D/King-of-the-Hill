@@ -18,7 +18,7 @@
          <font>
             <Font size="45.0" />
          </font></Button>
-      <Button id="button" layoutX="643.0" layoutY="816.0" mnemonicParsing="false" onAction="#handleQuitButton" prefHeight="100.0" prefWidth="475.0" text="Quit" textFill="#ffcc00">
+      <Button id="button" layoutX="644.0" layoutY="928.0" mnemonicParsing="false" onAction="#handleQuitButton" prefHeight="100.0" prefWidth="475.0" text="Quit" textFill="#ffcc00">
          <font>
             <Font size="45.0" />
          </font>
@@ -28,12 +28,12 @@
             <Font size="24.0" />
          </font>
       </TextField>
-      <Button id="button" layoutX="643.0" layoutY="592.0" mnemonicParsing="false" onAction="#handlePlayButton" prefHeight="100.0" prefWidth="475.0" text="Play!" textFill="#ffcc00">
+      <Button id="button" layoutX="644.0" layoutY="704.0" mnemonicParsing="false" onAction="#handlePlayButton" prefHeight="100.0" prefWidth="475.0" text="Play!" textFill="#ffcc00">
          <font>
             <Font size="45.0" />
          </font>
       </Button>
-      <Button id="button" layoutX="643.0" layoutY="704.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="475.0" text="Highscores" textFill="#ffcc00">
+      <Button id="button" layoutX="644.0" layoutY="816.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="475.0" text="Highscores" textFill="#ffcc00">
          <font>
             <Font size="45.0" />
          </font>
@@ -53,5 +53,10 @@
             <Font size="36.0" />
          </font>
       </Label>
+      <Button id="button" layoutX="643.0" layoutY="588.0" mnemonicParsing="false" onAction="#handleRegisterButton" prefHeight="100.0" prefWidth="475.0" text="Register" textFill="#ffcc00">
+         <font>
+            <Font size="45.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

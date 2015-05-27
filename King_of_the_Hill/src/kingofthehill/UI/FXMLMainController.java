@@ -19,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import kingofthehill.DB.DatabaseMediator;
 import kingofthehill.Encryption.AES;
 import kingofthehill.client.ClientManager;
 
@@ -34,7 +35,7 @@ public class FXMLMainController implements Initializable {
 
     @FXML
     private Label errorLabel;
-    
+
     @FXML
     private TextField playerName;
 
@@ -83,30 +84,31 @@ public class FXMLMainController implements Initializable {
      * @param e
      * @throws java.lang.Exception
      */
-    public void handleLoginButton(ActionEvent e) throws Exception {
-        
-        King_of_the_Hill.context.setPlayerName(playerName.getText());
-        String password = AES.encrypt(playerPassword.getText());
-
-        ClientManager cm = new ClientManager(serverUrl.getText());
-
-        if (cm.locate()) {
-            King_of_the_Hill.context.setServerUrl(serverUrl.getText());
-            if((AES.decrypt(password).equals("henk"))){
-            try {
-                ClientManager.setupAudioChat(cm.getServerUrl(), 9090, playerName.getText());
-                Parent window1;
-                window1 = FXMLLoader.load(getClass().getResource("FXMLLobbyView.fxml"));
-                King_of_the_Hill.currentStage.getScene().setRoot(window1);
-            } catch (IOException ex) {
-                Logger.getLogger(FXMLMainController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    public void handleLoginButton(ActionEvent e) {
+        //Check login data
+        if (DatabaseMediator.checkLogin(playerName.getText(), playerPassword.getText())) {
+            //Set player name
+            King_of_the_Hill.context.setPlayerName(playerName.getText());
+            //Locate server
+            ClientManager cm = new ClientManager(serverUrl.getText());
+            if (cm.locate()) {
+                //Set server url
+                King_of_the_Hill.context.setServerUrl(serverUrl.getText());
+                //Open lobby
+                try {
+                    ClientManager.setupAudioChat(cm.getServerUrl(), 9090, playerName.getText());
+                    Parent window1;
+                    window1 = FXMLLoader.load(getClass().getResource("FXMLLobbyView.fxml"));
+                    King_of_the_Hill.currentStage.getScene().setRoot(window1);
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLMainController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else {
-                errorLabel.setText("Password doesn't match with username");
+                errorLabel.setText("Server could not be found");
                 errorLabel.setVisible(true);
             }
-        }else{
-            errorLabel.setText("Server could not be found");
+        } else {
+            errorLabel.setText("Login failed!");
             errorLabel.setVisible(true);
         }
     }
@@ -118,6 +120,20 @@ public class FXMLMainController implements Initializable {
      */
     public void handleQuitButton(ActionEvent e) {
         System.exit(1);
+    }
+
+    /**
+     * Register the player
+     *
+     * @param e
+     */
+    public void handleRegisterButton(ActionEvent e) {
+        if (DatabaseMediator.addNewPlayer(playerName.getText(), playerPassword.getText())) {
+            handleLoginButton(e);
+        } else {
+            errorLabel.setText("Regestering failed!");
+            errorLabel.setVisible(true);
+        }
     }
 
 }

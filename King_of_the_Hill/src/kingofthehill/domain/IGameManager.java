@@ -23,7 +23,7 @@ public interface IGameManager extends Remote{
     public boolean readyGame() throws RemoteException;
     
     public boolean placeUnitAtBase(IPlayer player, Unit unit, int index, int cost) throws RemoteException;
-    
+    //Unit to unittype
     public boolean placeUnitAtBaseMulti(String playername, Unit unit, int index, int cost) throws RemoteException;
     
     public void bidMysteryboxMulti(String playername, int bid) throws RemoteException;
