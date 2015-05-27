@@ -119,10 +119,12 @@ public class ClientManager {
         if (ClientManager.AudioChat == null) {
             ClientManager.AudioChat = new VoiceClient(ipAddress, port, username);
         } else {
+            if (!ClientManager.AudioChat.isStarted()) {
+                ClientManager.AudioChat = new VoiceClient(ipAddress, port, username);
+                return true;
+            }
             return false;
         }
-
-        
 
         return true;
     }

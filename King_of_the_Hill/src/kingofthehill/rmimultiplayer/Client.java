@@ -5,6 +5,7 @@
  */
 package kingofthehill.rmimultiplayer;
 
+import java.io.EOFException;
 import kingofthehill.server.VoiceServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,10 +13,13 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import static java.lang.System.gc;
 import java.net.Socket;
+import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -96,6 +100,7 @@ public class Client implements Serializable {
             }
             sender.writeObject(message);
         } catch (Exception ecx) {
+            this.isAlive = false;
             System.out.println(ecx.getMessage());
         }
     }
@@ -104,12 +109,19 @@ public class Client implements Serializable {
         Thread t = new Thread(() -> {
             while (isAlive) {
 
+                if (!this.socket.isConnected()) {
+                    this.killClient();
+                    break;
+                }
+
                 Message object = null;
                 try {
                     object = (Message) reader.readObject();
+                } catch (EOFException|SocketException ex) {
+                    this.killClient();
                 } catch (Exception ex) {
                     continue;
-                }
+                } 
 
                 SimpleDateFormat dt = new SimpleDateFormat("hh:mm:ss");
 
@@ -126,7 +138,12 @@ public class Client implements Serializable {
                         System.out.print("\r<< Client " + mess.getData() + " will be kicked >>\n");
                         Client c = getClient((int) mess.getData());
                         c.sendMessageToMyself(new InfoMessage(null, "KICK"));
-                        c.setClientDead();
+                        c.killClient();
+                        continue;
+                    } else if (mess.getDefine().equals("LEAVE_PARTY")) {
+                        this.sendMessageToAll(new TextMessage(-10, name + " left the game"));
+                        System.out.println(name + " left the game");
+                        this.killClient();
                         continue;
                     } else if (mess.getDefine().equals("GET_LAST_MESSAGES")) {
                         System.out.println("\r<< Sending previous messages to client(" + mess.getSender() + ")");
@@ -146,9 +163,11 @@ public class Client implements Serializable {
                     Thread.sleep(10);
                 } catch (InterruptedException ex) {
                 }
-                
+
                 gc();
             }
+
+            this.killClient();
         });
         t.start();
     }
@@ -157,16 +176,10 @@ public class Client implements Serializable {
         for (Client c : knownClients) {
             c.sendMessageToMyself(message);
         }
-        
+
         if (!(message instanceof AudioMessage)) {
             this.sendMessageToMyself(message);
         }
-    }
-
-    private void setClientDead() {
-        this.isAlive = false;
-        this.parent.removeClient(this);
-
     }
 
     private Client getClient(int id) {
@@ -188,5 +201,14 @@ public class Client implements Serializable {
 
     public void removeClient(Client toRemove) {
         this.knownClients.remove(toRemove);
+    }
+
+    public void killClient() {
+        try {
+            this.isAlive = false;
+            this.socket.close();
+            this.parent.removeClient(this);
+        } catch (Exception ex) {
+        }
     }
 }
