@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class Team implements Serializable {
     private int nr;
-    private List<IPlayer> players;
+    private transient List<IPlayer> players;
     
     /**
      * Creates a new Team object
