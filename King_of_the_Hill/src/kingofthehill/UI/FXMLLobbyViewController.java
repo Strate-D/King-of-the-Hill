@@ -68,7 +68,7 @@ public class FXMLLobbyViewController implements Initializable {
 
         content.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent E) -> {
             switch (E.getCode()) {
-                case A:
+                case F3:
                 {
                     if(!ClientManager.AudioChat.isAudioCaptureStarted())
                         ClientManager.AudioChat.startAudioCapture();
@@ -78,7 +78,7 @@ public class FXMLLobbyViewController implements Initializable {
         });
         content.addEventFilter(KeyEvent.KEY_RELEASED, (KeyEvent E) -> {
             switch (E.getCode()) {
-                case A:
+                case F3:
                 {
                     ClientManager.AudioChat.stopAudioCapture();
                     break;
