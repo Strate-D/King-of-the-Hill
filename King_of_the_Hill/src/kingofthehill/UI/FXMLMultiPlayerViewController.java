@@ -279,6 +279,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
 
     private void getGameInfo() throws RemoteException {
         gameInfo = gm.getGameInfo();
+        gameInfo.setFirstPlayer(King_of_the_Hill.context.getPlayerName());
     }
 
     /**
