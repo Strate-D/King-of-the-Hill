@@ -23,10 +23,12 @@ public class AudioPlayer {
     private ArrayList<AudioMessage> bufferedMessages;
     private boolean playing;
     private int lastPlayedClip;
+    private VoiceClient parent;
 
-    public AudioPlayer() {
+    public AudioPlayer(VoiceClient parent) {
         this.bufferedMessages = new ArrayList<>();
         this.playing = true;
+        this.parent = parent;
     }
 
     public void play() throws Exception {
@@ -43,7 +45,7 @@ public class AudioPlayer {
             }
 
             if (speakers == null) {
-                System.out.println("Could not open the spreakers for playing audio");
+                this.parent.printMessage("Could not open the spreakers for playing audio");
                 return;
             }
 
@@ -52,7 +54,7 @@ public class AudioPlayer {
 
             this.resetMessageCounter();
 
-            System.out.println("\r<< Speakers are set up and ready to play >>");
+            this.parent.printMessage("<< Speakers are set up and ready to play >>");
 
             while (playing) {
                 // Find the next clip

@@ -122,14 +122,7 @@ public class ClientManager {
             return false;
         }
 
-        try {
-            ClientManager.AudioChat.start();
-            System.out.println("VoiceChat: Voice client started");
-        } catch (Exception ex) {
-            System.out.println("VoiceChat: Cannot start voice client");
-            System.out.println("VoiceChat: Exception: " + ex.getMessage());
-            return false;
-        }
+        
 
         return true;
     }

@@ -63,7 +63,7 @@ public class Client implements Serializable {
         return this.socket;
     }
 
-    public void sendMessageToSingle(Message message) {
+    public void sendMessageToMyself(Message message) {
         // Message contains a client id
         // replace the client id for a name
         if (message.getSender() == -10) {
@@ -119,18 +119,18 @@ public class Client implements Serializable {
                     if (mess.getDefine().equals("CLIENT_NAME")) {
                         System.out.print("\r<< Client(" + clientID + ") changed name from \'" + name + "\' to \'" + mess.getData() + "\' >>\n");
                         name = (String) mess.getData();
-                        sendMessageToSingle(new TextMessage(-10, name + " joined the game"));
+                        sendMessageToAll(new TextMessage(-10, name + " joined the game"));
                         continue;
                     } else if (mess.getDefine().equals("KICK_CLIENT")) {
                         System.out.print("\r<< Client " + mess.getData() + " will be kicked >>\n");
                         Client c = getClient((int) mess.getData());
-                        c.sendMessageToSingle(new InfoMessage(null, "KICK"));
+                        c.sendMessageToMyself(new InfoMessage(null, "KICK"));
                         c.setClientDead();
                         continue;
                     } else if (mess.getDefine().equals("GET_LAST_MESSAGES")) {
-                        System.out.print("\r<< Sending previous messages to client(" + mess.getSender() + ")");
+                        System.out.println("\r<< Sending previous messages to client(" + mess.getSender() + ")");
                         Client c = getClient((int) mess.getData());
-                        c.sendMessageToSingle(new InfoMessage(this.parent.getMessages(), "SEND_LAST_MESSAGES"));
+                        c.sendMessageToMyself(new InfoMessage(this.parent.getMessages(), "SEND_LAST_MESSAGES"));
                         continue;
                     }
                 } else if (object instanceof AudioMessage) {
@@ -139,13 +139,7 @@ public class Client implements Serializable {
                     this.parent.addMessage(object);
                 }
 
-                for (Client c : knownClients) {
-                    c.sendMessageToSingle(object);
-                }
-                if (object instanceof AudioMessage) {
-                } else {
-                    sendMessageToSingle(object);
-                }
+                this.sendMessageToAll(object);
 
                 try {
                     Thread.sleep(10);
@@ -154,6 +148,16 @@ public class Client implements Serializable {
             }
         });
         t.start();
+    }
+
+    private void sendMessageToAll(Message message) {
+        for (Client c : knownClients) {
+            c.sendMessageToMyself(message);
+        }
+        
+        if (!(message instanceof AudioMessage)) {
+            this.sendMessageToMyself(message);
+        }
     }
 
     private void setClientDead() {
