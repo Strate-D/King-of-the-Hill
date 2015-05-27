@@ -88,7 +88,6 @@ public class FXMLMultiPlayerViewController implements Initializable {
     String mysteryboxWinner = "";
     String mysteryboxContent = "";
     int gameInfoTimer;
-    long lastFrame = 1;
 
     /**
      * Initializes the controller class.
@@ -175,99 +174,97 @@ public class FXMLMultiPlayerViewController implements Initializable {
 
                 @Override
                 public void handle(long now) {
-                    if(1000000000/(now - lastFrame) <= 30){
-                        lastFrame = now;
-                        //Check if data has te be updated from the server
-                        if (gameInfoTimer > 10) {
-                            Executors.newSingleThreadExecutor().execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        getGameInfo();
-                                    } catch (RemoteException ex) {
-                                        Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
+                    //Check if data has te be updated from the server
+                    if (gameInfoTimer > 10) {
+                        Executors.newSingleThreadExecutor().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    getGameInfo();
+                                } catch (RemoteException ex) {
+                                    Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                            });
-                            gameInfoTimer = 0;
-                        } else {
-                            gameInfo.doStep();
+                            }
+                        });
+                        gameInfoTimer = 0;
+                        gameInfo.doStep();
+                    } else {
+                        gameInfo.doStep();
+                    }
+                    /**
+                     * Keep track of timer
+                     */
+                    gameInfoTimer++;
+                    
+                    drawBackground();
+                    drawField();
+                    drawUnits();
+
+                    // Check and handle mouse scrolling
+                    if (isMouseOnCanvas) {
+                        if (lastMousePosx > 800) {
+                            if (scrollPosX < -443) {
+                                scrollPosX = -450;
+                            } else {
+                                scrollPosX = scrollPosX - 7;
+                            }
+                        } else if (lastMousePosx < 100) {
+                            if (scrollPosX > -7) {
+                                scrollPosX = 0;
+                            } else {
+                                scrollPosX = scrollPosX + 7;
+                            }
                         }
+                        if (lastMousePosy > 800) {
+                            if (scrollPosY < -443) {
+                                scrollPosY = -450;
+                            } else {
+                                scrollPosY = scrollPosY - 7;
+                            }
+                        } else if (lastMousePosy < 100) {
+                            if (scrollPosY > -7) {
+                                scrollPosY = 0;
+                            } else {
+                                scrollPosY = scrollPosY + 7;
+                            }
+                        }
+                    }
+                    //If mouse on canvas, zoom in
+                    if (isMouseOnCanvas) {
+                        canvas.getGraphicsContext2D().setTransform(1.5, 0, 0, 1.5, scrollPosX, scrollPosY);
+                    } else {
+                        canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
+                    }
+
+                    //Check if game ended
+                    if (gameInfo.getPlayers().get(0).getBase().getHealthPoints() == 0 && gameInfo.getPlayers().get(2).getBase().getHealthPoints() == 0) {
+                        canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
                         drawBackground();
                         drawField();
                         drawUnits();
+                        canvas.getGraphicsContext2D().fillText("Team blue won!", 450, 450);
+                        this.stop();
+                    } else if (gameInfo.getPlayers().get(1).getBase().getHealthPoints() == 0 && gameInfo.getPlayers().get(3).getBase().getHealthPoints() == 0) {
+                        canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
+                        drawBackground();
+                        drawField();
+                        drawUnits();
+                        canvas.getGraphicsContext2D().fillText("Team red won!", 450, 450);
+                        this.stop();
+                    }
 
-                        // Check and handle mouse scrolling
-                        if (isMouseOnCanvas) {
-                            if (lastMousePosx > 800) {
-                                if (scrollPosX < -443) {
-                                    scrollPosX = -450;
-                                } else {
-                                    scrollPosX = scrollPosX - 7;
-                                }
-                            } else if (lastMousePosx < 100) {
-                                if (scrollPosX > -7) {
-                                    scrollPosX = 0;
-                                } else {
-                                    scrollPosX = scrollPosX + 7;
-                                }
-                            }
-                            if (lastMousePosy > 800) {
-                                if (scrollPosY < -443) {
-                                    scrollPosY = -450;
-                                } else {
-                                    scrollPosY = scrollPosY - 7;
-                                }
-                            } else if (lastMousePosy < 100) {
-                                if (scrollPosY > -7) {
-                                    scrollPosY = 0;
-                                } else {
-                                    scrollPosY = scrollPosY + 7;
-                                }
-                            }
-                        }
-                        //If mouse on canvas, zoom in
-                        if (isMouseOnCanvas) {
-                            canvas.getGraphicsContext2D().setTransform(1.5, 0, 0, 1.5, scrollPosX, scrollPosY);
-                        } else {
-                            canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
-                        }
-
-                        //Check if game ended
-                        if (gameInfo.getPlayers().get(0).getBase().getHealthPoints() == 0 && gameInfo.getPlayers().get(2).getBase().getHealthPoints() == 0) {
-                            canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
-                            drawBackground();
-                            drawField();
-                            drawUnits();
-                            canvas.getGraphicsContext2D().fillText("Team blue won!", 450, 450);
-                            this.stop();
-                        } else if (gameInfo.getPlayers().get(1).getBase().getHealthPoints() == 0 && gameInfo.getPlayers().get(3).getBase().getHealthPoints() == 0) {
-                            canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
-                            drawBackground();
-                            drawField();
-                            drawUnits();
-                            canvas.getGraphicsContext2D().fillText("Team red won!", 450, 450);
-                            this.stop();
-                        }
-
-                        //Handle cooldown of units
-                        if (meleeCooldown > 0) {
-                            meleeCooldown--;
-                        }
-                        if (rangedCooldown > 0) {
-                            rangedCooldown--;
-                        }
-                        if (defenceCooldown > 0) {
-                            defenceCooldown--;
-                        }
-                        if (resourceCooldown > 0) {
-                            resourceCooldown--;
-                        }
-
-                        /**
-                         * Keep track of timer
-                         */
-                        gameInfoTimer++;
+                    //Handle cooldown of units
+                    if (meleeCooldown > 0) {
+                        meleeCooldown--;
+                    }
+                    if (rangedCooldown > 0) {
+                        rangedCooldown--;
+                    }
+                    if (defenceCooldown > 0) {
+                        defenceCooldown--;
+                    }
+                    if (resourceCooldown > 0) {
+                        resourceCooldown--;
                     }
                 }
 
