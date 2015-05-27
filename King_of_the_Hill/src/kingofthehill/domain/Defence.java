@@ -6,7 +6,7 @@ package kingofthehill.domain;
 import java.io.Serializable;
 
 /**
- * Class containing all the info about a Defencive unit. Extends Unit.
+ * Class containing all the info about a Defensive unit. Extends Unit.
  *
  * @author Jur
  */
