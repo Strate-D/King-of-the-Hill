@@ -112,10 +112,21 @@ public class FXMLLobbyViewController implements Initializable {
                     while (true) {
                         try {
                             if (cm.getGameManager().readyGame()) {
-                                //Load next window
-                                Parent window1;
-                                window1 = FXMLLoader.load(getClass().getResource("FXMLMultiPlayerView.fxml"));
-                                King_of_the_Hill.currentStage.getScene().setRoot(window1);
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            //Load next window
+                                            Parent window1;
+                                            window1 = FXMLLoader.load(getClass().getResource("FXMLMultiPlayerView.fxml"));
+                                            King_of_the_Hill.currentStage.getScene().setRoot(window1);
+                                        } catch (IOException ex) {
+                                            System.out.println("Loading new window failed!");
+                                        }
+                                        
+
+                                    }
+                                });
                                 break;
                             }
                         } catch (RemoteException ex) {
