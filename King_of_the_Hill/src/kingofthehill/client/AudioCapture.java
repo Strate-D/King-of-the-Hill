@@ -62,7 +62,8 @@ public class AudioCapture {
             // Here, stopped is a global boolean set by another thread.
             this.client.printMessage("<< Started recording >>");
 
-            while (!stopped && line.isRunning()) {
+            while (!stopped /*&& line.isRunning()*/) {
+                this.client.printMessage("<< Recording ... >>");
                 // Read the next chunk of data from the TargetDataLine.
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
 
@@ -82,9 +83,7 @@ public class AudioCapture {
 
             line.close();
 
-            if (stopped) {
-                this.client.printMessage("<< Audio recording stopped >>");
-            }
+            this.client.printMessage("<< Audio recording stopped >>");
         });
         t.start();
     }
