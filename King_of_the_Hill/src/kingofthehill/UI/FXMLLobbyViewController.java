@@ -75,18 +75,17 @@ public class FXMLLobbyViewController implements Initializable {
 
         content.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent E) -> {
             switch (E.getCode()) {
-                case F3:
-                {
-                    if(!ClientManager.AudioChat.isAudioCaptureStarted())
+                case F3: {
+                    if (!ClientManager.AudioChat.isAudioCaptureStarted()) {
                         ClientManager.AudioChat.startAudioCapture();
+                    }
                     break;
                 }
             }
         });
         content.addEventFilter(KeyEvent.KEY_RELEASED, (KeyEvent E) -> {
             switch (E.getCode()) {
-                case F3:
-                {
+                case F3: {
                     ClientManager.AudioChat.stopAudioCapture();
                     break;
                 }
@@ -98,8 +97,8 @@ public class FXMLLobbyViewController implements Initializable {
     public void handleReadyButton() {
         try {
             ClientManager cm = new ClientManager(King_of_the_Hill.context.getServerUrl());
-            cm.getGameManager().addPlayer(King_of_the_Hill.context.getPlayerName(), false);
             if (cm.locate()) {
+                cm.getGameManager().addPlayer(King_of_the_Hill.context.getPlayerName(), false);
                 if (cm.getGameManager().setPlayerReady(King_of_the_Hill.context.getPlayerName())) {
                     buttonReady.setText("Unready");
                 } else {
