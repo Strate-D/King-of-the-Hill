@@ -25,6 +25,14 @@ public class DefenceTest {
 
     @Test
     public void TestCanAttack() {
-        
+        try{
+        IPlayer player1 = new AI("computer1");
+        Unit defence = new Defence(1, 1, 1, player1);
+        defence.canAttackUnit();
+        }
+        catch(Exception exc){
+            fail("unit couldn't attack");
+        }
+        }
     }
 }
