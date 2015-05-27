@@ -123,8 +123,6 @@ public class FXMLLobbyViewController implements Initializable {
                                         } catch (IOException ex) {
                                             System.out.println("Loading new window failed!");
                                         }
-                                        
-
                                     }
                                 });
                                 break;
