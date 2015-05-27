@@ -43,7 +43,7 @@ public class AITest
             IPlayer player2 = new AI("");
             fail("AI name cannot be empty!");
         }
-        catch (IllegalArgumentException ecx)
+        catch (IllegalArgumentException exc)
         {
         }
     }

@@ -380,7 +380,7 @@ public class AI implements IPlayer, Serializable {
             AttackInfo.add(info);
 
             info.setDefendingUnits(this.getAttackAtLane(i));
-            info.setUpcomingUnits(this.getBase().getLane(i).getUnits().size() - info.getDefendinUnits());
+            info.setUpcomingUnits(this.getBase().getLane(i).getUnits().size() - info.getDefendingUnits());
             info.setDefence(this.getDefenceAtLane(i));
         }
 
@@ -390,7 +390,7 @@ public class AI implements IPlayer, Serializable {
          */
         ArrayList<AIAttackInfo> toRemove = new ArrayList<>();
         for (AIAttackInfo aia : AttackInfo) {
-            if (aia.getUpcomingUnits() <= aia.getDefendinUnits() + aia.getDefence()) {
+            if (aia.getUpcomingUnits() <= aia.getDefendingUnits() + aia.getDefence()) {
                 toRemove.add(aia);
             }
             if (aia.getUpcomingUnits() == 0) {
@@ -410,8 +410,8 @@ public class AI implements IPlayer, Serializable {
          */
         for (int i = 0; i < AttackInfo.size(); i++) {
             for (int j = 0; j < AttackInfo.size(); j++) {
-                int differance1 = AttackInfo.get(i).getUpcomingUnits() - (AttackInfo.get(i).getDefendinUnits() + AttackInfo.get(i).getDefence());
-                int differance2 = AttackInfo.get(j).getUpcomingUnits() - (AttackInfo.get(j).getDefendinUnits() + AttackInfo.get(j).getDefence());
+                int differance1 = AttackInfo.get(i).getUpcomingUnits() - (AttackInfo.get(i).getDefendingUnits() + AttackInfo.get(i).getDefence());
+                int differance2 = AttackInfo.get(j).getUpcomingUnits() - (AttackInfo.get(j).getDefendingUnits() + AttackInfo.get(j).getDefence());
                 if (differance1 > differance2) {
                     AIAttackInfo helper = AttackInfo.get(i);
                     AttackInfo.set(i, AttackInfo.get(j));
