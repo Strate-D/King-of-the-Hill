@@ -16,7 +16,7 @@ import kingofthehill.domain.Mysterybox;
 import kingofthehill.domain.Unit;
 
 /**
- *
+ * Class that has all the important gameinfo of a multiplayer game
  * @author Dennis
  */
 public class GameInfo implements IGameInfo, Serializable{
@@ -34,7 +34,6 @@ public class GameInfo implements IGameInfo, Serializable{
         this.mysteryboxTime = mysteryboxtime;
     }
 
-    
     @Override
     public List<IPlayer> getPlayers() {
         return players;

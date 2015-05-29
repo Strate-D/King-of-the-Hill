@@ -10,21 +10,72 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
- *
+ * Interface of the gamemanager for multiplayer
  * @author Dennis
  */
 public interface IGameManager extends Remote{
+    /**
+     * Gets the gameinfo from the remote gamemanager on the server
+     * @return IGameInfo gameinfo object which contains all the important game information
+     * @throws RemoteException
+     */
     public IGameInfo getGameInfo() throws RemoteException;
     
+    /**
+     * Adds a new player to an existing game
+     * @param player name of the player to add, may not be null or empty
+     * @param isAi true if the player to add is an AI, else false
+     * @throws RemoteException 
+     */
     public void addPlayer(String player, boolean isAi) throws RemoteException;
     
+    /**
+     * Removes an existing player from an existing game
+     * @param player name of the player to be removed, may not be null or empty
+     * @throws RemoteException 
+     */
+    public void removePlayer(String player) throws RemoteException;
+    
+    /**
+     * Sets an joined player ready
+     * @param player name of the player to set ready
+     * @return true if player is ready, else false
+     * @throws RemoteException 
+     */
     public boolean setPlayerReady(String player) throws RemoteException;
     
+    /**
+     * Gets the join status of a player
+     * @param player name of the player to check
+     * @return true if player is ready, else false
+     * @throws RemoteException 
+     */
+    public boolean getPlayerReady(String player) throws RemoteException;
+    
+    /**
+     * Status of the game, if the game can be started
+     * @return true if all 4 players are ready, else false
+     * @throws RemoteException 
+     */
     public boolean readyGame() throws RemoteException;
     
-    public boolean placeUnitAtBase(IPlayer player, Unit unit, int index, int cost) throws RemoteException;
+    /**
+     * Places a unit at a lane of the base of the player
+     * @param playername name of the player
+     * @param unit unit that has to be placed
+     * @param index in which lane the unit has to be placed
+     * @param cost the cost of the unit that has to be placed
+     * @return true if unit is succesfully placed, else false
+     * @throws RemoteException 
+     */
     //Unit to unittype
     public boolean placeUnitAtBaseMulti(String playername, Unit unit, int index, int cost) throws RemoteException;
     
+    /**
+     * Bid on mysterybox
+     * @param playername name of the player that bids on the mysterybox
+     * @param bid amount of resources
+     * @throws RemoteException 
+     */
     public void bidMysteryboxMulti(String playername, int bid) throws RemoteException;
 }

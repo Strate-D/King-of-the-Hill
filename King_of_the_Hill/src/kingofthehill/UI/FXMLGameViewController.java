@@ -30,8 +30,6 @@ import kingofthehill.domain.AI;
 import kingofthehill.domain.AIState;
 import kingofthehill.domain.Defence;
 import kingofthehill.domain.GameManager;
-import kingofthehill.rmimultiplayer.IGameInfo;
-import kingofthehill.domain.IGameManager;
 import kingofthehill.domain.IPlayer;
 import kingofthehill.domain.Melee;
 import kingofthehill.domain.Player;
@@ -73,8 +71,7 @@ public class FXMLGameViewController implements Initializable {
     //Mysterybox sprites
     Image mysterybox;
 
-    IGameManager gm;
-    IGameInfo gameInfo;
+    GameManager gm;
     AnimationTimer antimer;
     boolean isMouseOnCanvas;
     boolean isMouseClicked = false;
@@ -108,14 +105,8 @@ public class FXMLGameViewController implements Initializable {
 
         try {
             gm.addPlayer(King_of_the_Hill.context.getPlayerName(), false);
-            //AI ai1 = new AI("ArtificialIntelligence1");
-            //ai1.setAIType(AIState.DEFENSIVE);
             gm.addPlayer("ArtificialIntelligence1", true);
-            //AI ai2 = new AI("ArtificialIntelligence2");
-            //ai2.setAIType(AIState.MODERNATE);
             gm.addPlayer("ArtificialIntelligence2", true);
-            //AI ai3 = new AI("ArtificialIntelligence3");
-            //ai3.setAIType(AIState.AGRESSIVE);
             gm.addPlayer("ArtificialIntelligence3", true);
 
             gm.setPlayerReady(King_of_the_Hill.context.getPlayerName());
@@ -125,12 +116,6 @@ public class FXMLGameViewController implements Initializable {
 
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        try {
-            getGameInfo();
-        } catch (RemoteException ex) {
-            Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         isMouseOnCanvas = false;
@@ -192,11 +177,6 @@ public class FXMLGameViewController implements Initializable {
 
             @Override
             public void handle(long now) {
-                try {
-                    getGameInfo();
-                } catch (RemoteException ex) {
-                    Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
-                }
                 drawBackground();
                 drawField();
                 drawUnits();
@@ -238,14 +218,14 @@ public class FXMLGameViewController implements Initializable {
                 }
 
                 //Check if game ended
-                if (gameInfo.getPlayers().get(0).getBase().getHealthPoints() == 0 && gameInfo.getPlayers().get(2).getBase().getHealthPoints() == 0) {
+                if (gm.getPlayers().get(0).getBase().getHealthPoints() == 0 && gm.getPlayers().get(2).getBase().getHealthPoints() == 0) {
                     canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
                     drawBackground();
                     drawField();
                     drawUnits();
                     canvas.getGraphicsContext2D().fillText("Team blue won!", 450, 450);
                     this.stop();
-                } else if (gameInfo.getPlayers().get(1).getBase().getHealthPoints() == 0 && gameInfo.getPlayers().get(3).getBase().getHealthPoints() == 0) {
+                } else if (gm.getPlayers().get(1).getBase().getHealthPoints() == 0 && gm.getPlayers().get(3).getBase().getHealthPoints() == 0) {
                     canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
                     drawBackground();
                     drawField();
@@ -274,31 +254,8 @@ public class FXMLGameViewController implements Initializable {
                 super.start();
             }
         };
-
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        if (gm.readyGame()) {
-                            antimer.start();
-                            break;
-                        }
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        });
-    }
-
-    private void getGameInfo() throws RemoteException {
-        gameInfo = gm.getGameInfo();
+        
+        antimer.start();
     }
 
     /**
@@ -372,22 +329,22 @@ public class FXMLGameViewController implements Initializable {
      */
     private void drawField() {
         //Check hp, then draw correct sprite for base
-        if (gameInfo.getPlayers().get(0).getBase().getHealthPoints() > 0) {
+        if (gm.getPlayers().get(0).getBase().getHealthPoints() > 0) {
             canvas.getGraphicsContext2D().drawImage(castle1, 20, 20, 200, 200);
         } else {
             canvas.getGraphicsContext2D().drawImage(castle_destroyed1, 20, 20, 200, 200);
         }
-        if (gameInfo.getPlayers().get(1).getBase().getHealthPoints() > 0) {
+        if (gm.getPlayers().get(1).getBase().getHealthPoints() > 0) {
             canvas.getGraphicsContext2D().drawImage(castle2, 680, 20, 200, 200);
         } else {
             canvas.getGraphicsContext2D().drawImage(castle_destroyed2, 680, 20, 200, 200);
         }
-        if (gameInfo.getPlayers().get(2).getBase().getHealthPoints() > 0) {
+        if (gm.getPlayers().get(2).getBase().getHealthPoints() > 0) {
             canvas.getGraphicsContext2D().drawImage(castle3, 680, 680, 200, 200);
         } else {
             canvas.getGraphicsContext2D().drawImage(castle_destroyed3, 680, 680, 200, 200);
         }
-        if (gameInfo.getPlayers().get(3).getBase().getHealthPoints() > 0) {
+        if (gm.getPlayers().get(3).getBase().getHealthPoints() > 0) {
             canvas.getGraphicsContext2D().drawImage(castle4, 20, 680, 200, 200);
         } else {
             canvas.getGraphicsContext2D().drawImage(castle_destroyed4, 20, 680, 200, 200);
@@ -399,20 +356,20 @@ public class FXMLGameViewController implements Initializable {
         canvas.getGraphicsContext2D().fillRect(745, 760, 100, 5);
         canvas.getGraphicsContext2D().fillRect(55, 760, 100, 5);
         canvas.getGraphicsContext2D().setFill(Color.GREEN);
-        canvas.getGraphicsContext2D().fillRect(55, 70, (float) gameInfo.getPlayers().get(0).getBase().getHealthPoints(), 5);
-        canvas.getGraphicsContext2D().fillRect(745, 70, (float) gameInfo.getPlayers().get(1).getBase().getHealthPoints(), 5);
-        canvas.getGraphicsContext2D().fillRect(745, 760, (float) gameInfo.getPlayers().get(2).getBase().getHealthPoints(), 5);
-        canvas.getGraphicsContext2D().fillRect(55, 760, (float) gameInfo.getPlayers().get(3).getBase().getHealthPoints(), 5);
+        canvas.getGraphicsContext2D().fillRect(55, 70, (float) gm.getPlayers().get(0).getBase().getHealthPoints(), 5);
+        canvas.getGraphicsContext2D().fillRect(745, 70, (float) gm.getPlayers().get(1).getBase().getHealthPoints(), 5);
+        canvas.getGraphicsContext2D().fillRect(745, 760, (float) gm.getPlayers().get(2).getBase().getHealthPoints(), 5);
+        canvas.getGraphicsContext2D().fillRect(55, 760, (float) gm.getPlayers().get(3).getBase().getHealthPoints(), 5);
         //Draw name
         canvas.getGraphicsContext2D().setFill(Color.BLACK);
         canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.BOLD, 12));
-        canvas.getGraphicsContext2D().fillText(gameInfo.getPlayers().get(0).getName(), 70, 65);
-        canvas.getGraphicsContext2D().fillText(gameInfo.getPlayers().get(1).getName(), 760, 65);
-        canvas.getGraphicsContext2D().fillText(gameInfo.getPlayers().get(2).getName(), 760, 755);
-        canvas.getGraphicsContext2D().fillText(gameInfo.getPlayers().get(3).getName(), 70, 755);
+        canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(0).getName(), 70, 65);
+        canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(1).getName(), 760, 65);
+        canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(2).getName(), 760, 755);
+        canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(3).getName(), 70, 755);
         //Draw money
         canvas.getGraphicsContext2D().setFill(Color.GOLD);
-        canvas.getGraphicsContext2D().fillText("# gold: " + gameInfo.getPlayers().get(0).getMoney(), 55, 100);
+        canvas.getGraphicsContext2D().fillText("# gold: " + gm.getPlayers().get(0).getMoney(), 55, 100);
         //Draw score
         canvas.getGraphicsContext2D().setFill(Color.AQUA);
         canvas.getGraphicsContext2D().fillRect(55, 80, 100, 5);
@@ -420,10 +377,10 @@ public class FXMLGameViewController implements Initializable {
         canvas.getGraphicsContext2D().fillRect(745, 770, 100, 5);
         canvas.getGraphicsContext2D().fillRect(55, 770, 100, 5);
         canvas.getGraphicsContext2D().setFill(Color.BLUE);
-        canvas.getGraphicsContext2D().fillRect(105, 80, (float) gameInfo.getPlayers().get(0).getScore() / 2, 5);
-        canvas.getGraphicsContext2D().fillRect(795, 80, (float) gameInfo.getPlayers().get(1).getScore() / 2, 5);
-        canvas.getGraphicsContext2D().fillRect(795, 770, (float) gameInfo.getPlayers().get(2).getScore() / 2, 5);
-        canvas.getGraphicsContext2D().fillRect(105, 770, (float) gameInfo.getPlayers().get(3).getScore() / 2, 5);
+        canvas.getGraphicsContext2D().fillRect(105, 80, (float) gm.getPlayers().get(0).getScore() / 2, 5);
+        canvas.getGraphicsContext2D().fillRect(795, 80, (float) gm.getPlayers().get(1).getScore() / 2, 5);
+        canvas.getGraphicsContext2D().fillRect(795, 770, (float) gm.getPlayers().get(2).getScore() / 2, 5);
+        canvas.getGraphicsContext2D().fillRect(105, 770, (float) gm.getPlayers().get(3).getScore() / 2, 5);
         //Set color back
         canvas.getGraphicsContext2D().setFill(Color.BLACK);
         canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.NORMAL, 12));
@@ -511,23 +468,23 @@ public class FXMLGameViewController implements Initializable {
         }
 
         //Draw mysterybox and text when mysterybox is available
-        if (gameInfo.getMysterybox() != null) {
+        if (gm.getMysterybox() != null) {
             canvas.getGraphicsContext2D().drawImage(mysterybox, (canvas.getWidth() - mysterybox.getWidth()) / 2, (canvas.getHeight() - mysterybox.getHeight()) / 2.2);
 
             //canvas.getGraphicsContext2D().setFill(Color);
             canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.BOLD, 12));
-            if (gameInfo.getMysterybox().getHigestBidder() != null) {
-                canvas.getGraphicsContext2D().fillText("Hoogste bieder: " + gameInfo.getMysterybox().getHigestBidder().getName(), (canvas.getWidth() - mysterybox.getWidth()) / 2, (canvas.getHeight() - mysterybox.getHeight()) / 2.2 + 325);
+            if (gm.getMysterybox().getHigestBidder() != null) {
+                canvas.getGraphicsContext2D().fillText("Hoogste bieder: " + gm.getMysterybox().getHigestBidder().getName(), (canvas.getWidth() - mysterybox.getWidth()) / 2, (canvas.getHeight() - mysterybox.getHeight()) / 2.2 + 325);
             }
-            canvas.getGraphicsContext2D().fillText("Volgend bod: " + gameInfo.getMysterybox().getNewHighestBid() + " resources", (canvas.getWidth() - mysterybox.getWidth()) / 2, (canvas.getHeight() - mysterybox.getHeight()) / 2.2 + 350);
+            canvas.getGraphicsContext2D().fillText("Volgend bod: " + gm.getMysterybox().getNewHighestBid() + " resources", (canvas.getWidth() - mysterybox.getWidth()) / 2, (canvas.getHeight() - mysterybox.getHeight()) / 2.2 + 350);
 
-            if (gameInfo.getMysterybox().getHigestBidder() != null) {
-                mysteryboxWinner = "Winnaar mysterybox: " + gameInfo.getMysterybox().getHigestBidder().getName();
+            if (gm.getMysterybox().getHigestBidder() != null) {
+                mysteryboxWinner = "Winnaar mysterybox: " + gm.getMysterybox().getHigestBidder().getName();
 
-                if (gameInfo.getMysterybox().getResourceAmount() != 0) {
-                    mysteryboxContent = "Inhoud: " + gameInfo.getMysterybox().getResourceAmount() + " resources";
-                } else if (gameInfo.getMysterybox().getUpgrade() != null) {
-                    mysteryboxContent = "Inhoud: " + gameInfo.getMysterybox().getUpgrade().toString();
+                if (gm.getMysterybox().getResourceAmount() != 0) {
+                    mysteryboxContent = "Inhoud: " + gm.getMysterybox().getResourceAmount() + " resources";
+                } else if (gm.getMysterybox().getUpgrade() != null) {
+                    mysteryboxContent = "Inhoud: " + gm.getMysterybox().getUpgrade().toString();
                 }
             } else {
                 mysteryboxWinner = "";
@@ -549,16 +506,16 @@ public class FXMLGameViewController implements Initializable {
         //Change selected unit
         if (lastRealMousePosx >= 55 && lastRealMousePosx <= 85
                 && lastRealMousePosy >= 105 && lastRealMousePosy <= 135 && meleeCooldown <= 0) {
-            selectedUnit = UnitInfo.getMeleeUnit(gameInfo.getPlayers().get(0));
+            selectedUnit = UnitInfo.getMeleeUnit(gm.getPlayers().get(0));
         } else if (lastRealMousePosx >= 90 && lastRealMousePosx <= 120
                 && lastRealMousePosy >= 105 && lastRealMousePosy <= 135 && rangedCooldown <= 0) {
-            selectedUnit = UnitInfo.getRangedUnit(gameInfo.getPlayers().get(0));
+            selectedUnit = UnitInfo.getRangedUnit(gm.getPlayers().get(0));
         } else if (lastRealMousePosx >= 125 && lastRealMousePosx <= 155
                 && lastRealMousePosy >= 90 && lastRealMousePosy <= 120 && defenceCooldown <= 0) {
-            selectedUnit = UnitInfo.getDefenceUnit(gameInfo.getPlayers().get(0));
+            selectedUnit = UnitInfo.getDefenceUnit(gm.getPlayers().get(0));
         } else if (lastRealMousePosx >= 125 && lastRealMousePosx <= 155
                 && lastRealMousePosy >= 125 && lastRealMousePosy <= 155 && resourceCooldown <= 0) {
-            selectedUnit = UnitInfo.getResourceUnit(gameInfo.getPlayers().get(0));
+            selectedUnit = UnitInfo.getResourceUnit(gm.getPlayers().get(0));
         }
         //Check if unit has to be placed
         if (selectedUnit != null) {
@@ -568,7 +525,7 @@ public class FXMLGameViewController implements Initializable {
                     && lastRealMousePosy >= 52 && lastRealMousePosy <= 157) {
                 int posX = ((int) lastRealMousePosx - 215) / 26;
                 int posY = ((int) lastRealMousePosy - 52) / 26;
-                if (gm.placeUnitAtBase(gameInfo.getPlayers().get(0), selectedUnit.getUnit(), posY * 4 + posX, selectedUnit.getCost())) {
+                if (gm.placeUnitAtBase(gm.getPlayers().get(0), selectedUnit.getUnit(), posY * 4 + posX, selectedUnit.getCost())) {
                     setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
                     selectedUnit = null;
                 }
@@ -577,7 +534,7 @@ public class FXMLGameViewController implements Initializable {
                     && lastRealMousePosy >= 215 && lastRealMousePosy <= 320) {
                 int posY = ((int) lastRealMousePosx - 52) / 26;
                 int posX = ((int) lastRealMousePosy - 215) / 26;
-                if (gm.placeUnitAtBase(gameInfo.getPlayers().get(0), selectedUnit.getUnit(), 16 + posY * 4 + posX, selectedUnit.getCost())) {
+                if (gm.placeUnitAtBase(gm.getPlayers().get(0), selectedUnit.getUnit(), 16 + posY * 4 + posX, selectedUnit.getCost())) {
                     setCooldown(selectedUnit.getUnitType(), selectedUnit.getCooldown());
                     selectedUnit = null;
                 }
@@ -586,8 +543,8 @@ public class FXMLGameViewController implements Initializable {
 
         //Handle mouseclick on mysterybox when mysterybox is available
         if (lastRealMousePosx >= 325 && lastRealMousePosx <= 700 && lastRealMousePosy >= 325 && lastRealMousePosy <= 700) {
-            if (gameInfo.getMysterybox() != null) {
-                gameInfo.getMysterybox().bid(gameInfo.getPlayers().get(0), gameInfo.getMysterybox().getNewHighestBid());
+            if (gm.getMysterybox() != null) {
+                gm.getMysterybox().bid(gm.getPlayers().get(0), gm.getMysterybox().getNewHighestBid());
             }
         }
     }
@@ -597,21 +554,21 @@ public class FXMLGameViewController implements Initializable {
      */
     private void drawUnits() {
         Image drawingImage = null;
-        Iterator<Unit> i = gameInfo.getLaneUnits();
+        Iterator<Unit> i = gm.getLaneUnits();
         while (i.hasNext()) {
             Unit u = i.next();
             double x = 0, y = 0;
             ///////////////////////////Draw for player 0///////////////////////////
-            if (u.getOwner() == gameInfo.getPlayers().get(0)) {
+            if (u.getOwner() == gm.getPlayers().get(0)) {
                 //Check which sprite to use
                 if (u instanceof Melee) {
-                    if (gameInfo.getPlayers().get(0).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                    if (gm.getPlayers().get(0).getBase().getLanes().indexOf(u.getLane()) < 4) {
                         drawingImage = meleeBlueR;
                     } else {
                         drawingImage = meleeBlueB;
                     }
                 } else if (u instanceof Ranged) {
-                    if (gameInfo.getPlayers().get(0).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                    if (gm.getPlayers().get(0).getBase().getLanes().indexOf(u.getLane()) < 4) {
                         drawingImage = rangedBlueR;
                     } else {
                         drawingImage = rangedBlueB;
@@ -619,57 +576,57 @@ public class FXMLGameViewController implements Initializable {
                 }
                 //Draw unit
                 //Lane 0
-                if (u.getLane() == gameInfo.getPlayers().get(0).getBase().getLane(0)) {
+                if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(0)) {
                     x = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                     y = 53;
                 }
                 //Lane 1
-                if (u.getLane() == gameInfo.getPlayers().get(0).getBase().getLane(1)) {
+                if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(1)) {
                     x = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                     y = 77;
                 }
                 //Lane 2
-                if (u.getLane() == gameInfo.getPlayers().get(0).getBase().getLane(2)) {
+                if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(2)) {
                     x = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                     y = 102;
                 }
                 //Lane 3
-                if (u.getLane() == gameInfo.getPlayers().get(0).getBase().getLane(3)) {
+                if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(3)) {
                     x = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                     y = 128;
                 }
                 //Lane 4
-                if (u.getLane() == gameInfo.getPlayers().get(0).getBase().getLane(4)) {
+                if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(4)) {
                     x = 53;
                     y = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
                 }
                 //Lane 5
-                if (u.getLane() == gameInfo.getPlayers().get(0).getBase().getLane(5)) {
+                if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(5)) {
                     x = 77;
                     y = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
                 }
                 //Lane 6
-                if (u.getLane() == gameInfo.getPlayers().get(0).getBase().getLane(6)) {
+                if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(6)) {
                     x = 102;
                     y = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
                 }
                 //Lane 7
-                if (u.getLane() == gameInfo.getPlayers().get(0).getBase().getLane(7)) {
+                if (u.getLane() == gm.getPlayers().get(0).getBase().getLane(7)) {
                     x = 128;
                     y = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
                 }
             }
             ///////////////////////////Draw for player 1///////////////////////////
-            if (u.getOwner() == gameInfo.getPlayers().get(1)) {
+            if (u.getOwner() == gm.getPlayers().get(1)) {
                 //Check which sprite to use
                 if (u instanceof Melee) {
-                    if (gameInfo.getPlayers().get(1).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                    if (gm.getPlayers().get(1).getBase().getLanes().indexOf(u.getLane()) < 4) {
                         drawingImage = meleeGreenB;
                     } else {
                         drawingImage = meleeGreenL;
                     }
                 } else if (u instanceof Ranged) {
-                    if (gameInfo.getPlayers().get(1).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                    if (gm.getPlayers().get(1).getBase().getLanes().indexOf(u.getLane()) < 4) {
                         drawingImage = rangedGreenB;
                     } else {
                         drawingImage = rangedGreenL;
@@ -677,57 +634,57 @@ public class FXMLGameViewController implements Initializable {
                 }
                 //Draw unit
                 //Lane 0
-                if (u.getLane() == gameInfo.getPlayers().get(1).getBase().getLane(0)) {
+                if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(0)) {
                     x = 743;
                     y = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                 }
                 //Lane 1
-                if (u.getLane() == gameInfo.getPlayers().get(1).getBase().getLane(1)) {
+                if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(1)) {
                     x = 768;
                     y = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                 }
                 //Lane 2
-                if (u.getLane() == gameInfo.getPlayers().get(1).getBase().getLane(2)) {
+                if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(2)) {
                     x = 793;
                     y = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                 }
                 //Lane 3
-                if (u.getLane() == gameInfo.getPlayers().get(1).getBase().getLane(3)) {
+                if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(3)) {
                     x = 818;
                     y = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                 }
                 //Lane 4
-                if (u.getLane() == gameInfo.getPlayers().get(1).getBase().getLane(4)) {
+                if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(4)) {
                     x = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                     y = 53;
                 }
                 //Lane 5
-                if (u.getLane() == gameInfo.getPlayers().get(1).getBase().getLane(5)) {
+                if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(5)) {
                     x = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                     y = 77;
                 }
                 //Lane 6
-                if (u.getLane() == gameInfo.getPlayers().get(1).getBase().getLane(6)) {
+                if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(6)) {
                     x = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                     y = 102;
                 }
                 //Lane 7
-                if (u.getLane() == gameInfo.getPlayers().get(1).getBase().getLane(7)) {
+                if (u.getLane() == gm.getPlayers().get(1).getBase().getLane(7)) {
                     x = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                     y = 128;
                 }
             }
             ///////////////////////////Draw for player 2///////////////////////////
-            if (u.getOwner() == gameInfo.getPlayers().get(2)) {
+            if (u.getOwner() == gm.getPlayers().get(2)) {
                 //Check which sprite to use
                 if (u instanceof Melee) {
-                    if (gameInfo.getPlayers().get(2).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                    if (gm.getPlayers().get(2).getBase().getLanes().indexOf(u.getLane()) < 4) {
                         drawingImage = meleePurpleL;
                     } else {
                         drawingImage = meleePurpleT;
                     }
                 } else if (u instanceof Ranged) {
-                    if (gameInfo.getPlayers().get(2).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                    if (gm.getPlayers().get(2).getBase().getLanes().indexOf(u.getLane()) < 4) {
                         drawingImage = rangedPurpleL;
                     } else {
                         drawingImage = rangedPurpleT;
@@ -735,57 +692,57 @@ public class FXMLGameViewController implements Initializable {
                 }
                 //Draw unit
                 //Lane 0
-                if (u.getLane() == gameInfo.getPlayers().get(2).getBase().getLane(0)) {
+                if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(0)) {
                     x = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
                     y = 743;
                 }
                 //Lane 1
-                if (u.getLane() == gameInfo.getPlayers().get(2).getBase().getLane(1)) {
+                if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(1)) {
                     x = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
                     y = 768;
                 }
                 //Lane 2
-                if (u.getLane() == gameInfo.getPlayers().get(2).getBase().getLane(2)) {
+                if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(2)) {
                     x = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
                     y = 793;
                 }
                 //Lane 3
-                if (u.getLane() == gameInfo.getPlayers().get(2).getBase().getLane(3)) {
+                if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(3)) {
                     x = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
                     y = 818;
                 }
                 //Lane 4
-                if (u.getLane() == gameInfo.getPlayers().get(2).getBase().getLane(4)) {
+                if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(4)) {
                     x = 743;
                     y = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                 }
                 //Lane 5
-                if (u.getLane() == gameInfo.getPlayers().get(2).getBase().getLane(5)) {
+                if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(5)) {
                     x = 768;
                     y = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                 }
                 //Lane 6
-                if (u.getLane() == gameInfo.getPlayers().get(2).getBase().getLane(6)) {
+                if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(6)) {
                     x = 793;
                     y = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                 }
                 //Lane 7
-                if (u.getLane() == gameInfo.getPlayers().get(2).getBase().getLane(7)) {
+                if (u.getLane() == gm.getPlayers().get(2).getBase().getLane(7)) {
                     x = 818;
                     y = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                 }
             }
             ///////////////////////////Draw for player 3///////////////////////////
-            if (u.getOwner() == gameInfo.getPlayers().get(3)) {
+            if (u.getOwner() == gm.getPlayers().get(3)) {
                 //Check which sprite to use
                 if (u instanceof Melee) {
-                    if (gameInfo.getPlayers().get(3).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                    if (gm.getPlayers().get(3).getBase().getLanes().indexOf(u.getLane()) < 4) {
                         drawingImage = meleeRedT;
                     } else {
                         drawingImage = meleeRedR;
                     }
                 } else if (u instanceof Ranged) {
-                    if (gameInfo.getPlayers().get(3).getBase().getLanes().indexOf(u.getLane()) < 4) {
+                    if (gm.getPlayers().get(3).getBase().getLanes().indexOf(u.getLane()) < 4) {
                         drawingImage = rangedRedT;
                     } else {
                         drawingImage = rangedRedR;
@@ -793,42 +750,42 @@ public class FXMLGameViewController implements Initializable {
                 }
                 //Draw unit
                 //Lane 0
-                if (u.getLane() == gameInfo.getPlayers().get(3).getBase().getLane(0)) {
+                if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(0)) {
                     x = 53;
                     y = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
                 }
                 //Lane 1
-                if (u.getLane() == gameInfo.getPlayers().get(3).getBase().getLane(1)) {
+                if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(1)) {
                     x = 77;
                     y = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
                 }
                 //Lane 2
-                if (u.getLane() == gameInfo.getPlayers().get(3).getBase().getLane(2)) {
+                if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(2)) {
                     x = 102;
                     y = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
                 }
                 //Lane 3
-                if (u.getLane() == gameInfo.getPlayers().get(3).getBase().getLane(3)) {
+                if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(3)) {
                     x = 128;
                     y = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
                 }
                 //Lane 4
-                if (u.getLane() == gameInfo.getPlayers().get(3).getBase().getLane(4)) {
+                if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(4)) {
                     x = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
                     y = 743;
                 }
                 //Lane 5
-                if (u.getLane() == gameInfo.getPlayers().get(3).getBase().getLane(5)) {
+                if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(5)) {
                     x = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
                     y = 768;
                 }
                 //Lane 6
-                if (u.getLane() == gameInfo.getPlayers().get(3).getBase().getLane(6)) {
+                if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(6)) {
                     x = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
                     y = 793;
                 }
                 //Lane 7
-                if (u.getLane() == gameInfo.getPlayers().get(3).getBase().getLane(7)) {
+                if (u.getLane() == gm.getPlayers().get(3).getBase().getLane(7)) {
                     x = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
                     y = 818;
                 }
@@ -843,7 +800,7 @@ public class FXMLGameViewController implements Initializable {
         }
         ////////////////// Draw defence units //////////////////////
         for (int j = 0; j < 4; j++) {
-            IPlayer p = gameInfo.getPlayers().get(j);
+            IPlayer p = gm.getPlayers().get(j);
             //Set start values
             double x1, y1, x2, y2;
             if (j == 0) {

@@ -52,29 +52,34 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         this.mysteryboxTimer = 0;
         this.mysteryboxTime = 0;
         this.readyGame = false;
+        this.gameInfo = new GameInfo();
     }
 
-    /**
-     *
-     * @param player
-     * @param isAi
-     * @throws RemoteException
-     */
     @Override
     public synchronized void addPlayer(String player, boolean isAi) throws RemoteException {
+        /**
+         * Check input
+         */
         if (player != null) {
             if (isAi) {
                 AI ai;
-                int count = 0;
+                int count = 1;
 
+                /**
+                 * Check how many AI players there are and generate an unique AI
+                 * name
+                 */
                 for (IPlayer p : players) {
                     if (p instanceof AI) {
-                        count = +1;
+                        count++;
                     }
                 }
 
                 ai = new AI("ArtificialIntelligence" + count);
 
+                /**
+                 * Randomly set state of AI
+                 */
                 Random random = new Random();
                 switch (random.nextInt(3)) {
                     case 0:
@@ -93,17 +98,41 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
             } else {
                 players.add(new Player(player, 0));
             }
+
+            /**
+             * Update gameinfo for lobby
+             */
+            gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
         }
     }
 
-    /**
-     *
-     * @param player
-     * @return
-     * @throws RemoteException
-     */
+    @Override
+    public synchronized void removePlayer(String player) throws RemoteException {
+        /**
+         * Check input
+         */
+        if (player != null) {
+            players.remove(getPlayer(player));
+        }
+
+        /**
+         * Update gameinfo for lobby
+         */
+        gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
+    }
+
     @Override
     public synchronized boolean setPlayerReady(String player) throws RemoteException {
+        /**
+         * Check input
+         */
+        if (player == null) {
+            return false;
+        }
+
+        /**
+         * Check if player with the same name already exsists
+         */
         for (String p : readyPlayers) {
             if (p.equals(player)) {
                 readyPlayers.remove(player);
@@ -113,6 +142,9 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
 
         readyPlayers.add(player);
 
+        /**
+         * Start game when all 4 players are ready
+         */
         if (readyPlayers.size() > 3) {
             startGame();
         }
@@ -120,8 +152,22 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         return true;
     }
 
+    @Override
+    public boolean getPlayerReady(String player) {
+        /**
+         * Check if player with name is ready
+         */
+        for (String p : readyPlayers) {
+            if (p.equals(player)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
-     * Start game when there are a total of 4 players
+     * Start game
      */
     private void startGame() {
         /**
@@ -182,9 +228,8 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         mysteryboxTime = mysteryboxRandom.nextInt(1800) + 1800;
 
         /**
-         * Create new GameInfo object and set the info for the first time;
+         * Set the info for the first time in the gameinfo object
          */
-        gameInfo = new GameInfo();
         gameInfo.setInfo(players, mysterybox, resourceTimer, mysteryboxTimer, mysteryboxTime);
 
         /**
@@ -201,6 +246,9 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         return this.readyGame;
     }
 
+    /**
+     * GameLoop class with timertask to call the doStep method in a loop
+     */
     private class GameLoop extends java.util.TimerTask {
 
         @Override
@@ -513,9 +561,10 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     }
 
     /**
+     * Searches the list with players by name
      *
-     * @param name
-     * @return
+     * @param name name of the player to be found
+     * @return Iplayer if player with the same name is found, else null
      */
     private synchronized IPlayer getPlayer(String name) {
         for (IPlayer p : players) {
@@ -528,19 +577,24 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     }
 
     /**
+     * Adds a defensive unit to the base on the given place of multiplayer.
      *
-     * @param playername
-     * @param unit
-     * @param index
-     * @param cost
-     * @return
+     * @param playername The playername that places the unit, may not be null.
+     * @param unit The unit that has to be placed, may not be null.
+     * @param index The index for the unit, must be between 0 and 31. 0 to 15
+     * being the group that is at the lane where the base of the player is
+     * baseEnd1, 16 to 31 being the other lane.
+     * @param cost The cost of the unit, must be higher than 0.
+     * @return true if unit is placed at base, else false
      */
     @Override
     public synchronized boolean placeUnitAtBaseMulti(String playername, Unit unit, int index, int cost) {
         IPlayer player = getPlayer(playername);
         Unit unitNew = null;
 
-        //Check unittype
+        /**
+         * Check unittype
+         */
         switch (unit.getType()) {
             case MELEE:
                 unitNew = UnitInfo.getMeleeUnit(player).getUnit();
@@ -560,7 +614,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     }
 
     /**
-     * Adds a defencive unit to the base on the given place.
+     * Adds a defensive unit to the base on the given place.
      *
      * @param player The player that places the unit, may not be null.
      * @param unit The unit that has to be placed, may not be null.
@@ -570,7 +624,6 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
      * @param cost The cost of the unit, must be higher than 0.
      * @return true if unit is placed at base, else false
      */
-    @Override
     public synchronized boolean placeUnitAtBase(IPlayer player, Unit unit, int index, int cost) {
         /**
          * Check input

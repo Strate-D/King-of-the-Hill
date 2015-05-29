@@ -34,27 +34,37 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label layoutX="210.0" layoutY="68.0" text="Label">
+            <Label fx:id="labelPlayer1" layoutX="210.0" layoutY="68.0" text="Label">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label layoutX="33.0" layoutY="95.0" text="Player 2:">
+            <Label layoutX="33.0" layoutY="98.0" text="Speler 2:">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label layoutX="210.0" layoutY="95.0" text="Label">
+            <Label fx:id="labelPlayer2" layoutX="210.0" layoutY="98.0" text="Wachten op nieuwe speler...">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label layoutX="209.0" layoutY="127.0" text="Label">
+            <Label fx:id="labelPlayer3" layoutX="209.0" layoutY="131.0" text="Wachten op nieuwe speler...">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label layoutX="32.0" layoutY="127.0" text="Player 3:">
+            <Label layoutX="32.0" layoutY="130.0" text="Speler 3:">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="32.0" layoutY="162.0" text="Speler 4:">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelPlayer4" layoutX="209.0" layoutY="162.0" text="Wachten op nieuwe speler...">
                <font>
                   <Font size="24.0" />
                </font>

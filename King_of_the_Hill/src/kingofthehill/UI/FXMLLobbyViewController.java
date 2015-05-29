@@ -21,11 +21,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import kingofthehill.client.ClientManager;
+import kingofthehill.rmimultiplayer.IGameInfo;
 import kingofthehill.rmimultiplayer.TextMessage;
 
 /**
@@ -46,7 +48,21 @@ public class FXMLLobbyViewController implements Initializable {
     @FXML
     private Button buttonReady;
 
+    @FXML
+    private Label labelPlayer1;
+
+    @FXML
+    private Label labelPlayer2;
+
+    @FXML
+    private Label labelPlayer3;
+
+    @FXML
+    private Label labelPlayer4;
+
     ObservableList<String> messages;
+
+    ClientManager cm = new ClientManager(King_of_the_Hill.context.getServerUrl());
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -91,51 +107,107 @@ public class FXMLLobbyViewController implements Initializable {
                 }
             }
         });
+
+        if (cm.locate()) {
+            try {
+                cm.getGameManager().addPlayer(King_of_the_Hill.context.getPlayerName(), false);
+            } catch (RemoteException ex) {
+                Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            IGameInfo gameInfo;
+
+            @Override
+            public void run() {
+                try {
+                    while (!cm.getGameManager().readyGame()) {
+                        gameInfo = cm.getGameManager().getGameInfo();
+
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (int i = 0; i < gameInfo.getPlayers().size(); i++) {
+                                    switch (i) {
+                                        case 0:
+                                            labelPlayer1.setText(gameInfo.getPlayers().get(i).getName());
+                                            break;
+                                        case 1:
+                                            labelPlayer2.setText(gameInfo.getPlayers().get(i).getName());
+                                            break;
+                                        case 2:
+                                            labelPlayer3.setText(gameInfo.getPlayers().get(i).getName());
+                                            break;
+                                        case 3:
+                                            labelPlayer4.setText(gameInfo.getPlayers().get(i).getName());
+                                            break;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
     }
 
     @FXML
     public void handleReadyButton() {
         try {
-            ClientManager cm = new ClientManager(King_of_the_Hill.context.getServerUrl());
             if (cm.locate()) {
-                cm.getGameManager().addPlayer(King_of_the_Hill.context.getPlayerName(), false);
+                /**
+                 * Set player ready, if player already was ready unset ready
+                 */
                 if (cm.getGameManager().setPlayerReady(King_of_the_Hill.context.getPlayerName())) {
                     buttonReady.setText("Unready");
                 } else {
                     buttonReady.setText("Ready");
                 }
             }
+
             //Todo thread control
             Executors.newSingleThreadExecutor().execute(new Runnable() {
                 @Override
                 public void run() {
-                    while (true) {
-                        try {
-                            if (cm.getGameManager().readyGame()) {
-                                Platform.runLater(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            //Load next window
-                                            Parent window1;
-                                            window1 = FXMLLoader.load(getClass().getResource("FXMLMultiPlayerView.fxml"));
-                                            King_of_the_Hill.currentStage.getScene().setRoot(window1);
-                                        } catch (IOException ex) {
-                                            System.out.println("Loading new window failed!");
+                    try {
+                        while (cm.getGameManager().getPlayerReady(King_of_the_Hill.context.getPlayerName())) {
+                            try {
+                                if (cm.getGameManager().readyGame()) {
+                                    Platform.runLater(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                //Load next window
+                                                Parent window1;
+                                                window1 = FXMLLoader.load(getClass().getResource("FXMLMultiPlayerView.fxml"));
+                                                King_of_the_Hill.currentStage.getScene().setRoot(window1);
+                                            } catch (IOException ex) {
+                                                System.out.println("Loading new window failed!");
+                                            }
                                         }
-                                    }
-                                });
-                                break;
+                                    });
+                                    break;
+                                }
+                            } catch (RemoteException ex) {
+                                Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                        } catch (RemoteException ex) {
-                            Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
-                        } 
 
-                        try {
-                            Thread.sleep(10);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
+                            try {
+                                Thread.sleep(10);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             });
@@ -156,6 +228,14 @@ public class FXMLLobbyViewController implements Initializable {
 
     @FXML
     public void handleQuitButton() {
+        if (cm.locate()) {
+            try {
+                cm.getGameManager().removePlayer(King_of_the_Hill.context.getPlayerName());
+            } catch (RemoteException ex) {
+                Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
         try {
             //Load next window
             Parent window1;
