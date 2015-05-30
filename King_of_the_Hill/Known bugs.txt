@@ -2,3 +2,9 @@ Datum: 			12-4-2015
 Aangemaakt door: 	Bas Corpelijn
 Omschrijving: 	NullPointerException in Mysterybox
 Oorzaak: 		De Mysterybox probeert de resources terug te geven aan de speler die zojuist overboden is door een andere speler. De oude bieder is echter op dit moment vernietigd, de highestBidder verwijst naar een lege speler.
+
+
+Datum: 			27-5-2015
+Aangemaakt door:	Bas Koch
+Omschrijving:		Vijandelijke units lopen door Defence unit (mogelijk ook andere units)
+Oorzaak:		Plaats een nieuwe unit op de plaats waar een unit van de tegenstander staat.
