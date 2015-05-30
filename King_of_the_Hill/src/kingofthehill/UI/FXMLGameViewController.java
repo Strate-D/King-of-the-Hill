@@ -34,6 +34,7 @@ import kingofthehill.domain.IPlayer;
 import kingofthehill.domain.Melee;
 import kingofthehill.domain.Player;
 import kingofthehill.domain.Ranged;
+import kingofthehill.domain.Resource;
 import kingofthehill.domain.Unit;
 import kingofthehill.domain.UnitType;
 import kingofthehill.unitinfo.UnitInfo;
@@ -369,7 +370,15 @@ public class FXMLGameViewController implements Initializable {
         canvas.getGraphicsContext2D().fillText(gm.getPlayers().get(3).getName(), 70, 755);
         //Draw money
         canvas.getGraphicsContext2D().setFill(Color.GOLD);
-        canvas.getGraphicsContext2D().fillText("# gold: " + gm.getPlayers().get(0).getMoney(), 55, 100);
+        int resourceUnitsAmount = 0;
+        for(Unit u : gm.getPlayers().get(0).getBase().getUnits()) {
+            if (u instanceof Resource) {
+                resourceUnitsAmount++;
+            }
+        }
+        int extraGold = 10 + resourceUnitsAmount * 2;
+        
+        canvas.getGraphicsContext2D().fillText("G: " + gm.getPlayers().get(0).getMoney() + " (+" + extraGold + ")" , 55, 100);
         //Draw score
         canvas.getGraphicsContext2D().setFill(Color.AQUA);
         canvas.getGraphicsContext2D().fillRect(55, 80, 100, 5);
@@ -450,6 +459,20 @@ public class FXMLGameViewController implements Initializable {
         if (resourceCooldown > 0) {
             canvas.getGraphicsContext2D().drawImage(cooldown, 125, 125, 30, 30);
         }
+        //Set color gold
+        canvas.getGraphicsContext2D().setFill(Color.GOLD);
+        canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.BOLD, 12));
+        
+        // Draw unit cost
+        canvas.getGraphicsContext2D().fillText(""+ UnitInfo.getMeleeUnit(new Player("melee",5)).getCost(), 60, 115);
+        canvas.getGraphicsContext2D().fillText(""+ UnitInfo.getRangedUnit(new Player("range",5)).getCost() , 90, 115);
+        canvas.getGraphicsContext2D().fillText(""+ UnitInfo.getDefenceUnit(new Player("defence",5)).getCost(), 125, 100);
+        canvas.getGraphicsContext2D().fillText(""+ UnitInfo.getResourceUnit(new Player("resource",5)).getCost(), 125, 135);
+        
+        //Set color back
+        canvas.getGraphicsContext2D().setFill(Color.BLACK);
+        canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.NORMAL, 12));
+        
         //SpotsLanes when unit is selected
         if (selectedUnit != null) {
             //Lane 0 to 3
