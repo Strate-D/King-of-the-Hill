@@ -142,7 +142,6 @@ public class FXMLLobbyViewController implements Initializable {
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
-
                                     switch (id) {
                                         case 0:
                                             labelPlayer1.setText(playerName + readyString);
