@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -21,6 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -38,6 +40,7 @@ import kingofthehill.domain.Player;
 import kingofthehill.domain.Ranged;
 import kingofthehill.domain.Unit;
 import kingofthehill.domain.UnitType;
+import kingofthehill.domain.Upgrade;
 import kingofthehill.unitinfo.UnitInfo;
 
 /**
@@ -88,6 +91,8 @@ public class FXMLMultiPlayerViewController implements Initializable {
     String mysteryboxWinner = "";
     String mysteryboxContent = "";
     int gameInfoTimer;
+    @FXML
+    private Label InfoLabel;
 
     /**
      * Initializes the controller class.
@@ -295,6 +300,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
      *
      * @param e
      */
+    @FXML
     public void handleQuitButton(ActionEvent e) {
         try {
             //Load next window
@@ -313,6 +319,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
      *
      * @param e
      */
+    @FXML
     public void handleMouseOver(MouseEvent e) {
         isMouseOnCanvas = true;
         lastMousePosx = e.getX();
@@ -336,6 +343,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
      *
      * @param e
      */
+    @FXML
     public void handleMouseOffCanvas(MouseEvent e) {
         isMouseOnCanvas = false;
     }
@@ -443,6 +451,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
         if (lastRealMousePosx >= 55 && lastRealMousePosx <= 85
                 && lastRealMousePosy >= 105 && lastRealMousePosy <= 135 && meleeCooldown <= 0) {
             canvas.getGraphicsContext2D().drawImage(selector, 55, 105, 30, 30);
+            PrintUnitInfo(UnitType.MELEE);
         }
         //Ranged button
         if (lastRealMousePosx >= 90 && lastRealMousePosx <= 120
@@ -537,6 +546,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
      * @param e
      * @throws java.rmi.RemoteException
      */
+    @FXML
     public void handleMouseClick(MouseEvent e) throws RemoteException {
         //Change selected unit
         if (lastRealMousePosx >= 55 && lastRealMousePosx <= 85
@@ -966,4 +976,27 @@ public class FXMLMultiPlayerViewController implements Initializable {
         }
     }
 
+    private void PrintUnitInfo(UnitType unit) {
+        IPlayer player = this.gameInfo.getPlayers().get(0);
+        List<Upgrade> upgrades = player.getUpgrades();
+        
+        UnitInfo ui = null;
+        if (unit == UnitType.MELEE) {
+            ui = UnitInfo.getMeleeUnit(player);
+        } else if (unit == UnitType.DEFENCE) {
+            ui = UnitInfo.getDefenceUnit(player);
+        } else if (unit == UnitType.RANGED) {
+            ui = UnitInfo.getRangedUnit(player);
+        } else if (unit == UnitType.RESOURCE) {
+            ui = UnitInfo.getResourceUnit(player);
+        }
+
+        if(ui == null)
+            throw new IllegalArgumentException("Wrong UnitType");
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("Unit Information");
+        
+        this.InfoLabel.setText(sb.toString());
+    }
 }
