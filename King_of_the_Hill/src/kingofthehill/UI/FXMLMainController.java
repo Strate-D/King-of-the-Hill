@@ -131,7 +131,7 @@ public class FXMLMainController implements Initializable {
         if (DatabaseMediator.addNewPlayer(playerName.getText(), playerPassword.getText())) {
             handleLoginButton(e);
         } else {
-            errorLabel.setText("Regestering failed!");
+            errorLabel.setText("Registration failed!");
             errorLabel.setVisible(true);
         }
     }
