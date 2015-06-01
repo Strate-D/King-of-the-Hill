@@ -33,6 +33,11 @@ public class Ranged extends Unit{
         this.attackRange = attackRange;
         this.lastAction = 0;
     }
+    
+    public int getAttackRange()
+    {
+        return this.attackRange;
+    }
 
     @Override
     public void doNextAction() {

@@ -344,6 +344,8 @@ public class FXMLGameViewController implements Initializable {
      * Draws the field of the game
      */
     private void drawField() {
+        printPlayerInfo();
+        
         //Check hp, then draw correct sprite for base
         if (gm.getPlayers().get(0).getBase().getHealthPoints() > 0) {
             canvas.getGraphicsContext2D().drawImage(castle1, 20, 20, 200, 200);
@@ -433,22 +435,25 @@ public class FXMLGameViewController implements Initializable {
         if (lastRealMousePosx >= 55 && lastRealMousePosx <= 85
                 && lastRealMousePosy >= 105 && lastRealMousePosy <= 135 && meleeCooldown <= 0) {
             canvas.getGraphicsContext2D().drawImage(selector, 55, 105, 30, 30);
-            this.PrintUnitInfo(UnitType.MELEE);
+            this.printUnitInfo(UnitType.MELEE);
         }
         //Ranged button
         if (lastRealMousePosx >= 90 && lastRealMousePosx <= 120
                 && lastRealMousePosy >= 105 && lastRealMousePosy <= 135 && rangedCooldown <= 0) {
             canvas.getGraphicsContext2D().drawImage(selector, 90, 105, 30, 30);
+            this.printUnitInfo(UnitType.RANGED);
         }
         //Defence button
         if (lastRealMousePosx >= 125 && lastRealMousePosx <= 155
                 && lastRealMousePosy >= 90 && lastRealMousePosy <= 120 && defenceCooldown <= 0) {
             canvas.getGraphicsContext2D().drawImage(selector, 125, 90, 30, 30);
+            this.printUnitInfo(UnitType.DEFENCE);
         }
         //Resource button
         if (lastRealMousePosx >= 125 && lastRealMousePosx <= 155
                 && lastRealMousePosy >= 125 && lastRealMousePosy <= 155 && resourceCooldown <= 0) {
             canvas.getGraphicsContext2D().drawImage(selector, 125, 125, 30, 30);
+            this.printUnitInfo(UnitType.RESOURCE);
         }
         //Draw selector for selected unit
         if (selectedUnit != null) {
@@ -968,7 +973,7 @@ public class FXMLGameViewController implements Initializable {
         }
     }
 
-    private void PrintUnitInfo(UnitType unit) {
+    private void printUnitInfo(UnitType unit) {
         IPlayer player = this.gm.getPlayers().get(0);
         List<Upgrade> upgrades = player.getUpgrades();
         
@@ -988,20 +993,82 @@ public class FXMLGameViewController implements Initializable {
         
         int ATK = ui.getUnit().getAttack();
         int DEF = ui.getUnit().getArmor();
+        int COST = ui.getCost();
+        int HEALTH = ui.getUnit().getHealth();
+        int SPEED = ui.getUnit().getMovementSpeed();
         for(Upgrade u : upgrades)
         {
             if(u.getTargetUnit() == unit)
             {
                 ATK = ATK + (int)(ATK * u.getModAttack());
                 DEF = DEF + (int)(DEF * u.getModArmor());
+                HEALTH = HEALTH + (int)(HEALTH * u.getModHealth());
+                SPEED = SPEED + (int)(SPEED * u.getModMovementSpeed());
             }
         }
         
         StringBuilder sb = new StringBuilder();
-        sb.append("Unit Information\n\n");
-        sb.append("ATTACK: ").append(ATK).append("\n");
-        sb.append("ARMOR: ").append(DEF).append("\n");
+        sb.append("Unit Information (").append(unit.toString()).append(")\n\n");
+        sb.append("ATTACK:\t\t").append(ATK).append("\n");
+        sb.append("ARMOR:\t\t").append(DEF).append("\n");
+        sb.append("COST:\t\t").append(COST).append("\n");
+        sb.append("HEALTH:\t\t").append(HEALTH).append("\n");
+        sb.append("SPEED:\t\t").append(SPEED).append("\n");
         
+        if(unit == UnitType.RANGED)
+        {
+            Ranged r = (Ranged) ui.getUnit();
+            sb.append("RANGE:\t\t").append(r.getAttackRange()).append("\n");   
+        }
+        
+        
+        this.InfoLabel.setText(sb.toString());
+    }
+    
+    private void printPlayerInfo() {
+        IPlayer player = this.gm.getPlayers().get(0);
+        IPlayer team = null;
+        List<Upgrade> upgrades = player.getUpgrades();
+        List<Unit> units = player.getBase().getUnits();
+        
+        int GOLD = 10;
+        
+        for(Unit u : units)
+        {
+            if(u instanceof Resource)
+            {
+                GOLD += 2;
+            }
+        }
+        
+        for(IPlayer p : player.getTeam().getPlayers())
+        {
+            if(p != player)
+            {
+                team = p;
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Player Information (").append(player.getName()).append(")\n\n");
+        sb.append("Gold:\t\t").append(player.getMoney()).append("\n");
+        sb.append("Receiving:\t"). append(GOLD).append("\n");
+        sb.append("Experiance:\t").append(player.getExp()).append("\n");
+        sb.append("\nTeammate").append("\n");
+        sb.append("Name:\t\t").append(team.getName()).append("\n");
+        sb.append("Experiance:\t").append(team.getExp()).append("\n");
+        sb.append("\nBought upgrades").append("\n");
+        
+        for(Upgrade u : upgrades)
+        {
+            sb.append(u.getTargetUnit().toString()).append(": ");
+            sb.append("AMR: ").append(u.getModArmor()).append(", ");
+            sb.append("ATK: ").append(u.getModAttack()).append(", ");
+            sb.append("HP: ").append(u.getModHealth()).append(", ");
+            sb.append("SPD: ").append(u.getModMovementSpeed());
+            sb.append("\n");
+        }
+             
         this.InfoLabel.setText(sb.toString());
     }
 }
