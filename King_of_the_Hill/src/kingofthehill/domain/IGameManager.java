@@ -78,4 +78,8 @@ public interface IGameManager extends Remote{
      * @throws RemoteException 
      */
     public void bidMysteryboxMulti(String playername, int bid) throws RemoteException;
+    
+    public void sendPlayerSignal(String playername) throws RemoteException;
+    
+    public void setPlayerToAI(String playername) throws RemoteException;
 }

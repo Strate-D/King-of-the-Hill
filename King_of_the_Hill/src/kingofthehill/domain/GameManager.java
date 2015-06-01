@@ -246,6 +246,16 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         return this.readyGame;
     }
 
+    @Override
+    public void sendPlayerSignal(String playername) throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setPlayerToAI(String playername) throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     /**
      * GameLoop class with timertask to call the doStep method in a loop
      */
