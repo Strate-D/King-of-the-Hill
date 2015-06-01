@@ -129,18 +129,30 @@ public class FXMLLobbyViewController implements Initializable {
                             @Override
                             public void run() {
                                 for (int i = 0; i < gameInfo.getPlayers().size(); i++) {
+                                    String readyString = "";
+                                    
+                                    try {
+                                        if(cm.getGameManager().getPlayerReady(gameInfo.getPlayers().get(i).getName())){
+                                            readyString = "Ready";
+                                        } else {
+                                            readyString = "Unready";
+                                        }
+                                    } catch (RemoteException ex) {
+                                        Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                                                 
                                     switch (i) {
                                         case 0:
-                                            labelPlayer1.setText(gameInfo.getPlayers().get(i).getName());
+                                            labelPlayer1.setText(gameInfo.getPlayers().get(i).getName() + readyString);
                                             break;
                                         case 1:
-                                            labelPlayer2.setText(gameInfo.getPlayers().get(i).getName());
+                                            labelPlayer2.setText(gameInfo.getPlayers().get(i).getName() + readyString);
                                             break;
                                         case 2:
-                                            labelPlayer3.setText(gameInfo.getPlayers().get(i).getName());
+                                            labelPlayer3.setText(gameInfo.getPlayers().get(i).getName() + readyString);
                                             break;
                                         case 3:
-                                            labelPlayer4.setText(gameInfo.getPlayers().get(i).getName());
+                                            labelPlayer4.setText(gameInfo.getPlayers().get(i).getName() + readyString);
                                             break;
                                     }
                                 }
