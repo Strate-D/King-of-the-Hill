@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
@@ -20,5 +21,10 @@
          </font>
       </Button>
       <Canvas fx:id="canvas" height="900.0" layoutX="510.0" layoutY="90.0" onMouseClicked="#handleMouseClick" onMouseExited="#handleMouseOffCanvas" onMouseMoved="#handleMouseOver" width="900.0" />
+      <Label fx:id="InfoLabel" layoutX="62.0" layoutY="90.0" text="Current Information" textFill="RED">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
