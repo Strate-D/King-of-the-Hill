@@ -133,9 +133,9 @@ public class FXMLLobbyViewController implements Initializable {
                                     
                                     try {
                                         if(cm.getGameManager().getPlayerReady(gameInfo.getPlayers().get(i).getName())){
-                                            readyString = " Ready";
+                                            readyString = " (Ready)";
                                         } else {
-                                            readyString = " Unready";
+                                            readyString = " (Unready)";
                                         }
                                     } catch (RemoteException ex) {
                                         Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
