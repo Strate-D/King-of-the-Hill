@@ -564,7 +564,12 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
                     munnie += 2;
                 }
             }
-            p.addMoney(munnie);
+            //Check if give to player or to teammate
+            if (p.getBase().getHealthPoints() != 0) {
+                p.addMoney(munnie);
+            } else {
+                p.getBase().getLane(0).getBaseEnd2().getLane(0).getBaseEnd2().getOwner().addMoney(munnie/2);
+            }
         }
     }
 
