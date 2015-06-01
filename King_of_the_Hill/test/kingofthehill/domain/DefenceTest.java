@@ -33,3 +33,4 @@ public class DefenceTest {
             fail("unit couldn't attack");
         }
     }
+}
