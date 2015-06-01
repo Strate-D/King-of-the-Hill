@@ -189,17 +189,24 @@ public class FXMLMultiPlayerViewController implements Initializable {
                         gameInfoTimer = 0;
                     }
                     //Check if to do step
-                    if(gameInfoTimer%2 == 0) {
+                    if (gameInfoTimer % 2 == 0) {
                         gameInfo.doStep();
                     }
                     /**
                      * Keep track of timer
                      */
                     gameInfoTimer++;
-                    
+
                     drawBackground();
                     drawField();
                     drawUnits();
+
+                    try {
+                        // Send heartbeat to server
+                        gm.sendPlayerSignal(King_of_the_Hill.context.getPlayerName());
+                    } catch (RemoteException ex) {
+                        System.out.println("Failed to inform server!");
+                    }
 
                     // Check and handle mouse scrolling
                     if (isMouseOnCanvas) {

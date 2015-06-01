@@ -181,6 +181,13 @@ public class FXMLGameViewController implements Initializable {
                 drawBackground();
                 drawField();
                 drawUnits();
+                
+                try {
+                    // Send heartbeat to server
+                    gm.sendPlayerSignal(King_of_the_Hill.context.getPlayerName());
+                } catch (RemoteException ex) {
+                    System.out.println("Failed to inform server!");
+                }
 
                 // Check and handle mouse scrolling
                 if (isMouseOnCanvas) {

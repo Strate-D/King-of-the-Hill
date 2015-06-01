@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kingofthehill.unitinfo.UnitInfo;
 import kingofthehill.upgradeinfo.UpgradeInfo;
 
@@ -248,7 +250,10 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
 
     @Override
     public void sendPlayerSignal(String playername) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Get the player
+        IPlayer player = this.getPlayer(playername);
+        //Set hearthbeat
+        player.resetConnectionTimer();
     }
 
     @Override
@@ -449,7 +454,11 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         for (IPlayer p : this.players) {
             p.lowerConnectionTimer();
             if (p.getConnectionTimer() == 0) {
-                //replace player with si
+                try {
+                    this.setPlayerToAI(p.getName());
+                } catch (RemoteException ex) {
+                    System.out.println("Failed to set player to AI");
+                }
             }
         }
 
