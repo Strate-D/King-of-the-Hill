@@ -1039,50 +1039,40 @@ public class FXMLMultiPlayerViewController implements Initializable {
     }
 
     private void printPlayerInfo() {
-//        IPlayer player = null;
-//        for (IPlayer p : this.gameInfo.getPlayers()) {
-//            if (p.getName().equals(King_of_the_Hill.context.getPlayerName())) {
-//                player = p;
-//            }
-//        }
-//
-//        IPlayer team = null;
-//        List<Upgrade> upgrades = player.getUpgrades();
-//        List<Unit> units = player.getBase().getUnits();
-//
-//        int GOLD = 10;
-//
-//        for (Unit u : units) {
-//            if (u instanceof Resource) {
-//                GOLD += 2;
-//            }
-//        }
-//
-//        for (IPlayer p : player.getTeam().getPlayers()) {
-//            if (p != player) {
-//                team = p;
-//            }
-//        }
-//
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("Player Information (").append(player.getName()).append(")\n\n");
-//        sb.append("Gold:\t\t").append(player.getMoney()).append("\n");
-//        sb.append("Receiving:\t").append(GOLD).append("\n");
-//        sb.append("Experiance:\t").append(player.getExp()).append("\n");
-//        sb.append("\nTeammate").append("\n");
-//        sb.append("Name:\t\t").append(team.getName()).append("\n");
-//        sb.append("Experiance:\t").append(team.getExp()).append("\n");
-//        sb.append("\nBought upgrades").append("\n");
-//
-//        for (Upgrade u : upgrades) {
-//            sb.append(u.getTargetUnit().toString()).append(": ");
-//            sb.append("AMR: ").append(u.getModArmor()).append(", ");
-//            sb.append("ATK: ").append(u.getModAttack()).append(", ");
-//            sb.append("HP: ").append(u.getModHealth()).append(", ");
-//            sb.append("SPD: ").append(u.getModMovementSpeed());
-//            sb.append("\n");
-//        }
-//
-//        this.InfoLabel.setText(sb.toString());
+        IPlayer player = null;
+        for (IPlayer p : this.gameInfo.getPlayers()) {
+            if (p.getName().equals(King_of_the_Hill.context.getPlayerName())) {
+                player = p;
+            }
+        }
+
+        List<Upgrade> upgrades = player.getUpgrades();
+        List<Unit> units = player.getBase().getUnits();
+
+        int GOLD = 10;
+
+        for (Unit u : units) {
+            if (u instanceof Resource) {
+                GOLD += 2;
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Player Information (").append(player.getName()).append(")\n\n");
+        sb.append("Gold:\t\t").append(player.getMoney()).append("\n");
+        sb.append("Receiving:\t").append(GOLD).append("\n");
+        sb.append("Experiance:\t").append(player.getExp()).append("\n");
+        sb.append("\nBought upgrades").append("\n");
+
+        for (Upgrade u : upgrades) {
+            sb.append(u.getTargetUnit().toString()).append(": ");
+            sb.append("AMR: ").append(u.getModArmor()).append(", ");
+            sb.append("ATK: ").append(u.getModAttack()).append(", ");
+            sb.append("HP: ").append(u.getModHealth()).append(", ");
+            sb.append("SPD: ").append(u.getModMovementSpeed());
+            sb.append("\n");
+        }
+
+        this.InfoLabel.setText(sb.toString());
     }
 }
