@@ -308,6 +308,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
             Parent window1;
             window1 = FXMLLoader.load(getClass().getResource("FXMLMain.fxml"));
             King_of_the_Hill.currentStage.getScene().setRoot(window1);
+            antimer.stop();
 
         } catch (IOException ex) {
             Logger.getLogger(FXMLMainController.class

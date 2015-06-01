@@ -116,47 +116,59 @@ public class FXMLLobbyViewController implements Initializable {
             }
         }
 
-//        Executors.newSingleThreadExecutor().execute(new Runnable() {
-//            IGameInfo gameInfo;
-//
-//            @Override
-//            public void run() {
-//                try {
-//                    while (!cm.getGameManager().readyGame()) {
-//                        gameInfo = cm.getGameManager().getGameInfo();
-//
-//                        Platform.runLater(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                for (int i = 0; i < gameInfo.getPlayers().size(); i++) {
-//                                    switch (i) {
-//                                        case 0:
-//                                            labelPlayer1.setText(gameInfo.getPlayers().get(i).getName());
-//                                            break;
-//                                        case 1:
-//                                            labelPlayer2.setText(gameInfo.getPlayers().get(i).getName());
-//                                            break;
-//                                        case 2:
-//                                            labelPlayer3.setText(gameInfo.getPlayers().get(i).getName());
-//                                            break;
-//                                        case 3:
-//                                            labelPlayer4.setText(gameInfo.getPlayers().get(i).getName());
-//                                            break;
-//                                    }
-//                                }
-//                            }
-//                        });
-//                    }
-//                } catch (RemoteException ex) {
-//                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException ex) {
-//                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            }
-//        });
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            IGameInfo gameInfo;
+
+            @Override
+            public void run() {
+                try {
+                    while (!cm.getGameManager().readyGame()) {
+                        gameInfo = cm.getGameManager().getGameInfo();
+
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (int i = 0; i < gameInfo.getPlayers().size(); i++) {
+                                    String readyString = "";
+                                    
+                                    try {
+                                        if(cm.getGameManager().getPlayerReady(gameInfo.getPlayers().get(i).getName())){
+                                            readyString = " (Ready)";
+                                        } else {
+                                            readyString = " (Unready)";
+                                        }
+                                    } catch (RemoteException ex) {
+                                        Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                                                 
+                                    switch (i) {
+                                        case 0:
+                                            labelPlayer1.setText(gameInfo.getPlayers().get(i).getName() + readyString);
+                                            break;
+                                        case 1:
+                                            labelPlayer2.setText(gameInfo.getPlayers().get(i).getName() + readyString);
+                                            break;
+                                        case 2:
+                                            labelPlayer3.setText(gameInfo.getPlayers().get(i).getName() + readyString);
+                                            break;
+                                        case 3:
+                                            labelPlayer4.setText(gameInfo.getPlayers().get(i).getName() + readyString);
+                                            break;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
     }
 
     @FXML
