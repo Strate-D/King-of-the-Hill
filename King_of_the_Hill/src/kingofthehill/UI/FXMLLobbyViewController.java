@@ -116,11 +116,11 @@ public class FXMLLobbyViewController implements Initializable {
             }
         }
 
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
-            IGameInfo gameInfo;
-
-            @Override
-            public void run() {
+//        Executors.newSingleThreadExecutor().execute(new Runnable() {
+//            IGameInfo gameInfo;
+//
+//            @Override
+//            public void run() {
 //                try {
 //                    while (!cm.getGameManager().readyGame()) {
 //                        gameInfo = cm.getGameManager().getGameInfo();
@@ -150,13 +150,13 @@ public class FXMLLobbyViewController implements Initializable {
 //                } catch (RemoteException ex) {
 //                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
 //                }
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException ex) {
+//                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//        });
     }
 
     @FXML
