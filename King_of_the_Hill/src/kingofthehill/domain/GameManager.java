@@ -249,7 +249,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     }
 
     @Override
-    public void sendPlayerSignal(String playername) throws RemoteException {
+    public synchronized void sendPlayerSignal(String playername) throws RemoteException {
         //Get the player
         IPlayer player = this.getPlayer(playername);
         //Set hearthbeat
@@ -257,8 +257,38 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     }
 
     @Override
-    public void setPlayerToAI(String playername) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public synchronized void setPlayerToAI(String playername) throws RemoteException {
+        //Create new AI
+        AI newPlayer = new AI("AI" + playername);
+
+        //Get old player
+        IPlayer oldPlayer = this.getPlayer(playername);
+
+        //Give all upgrades to new player
+        for (Upgrade u : oldPlayer.getUpgrades()) {
+            newPlayer.addUpgrade(u);
+        }
+        //Give the units
+        for (Lane l : oldPlayer.getBase().getLanes()) {
+            for (Unit u : l.getUnits()) {
+                if (u.getOwner() == oldPlayer) {
+                    u.setOwner(newPlayer);
+                }
+            }
+        }
+        for (Unit u : oldPlayer.getBase().getUnits()) {
+            if (u.getOwner() == oldPlayer) {
+                u.setOwner(newPlayer);
+            }
+        }
+        //Give the player the base
+        oldPlayer.getBase().setOwner(newPlayer);
+        newPlayer.setBase(oldPlayer.getBase());
+        //Set type
+        newPlayer.setAIType(AIState.AGRESSIVE);
+        //Add to the list and remove old one
+        this.players.set(this.players.indexOf(oldPlayer), newPlayer);
+        System.out.println("Replaced player!");
     }
 
     /**

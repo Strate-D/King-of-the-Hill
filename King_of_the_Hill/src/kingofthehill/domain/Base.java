@@ -230,4 +230,14 @@ public class Base implements Serializable {
 
         return lanes[lane];
     }
+    
+    /**
+     * Sets a new owner to the base
+     * @param player The new owner, not null
+     */
+    public void setOwner(IPlayer player) {
+        if(player != null) {
+            this.owner = player;
+        }
+    }
 }

@@ -312,7 +312,21 @@ public abstract class Unit implements Serializable{
         }
     }
     
+    /**
+     * Gets the unit type of the unit
+     * @return The unit type of the unit, not null
+     */
     public UnitType getType() {
         return this.type;
+    }
+    
+    /**
+     * Sets the new owner of the unit
+     * @param player The new owner not null.
+     */
+    public void setOwner(IPlayer player) {
+        if(player != null) {
+            this.owner = player;
+        }
     }
 }
