@@ -125,43 +125,46 @@ public class FXMLLobbyViewController implements Initializable {
                     while (!cm.getGameManager().readyGame()) {
                         gameInfo = cm.getGameManager().getGameInfo();
 
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                for (int i = 0; i < gameInfo.getPlayers().size(); i++) {
-                                    String readyString = "";
-                                    
-                                    try {
-                                        if(cm.getGameManager().getPlayerReady(gameInfo.getPlayers().get(i).getName())){
-                                            readyString = " (Ready)";
-                                        } else {
-                                            readyString = " (Unready)";
-                                        }
-                                    } catch (RemoteException ex) {
-                                        Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
-                                                                 
-                                    switch (i) {
+                        for (int i = 0; i < gameInfo.getPlayers().size(); i++) {
+                            final String playerName = gameInfo.getPlayers().get(i).getName();
+
+                            String ready = "";
+
+                            if (cm.getGameManager().getPlayerReady(gameInfo.getPlayers().get(i).getName())) {
+                                ready = " (Ready)";
+                            } else {
+                                ready = " (Unready)";
+                            }
+
+                            final Integer id = i;
+                            final String readyString = ready;
+                            
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    switch (id) {
                                         case 0:
-                                            labelPlayer1.setText(gameInfo.getPlayers().get(i).getName() + readyString);
+                                            labelPlayer1.setText(playerName + readyString);
                                             break;
                                         case 1:
-                                            labelPlayer2.setText(gameInfo.getPlayers().get(i).getName() + readyString);
+                                            labelPlayer2.setText(playerName + readyString);
                                             break;
                                         case 2:
-                                            labelPlayer3.setText(gameInfo.getPlayers().get(i).getName() + readyString);
+                                            labelPlayer3.setText(playerName + readyString);
                                             break;
                                         case 3:
-                                            labelPlayer4.setText(gameInfo.getPlayers().get(i).getName() + readyString);
+                                            labelPlayer4.setText(playerName + readyString);
                                             break;
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 } catch (RemoteException ex) {
                     Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
+
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
@@ -207,24 +210,32 @@ public class FXMLLobbyViewController implements Initializable {
                                         }
                                     });
                                     break;
+
                                 }
                             } catch (RemoteException ex) {
-                                Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(FXMLLobbyViewController.class
+                                        .getName()).log(Level.SEVERE, null, ex);
                             }
 
                             try {
                                 Thread.sleep(10);
+
                             } catch (InterruptedException ex) {
-                                Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(FXMLGameViewController.class
+                                        .getName()).log(Level.SEVERE, null, ex);
                             }
+
                         }
                     } catch (RemoteException ex) {
-                        Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(FXMLLobbyViewController.class
+                                .getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             });
+
         } catch (IOException ex) {
-            Logger.getLogger(FXMLMainController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FXMLMainController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -243,8 +254,10 @@ public class FXMLLobbyViewController implements Initializable {
         if (cm.locate()) {
             try {
                 cm.getGameManager().removePlayer(King_of_the_Hill.context.getPlayerName());
+
             } catch (RemoteException ex) {
-                Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(FXMLLobbyViewController.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -253,8 +266,10 @@ public class FXMLLobbyViewController implements Initializable {
             Parent window1;
             window1 = FXMLLoader.load(getClass().getResource("FXMLMain.fxml"));
             King_of_the_Hill.currentStage.getScene().setRoot(window1);
+
         } catch (IOException ex) {
-            Logger.getLogger(FXMLMainController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FXMLMainController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
