@@ -984,101 +984,101 @@ public class FXMLMultiPlayerViewController implements Initializable {
     }
 
     private void printUnitInfo(UnitType unit) {
-        IPlayer player = this.gameInfo.getPlayers().get(0);
-        List<Upgrade> upgrades = player.getUpgrades();
-        
-        UnitInfo ui = null;
-        if (unit == UnitType.MELEE) {
-            ui = UnitInfo.getMeleeUnit(player);
-        } else if (unit == UnitType.DEFENCE) {
-            ui = UnitInfo.getDefenceUnit(player);
-        } else if (unit == UnitType.RANGED) {
-            ui = UnitInfo.getRangedUnit(player);
-        } else if (unit == UnitType.RESOURCE) {
-            ui = UnitInfo.getResourceUnit(player);
-        }
-
-        if(ui == null)
-            throw new IllegalArgumentException("Wrong UnitType");
-        
-        int ATK = ui.getUnit().getAttack();
-        int DEF = ui.getUnit().getArmor();
-        int COST = ui.getCost();
-        int HEALTH = ui.getUnit().getHealth();
-        int SPEED = ui.getUnit().getMovementSpeed();
-        for(Upgrade u : upgrades)
-        {
-            if(u.getTargetUnit() == unit)
-            {
-                ATK = ATK + (int)(ATK * u.getModAttack());
-                DEF = DEF + (int)(DEF * u.getModArmor());
-                HEALTH = HEALTH + (int)(HEALTH * u.getModHealth());
-                SPEED = SPEED + (int)(SPEED * u.getModMovementSpeed());
-            }
-        }
-        
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unit Information (").append(unit.toString()).append(")\n\n");
-        sb.append("ATTACK:\t\t").append(ATK).append("\n");
-        sb.append("ARMOR:\t\t").append(DEF).append("\n");
-        sb.append("COST:\t\t").append(COST).append("\n");
-        sb.append("HEALTH:\t\t").append(HEALTH).append("\n");
-        sb.append("SPEED:\t\t").append(SPEED).append("\n");
-        
-        if(unit == UnitType.RANGED)
-        {
-            Ranged r = (Ranged) ui.getUnit();
-            sb.append("RANGE:\t\t").append(r.getAttackRange()).append("\n");   
-        }
-        
-        
-        this.InfoLabel.setText(sb.toString());
-    }
-    
+//        IPlayer player = this.gameInfo.getPlayers().get(0);
+//        List<Upgrade> upgrades = player.getUpgrades();
+//        
+//        UnitInfo ui = null;
+//        if (unit == UnitType.MELEE) {
+//            ui = UnitInfo.getMeleeUnit(player);
+//        } else if (unit == UnitType.DEFENCE) {
+//            ui = UnitInfo.getDefenceUnit(player);
+//        } else if (unit == UnitType.RANGED) {
+//            ui = UnitInfo.getRangedUnit(player);
+//        } else if (unit == UnitType.RESOURCE) {
+//            ui = UnitInfo.getResourceUnit(player);
+//        }
+//
+//        if(ui == null)
+//            throw new IllegalArgumentException("Wrong UnitType");
+//        
+//        int ATK = ui.getUnit().getAttack();
+//        int DEF = ui.getUnit().getArmor();
+//        int COST = ui.getCost();
+//        int HEALTH = ui.getUnit().getHealth();
+//        int SPEED = ui.getUnit().getMovementSpeed();
+//        for(Upgrade u : upgrades)
+//        {
+//            if(u.getTargetUnit() == unit)
+//            {
+//                ATK = ATK + (int)(ATK * u.getModAttack());
+//                DEF = DEF + (int)(DEF * u.getModArmor());
+//                HEALTH = HEALTH + (int)(HEALTH * u.getModHealth());
+//                SPEED = SPEED + (int)(SPEED * u.getModMovementSpeed());
+//            }
+//        }
+//        
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("Unit Information (").append(unit.toString()).append(")\n\n");
+//        sb.append("ATTACK:\t\t").append(ATK).append("\n");
+//        sb.append("ARMOR:\t\t").append(DEF).append("\n");
+//        sb.append("COST:\t\t").append(COST).append("\n");
+//        sb.append("HEALTH:\t\t").append(HEALTH).append("\n");
+//        sb.append("SPEED:\t\t").append(SPEED).append("\n");
+//        
+//        if(unit == UnitType.RANGED)
+//        {
+//            Ranged r = (Ranged) ui.getUnit();
+//            sb.append("RANGE:\t\t").append(r.getAttackRange()).append("\n");   
+//        }
+//        
+//        
+//        this.InfoLabel.setText(sb.toString());
+   }
+   
     private void printPlayerInfo() {
-        IPlayer player = this.gameInfo.getPlayers().get(0);
-        IPlayer team = null;
-        List<Upgrade> upgrades = player.getUpgrades();
-        List<Unit> units = player.getBase().getUnits();
-        
-        int GOLD = 10;
-        
-        for(Unit u : units)
-        {
-            if(u instanceof Resource)
-            {
-                GOLD += 2;
-            }
-        }
-        
-        for(IPlayer p : player.getTeam().getPlayers())
-        {
-            if(p != player)
-            {
-                team = p;
-            }
-        }
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("Player Information (").append(player.getName()).append(")\n\n");
-        sb.append("Gold:\t\t").append(player.getMoney()).append("\n");
-        sb.append("Receiving:\t"). append(GOLD).append("\n");
-        sb.append("Experiance:\t").append(player.getExp()).append("\n");
-        sb.append("\nTeammate").append("\n");
-        sb.append("Name:\t\t").append(team.getName()).append("\n");
-        sb.append("Experiance:\t").append(team.getExp()).append("\n");
-        sb.append("\nBought upgrades").append("\n");
-        
-        for(Upgrade u : upgrades)
-        {
-            sb.append(u.getTargetUnit().toString()).append(": ");
-            sb.append("AMR: ").append(u.getModArmor()).append(", ");
-            sb.append("ATK: ").append(u.getModAttack()).append(", ");
-            sb.append("HP: ").append(u.getModHealth()).append(", ");
-            sb.append("SPD: ").append(u.getModMovementSpeed());
-            sb.append("\n");
-        }
-             
-        this.InfoLabel.setText(sb.toString());
+//        IPlayer player = this.gameInfo.getPlayers().get(0);
+//        IPlayer team = null;
+//        List<Upgrade> upgrades = player.getUpgrades();
+//        List<Unit> units = player.getBase().getUnits();
+//        
+//        int GOLD = 10;
+//        
+//        for(Unit u : units)
+//        {
+//            if(u instanceof Resource)
+//            {
+//                GOLD += 2;
+//            }
+//        }
+//        
+//        for(IPlayer p : player.getTeam().getPlayers())
+//        {
+//            if(p != player)
+//            {
+//                team = p;
+//            }
+//        }
+//
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("Player Information (").append(player.getName()).append(")\n\n");
+//        sb.append("Gold:\t\t").append(player.getMoney()).append("\n");
+//        sb.append("Receiving:\t"). append(GOLD).append("\n");
+//        sb.append("Experiance:\t").append(player.getExp()).append("\n");
+//        sb.append("\nTeammate").append("\n");
+//        sb.append("Name:\t\t").append(team.getName()).append("\n");
+//        sb.append("Experiance:\t").append(team.getExp()).append("\n");
+//        sb.append("\nBought upgrades").append("\n");
+//        
+//        for(Upgrade u : upgrades)
+//        {
+//            sb.append(u.getTargetUnit().toString()).append(": ");
+//            sb.append("AMR: ").append(u.getModArmor()).append(", ");
+//            sb.append("ATK: ").append(u.getModAttack()).append(", ");
+//            sb.append("HP: ").append(u.getModHealth()).append(", ");
+//            sb.append("SPD: ").append(u.getModMovementSpeed());
+//            sb.append("\n");
+//        }
+//             
+//        this.InfoLabel.setText(sb.toString());
     }
 }
