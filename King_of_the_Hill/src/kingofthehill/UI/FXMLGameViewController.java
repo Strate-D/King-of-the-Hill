@@ -1027,7 +1027,6 @@ public class FXMLGameViewController implements Initializable {
     
     private void printPlayerInfo() {
         IPlayer player = this.gm.getPlayers().get(0);
-        IPlayer team = null;
         List<Upgrade> upgrades = player.getUpgrades();
         List<Unit> units = player.getBase().getUnits();
         
@@ -1040,23 +1039,12 @@ public class FXMLGameViewController implements Initializable {
                 GOLD += 2;
             }
         }
-        
-        for(IPlayer p : player.getTeam().getPlayers())
-        {
-            if(p != player)
-            {
-                team = p;
-            }
-        }
 
         StringBuilder sb = new StringBuilder();
         sb.append("Player Information (").append(player.getName()).append(")\n\n");
         sb.append("Gold:\t\t").append(player.getMoney()).append("\n");
         sb.append("Receiving:\t"). append(GOLD).append("\n");
         sb.append("Experiance:\t").append(player.getExp()).append("\n");
-        sb.append("\nTeammate").append("\n");
-        sb.append("Name:\t\t").append(team.getName()).append("\n");
-        sb.append("Experiance:\t").append(team.getExp()).append("\n");
         sb.append("\nBought upgrades").append("\n");
         
         for(Upgrade u : upgrades)
