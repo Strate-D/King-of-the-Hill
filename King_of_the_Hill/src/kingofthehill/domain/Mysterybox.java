@@ -66,7 +66,7 @@ public class Mysterybox implements Serializable {
      */
     public void bid(IPlayer bidder, int bid) {
         if (bidder != null) {
-            if (bid > highestBid && highestBidder != bidder && bidder.getMoney() >= bid) {
+            if (bid > highestBid && highestBidder != bidder && bidder.getMoney() >= bid && bidder.getBase().getHealthPoints() > 0) {
                 /**
                  * Give money back to previous higest bidder
                  */
@@ -83,9 +83,7 @@ public class Mysterybox implements Serializable {
                 /**
                  * Take money from new higest bidder
                  */
-                if(highestBidder != null){
-                    highestBidder.payMoney(bid);
-                }
+                highestBidder.payMoney(bid);
             }
         }
     }
