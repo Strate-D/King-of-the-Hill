@@ -116,6 +116,8 @@ public class FXMLMultiPlayerViewController implements Initializable {
 
             try {
                 getGameInfo();
+                //Set player faction
+                gm.setPlayerFaction(King_of_the_Hill.context.getPlayerName(), King_of_the_Hill.context.getFaction());
             } catch (RemoteException ex) {
                 Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
             }

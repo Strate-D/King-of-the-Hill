@@ -110,11 +110,19 @@ public class FXMLGameViewController implements Initializable {
         }
 
         try {
+            //Add players
             gm.addPlayer(King_of_the_Hill.context.getPlayerName(), false);
             gm.addPlayer("ArtificialIntelligence1", true);
             gm.addPlayer("ArtificialIntelligence2", true);
             gm.addPlayer("ArtificialIntelligence3", true);
+            
+            //Set faction
+            gm.setPlayerFaction(King_of_the_Hill.context.getPlayerName(), King_of_the_Hill.context.getFaction());
+            gm.setPlayerFaction("ArtificialIntelligence1", "melee");
+            gm.setPlayerFaction("ArtificialIntelligence2", "ranged");
+            gm.setPlayerFaction("ArtificialIntelligence3", "defence");
 
+            //Set players ready to start
             gm.setPlayerReady(King_of_the_Hill.context.getPlayerName());
             gm.setPlayerReady("ArtificialIntelligence1");
             gm.setPlayerReady("ArtificialIntelligence2");
