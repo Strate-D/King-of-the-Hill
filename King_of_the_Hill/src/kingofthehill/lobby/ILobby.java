@@ -26,4 +26,5 @@ public interface ILobby extends Remote{
     public IGameManager getGame(String gameName) throws RemoteException;
     
     public ArrayList<String> getGames() throws RemoteException;
+    
 }

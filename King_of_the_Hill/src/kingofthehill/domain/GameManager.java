@@ -66,7 +66,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         /**
          * Check input
          */
-        if (player != null) {
+        if (player != null && players.size() < 4) {
             if (isAi) {
                 AI ai;
                 int count = 1;
@@ -481,10 +481,14 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
      * Does a step in the game (1/60 of a second).
      */
     private synchronized void doStep() {
-        //Create game info for clients
+        /**
+         * Update game info for clients
+         */
         gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
 
-        //Check player connections
+        /**
+         * Check player connections
+         */
         for (IPlayer p : this.players) {
             p.lowerConnectionTimer();
             if (p.getConnectionTimer() == 0) {

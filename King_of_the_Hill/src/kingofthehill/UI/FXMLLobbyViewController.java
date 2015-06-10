@@ -60,15 +60,15 @@ public class FXMLLobbyViewController implements Initializable {
 
     @FXML
     private Label labelPlayer4;
-    
+
     @FXML
     private Label lblStartRes;
 
     @FXML
     private Slider moneySlider;
-    
+
     ObservableList<String> messages;
-    
+
     ClientManager cm = new ClientManager(King_of_the_Hill.context.getServerUrl());
     String gameName = King_of_the_Hill.context.getGameName();
     ILobby lobby;
@@ -78,7 +78,7 @@ public class FXMLLobbyViewController implements Initializable {
         if (cm.locate()) {
             lobby = cm.getLobby();
         }
-        
+
         ClientManager.AudioChat.setParent(this);
 
         try {
@@ -128,45 +128,50 @@ public class FXMLLobbyViewController implements Initializable {
             public void run() {
                 try {
                     while (!lobby.getGame(gameName).readyGame()) {
-                        
-                        int amount = (int)moneySlider.valueProperty().get() - 100; // Amount of money added to starting resources
+
+                        int amount = (int) moneySlider.valueProperty().get() - 100; // Amount of money added to starting resources
                         lblStartRes.setText("" + amount);
                         gameInfo = lobby.getGame(gameName).getGameInfo();
+                        //gameInfo.getPlayers().get(i).addMoney(amount);
 
-                        for (int i = 0; i < gameInfo.getPlayers().size(); i++) {
-                            final String playerName = gameInfo.getPlayers().get(i).getName();
-
-                            String ready = "";
-
-                            if (lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayers().get(i).getName())) {
-                                ready = " (Ready)";
-                            } else {
-                                ready = " (Unready)";
-                            }
-                            gameInfo.getPlayers().get(i).addMoney(amount);
-                            final Integer id = i;
-                            final String readyString = ready;
-                            
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    switch (id) {
-                                        case 0:
-                                            labelPlayer1.setText(playerName + readyString);
-                                            break;
-                                        case 1:
-                                            labelPlayer2.setText(playerName + readyString);
-                                            break;
-                                        case 2:
-                                            labelPlayer3.setText(playerName + readyString);
-                                            break;
-                                        case 3:
-                                            labelPlayer4.setText(playerName + readyString);
-                                            break;
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    if (gameInfo.getPlayerName(0) != null) {
+                                        labelPlayer1.setText(gameInfo.getPlayerName(0) + lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(0)));
+                                    } else {
+                                        labelPlayer1.setText("Wachten op nieuwe speler...");
                                     }
+                                    
+                                    if (gameInfo.getPlayerName(1) != null) {
+                                        labelPlayer1.setText(gameInfo.getPlayerName(1) + lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(1)));
+                                    } else {
+                                        labelPlayer1.setText("Wachten op nieuwe speler...");
+                                    }
+                                    
+                                    if (gameInfo.getPlayerName(2) != null) {
+                                        labelPlayer1.setText(gameInfo.getPlayerName(2) + lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(2)));
+                                    } else {
+                                        labelPlayer1.setText("Wachten op nieuwe speler...");
+                                    }
+                                    
+                                    if (gameInfo.getPlayerName(3) != null) {
+                                        labelPlayer1.setText(gameInfo.getPlayerName(3) + lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(3)));
+                                    } else {
+                                        labelPlayer1.setText("Wachten op nieuwe speler...");
+                                    }
+
+//                                        if (lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayers().get(i).getName())) {
+//                                            ready = " (Ready)";
+//                                        } else {
+//                                            ready = " (Unready)";
+//                                        }
+                                } catch (RemoteException ex) {
+                                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
                 } catch (RemoteException ex) {
                     Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
@@ -271,7 +276,7 @@ public class FXMLLobbyViewController implements Initializable {
         try {
             //Load next window
             Parent window1;
-            window1 = FXMLLoader.load(getClass().getResource("FXMLMain.fxml"));
+            window1 = FXMLLoader.load(getClass().getResource("FXMLLobbyListView.fxml"));
             King_of_the_Hill.currentStage.getScene().setRoot(window1);
 
         } catch (IOException ex) {

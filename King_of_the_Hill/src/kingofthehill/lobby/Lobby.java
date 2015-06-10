@@ -28,7 +28,11 @@ public class Lobby extends UnicastRemoteObject implements ILobby {
     @Override
     public synchronized void createGame(String name) throws RemoteException {
         try {
-            games.add(new GameManager(name));
+            if (name != null) {
+                if(checkGameName(name)){
+                games.add(new GameManager(name));
+                }
+            }
         } catch (RemoteException ex) {
             Logger.getLogger(Lobby.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -42,7 +46,9 @@ public class Lobby extends UnicastRemoteObject implements ILobby {
     @Override
     public synchronized void joinGame(int index, String playername) throws RemoteException {
         try {
-            games.get(index).addPlayer(playername, false);
+            if (playername != null) {
+                games.get(index).addPlayer(playername, false);
+            }
         } catch (RemoteException ex) {
             Logger.getLogger(Lobby.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -55,9 +61,11 @@ public class Lobby extends UnicastRemoteObject implements ILobby {
 
     @Override
     public IGameManager getGame(String gameName) throws RemoteException {
-        for (IGameManager gm : games) {
-            if (gm.getName().equals(gameName)) {
-                return gm;
+        if (gameName != null) {
+            for (IGameManager gm : games) {
+                if (gm.getName().equals(gameName)) {
+                    return gm;
+                }
             }
         }
         return null;
@@ -66,9 +74,21 @@ public class Lobby extends UnicastRemoteObject implements ILobby {
     @Override
     public ArrayList<String> getGames() throws RemoteException {
         ArrayList<String> stringGames = new ArrayList<>();
+
         for (IGameManager gm : games) {
             stringGames.add(gm.toString());
         }
+
         return stringGames;
+    }
+    
+    private boolean checkGameName(String name) throws RemoteException{
+        for(IGameManager gm : games){
+            if(gm.getName().equals(name)){
+                return false;
+            }
+        }
+        
+        return true;
     }
 }

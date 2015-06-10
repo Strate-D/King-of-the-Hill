@@ -17,16 +17,18 @@ import kingofthehill.domain.Unit;
 
 /**
  * Class that has all the important gameinfo of a multiplayer game
+ *
  * @author Dennis
  */
-public class GameInfo implements IGameInfo, Serializable{
+public class GameInfo implements IGameInfo, Serializable {
+
     private List<IPlayer> players;
     private Mysterybox mbox;
     private int resourceTimer;
     private int mysteryboxTimer;
     private int mysteryboxTime;
-    
-    public void setInfo(List<IPlayer> players, Mysterybox mbox, int resourcetimer, int mysteryboxtimer, int mysteryboxtime){
+
+    public void setInfo(List<IPlayer> players, Mysterybox mbox, int resourcetimer, int mysteryboxtimer, int mysteryboxtime) {
         this.players = players;
         this.mbox = mbox;
         this.resourceTimer = resourcetimer;
@@ -58,7 +60,7 @@ public class GameInfo implements IGameInfo, Serializable{
     public int getMysteryboxtime() {
         return mysteryboxTime;
     }
-    
+
     @Override
     public Iterator<Unit> getLaneUnits() {
         ArrayList<Unit> list = new ArrayList<>();
@@ -77,27 +79,37 @@ public class GameInfo implements IGameInfo, Serializable{
 
     @Override
     public void setFirstPlayer(String name) {
-        while(!this.getPlayers().get(0).getName().equals(name)){
+        while (!this.getPlayers().get(0).getName().equals(name)) {
             IPlayer buffer = this.getPlayers().get(0);
             this.getPlayers().remove(buffer);
             this.getPlayers().add(buffer);
         }
     }
-    
+
     /**
      * Does a step in the game (1/60 of a second).
      */
     @Override
-    public void doStep() {           
+    public void doStep() {
         /**
          * Operate all units
          */
         operateUnits();
     }
-    
+
+    @Override
+    public int getActivePlayerCount() {
+        return players.size();
+    }
+
+    @Override
+    public String getPlayerName(int index) {
+        return players.get(index).getName();
+    }
+
     /**
      * Let all the units do their next action.
-    */
+     */
     private void operateUnits() {
         for (IPlayer p : players) {
             Base b = p.getBase();
@@ -117,7 +129,7 @@ public class GameInfo implements IGameInfo, Serializable{
                     }
 
                 }
-                
+
                 List<Unit> doneUnits = new ArrayList<>();
                 while (doneUnits.size() < b.getUnits().size()) {
                     try {
