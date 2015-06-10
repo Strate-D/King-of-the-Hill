@@ -59,11 +59,6 @@ public class Player implements IPlayer, Serializable{
     }
 
     @Override
-    public boolean checkPassword(String password) {
-        throw new UnsupportedOperationException("Not supported yet");
-    }
-
-    @Override
     public void addUpgrade(Upgrade upgrade){
         if(upgrade != null){
             upgrades.add(upgrade);

@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
  */
 package kingofthehill.rmimultiplayer;
 
@@ -26,6 +24,14 @@ public class GameInfo implements IGameInfo, Serializable{
     private int mysteryboxTimer;
     private int mysteryboxTime;
     
+    /**
+     * Set new information into the GameInfo class
+     * @param players The new List of Players
+     * @param mbox The new Mysterybox
+     * @param resourcetimer The new timer for the resource cooldown
+     * @param mysteryboxtimer The timer for counting down to the next mysterybox
+     * @param mysteryboxtime The timer for leaving the mysterybox active
+     */
     public void setInfo(List<IPlayer> players, Mysterybox mbox, int resourcetimer, int mysteryboxtimer, int mysteryboxtime){
         this.players = players;
         this.mbox = mbox;
@@ -113,6 +119,7 @@ public class GameInfo implements IGameInfo, Serializable{
                                 }
                             }
                         } catch (Exception ecx) {
+                            System.out.println("kingofthehill.rmimultiplayer.GameInfo operateUnits(): " + ecx.getMessage());
                         }
                     }
 
@@ -128,6 +135,7 @@ public class GameInfo implements IGameInfo, Serializable{
                             }
                         }
                     } catch (Exception ecx) {
+                        System.out.println("kingofthehill.rmimultiplayer.GameInfo operateUnits(): " + ecx.getMessage());
                     }
                 }
             }

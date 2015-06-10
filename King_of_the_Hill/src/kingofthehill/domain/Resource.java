@@ -11,8 +11,8 @@ package kingofthehill.domain;
 public class Resource extends Unit {
 
     /**
-     * Creates a new resource unit. When placed in a defence spot the unit generates extra
-     * resources
+     * Creates a new resource unit. When placed in a defence spot the unit
+     * generates extra resources
      *
      * @param health Amount of health the unit has. Must be positive.
      * @param attack Amount of attack the unit has. Must be positive.
@@ -25,15 +25,9 @@ public class Resource extends Unit {
 
     @Override
     public void doNextAction() {
-//        Unit targetUnit = this.canAttackUnit();
-//        if (targetUnit != null){
-//            targetUnit.receiveDamage(this.getAttack());
-//            
-//            if(targetUnit.canAttackUnit() == this) {
-//                this.receiveDamage(targetUnit.getAttack());
-//            }
-//        }
-        //Just sit around
+        /**
+         * Do nothing, just sit around
+         */
     }
 
     @Override
@@ -78,6 +72,13 @@ public class Resource extends Unit {
                     }
                 }
             }
+            /**
+             * Check for a null value
+             */
+            if (closestUnit == null) {
+                return null;
+            }
+
             /**
              * Check if the unit is within attack range
              */

@@ -13,7 +13,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- *
+ * Creates the main application in JavaFX
  * @author Jur
  */
 public class King_of_the_Hill extends Application {

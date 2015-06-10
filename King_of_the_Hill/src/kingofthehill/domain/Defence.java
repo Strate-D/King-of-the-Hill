@@ -10,7 +10,8 @@ import java.io.Serializable;
  *
  * @author Jur
  */
-public class Defence extends Unit implements Serializable{
+public class Defence extends Unit implements Serializable {
+
     /**
      * Creates a new defensive unit with the given parameters. Unit has to be
      * set to a lane or base manually!
@@ -26,15 +27,9 @@ public class Defence extends Unit implements Serializable{
 
     @Override
     public void doNextAction() {
-//        Unit targetUnit = this.canAttackUnit();
-//        if (targetUnit != null){
-//            targetUnit.receiveDamage(this.getAttack());
-//            
-//            if(targetUnit.canAttackUnit() == this) {
-//                this.receiveDamage(targetUnit.getAttack());
-//            }
-//        }
-        //Just sit around
+        /**
+         * Do nothing, just sit around
+         */
     }
 
     @Override
@@ -79,6 +74,13 @@ public class Defence extends Unit implements Serializable{
                     }
                 }
             }
+            /**
+             * Check for a null pointer
+             */
+            if (closestUnit == null) {
+                return null;
+            }
+
             /**
              * Check if the unit is within attack range
              */

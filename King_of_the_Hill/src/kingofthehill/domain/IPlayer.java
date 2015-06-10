@@ -41,13 +41,6 @@ public interface IPlayer {
     public List<Upgrade> getUpgrades();
     
     /**
-     * Checks if the entered password is correct
-     * @param password The entered password. Is not allowed to be null!
-     * @return If the password is correct or not
-     */
-    public boolean checkPassword(String password);
-    
-    /**
      * Gets the players team
      * @return The team of the player, can be null
      */

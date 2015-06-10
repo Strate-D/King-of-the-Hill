@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
  */
 package kingofthehill.rmimultiplayer;
 
@@ -13,23 +11,38 @@ import java.util.Date;
  */
 public class AudioMessage extends Message {
 
-    private int volgNummer;
+    private int followupnumber;
     
-    public AudioMessage(int sender, Object data, int volgnummer) {
+    /**
+     * Constructor for creating a AudioMessage object. 
+     * AudioMessage extends the Message class
+     * @param sender The ID of the sender
+     * @param data The data inside the message, this is most of the time a byte[]
+     * @param followupnumber A followupnumber to play the data back in the correct order
+     */
+    public AudioMessage(int sender, Object data, int followupnumber) {
         super.setHeader("audio");
         super.setData(data);
         super.setTime(new Date());
         super.setSender(sender);
-        this.volgNummer = volgnummer;
+        this.followupnumber = followupnumber;
     }
     
-    public int getVolgnummer()
+    /**
+     * Returns the followupnumber
+     * @return The followupnumber
+     */
+    public int getFollowupnumber()
     {
-        return volgNummer;
+        return followupnumber;
     }
     
-    public void setVolgnummer(int nummer)
+    /**
+     * Sets a new followupnumber
+     * @param nummer The new followupnumber
+     */
+    public void setFollowupnumber(int nummer)
     {
-        volgNummer = nummer;
+        followupnumber = nummer;
     }
 }

@@ -94,7 +94,9 @@ public class Melee extends Unit implements Serializable {
             int closestDistance = -1;
             Unit closestUnit = null;
             if (lane.getBaseEnd1().getOwner() == owner) {
-                //Check for lanes
+                /**
+                 * Check for lanes
+                 */
                 for (Unit u : lane.getUnits()) {
                     if ((u.getPosition() - this.getPosition() < closestDistance
                             || closestDistance == -1)) {
@@ -107,13 +109,15 @@ public class Melee extends Unit implements Serializable {
                         }
                     }
                 }
-                //Check the defence spots
+                /**
+                 * Check the defence spots
+                 */
                 for (Unit u : lane.getBaseEnd2().getUnits()) {
                     int index = lane.getBaseEnd2().getUnitIndex(u);
                     int pos = 950 - (index % 4 * 55);
                     int laneIndex = index / 4;
                     if (this.getLane() == lane.getBaseEnd2().getLane(laneIndex)) {
-                        if(pos - this.getPosition() < closestDistance || closestDistance == -1) {
+                        if (pos - this.getPosition() < closestDistance || closestDistance == -1) {
                             closestDistance = pos - this.getPosition();
                             closestUnit = u;
                         }
@@ -132,19 +136,28 @@ public class Melee extends Unit implements Serializable {
                         }
                     }
                 }
-                //Check the defence spots
+                /**
+                 * Check the defence spots
+                 */
                 for (Unit u : lane.getBaseEnd1().getUnits()) {
                     int index = lane.getBaseEnd1().getUnitIndex(u);
                     int pos = (index % 4 * 55);
                     int laneIndex = index / 4;
                     if (this.getLane() == lane.getBaseEnd1().getLane(laneIndex)) {
-                        if(this.getPosition() - pos  < closestDistance || closestDistance == -1) {
-                            closestDistance = this.getPosition() - pos; 
+                        if (this.getPosition() - pos < closestDistance || closestDistance == -1) {
+                            closestDistance = this.getPosition() - pos;
                             closestUnit = u;
                         }
                     }
                 }
             }
+            /**
+             * Check for a null pointer
+             */
+            if (closestUnit == null) {
+                return null;
+            }
+
             /**
              * Check if the unit is within attack range
              */

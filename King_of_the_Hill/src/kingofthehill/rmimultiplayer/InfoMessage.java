@@ -6,24 +6,30 @@
 package kingofthehill.rmimultiplayer;
 
 /**
+ * An InfoMessage contains information from the server towards the client. The
+ * class extends the Message class
  *
  * @author Bas
  */
 public class InfoMessage extends Message {
-    
+
     private String define;
-    
-    public InfoMessage(Object information, String defined)
-    {
+
+    public InfoMessage(Object information, String defined) {
         super.setHeader("info");
         super.setData(information);
         super.setTime(null);
         super.setSender(-10);
         this.define = defined;
     }
-    
-    public String getDefine()
-    {
+
+    /**
+     * This is an extra header inside the message for speaking to parts of the
+     * client application
+     *
+     * @return The header value inside the message
+     */
+    public String getDefine() {
         return this.define;
     }
 }
