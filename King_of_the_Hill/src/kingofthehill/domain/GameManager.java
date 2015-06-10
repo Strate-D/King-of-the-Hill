@@ -744,7 +744,13 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         return this.gameInfo;
     }
     
+    @Override
     public String getName(){
         return this.name;
+    }
+    
+    @Override
+    public String toString(){
+        return this.name + "- aantal actieve spelers: " + players.size() + "/4";
     }
 }

@@ -7,6 +7,8 @@ package kingofthehill.lobby;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import kingofthehill.domain.IGameManager;
 
 /**
  *
@@ -18,4 +20,10 @@ public interface ILobby extends Remote{
     public void removeGame(int index) throws RemoteException;
     
     public void joinGame(int index, String playername) throws RemoteException;
+    
+    public IGameManager getGame(int index) throws RemoteException;
+    
+    public IGameManager getGame(String gameName) throws RemoteException;
+    
+    public ArrayList<String> getGames() throws RemoteException;
 }

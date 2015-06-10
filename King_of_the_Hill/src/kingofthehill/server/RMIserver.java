@@ -22,7 +22,7 @@ public class RMIserver {
     private static final int portNumber = 9999;
 
     // Set binding name for student administration
-    private static final String bindingName = "GameInfo";
+    private static final String bindingName = "Lobby";
 
     // References to registry and student administration
     private Registry registry = null;

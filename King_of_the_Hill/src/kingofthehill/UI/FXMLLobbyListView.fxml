@@ -9,25 +9,24 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="pane" fx:id="content" onKeyPressed="#handleTextFieldKeyPress" prefHeight="1080.0" prefWidth="1920.0" styleClass="mainFxmlClass" stylesheets="@fxmlmain.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kingofthehill.UI.FXMLLobbyViewController">
+<AnchorPane id="pane" fx:id="content" prefHeight="1080.0" prefWidth="1920.0" styleClass="mainFxmlClass" stylesheets="@fxmlmain.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kingofthehill.UI.FXMLLobbyListViewController">
    <children>
-      <Button id="button" fx:id="buttonReady" layoutX="1392.0" layoutY="973.0" mnemonicParsing="false" onMouseClicked="#handleReadyButton" prefHeight="100.0" prefWidth="475.0" text="Ready" textFill="#ffcc00">
+      <Button id="button" fx:id="buttonJoin" layoutX="972.0" layoutY="572.0" mnemonicParsing="false" onAction="#handleJoinButton" prefHeight="100.0" prefWidth="475.0" text="Meespelen" textFill="#ffcc00">
          <font>
             <Font size="45.0" />
          </font></Button>
-      <Button id="button" layoutX="396.0" layoutY="813.0" mnemonicParsing="false" onMouseClicked="#handleSendButton" prefHeight="100.0" prefWidth="475.0" text="Send" textFill="#ffcc00">
+      <Button id="button" layoutX="972.0" layoutY="364.0" mnemonicParsing="false" onAction="#handleNewGameButton" prefHeight="100.0" prefWidth="475.0" text="Nieuw spel" textFill="#ffcc00">
          <font>
             <Font size="45.0" />
          </font>
       </Button>
-      <Button id="button" layoutX="897.0" layoutY="976.0" mnemonicParsing="false" onMouseClicked="#handleQuitButton" prefHeight="100.0" prefWidth="475.0" text="Leave lobby" textFill="#ffcc00">
+      <Button id="button" layoutX="1431.0" layoutY="966.0" mnemonicParsing="false" onAction="#handleHomeButton" prefHeight="100.0" prefWidth="475.0" text="Hoofdmenu" textFill="#ffcc00">
          <font>
             <Font size="45.0" />
          </font>
       </Button>
-      <ListView fx:id="messagesOutput" layoutX="17.0" layoutY="16.0" prefHeight="728.0" prefWidth="852.0" />
-      <TextField fx:id="chatInput" layoutX="15.0" layoutY="754.0" onKeyPressed="#handleTextFieldKeyPress" prefHeight="50.0" prefWidth="854.0" />
-      <Pane layoutX="972.0" layoutY="18.0" prefHeight="783.0" prefWidth="941.0" style="-fx-background-color: lightgrey;">
+      <ListView fx:id="gamesList" layoutX="17.0" layoutY="16.0" onMouseClicked="#handleGamesListOnClick" prefHeight="728.0" prefWidth="852.0" />
+      <Pane layoutX="972.0" layoutY="18.0" prefHeight="230.0" prefWidth="941.0" style="-fx-background-color: lightgrey;">
          <children>
             <Label layoutX="33.0" layoutY="68.0" text="Lobby eigenaar:">
                <font>
@@ -44,12 +43,12 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="labelPlayer2" layoutX="210.0" layoutY="98.0" text="Wachten op nieuwe speler...">
+            <Label fx:id="labelPlayer2" layoutX="210.0" layoutY="98.0" text="Label">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="labelPlayer3" layoutX="209.0" layoutY="131.0" text="Wachten op nieuwe speler...">
+            <Label fx:id="labelPlayer3" layoutX="209.0" layoutY="131.0" text="Label">
                <font>
                   <Font size="24.0" />
                </font>
@@ -64,30 +63,11 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="labelPlayer4" layoutX="209.0" layoutY="162.0" text="Wachten op nieuwe speler...">
+            <Label fx:id="labelPlayer4" layoutX="209.0" layoutY="162.0" text="Label">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label layoutX="32.0" layoutY="290.0" text="Game Settings">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
-            <Label layoutX="33.0" layoutY="336.0" prefHeight="30.0" prefWidth="154.0" text="Start resources:">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Label layoutX="33.0" layoutY="366.0" text="Game Mode:">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Label id="lblStartRes" layoutX="201.0" layoutY="343.0" text="lblStartRes" />
-            <Slider id="sliderResAtStart" layoutX="287.0" layoutY="345.0" max="200.0" min="50.0" />
-            <ChoiceBox id="cbGameMode" layoutX="287.0" layoutY="369.0" prefHeight="25.0" prefWidth="140.0" />
-            <Label id="lblGamemode" layoutX="201.0" layoutY="373.0" text="lblGamemode" />
          </children>
       </Pane>
    </children>

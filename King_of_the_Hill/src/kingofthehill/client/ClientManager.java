@@ -5,6 +5,7 @@ import kingofthehill.domain.*;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import kingofthehill.lobby.ILobby;
 
 /**
  * Class that manages the rmi connection of the client
@@ -13,10 +14,10 @@ import java.rmi.registry.Registry;
  */
 public class ClientManager {
 
-    private IGameManager gm;
+    private ILobby lobby;
     private Registry registry = null;
     private final int portNumber = 9999;
-    private static final String bindingName = "GameInfo";
+    private static final String bindingName = "Lobby";
     private final String ipAddress;
 
     public static VoiceClient AudioChat;
@@ -73,22 +74,22 @@ public class ClientManager {
          */
         if (registry != null) {
             try {
-                gm = (IGameManager) registry.lookup(bindingName);
+                lobby = (ILobby) registry.lookup(bindingName);
             } catch (RemoteException ex) {
                 System.out.println("Client: Cannot bind gamemanager");
                 System.out.println("Client: RemoteException: " + ex.getMessage());
-                gm = null;
+                lobby = null;
             } catch (NotBoundException ex) {
                 System.out.println("Client: Cannot bind gamemanager");
                 System.out.println("Client: NotBoundException: " + ex.getMessage());
-                gm = null;
+                lobby = null;
             }
         }
 
         /**
          * Print result binding gamemanager
          */
-        if (gm != null) {
+        if (lobby != null) {
             System.out.println("Client: Gamemanager bound");
         } else {
             System.out.println("Client: Gamemanager is null pointer");
@@ -111,8 +112,8 @@ public class ClientManager {
      *
      * @return
      */
-    public IGameManager getGameManager() {
-        return this.gm;
+    public ILobby getLobby() {
+        return this.lobby;
     }
 
     public static boolean setupAudioChat(String ipAddress, int port, String username) {

@@ -82,4 +82,6 @@ public interface IGameManager extends Remote{
     public void sendPlayerSignal(String playername) throws RemoteException;
     
     public void setPlayerToAI(String playername) throws RemoteException;
+    
+    public String getName() throws RemoteException;
 }

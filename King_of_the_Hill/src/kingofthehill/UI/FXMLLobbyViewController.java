@@ -12,7 +12,6 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,6 +26,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import kingofthehill.client.ClientManager;
+import kingofthehill.lobby.ILobby;
 import kingofthehill.rmimultiplayer.IGameInfo;
 import kingofthehill.rmimultiplayer.TextMessage;
 
@@ -61,11 +61,17 @@ public class FXMLLobbyViewController implements Initializable {
     private Label labelPlayer4;
 
     ObservableList<String> messages;
-
+    
     ClientManager cm = new ClientManager(King_of_the_Hill.context.getServerUrl());
+    String gameName = King_of_the_Hill.context.getGameName();
+    ILobby lobby;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        if (cm.locate()) {
+            lobby = cm.getLobby();
+        }
+        
         ClientManager.AudioChat.setParent(this);
 
         try {
@@ -108,29 +114,21 @@ public class FXMLLobbyViewController implements Initializable {
             }
         });
 
-        if (cm.locate()) {
-            try {
-                cm.getGameManager().addPlayer(King_of_the_Hill.context.getPlayerName(), false);
-            } catch (RemoteException ex) {
-                Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             IGameInfo gameInfo;
 
             @Override
             public void run() {
                 try {
-                    while (!cm.getGameManager().readyGame()) {
-                        gameInfo = cm.getGameManager().getGameInfo();
+                    while (!lobby.getGame(gameName).readyGame()) {
+                        gameInfo = lobby.getGame(gameName).getGameInfo();
 
                         for (int i = 0; i < gameInfo.getPlayers().size(); i++) {
                             final String playerName = gameInfo.getPlayers().get(i).getName();
 
                             String ready = "";
 
-                            if (cm.getGameManager().getPlayerReady(gameInfo.getPlayers().get(i).getName())) {
+                            if (lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayers().get(i).getName())) {
                                 ready = " (Ready)";
                             } else {
                                 ready = " (Unready)";
@@ -180,7 +178,7 @@ public class FXMLLobbyViewController implements Initializable {
                 /**
                  * Set player ready, if player already was ready unset ready
                  */
-                if (cm.getGameManager().setPlayerReady(King_of_the_Hill.context.getPlayerName())) {
+                if (lobby.getGame(gameName).setPlayerReady(King_of_the_Hill.context.getPlayerName())) {
                     buttonReady.setText("Unready");
                 } else {
                     buttonReady.setText("Ready");
@@ -192,9 +190,9 @@ public class FXMLLobbyViewController implements Initializable {
                 @Override
                 public void run() {
                     try {
-                        while (cm.getGameManager().getPlayerReady(King_of_the_Hill.context.getPlayerName())) {
+                        while (lobby.getGame(gameName).getPlayerReady(King_of_the_Hill.context.getPlayerName())) {
                             try {
-                                if (cm.getGameManager().readyGame()) {
+                                if (lobby.getGame(gameName).readyGame()) {
                                     Platform.runLater(new Runnable() {
                                         @Override
                                         public void run() {
@@ -252,7 +250,7 @@ public class FXMLLobbyViewController implements Initializable {
     public void handleQuitButton() {
         if (cm.locate()) {
             try {
-                cm.getGameManager().removePlayer(King_of_the_Hill.context.getPlayerName());
+                lobby.getGame(gameName).removePlayer(King_of_the_Hill.context.getPlayerName());
 
             } catch (RemoteException ex) {
                 Logger.getLogger(FXMLLobbyViewController.class
