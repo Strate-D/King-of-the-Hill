@@ -127,15 +127,11 @@ public class FXMLLobbyViewController implements Initializable {
             @Override
             public void run() {
                 try {
-<<<<<<< HEAD
                     while (!lobby.getGame(gameName).readyGame()) {
-                        gameInfo = lobby.getGame(gameName).getGameInfo();
-=======
-                    while (!cm.getGameManager().readyGame()) {
+                        
                         int amount = (int)moneySlider.valueProperty().get() - 100; // Amount of money added to starting resources
                         lblStartRes.setText("" + amount);
-                        gameInfo = cm.getGameManager().getGameInfo();
->>>>>>> origin/Overkoekende-lobby
+                        gameInfo = lobby.getGame(gameName).getGameInfo();
 
                         for (int i = 0; i < gameInfo.getPlayers().size(); i++) {
                             final String playerName = gameInfo.getPlayers().get(i).getName();
