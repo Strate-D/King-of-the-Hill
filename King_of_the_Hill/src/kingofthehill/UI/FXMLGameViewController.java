@@ -32,6 +32,7 @@ import kingofthehill.domain.AI;
 import kingofthehill.domain.AIState;
 import kingofthehill.domain.Defence;
 import kingofthehill.domain.GameManager;
+import kingofthehill.domain.GameMode;
 import kingofthehill.domain.IPlayer;
 import kingofthehill.domain.Melee;
 import kingofthehill.domain.Player;
@@ -115,7 +116,7 @@ public class FXMLGameViewController implements Initializable {
             gm.addPlayer("ArtificialIntelligence1", true);
             gm.addPlayer("ArtificialIntelligence2", true);
             gm.addPlayer("ArtificialIntelligence3", true);
-            
+
             //Set faction
             gm.setPlayerFaction(King_of_the_Hill.context.getPlayerName(), King_of_the_Hill.context.getFaction());
             gm.setPlayerFaction("ArtificialIntelligence1", "melee");
@@ -194,7 +195,7 @@ public class FXMLGameViewController implements Initializable {
                 drawBackground();
                 drawField();
                 drawUnits();
-                
+
                 try {
                     // Send heartbeat to server
                     gm.sendPlayerSignal(King_of_the_Hill.context.getPlayerName());
@@ -239,20 +240,47 @@ public class FXMLGameViewController implements Initializable {
                 }
 
                 //Check if game ended
-                if (gm.getPlayers().get(0).getBase().getHealthPoints() == 0 && gm.getPlayers().get(2).getBase().getHealthPoints() == 0) {
-                    canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
-                    drawBackground();
-                    drawField();
-                    drawUnits();
-                    canvas.getGraphicsContext2D().fillText("Team blue won!", 450, 450);
-                    this.stop();
-                } else if (gm.getPlayers().get(1).getBase().getHealthPoints() == 0 && gm.getPlayers().get(3).getBase().getHealthPoints() == 0) {
-                    canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
-                    drawBackground();
-                    drawField();
-                    drawUnits();
-                    canvas.getGraphicsContext2D().fillText("Team red won!", 450, 450);
-                    this.stop();
+                try {
+                    //Coop mode
+                    if (gm.getGameMode() == GameMode.COOP) {
+                        if (gm.getPlayers().get(0).getBase().getHealthPoints() == 0 && gm.getPlayers().get(2).getBase().getHealthPoints() == 0) {
+                            canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
+                            drawBackground();
+                            drawField();
+                            drawUnits();
+                            canvas.getGraphicsContext2D().fillText("Team blue won!", 450, 450);
+                            this.stop();
+                        } else if (gm.getPlayers().get(1).getBase().getHealthPoints() == 0 && gm.getPlayers().get(3).getBase().getHealthPoints() == 0) {
+                            canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
+                            drawBackground();
+                            drawField();
+                            drawUnits();
+                            canvas.getGraphicsContext2D().fillText("Team red won!", 450, 450);
+                            this.stop();
+                        }
+                    }
+                    //Free for all
+                    else {
+                        int counter = 0;
+                        IPlayer winner = null;
+                        for (IPlayer p : gm.getPlayers()) {
+                            if (p.getBase().getHealthPoints() == 0) {
+                                counter++;
+                            } else {
+                                winner = p;
+                            }
+                        }
+                        if (counter == 3) {
+                            canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
+                            drawBackground();
+                            drawField();
+                            drawUnits();
+                            canvas.getGraphicsContext2D().fillText("Player: " + winner.getName() + " won!", 450, 450);
+                            this.stop();
+                        }
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
                 //Handle cooldown of units
@@ -275,7 +303,7 @@ public class FXMLGameViewController implements Initializable {
                 super.start();
             }
         };
-        
+
         antimer.start();
     }
 
@@ -353,7 +381,7 @@ public class FXMLGameViewController implements Initializable {
      */
     private void drawField() {
         printPlayerInfo();
-        
+
         //Check hp, then draw correct sprite for base
         if (gm.getPlayers().get(0).getBase().getHealthPoints() > 0) {
             canvas.getGraphicsContext2D().drawImage(castle1, 20, 20, 200, 200);
@@ -396,14 +424,14 @@ public class FXMLGameViewController implements Initializable {
         //Draw money
         canvas.getGraphicsContext2D().setFill(Color.GOLD);
         int resourceUnitsAmount = 0;
-        for(Unit u : gm.getPlayers().get(0).getBase().getUnits()) {
+        for (Unit u : gm.getPlayers().get(0).getBase().getUnits()) {
             if (u instanceof Resource) {
                 resourceUnitsAmount++;
             }
         }
         int extraGold = 10 + resourceUnitsAmount * 2;
-        
-        canvas.getGraphicsContext2D().fillText("G: " + gm.getPlayers().get(0).getMoney() + " (+" + extraGold + ")" , 55, 100);
+
+        canvas.getGraphicsContext2D().fillText("G: " + gm.getPlayers().get(0).getMoney() + " (+" + extraGold + ")", 55, 100);
         //Draw score
         canvas.getGraphicsContext2D().setFill(Color.AQUA);
         canvas.getGraphicsContext2D().fillRect(55, 80, 100, 5);
@@ -491,17 +519,17 @@ public class FXMLGameViewController implements Initializable {
         //Set color gold
         canvas.getGraphicsContext2D().setFill(Color.GOLD);
         canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.BOLD, 12));
-        
+
         // Draw unit cost
-        canvas.getGraphicsContext2D().fillText(""+ UnitInfo.getMeleeUnit(new Player("melee",5)).getCost(), 60, 115);
-        canvas.getGraphicsContext2D().fillText(""+ UnitInfo.getRangedUnit(new Player("range",5)).getCost() , 90, 115);
-        canvas.getGraphicsContext2D().fillText(""+ UnitInfo.getDefenceUnit(new Player("defence",5)).getCost(), 125, 100);
-        canvas.getGraphicsContext2D().fillText(""+ UnitInfo.getResourceUnit(new Player("resource",5)).getCost(), 125, 135);
-        
+        canvas.getGraphicsContext2D().fillText("" + UnitInfo.getMeleeUnit(new Player("melee", 5)).getCost(), 60, 115);
+        canvas.getGraphicsContext2D().fillText("" + UnitInfo.getRangedUnit(new Player("range", 5)).getCost(), 90, 115);
+        canvas.getGraphicsContext2D().fillText("" + UnitInfo.getDefenceUnit(new Player("defence", 5)).getCost(), 125, 100);
+        canvas.getGraphicsContext2D().fillText("" + UnitInfo.getResourceUnit(new Player("resource", 5)).getCost(), 125, 135);
+
         //Set color back
         canvas.getGraphicsContext2D().setFill(Color.BLACK);
         canvas.getGraphicsContext2D().setFont(Font.font(null, FontWeight.NORMAL, 12));
-        
+
         //SpotsLanes when unit is selected
         if (selectedUnit != null) {
             //Lane 0 to 3
@@ -984,7 +1012,7 @@ public class FXMLGameViewController implements Initializable {
     private void printUnitInfo(UnitType unit) {
         IPlayer player = this.gm.getPlayers().get(0);
         List<Upgrade> upgrades = player.getUpgrades();
-        
+
         UnitInfo ui = null;
         if (unit == UnitType.MELEE) {
             ui = UnitInfo.getMeleeUnit(player);
@@ -996,25 +1024,24 @@ public class FXMLGameViewController implements Initializable {
             ui = UnitInfo.getResourceUnit(player);
         }
 
-        if(ui == null)
+        if (ui == null) {
             throw new IllegalArgumentException("Wrong UnitType");
-        
+        }
+
         int ATK = ui.getUnit().getAttack();
         int DEF = ui.getUnit().getArmor();
         int COST = ui.getCost();
         int HEALTH = ui.getUnit().getHealth();
         int SPEED = ui.getUnit().getMovementSpeed();
-        for(Upgrade u : upgrades)
-        {
-            if(u.getTargetUnit() == unit)
-            {
-                ATK = ATK + (int)(ATK * u.getModAttack());
-                DEF = DEF + (int)(DEF * u.getModArmor());
-                HEALTH = HEALTH + (int)(HEALTH * u.getModHealth());
-                SPEED = SPEED + (int)(SPEED * u.getModMovementSpeed());
+        for (Upgrade u : upgrades) {
+            if (u.getTargetUnit() == unit) {
+                ATK = ATK + (int) (ATK * u.getModAttack());
+                DEF = DEF + (int) (DEF * u.getModArmor());
+                HEALTH = HEALTH + (int) (HEALTH * u.getModHealth());
+                SPEED = SPEED + (int) (SPEED * u.getModMovementSpeed());
             }
         }
-        
+
         StringBuilder sb = new StringBuilder();
         sb.append("Unit Information (").append(unit.toString()).append(")\n\n");
         sb.append("ATTACK:\t\t").append(ATK).append("\n");
@@ -1022,37 +1049,31 @@ public class FXMLGameViewController implements Initializable {
         sb.append("COST:\t\t").append(COST).append("\n");
         sb.append("HEALTH:\t\t").append(HEALTH).append("\n");
         sb.append("SPEED:\t\t").append(SPEED).append("\n");
-        
-        if(unit == UnitType.RANGED)
-        {
+
+        if (unit == UnitType.RANGED) {
             Ranged r = (Ranged) ui.getUnit();
-            sb.append("RANGE:\t\t").append(r.getAttackRange()).append("\n");   
+            sb.append("RANGE:\t\t").append(r.getAttackRange()).append("\n");
         }
-        
-        
+
         this.InfoLabel.setText(sb.toString());
     }
-    
+
     private void printPlayerInfo() {
         IPlayer player = this.gm.getPlayers().get(0);
         IPlayer team = null;
         List<Upgrade> upgrades = player.getUpgrades();
         List<Unit> units = player.getBase().getUnits();
-        
+
         int GOLD = 10;
-        
-        for(Unit u : units)
-        {
-            if(u instanceof Resource)
-            {
+
+        for (Unit u : units) {
+            if (u instanceof Resource) {
                 GOLD += 2;
             }
         }
-        
-        for(IPlayer p : player.getTeam().getPlayers())
-        {
-            if(p != player)
-            {
+
+        for (IPlayer p : player.getTeam().getPlayers()) {
+            if (p != player) {
                 team = p;
             }
         }
@@ -1060,15 +1081,14 @@ public class FXMLGameViewController implements Initializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Player Information (").append(player.getName()).append(")\n\n");
         sb.append("Gold:\t\t").append(player.getMoney()).append("\n");
-        sb.append("Receiving:\t"). append(GOLD).append("\n");
+        sb.append("Receiving:\t").append(GOLD).append("\n");
         sb.append("Experiance:\t").append(player.getExp()).append("\n");
         sb.append("\nTeammate").append("\n");
         sb.append("Name:\t\t").append(team.getName()).append("\n");
         sb.append("Experiance:\t").append(team.getExp()).append("\n");
         sb.append("\nBought upgrades").append("\n");
-        
-        for(Upgrade u : upgrades)
-        {
+
+        for (Upgrade u : upgrades) {
             sb.append(u.getTargetUnit().toString()).append(": ");
             sb.append("AMR: ").append(u.getModArmor()).append(", ");
             sb.append("ATK: ").append(u.getModAttack()).append(", ");
@@ -1076,7 +1096,7 @@ public class FXMLGameViewController implements Initializable {
             sb.append("SPD: ").append(u.getModMovementSpeed());
             sb.append("\n");
         }
-             
+
         this.InfoLabel.setText(sb.toString());
     }
 }

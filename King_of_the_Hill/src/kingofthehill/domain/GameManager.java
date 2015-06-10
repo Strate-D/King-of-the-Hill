@@ -25,7 +25,7 @@ import kingofthehill.upgradeinfo.UpgradeInfo;
  * @author Jur
  */
 public class GameManager extends UnicastRemoteObject implements IGameManager {
-    
+
     private List<IPlayer> players;
     private List<String> readyPlayers;
     private Mysterybox mysterybox;
@@ -36,7 +36,8 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     private GameInfo gameInfo;
     private Timer timer;
     private boolean readyGame;
-    
+    private GameMode gameMode;
+
     private boolean DebugLevelAI = false;
 
     /**
@@ -55,8 +56,9 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         this.mysteryboxTime = 0;
         this.readyGame = false;
         this.gameInfo = new GameInfo();
+        this.gameMode = GameMode.F4A;
     }
-    
+
     @Override
     public synchronized void addPlayer(String player, boolean isAi) throws RemoteException {
         /**
@@ -76,7 +78,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
                         count++;
                     }
                 }
-                
+
                 ai = new AI("ArtificialIntelligence" + count);
 
                 /**
@@ -94,7 +96,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
                         ai.setAIType(AIState.MODERNATE);
                         break;
                 }
-                
+
                 players.add(ai);
                 this.setPlayerReady(ai.getName());
             } else {
@@ -107,7 +109,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
             gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
         }
     }
-    
+
     @Override
     public synchronized void removePlayer(String player) throws RemoteException {
         /**
@@ -122,7 +124,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
          */
         gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
     }
-    
+
     @Override
     public synchronized boolean setPlayerReady(String player) throws RemoteException {
         /**
@@ -141,7 +143,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
                 return false;
             }
         }
-        
+
         readyPlayers.add(player);
 
         /**
@@ -150,10 +152,10 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         if (readyPlayers.size() > 3) {
             startGame();
         }
-        
+
         return true;
     }
-    
+
     @Override
     public boolean getPlayerReady(String player) {
         /**
@@ -164,7 +166,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -239,15 +241,15 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
          */
         timer = new Timer();
         timer.schedule(new GameLoop(), 0, 1000 / 30);
-        
+
         readyGame = true;
     }
-    
+
     @Override
     public boolean readyGame() throws RemoteException {
         return this.readyGame;
     }
-    
+
     @Override
     public synchronized void sendPlayerSignal(String playername) throws RemoteException {
         //Get the player
@@ -255,7 +257,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         //Set hearthbeat
         player.resetConnectionTimer();
     }
-    
+
     @Override
     public synchronized void setPlayerToAI(String playername) throws RemoteException {
         //Create new AI
@@ -290,7 +292,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         this.players.set(this.players.indexOf(oldPlayer), newPlayer);
         System.out.println("Replaced player!");
     }
-    
+
     @Override
     public void setPlayerFaction(String playername, String faction) throws RemoteException {
         IPlayer player = this.getPlayer(playername);
@@ -305,11 +307,23 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         }
     }
 
+    @Override
+    public GameMode getGameMode() throws RemoteException {
+        return this.gameMode;
+    }
+
+    @Override
+    public void setGameMode(GameMode newGameMode) throws RemoteException {
+        if (newGameMode != null) {
+            this.gameMode = newGameMode;
+        }
+    }
+
     /**
      * GameLoop class with timertask to call the doStep method in a loop
      */
     private class GameLoop extends java.util.TimerTask {
-        
+
         @Override
         public void run() {
             doStep();
@@ -336,9 +350,9 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
                         } catch (Exception ecx) {
                         }
                     }
-                    
+
                 }
-                
+
                 List<Unit> doneUnits = new ArrayList<>();
                 while (doneUnits.size() < b.getUnits().size()) {
                     try {
@@ -374,7 +388,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         }
         return list.iterator();
     }
-    
+
     private void generateMysterybox() {
         Random r = new Random();
         UnitType unitType = null;
@@ -526,10 +540,14 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
                 }
             }
             //Check if give to player or to teammate
-            if (p.getBase().getHealthPoints() != 0) {
-                p.addMoney(munnie);
+            if (this.gameMode == GameMode.COOP) {
+                if (p.getBase().getHealthPoints() != 0) {
+                    p.addMoney(munnie);
+                } else {
+                    p.getBase().getLane(0).getBaseEnd2().getLane(0).getBaseEnd2().getOwner().addMoney(munnie / 2);
+                }
             } else {
-                p.getBase().getLane(0).getBaseEnd2().getLane(0).getBaseEnd2().getOwner().addMoney(munnie / 2);
+                p.addMoney(munnie);
             }
         }
     }
@@ -587,7 +605,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
                 return p;
             }
         }
-        
+
         return null;
     }
 
@@ -624,7 +642,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
                 unitNew = UnitInfo.getResourceUnit(player).getUnit();
                 break;
         }
-        
+
         return placeUnitAtBase(getPlayer(playername), unitNew, index, cost);
     }
 
@@ -686,16 +704,16 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     public synchronized Mysterybox getMysterybox() {
         return this.mysterybox;
     }
-    
+
     @Override
     public synchronized void bidMysteryboxMulti(String playername, int bid) {
         IPlayer player = getPlayer(playername);
-        
+
         if (mysterybox != null && player != null) {
             mysterybox.bid(player, bid);
         }
     }
-    
+
     @Override
     public synchronized IGameInfo getGameInfo() throws RemoteException {
         return this.gameInfo;

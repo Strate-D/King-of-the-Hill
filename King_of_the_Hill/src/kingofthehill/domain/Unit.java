@@ -1,17 +1,17 @@
 /**
  *
  */
-
 package kingofthehill.domain;
 
 import java.io.Serializable;
 
 /**
-* Abstract class as template for all units
-*
+ * Abstract class as template for all units
+ * 
 * @author Jur
-*/
-public abstract class Unit implements Serializable{
+ */
+public abstract class Unit implements Serializable {
+
     private int health;
     private int attack;
     private int armor;
@@ -28,6 +28,7 @@ public abstract class Unit implements Serializable{
 
     /**
      * Creates a new Unit object
+     *
      * @param health The healthpoints of the new unit
      * @param attack The attack of the new unit
      * @param armor The armor of the new unit
@@ -36,23 +37,25 @@ public abstract class Unit implements Serializable{
      * @param owner The owner of the unit
      */
     public Unit(int health, int attack, int armor,
-        UnitType unittype, int movementSpeed, IPlayer owner) {
-            if (health < 1 || attack < 1 || armor < 0 || unittype == null || movementSpeed < 0 || owner == null) {
-                throw new IllegalArgumentException("Unit couldn't be made!");
-            }
-            this.health = health;
-            this.attack = attack;
-            this.armor = armor;
-            this.type = unittype;
-            this.movementSpeed = movementSpeed;
-            this.owner = owner;
-            this.position = 0;
-            this.damage = 0;
+            UnitType unittype, int movementSpeed, IPlayer owner) {
+        if (health < 1 || attack < 1 || armor < 0 || unittype == null || movementSpeed < 0 || owner == null) {
+            throw new IllegalArgumentException("Unit couldn't be made!");
+        }
+        this.health = health;
+        this.attack = attack;
+        this.armor = armor;
+        this.type = unittype;
+        this.movementSpeed = movementSpeed;
+        this.owner = owner;
+        this.position = 0;
+        this.damage = 0;
     }
+
     /**
-    * Calculates the health of the unit with all the upgrades
-    * @return The health of the unit. Is at least 1.
-    */
+     * Calculates the health of the unit with all the upgrades
+     *
+     * @return The health of the unit. Is at least 1.
+     */
     public int getHealth() {
         double result = this.health;
         for (Upgrade upg : this.owner.getUpgrades()) {
@@ -67,10 +70,12 @@ public abstract class Unit implements Serializable{
             return 1;
         }
     }
+
     /**
-    * Calculates the attack of the unit with all the upgrades
-    * @return The attack of the unit. Is at least 1.
-    */
+     * Calculates the attack of the unit with all the upgrades
+     *
+     * @return The attack of the unit. Is at least 1.
+     */
     public int getAttack() {
         double result = this.attack;
         for (Upgrade upg : this.owner.getUpgrades()) {
@@ -85,10 +90,12 @@ public abstract class Unit implements Serializable{
             return 1;
         }
     }
+
     /**
-    * Calculates the armor of the unit with all the upgrades
-    * @return The armor of the unit. Will never be negative
-    */
+     * Calculates the armor of the unit with all the upgrades
+     *
+     * @return The armor of the unit. Will never be negative
+     */
     public int getArmor() {
         double result = this.armor;
         for (Upgrade upg : this.owner.getUpgrades()) {
@@ -103,10 +110,12 @@ public abstract class Unit implements Serializable{
             return 0;
         }
     }
+
     /**
-    * Calculates the movement speed of the unit with all the upgrades
-    * @return The movement speed of the unit. Will never be negative
-    */
+     * Calculates the movement speed of the unit with all the upgrades
+     *
+     * @return The movement speed of the unit. Will never be negative
+     */
     public int getMovementSpeed() {
         double result = this.movementSpeed;
         for (Upgrade upg : this.owner.getUpgrades()) {
@@ -121,20 +130,22 @@ public abstract class Unit implements Serializable{
             return 1;
         }
     }
+
     /**
-    * Let's the unit perform its next action
-    */
+     * Let's the unit perform its next action
+     */
     public abstract void doNextAction();
-    
+
     /**
-    * Checks if this unit can attack a enemy unit
-    * @return The unit it can attack, can be null.
-    */
+     * Checks if this unit can attack a enemy unit
+     *
+     * @return The unit it can attack, can be null.
+     */
     public abstract Unit canAttackUnit();
-    
+
     /**
-    * Kills this unit
-    */
+     * Kills this unit
+     */
     private void killUnit() {
         if (this.lane != null) {
             this.lane.removeUnit(this);
@@ -143,11 +154,13 @@ public abstract class Unit implements Serializable{
             this.base.removeUnit(this);
         }
     }
+
     /**
-    * Adds a amount of damage to the Unit
-    * @param damagepoints Amount of damage that is dealt.
-    * @return If the unit is killed or not
-    */
+     * Adds a amount of damage to the Unit
+     *
+     * @param damagepoints Amount of damage that is dealt.
+     * @return If the unit is killed or not
+     */
     public boolean receiveDamage(int damagepoints) {
         if (damagepoints < 0) {
             throw new IllegalArgumentException("Unit can't take negative damage");
@@ -164,10 +177,12 @@ public abstract class Unit implements Serializable{
         }
         return false;
     }
+
     /**
-    * Returns the cost of the unit
-    * @return The cost of the unit. Will always be positive.
-    */
+     * Returns the cost of the unit
+     *
+     * @return The cost of the unit. Will always be positive.
+     */
     public int getCost() {
         if (this.cost > 0) {
             return this.cost;
@@ -177,40 +192,44 @@ public abstract class Unit implements Serializable{
     }
 
     /**
-    * Returns the damage that was done to the unit
-    * @return The damage done to the unit.
-    */
+     * Returns the damage that was done to the unit
+     *
+     * @return The damage done to the unit.
+     */
     public int getDamage() {
         return this.damage;
     }
 
     /**
-    * Returns the base object of the unit.
-    * @return Can be null.
-    */
+     * Returns the base object of the unit.
+     *
+     * @return Can be null.
+     */
     public Base getBase() {
         return this.base;
     }
-    
+
     /**
-    * Sets the base of the unit If the lane was not null, it will be set to
-    * null.
-    * @param base The new base of the unit
-    */
+     * Sets the base of the unit If the lane was not null, it will be set to
+     * null.
+     *
+     * @param base The new base of the unit
+     */
     public void setBase(Base base) {
 
         if (base != null) {
-           this.base = base;
-           this.lane = null;
+            this.base = base;
+            this.lane = null;
         }
     }
-    
+
     /**
-    * Sets the new lane of the unit If the base was not null, it will be set to
-    * null Also changes the position of the unit as close as possible to his
-    * own base.
-    * @param lane The new lane of the unit
-    */
+     * Sets the new lane of the unit If the base was not null, it will be set to
+     * null Also changes the position of the unit as close as possible to his
+     * own base.
+     *
+     * @param lane The new lane of the unit
+     */
     public void setLane(Lane lane) {
         this.lane = lane;
         this.base = null;
@@ -222,27 +241,30 @@ public abstract class Unit implements Serializable{
             }
         }
     }
-    
+
     /**
      * Returns the lane object in which the unit is placed.
-    * @return Can be null
-    */
+     *
+     * @return Can be null
+     */
     public Lane getLane() {
-    return this.lane;
+        return this.lane;
     }
-    
+
     /**
-    * Returns the position of the unit on a lane
-    * @return Int between 0 and 100. -1 if unit is placed on a base.
-    */
+     * Returns the position of the unit on a lane
+     *
+     * @return Int between 0 and 100. -1 if unit is placed on a base.
+     */
     public int getPosition() {
-    return this.position;
+        return this.position;
     }
-    
+
     /**
-    * Gets the cooldown time of a unit
-    * @return Always a positive int
-    */
+     * Gets the cooldown time of a unit
+     *
+     * @return Always a positive int
+     */
     public int getCooldown() {
         if (this.cooldown > 0) {
             return this.cooldown;
@@ -250,11 +272,12 @@ public abstract class Unit implements Serializable{
             return 1;
         }
     }
-    
+
     /**
-    * Gets the view range of the unit
-    * @return Always a positive int
-    */
+     * Gets the view range of the unit
+     *
+     * @return Always a positive int
+     */
     public int getViewRange() {
         if (this.viewRange > 0) {
             return this.viewRange;
@@ -262,19 +285,20 @@ public abstract class Unit implements Serializable{
             return 1;
         }
     }
-    
+
     /**
-    * Gets the owner of the unit.
-    * @return Cannot be null
-    */
+     * Gets the owner of the unit.
+     *
+     * @return Cannot be null
+     */
     public IPlayer getOwner() {
-    return this.owner;
+        return this.owner;
     }
-    
+
     /**
-    * Moves the unit with use of the movementspeed If the unit reaches the base
-    * on the other side, the unit will be destroyed and damage will be dealt.
-    */
+     * Moves the unit with use of the movementspeed If the unit reaches the base
+     * on the other side, the unit will be destroyed and damage will be dealt.
+     */
     public void moveUnit() {
         /**
          * Get lane and check wich way the unit has to move and move the unit
@@ -283,49 +307,69 @@ public abstract class Unit implements Serializable{
         if (lane != null) {
             if (lane.getBaseEnd1().getOwner() == this.getOwner()) {
                 this.position += this.getMovementSpeed();
-            } else {
+            } else if (lane.getBaseEnd2().getOwner() == this.getOwner()) {
                 this.position -= this.getMovementSpeed();
             }
-            
+
             /**
              * Check if unit has reached the base, if so, do damage
              */
             if (this.position > 1000) {
-                lane.getBaseEnd2().receiveDamage(this.getAttack());
-                this.killUnit();
+                if (lane.getBaseEnd2().getHealthPoints() != 0) {
+                    lane.getBaseEnd2().receiveDamage(this.getAttack());
+                    this.killUnit();
+                } else {
+                    int index = lane.getBaseEnd2().getLanes().indexOf(lane);
+                    Lane newLane = lane.getBaseEnd2().getLane(index - 4);
+                    this.setLane(newLane);
+                    this.setPosition(0);
+                    this.setOwner(lane.getBaseEnd2().getOwner());
+                }
             } else if (this.position < 0) {
-                lane.getBaseEnd1().receiveDamage(this.getAttack());
-                this.killUnit();
+                if (lane.getBaseEnd1().getHealthPoints() != 0) {
+                    lane.getBaseEnd1().receiveDamage(this.getAttack());
+                    this.killUnit();
+                } else {
+                    int index = lane.getBaseEnd1().getLanes().indexOf(lane);
+                    Lane newLane = lane.getBaseEnd1().getLane(index + 4);
+                    this.setLane(newLane);
+                    this.setPosition(1000);
+                    this.setOwner(lane.getBaseEnd1().getOwner());
+                }
             }
         }
     }
-    
+
     /**
      * Sets the new position of the unit to the given value
-     * @param newPos The new position of the unit, must be positive and lower than 1000!
+     *
+     * @param newPos The new position of the unit, must be positive and lower
+     * than 1000!
      */
     public void setPosition(int newPos) {
-        if(newPos < 0 || newPos >= 1000) {
+        if (newPos < 0 || newPos >= 1000) {
             //do nothing
         } else {
             this.position = newPos;
         }
     }
-    
+
     /**
      * Gets the unit type of the unit
+     *
      * @return The unit type of the unit, not null
      */
     public UnitType getType() {
         return this.type;
     }
-    
+
     /**
      * Sets the new owner of the unit
+     *
      * @param player The new owner not null.
      */
     public void setOwner(IPlayer player) {
-        if(player != null) {
+        if (player != null) {
             this.owner = player;
         }
     }
