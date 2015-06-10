@@ -22,6 +22,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -59,7 +60,13 @@ public class FXMLLobbyViewController implements Initializable {
 
     @FXML
     private Label labelPlayer4;
+    
+    @FXML
+    private Label lblStartRes;
 
+    @FXML
+    private Slider moneySlider;
+    
     ObservableList<String> messages;
     
     ClientManager cm = new ClientManager(King_of_the_Hill.context.getServerUrl());
@@ -120,8 +127,15 @@ public class FXMLLobbyViewController implements Initializable {
             @Override
             public void run() {
                 try {
+<<<<<<< HEAD
                     while (!lobby.getGame(gameName).readyGame()) {
                         gameInfo = lobby.getGame(gameName).getGameInfo();
+=======
+                    while (!cm.getGameManager().readyGame()) {
+                        int amount = (int)moneySlider.valueProperty().get() - 100; // Amount of money added to starting resources
+                        lblStartRes.setText("" + amount);
+                        gameInfo = cm.getGameManager().getGameInfo();
+>>>>>>> origin/Overkoekende-lobby
 
                         for (int i = 0; i < gameInfo.getPlayers().size(); i++) {
                             final String playerName = gameInfo.getPlayers().get(i).getName();
@@ -133,7 +147,7 @@ public class FXMLLobbyViewController implements Initializable {
                             } else {
                                 ready = " (Unready)";
                             }
-
+                            gameInfo.getPlayers().get(i).addMoney(amount);
                             final Integer id = i;
                             final String readyString = ready;
                             
