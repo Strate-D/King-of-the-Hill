@@ -103,7 +103,7 @@ public class FXMLGameViewController implements Initializable {
 
         gm = null;
         try {
-            gm = new GameManager();
+            gm = new GameManager(p.getName());
         } catch (RemoteException ex) {
             System.out.println("Failed to start game");
             System.exit(1);

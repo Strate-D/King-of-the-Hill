@@ -10,8 +10,8 @@ import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import kingofthehill.domain.GameManager;
-import kingofthehill.domain.IGameManager;
+import kingofthehill.lobby.ILobby;
+import kingofthehill.lobby.Lobby;
 
 /**
  *
@@ -26,7 +26,7 @@ public class RMIserver {
 
     // References to registry and student administration
     private Registry registry = null;
-    private IGameManager gameManager = null;
+    private ILobby lobby = null;
     
     public RMIserver() {
         // Welcome message
@@ -40,12 +40,13 @@ public class RMIserver {
         
         // Create student administration
         try {
-            gameManager = new GameManager();
+            //gameManager = new GameManager();
+            lobby = new Lobby();
             System.out.println("Server: Game created");
         } catch (RemoteException ex) {
             System.out.println("Server: Cannot create game");
             System.out.println("Server: RemoteException: " + ex.getMessage());
-            gameManager = null;
+            lobby = null;
         }
 
         // Create registry at port number
@@ -60,7 +61,7 @@ public class RMIserver {
 
         // Bind student administration using registry
         try {
-            registry.rebind(bindingName, gameManager);
+            registry.rebind(bindingName, lobby);
         } catch (RemoteException ex) {
             System.out.println("Server: Cannot bind student administration");
             System.out.println("Server: RemoteException: " + ex.getMessage());

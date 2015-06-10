@@ -18,7 +18,7 @@ public class AITesting {
      */
     public static void main(String[] args) throws RemoteException 
     {
-        GameManager gm = new GameManager();
+        GameManager gm = new GameManager("test");
         //gm.setDebugLevelAI(true);
         AI ai1 = (AI)(gm.getPlayers().get(1));
         ai1.setAIType(AIState.AGRESSIVE);

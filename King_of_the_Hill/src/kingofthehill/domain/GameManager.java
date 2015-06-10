@@ -26,6 +26,7 @@ import kingofthehill.upgradeinfo.UpgradeInfo;
  */
 public class GameManager extends UnicastRemoteObject implements IGameManager {
 
+    private String name;
     private List<IPlayer> players;
     private List<String> readyPlayers;
     private Mysterybox mysterybox;
@@ -42,19 +43,22 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     /**
      * Creates a new gameManager, also creating a new game with it.
      *
+     * @param name name of the game
      * @throws java.rmi.RemoteException
      */
-    public GameManager() throws RemoteException {
+    public GameManager(String name) throws RemoteException {
+        this.name = name;
+        this.players = new ArrayList<>();
+        this.readyPlayers = new ArrayList<>();
+        this.readyGame = false;
+        this.gameInfo = new GameInfo();
+
         /**
          * Set resourceTimer to 0
          */
-        this.players = new ArrayList<>();
-        this.readyPlayers = new ArrayList<>();
         this.resourceTimer = 0;
         this.mysteryboxTimer = 0;
         this.mysteryboxTime = 0;
-        this.readyGame = false;
-        this.gameInfo = new GameInfo();
     }
 
     @Override
@@ -568,7 +572,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
             if (p.getBase().getHealthPoints() != 0) {
                 p.addMoney(munnie);
             } else {
-                p.getBase().getLane(0).getBaseEnd2().getLane(0).getBaseEnd2().getOwner().addMoney(munnie/2);
+                p.getBase().getLane(0).getBaseEnd2().getLane(0).getBaseEnd2().getOwner().addMoney(munnie / 2);
             }
         }
     }
@@ -738,5 +742,9 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     @Override
     public synchronized IGameInfo getGameInfo() throws RemoteException {
         return this.gameInfo;
+    }
+    
+    public String getName(){
+        return this.name;
     }
 }
