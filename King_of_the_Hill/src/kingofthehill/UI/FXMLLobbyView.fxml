@@ -84,8 +84,8 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label id="lblStartRes" layoutX="201.0" layoutY="343.0" text="lblStartRes" />
-            <Slider id="sliderResAtStart" layoutX="287.0" layoutY="345.0" max="200.0" min="50.0" />
+            <Label id="lblStartRes" fx:id="lblStartRes" layoutX="201.0" layoutY="343.0" text="lblStartRes" />
+            <Slider id="sliderResAtStart" fx:id="moneySlider" layoutX="287.0" layoutY="345.0" max="200.0" min="50.0" />
             <ChoiceBox id="cbGameMode" layoutX="287.0" layoutY="369.0" prefHeight="25.0" prefWidth="140.0" />
             <Label id="lblGamemode" layoutX="201.0" layoutY="373.0" text="lblGamemode" />
          </children>
