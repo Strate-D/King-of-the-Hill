@@ -56,7 +56,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         this.mysteryboxTime = 0;
         this.readyGame = false;
         this.gameInfo = new GameInfo();
-        this.gameMode = GameMode.F4A;
+        this.gameMode = GameMode.COOP;
     }
 
     @Override
@@ -224,7 +224,12 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
             }
             i++;
         }
-
+        /**
+         * Set player gamemodes
+         */
+        for (IPlayer p : this.getPlayers()) {
+            p.setGameMode(this.gameMode);
+        }
         /**
          * Set mysteryboxtime at random for the first time
          */

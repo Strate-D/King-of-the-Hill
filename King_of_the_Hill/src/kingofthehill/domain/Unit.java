@@ -312,10 +312,11 @@ public abstract class Unit implements Serializable {
             }
 
             /**
-             * Check if unit has reached the base, if so, do damage
+             * Check if unit has reached the base, if so, do damage If Gamemode
+             * FFA and enemy base destroyed, place unit to next base
              */
             if (this.position > 1000) {
-                if (lane.getBaseEnd2().getHealthPoints() != 0) {
+                if (lane.getBaseEnd2().getHealthPoints() != 0 || owner.getGameMode() != GameMode.F4A) {
                     lane.getBaseEnd2().receiveDamage(this.getAttack());
                     this.killUnit();
                 } else {
@@ -326,7 +327,7 @@ public abstract class Unit implements Serializable {
                     this.setOwner(lane.getBaseEnd2().getOwner());
                 }
             } else if (this.position < 0) {
-                if (lane.getBaseEnd1().getHealthPoints() != 0) {
+                if (lane.getBaseEnd1().getHealthPoints() != 0 || owner.getGameMode() != GameMode.F4A) {
                     lane.getBaseEnd1().receiveDamage(this.getAttack());
                     this.killUnit();
                 } else {

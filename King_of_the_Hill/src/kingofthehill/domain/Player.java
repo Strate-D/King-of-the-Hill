@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package kingofthehill.domain;
 
@@ -10,11 +10,11 @@ import java.util.List;
 
 /**
  * Class containing all the information about a human player
- * 
+ *
  * @author Jur
  */
-public class Player implements IPlayer, Serializable{
-    
+public class Player implements IPlayer, Serializable {
+
     private String name;
     private int exp;
     private int score;
@@ -23,14 +23,16 @@ public class Player implements IPlayer, Serializable{
     private int money;
     private Base base;
     private int connectionTimer;
-    
+    private GameMode gameMode;
+
     /**
      * Creates a new player object
+     *
      * @param name Name of the player, may not be empty
      * @param exp Exp points of the player, may not be lower than 0.
      */
-    public Player(String name, int exp){
-        if(name.isEmpty() || exp < 0){
+    public Player(String name, int exp) {
+        if (name.isEmpty() || exp < 0) {
             throw new IllegalArgumentException("Illegal arguments given!");
         }
         this.name = name;
@@ -64,12 +66,12 @@ public class Player implements IPlayer, Serializable{
     }
 
     @Override
-    public void addUpgrade(Upgrade upgrade){
-        if(upgrade != null){
+    public void addUpgrade(Upgrade upgrade) {
+        if (upgrade != null) {
             upgrades.add(upgrade);
         }
     }
-    
+
     @Override
     public List<Upgrade> getUpgrades() {
         return Collections.unmodifiableList(upgrades);
@@ -77,8 +79,8 @@ public class Player implements IPlayer, Serializable{
 
     @Override
     public void setTeam(Team newTeam) {
-        if(newTeam != null){
-            this.team = newTeam; 
+        if (newTeam != null) {
+            this.team = newTeam;
         }
     }
 
@@ -101,8 +103,8 @@ public class Player implements IPlayer, Serializable{
 
     @Override
     public boolean payMoney(int amount) {
-        if(amount > 0){
-            if(amount <= this.money){
+        if (amount > 0) {
+            if (amount <= this.money) {
                 this.money -= amount;
                 return true;
             } else {
@@ -120,7 +122,7 @@ public class Player implements IPlayer, Serializable{
 
     @Override
     public void setBase(Base newBase) {
-        if(newBase != null){
+        if (newBase != null) {
             this.base = newBase;
         }
     }
@@ -142,9 +144,21 @@ public class Player implements IPlayer, Serializable{
 
     @Override
     public void lowerConnectionTimer() {
-        if(this.connectionTimer > 0) {
+        if (this.connectionTimer > 0) {
             this.connectionTimer--;
         }
     }
-    
+
+    @Override
+    public GameMode getGameMode() {
+        return this.gameMode;
+    }
+
+    @Override
+    public void setGameMode(GameMode newGameMode) {
+        if (newGameMode != null) {
+            this.gameMode = newGameMode;
+        }
+    }
+
 }
