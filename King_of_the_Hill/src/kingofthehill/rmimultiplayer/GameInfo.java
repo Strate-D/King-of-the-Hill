@@ -104,7 +104,11 @@ public class GameInfo implements IGameInfo, Serializable {
 
     @Override
     public String getPlayerName(int index) {
-        return players.get(index).getName();
+        try {
+            return players.get(index).getName();
+        } catch (IndexOutOfBoundsException ex) {
+            return null;
+        }
     }
 
     /**

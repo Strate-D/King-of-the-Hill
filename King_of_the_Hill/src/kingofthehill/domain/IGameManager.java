@@ -47,10 +47,10 @@ public interface IGameManager extends Remote{
     /**
      * Gets the join status of a player
      * @param player name of the player to check
-     * @return true if player is ready, else false
+     * @return String unready if player is ready, else ready
      * @throws RemoteException 
      */
-    public boolean getPlayerReady(String player) throws RemoteException;
+    public String getPlayerReady(String player) throws RemoteException;
     
     /**
      * Status of the game, if the game can be started

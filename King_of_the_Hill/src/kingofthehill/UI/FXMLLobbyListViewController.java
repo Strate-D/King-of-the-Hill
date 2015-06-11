@@ -149,36 +149,6 @@ public class FXMLLobbyListViewController implements Initializable {
                         } else {
                             labelPlayer4.setText("Nog geen speler");
                         }
-
-//                            for (int i = 0; i < gm.getActivePlayerCount(); i++) {
-//                                switch (i) {
-//                                    case 0:
-//                                        labelPlayer1.setText(gm.getPlayerName(i));
-//                                        break;
-//                                    case 1:
-//                                        labelPlayer2.setText(gm.getPlayerName(i));
-//                                        break;
-//                                    case 2:
-//                                        labelPlayer3.setText(gm.getPlayerName(i));
-//                                        break;
-//                                    case 3:
-//                                        labelPlayer4.setText(gm.getPlayerName(i));
-//                                        break;
-//                                }
-//                            }
-//
-//                            if (gm.getPlayerName(i) !=) {
-//                                labelPlayer1.setText("Nog geen speler");
-//                            }
-//                            if (gm.getActivePlayerCount() < 2) {
-//                                labelPlayer2.setText("Nog geen speler");
-//                            }
-//                            if (gm.getActivePlayerCount() < 3) {
-//                                labelPlayer3.setText("Nog geen speler");
-//                            }
-//                            if (gm.getActivePlayerCount() < 4) {
-//                                labelPlayer4.setText("Nog geen speler");
-//                            }
                     } catch (RemoteException ex) {
                         Logger.getLogger(FXMLLobbyListViewController.class.getName()).log(Level.SEVERE, null, ex);
                     }

@@ -59,6 +59,11 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         this.resourceTimer = 0;
         this.mysteryboxTimer = 0;
         this.mysteryboxTime = 0;
+        
+        /**
+         * Update gameinfo for the first time
+         */
+        gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
     }
 
     @Override
@@ -159,17 +164,16 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     }
 
     @Override
-    public boolean getPlayerReady(String player) {
+    public String getPlayerReady(String player) {
         /**
          * Check if player with name is ready
          */
         for (String p : readyPlayers) {
             if (p.equals(player)) {
-                return true;
+                return " (Ready)";
             }
         }
-
-        return false;
+        return " (Unready)";
     }
 
     /**
