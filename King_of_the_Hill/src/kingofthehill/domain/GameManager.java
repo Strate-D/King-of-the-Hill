@@ -321,6 +321,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     public void setGameMode(GameMode newGameMode) throws RemoteException {
         if (newGameMode != null) {
             this.gameMode = newGameMode;
+            System.out.println("GameMode changed!");
         }
     }
 
