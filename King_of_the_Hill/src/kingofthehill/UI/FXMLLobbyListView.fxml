@@ -70,5 +70,10 @@
             </Label>
          </children>
       </Pane>
+      <Button id="button" layoutX="394.0" layoutY="766.0" mnemonicParsing="false" onAction="#handleRefreshButton" prefHeight="100.0" prefWidth="475.0" text="Refresh" textFill="#ffcc00">
+         <font>
+            <Font size="45.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

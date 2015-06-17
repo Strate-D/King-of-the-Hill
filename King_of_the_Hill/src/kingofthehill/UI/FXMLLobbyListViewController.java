@@ -101,6 +101,16 @@ public class FXMLLobbyListViewController implements Initializable {
     }
 
     @FXML
+    public void handleRefreshButton(ActionEvent e) {
+        try {
+            games.addAll(lobby.getGames());
+        } catch (RemoteException ex) {
+            Logger.getLogger(FXMLLobbyListViewController.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        gamesList.setItems(games);
+    }
+    @FXML
     public void handleNewGameButton(ActionEvent e) {
         try {
             lobby.createGame(King_of_the_Hill.context.getPlayerName() + "'s lobby");
