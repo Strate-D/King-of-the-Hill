@@ -192,10 +192,6 @@ public class Client implements Serializable {
                     /**
                      * If there was an AudioMessage send, do not do anything
                      */
-                    if (object.getData() instanceof String) {
-                    } else {
-                        System.out.println(ByteArrayToString((byte[]) object.getData()));
-                    }
                 } else {
                     this.parent.addMessage(object);
                 }
@@ -214,16 +210,6 @@ public class Client implements Serializable {
             this.killClient();
         });
         t.start();
-    }
-
-    private String ByteArrayToString(byte[] input) {
-        String output = "";
-        for (byte b : input) {
-            Integer i = ((int) b);
-            output += i.toString();
-        }
-
-        return output;
     }
 
     /**

@@ -5,8 +5,6 @@ package kingofthehill.client;
 
 import kingofthehill.rmimultiplayer.AudioMessage;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
@@ -23,9 +21,11 @@ public class AudioPlayer {
     private boolean playing;
     //private int lastPlayedClip;
     private VoiceClient parent;
+    private AudioBuffer buffer;
 
     public AudioPlayer(VoiceClient parent) {
         this.bufferedMessages = new ArrayList<>();
+        this.buffer = new AudioBuffer(8000);
         this.playing = true;
         this.parent = parent;
     }
@@ -93,24 +93,25 @@ public class AudioPlayer {
                 /**
                  * Play the next audio clip
                  */
-                if (bufferedMessages.size() > 0) {
-                    /**
-                     * Write it to the speakers
-                     */
-                    Object dat = bufferedMessages.get(0).getData();
-                    if (dat instanceof String) {
-                        /**
-                         * Old message kind, ignore
-                         */
-                        System.out.println("Microphone of sender reset");
-                        bufferedMessages.remove(0);
-                    } else {
-                        byte[] data = (byte[]) dat;
-                        speakers.write(data, 0, data.length);
-                        bufferedMessages.remove(0);
-                        System.out.println("Message: " + ByteArrayToString(data));
-                    }
-                }
+                byte[] data = buffer.readBuffer();
+                speakers.write(data, 0, data.length);
+//                if (bufferedMessages.size() > 0) {
+//                    /**
+//                     * Write it to the speakers
+//                     */
+//                    Object dat = bufferedMessages.get(0).getData();
+//                    if (dat instanceof String) {
+//                        /**
+//                         * Old message kind, ignore
+//                         */
+//                        System.out.println("Microphone of sender reset");
+//                        bufferedMessages.remove(0);
+//                    } else {
+//                        byte[] data = (byte[]) dat;
+//                        speakers.write(data, 0, data.length);
+//                        bufferedMessages.remove(0);
+//                    }
+//                }
 
                 try {
                     Thread.sleep(1);
@@ -137,7 +138,10 @@ public class AudioPlayer {
      * @param message The message to add
      */
     public synchronized void addAudioMessage(AudioMessage message) {
-        this.bufferedMessages.add(message);
+        //this.bufferedMessages.add(message);
+        if (message.getData() instanceof byte[]) {
+            buffer.addToBuffer((byte[])message.getData());
+        }
     }
 
     /**
@@ -153,13 +157,4 @@ public class AudioPlayer {
 //    public void resetMessageCounter() {
 //        this.lastPlayedClip = -1;
 //    }
-    private String ByteArrayToString(byte[] input) {
-        String output = "";
-        for (byte b : input) {
-            Integer i = ((int) b);
-            output += i.toString();
-        }
-
-        return output;
-    }
 }
