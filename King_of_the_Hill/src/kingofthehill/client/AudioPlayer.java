@@ -27,7 +27,7 @@ public class AudioPlayer {
 
     public AudioPlayer(VoiceClient parent) {
         this.bufferedMessages = new ArrayList<>();
-        this.buffer = new AudioBuffer(50000);
+        this.buffer = new AudioBuffer(500000);
         this.playing = true;
         this.parent = parent;
     }
