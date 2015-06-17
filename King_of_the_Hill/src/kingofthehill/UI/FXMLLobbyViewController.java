@@ -137,9 +137,8 @@ public class FXMLLobbyViewController implements Initializable {
                                     lblStartRes.setText("" + amount);
                                     gameInfo = lobby.getGame(gameName).getGameInfo();
                                     //gameInfo.getPlayers().get(i).addMoney(amount);
-                                    
-                                    //gameInfo = lobby.getGame(gameName).getGameInfo();
 
+                                    //gameInfo = lobby.getGame(gameName).getGameInfo();
                                     if (gameInfo.getPlayerName(0) != null) {
                                         labelPlayer1.setText(gameInfo.getPlayerName(0) + lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(0)));
                                     } else {
@@ -200,7 +199,7 @@ public class FXMLLobbyViewController implements Initializable {
                 @Override
                 public void run() {
                     try {
-                        while (lobby.getGame(gameName).getPlayerReady(King_of_the_Hill.context.getPlayerName()).equals(" (Ready)")) {
+                        while (lobby.getGame(gameName).getPlayerReady(King_of_the_Hill.context.getPlayerName())) {
                             try {
                                 if (lobby.getGame(gameName).readyGame()) {
                                     Platform.runLater(new Runnable() {
@@ -217,8 +216,8 @@ public class FXMLLobbyViewController implements Initializable {
                                         }
                                     });
                                     break;
-
                                 }
+                                System.out.println("Checking for game start");
                             } catch (RemoteException ex) {
                                 System.out.println("kingofthehill.UI.FXMLLobbyViewController handleReadyButton(): " + ex.getMessage());
                             }

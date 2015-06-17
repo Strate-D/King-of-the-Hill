@@ -62,7 +62,7 @@ public interface IGameManager extends Remote {
      * @return String unready if player is ready, else ready
      * @throws RemoteException 
      */
-    public String getPlayerReady(String player) throws RemoteException;
+    public boolean getPlayerReady(String player) throws RemoteException;
     /**
      * Status of the game, if the game can be started
      *

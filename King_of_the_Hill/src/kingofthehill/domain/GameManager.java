@@ -160,16 +160,16 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     }
 
     @Override
-    public String getPlayerReady(String player) {
+    public boolean getPlayerReady(String player) {
         /**
          * Check if player with name is ready
          */
         for (String p : readyPlayers) {
             if (p.equals(player)) {
-                return " (Ready)";
+                return true;
             }
         }
-        return " (Unready)";
+        return false;
     }
 
     /**
