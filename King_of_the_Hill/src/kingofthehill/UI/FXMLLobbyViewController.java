@@ -169,13 +169,9 @@ public class FXMLLobbyViewController implements Initializable {
                                     }
                                     try {
                                         if (cm.getGameManager().getGameMode() == GameMode.COOP) {
-                                            if (choiceBoxGameMode.getSelectionModel().isSelected(0)) {
-                                                choiceBoxGameMode.getSelectionModel().selectFirst();
-                                            }
+                                            choiceBoxGameMode.getSelectionModel().selectFirst();
                                         } else {
-                                            if (choiceBoxGameMode.getSelectionModel().isSelected(1)) {
-                                                choiceBoxGameMode.getSelectionModel().selectLast();
-                                            }
+                                            choiceBoxGameMode.getSelectionModel().selectLast();
                                         }
                                     } catch (RemoteException ex) {
                                         Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
