@@ -140,25 +140,25 @@ public class FXMLLobbyViewController implements Initializable {
 
                                     //gameInfo = lobby.getGame(gameName).getGameInfo();
                                     if (gameInfo.getPlayerName(0) != null) {
-                                        labelPlayer1.setText(gameInfo.getPlayerName(0) + lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(0)));
+                                        labelPlayer1.setText(gameInfo.getPlayerName(0) + readyString(lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(0))));
                                     } else {
                                         labelPlayer1.setText("Wachten op nieuwe speler...");
                                     }
 
                                     if (gameInfo.getPlayerName(1) != null) {
-                                        labelPlayer2.setText(gameInfo.getPlayerName(1) + lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(1)));
+                                        labelPlayer2.setText(gameInfo.getPlayerName(1) + readyString(lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(1))));
                                     } else {
                                         labelPlayer2.setText("Wachten op nieuwe speler...");
                                     }
 
                                     if (gameInfo.getPlayerName(2) != null) {
-                                        labelPlayer3.setText(gameInfo.getPlayerName(2) + lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(2)));
+                                        labelPlayer3.setText(gameInfo.getPlayerName(2) + readyString(lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(2))));
                                     } else {
                                         labelPlayer3.setText("Wachten op nieuwe speler...");
                                     }
 
                                     if (gameInfo.getPlayerName(3) != null) {
-                                        labelPlayer4.setText(gameInfo.getPlayerName(3) + lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(3)));
+                                        labelPlayer4.setText(gameInfo.getPlayerName(3) + readyString(lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(3))));
                                     } else {
                                         labelPlayer4.setText("Wachten op nieuwe speler...");
                                     }
@@ -178,6 +178,14 @@ public class FXMLLobbyViewController implements Initializable {
                 }
             }
         });
+    }
+    
+    private String readyString(boolean ready){
+        if(ready){
+            return " (Ready)";
+        } else {
+            return " (Unready)";
+        }
     }
 
     @FXML
