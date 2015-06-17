@@ -29,7 +29,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import kingofthehill.domain.Defence;
 import kingofthehill.domain.GameManager;
-import kingofthehill.domain.GameMode;
 import kingofthehill.domain.IPlayer;
 import kingofthehill.domain.Melee;
 import kingofthehill.domain.Player;
@@ -124,19 +123,11 @@ public class FXMLGameViewController implements Initializable {
         }
 
         try {
-            //Add players
             gm.addPlayer(King_of_the_Hill.context.getPlayerName(), false);
             gm.addPlayer("ArtificialIntelligence1", true);
             gm.addPlayer("ArtificialIntelligence2", true);
             gm.addPlayer("ArtificialIntelligence3", true);
 
-            //Set faction
-            gm.setPlayerFaction(King_of_the_Hill.context.getPlayerName(), King_of_the_Hill.context.getFaction());
-            gm.setPlayerFaction("ArtificialIntelligence1", "melee");
-            gm.setPlayerFaction("ArtificialIntelligence2", "ranged");
-            gm.setPlayerFaction("ArtificialIntelligence3", "defence");
-
-            //Set players ready to start
             gm.setPlayerReady(King_of_the_Hill.context.getPlayerName());
             gm.setPlayerReady("ArtificialIntelligence1");
             gm.setPlayerReady("ArtificialIntelligence2");
@@ -261,48 +252,24 @@ public class FXMLGameViewController implements Initializable {
                 } else {
                     canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
                 }
-                //Check if game ended
-                try {
-                    //Coop mode
-                    if (gm.getGameMode() == GameMode.COOP) {
-                        if (gm.getPlayers().get(0).getBase().getHealthPoints() == 0 && gm.getPlayers().get(2).getBase().getHealthPoints() == 0) {
-                            canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
-                            drawBackground();
-                            drawField();
-                            drawUnits();
-                            canvas.getGraphicsContext2D().fillText("Team blue won!", 450, 450);
-                            this.stop();
-                        } else if (gm.getPlayers().get(1).getBase().getHealthPoints() == 0 && gm.getPlayers().get(3).getBase().getHealthPoints() == 0) {
-                            canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
-                            drawBackground();
-                            drawField();
-                            drawUnits();
-                            canvas.getGraphicsContext2D().fillText("Team red won!", 450, 450);
-                            this.stop();
-                        }
-                    }
-                    //Free for all
-                    else {
-                        int counter = 0;
-                        IPlayer winner = null;
-                        for (IPlayer p : gm.getPlayers()) {
-                            if (p.getBase().getHealthPoints() == 0) {
-                                counter++;
-                            } else {
-                                winner = p;
-                            }
-                        }
-                        if (counter == 3) {
-                            canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
-                            drawBackground();
-                            drawField();
-                            drawUnits();
-                            canvas.getGraphicsContext2D().fillText("Player: " + winner.getName() + " won!", 450, 450);
-                            this.stop();
-                        }
-                    }
-                } catch (RemoteException ex) {
-                    Logger.getLogger(FXMLGameViewController.class.getName()).log(Level.SEVERE, null, ex);
+
+                /**
+                 * Check if game ended
+                 */
+                if (gm.getPlayers().get(0).getBase().getHealthPoints() == 0 && gm.getPlayers().get(2).getBase().getHealthPoints() == 0) {
+                    canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
+                    drawBackground();
+                    drawField();
+                    drawUnits();
+                    canvas.getGraphicsContext2D().fillText("Team blue won!", 450, 450);
+                    this.stop();
+                } else if (gm.getPlayers().get(1).getBase().getHealthPoints() == 0 && gm.getPlayers().get(3).getBase().getHealthPoints() == 0) {
+                    canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
+                    drawBackground();
+                    drawField();
+                    drawUnits();
+                    canvas.getGraphicsContext2D().fillText("Team red won!", 450, 450);
+                    this.stop();
                 }
 
                 /**
@@ -415,6 +382,7 @@ public class FXMLGameViewController implements Initializable {
      */
     private void drawField() {
         printPlayerInfo();
+
         /**
          * Check hp, then draw correct sprite for base
          */

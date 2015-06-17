@@ -15,9 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import kingofthehill.DB.DatabaseMediator;
 import kingofthehill.client.ClientManager;
@@ -44,15 +42,6 @@ public class FXMLMainController implements Initializable {
     @FXML
     private TextField serverUrl;
 
-    @FXML
-    private RadioButton radioBtnMelee;
-
-    @FXML
-    private RadioButton radioBtnRanged;
-
-    @FXML
-    private RadioButton radioBtnDefence;
-
     /**
      * Initializes the controller class.
      *
@@ -65,22 +54,8 @@ public class FXMLMainController implements Initializable {
          * Collect garbage
          */
         System.gc();
-        //Set toggle group
-        ToggleGroup grp = new ToggleGroup();
-        radioBtnMelee.setToggleGroup(grp);
-        radioBtnRanged.setToggleGroup(grp);
-        radioBtnDefence.setToggleGroup(grp);
-        //Set player information
         playerName.setText(King_of_the_Hill.context.getPlayerName());
         serverUrl.setText(King_of_the_Hill.context.getServerUrl());
-        //Set preferred player faction
-        if (King_of_the_Hill.context.getFaction().equals("melee")) {
-            radioBtnMelee.fire();
-        } else if (King_of_the_Hill.context.getFaction().equals("ranged")) {
-            radioBtnRanged.fire();
-        } else {
-            radioBtnDefence.fire();
-        }
         errorLabel.setVisible(false);
     }
 
@@ -170,18 +145,6 @@ public class FXMLMainController implements Initializable {
         } else {
             errorLabel.setText("Registration failed!");
             errorLabel.setVisible(true);
-        }
-    }
-
-    public void handleRadioButtonChanged(ActionEvent e) {
-        if (e.getSource() == radioBtnMelee) {
-            King_of_the_Hill.context.setFaction("melee");
-        } else if (e.getSource() == radioBtnRanged) {
-            King_of_the_Hill.context.setFaction("ranged");
-        } else if (e.getSource() == radioBtnDefence) {
-            King_of_the_Hill.context.setFaction("defence");
-        } else {
-            System.out.println("Source not found!");
         }
     }
 

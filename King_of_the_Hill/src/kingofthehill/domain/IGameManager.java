@@ -115,10 +115,4 @@ public interface IGameManager extends Remote {
      * server
      */
     public void setPlayerToAI(String playername) throws RemoteException;
-
-    public void setPlayerFaction(String playername, String faction) throws RemoteException;
-
-    public GameMode getGameMode() throws RemoteException;
-
-    public void setGameMode(GameMode newGameMode) throws RemoteException;
 }

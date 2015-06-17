@@ -34,7 +34,6 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     private GameInfo gameInfo;
     private Timer timer;
     private boolean readyGame;
-    private GameMode gameMode;
 
     /**
      * Creates a new gameManager, also creating a new game with it.
@@ -52,7 +51,6 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         this.mysteryboxTime = 0;
         this.readyGame = false;
         this.gameInfo = new GameInfo();
-        this.gameMode = GameMode.COOP;
     }
 
     @Override
@@ -220,12 +218,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
             }
             i++;
         }
-        /**
-         * Set player gamemodes
-         */
-        for (IPlayer p : this.getPlayers()) {
-            p.setGameMode(this.gameMode);
-        }
+
         /**
          * Set mysteryboxtime at random for the first time
          */
@@ -315,33 +308,6 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         System.out.println("Replaced player!");
     }
 
-    @Override
-    public void setPlayerFaction(String playername, String faction) throws RemoteException {
-        IPlayer player = this.getPlayer(playername);
-        if (player != null) {
-            if (faction.equals("melee")) {
-                player.addUpgrade(new Upgrade(0.1, 0.1, 0.1, 0.1, UnitType.MELEE));
-            } else if (faction.equals("ranged")) {
-                player.addUpgrade(new Upgrade(0.1, 0.1, 0.1, 0.1, UnitType.RANGED));
-            } else if (faction.equals("defence")) {
-                player.addUpgrade(new Upgrade(0.1, 0.1, 0.1, 0.1, UnitType.DEFENCE));
-            }
-        }
-    }
-
-    @Override
-    public GameMode getGameMode() throws RemoteException {
-        return this.gameMode;
-    }
-
-    @Override
-    public void setGameMode(GameMode newGameMode) throws RemoteException {
-        if (newGameMode != null) {
-            this.gameMode = newGameMode;
-            System.out.println("GameMode changed!");
-        }
-    }
-
     /**
      * GameLoop class with timertask to call the doStep method in a loop
      */
@@ -420,47 +386,100 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     private void generateMysterybox() {
         Random r = new Random();
         UnitType unitType = null;
-        int random;
 
         /**
          * Random choose unittype for upgrade
          */
-        random = r.nextInt(10);
-        if (random >= 0 && random <= 2) {
-            unitType = UnitType.DEFENCE;
-        } else if (random >= 3 && random <= 5) {
-            unitType = UnitType.MELEE;
-        } else if (random >= 6 && random <= 8) {
-            unitType = UnitType.RANGED;
-        } else {
-            unitType = UnitType.ALL;
+        switch (r.nextInt(2)) {
+            /**
+             * Defence
+             */
+            case 0:
+                unitType = UnitType.DEFENCE;
+                break;
+            /**
+             * Melee
+             */
+            case 1:
+                unitType = UnitType.MELEE;
+                break;
+            /**
+             * Ranged
+             */
+            case 2:
+                unitType = UnitType.RANGED;
+                break;
         }
 
         /**
          * Random generate content mysterybox
          */
-        random = r.nextInt(10);
-        if (random >= 0 && random <= 8) {
-            //Mysterybox with resources
-            mysterybox = new Mysterybox(r.nextInt(90) + 10, null, null, 0);
-        } else {
-            //Mysterybox with upgrades
-            random = r.nextInt(63);
-            UpgradeInfo upgradeInfo;
-            if (random == 62) {
-                upgradeInfo = UpgradeInfo.getUberUpgrade(unitType);
-            } else if (random <= 61 && random >= 60) {
-                upgradeInfo = UpgradeInfo.getStrongUpgrade(unitType);
-            } else if (random <= 59 && random >= 56) {
-                upgradeInfo = UpgradeInfo.getNormalStrongUpgrade(unitType);
-            } else if (random <= 55 && random >= 48) {
-                upgradeInfo = UpgradeInfo.getNormalUpgrade(unitType);
-            } else if (random <= 47 && random >= 31) {
-                upgradeInfo = UpgradeInfo.getWeakNormalUpgrade(unitType);
-            } else {
-                upgradeInfo = UpgradeInfo.getWeakUpgrade(unitType);
-            }
-            mysterybox = new Mysterybox(0, upgradeInfo.getUpgrade(), null, 0);
+        switch (r.nextInt(2)) {
+            /**
+             * Mysterybox has resources
+             */
+            case 0:
+                mysterybox = new Mysterybox(r.nextInt(90) + 10, null, null, 0);
+                break;
+            /**
+             * Mysterybox has upgrade
+             */
+            case 1:
+                if (unitType != null) {
+                    UpgradeInfo upgradeInfo = null;
+                    /**
+                     * Random choose upgradetype
+                     */
+                    switch (r.nextInt(6)) {
+                        /**
+                         * Weak upgrade
+                         */
+                        case 0:
+                            upgradeInfo = UpgradeInfo.getWeakUpgrade(unitType);
+                            break;
+                        /**
+                         * Weak-normal upgrade
+                         */
+                        case 1:
+                            upgradeInfo = UpgradeInfo.getWeakNormalUpgrade(unitType);
+                            break;
+                        /**
+                         * Normal upgrade
+                         */
+                        case 2:
+                            upgradeInfo = UpgradeInfo.getNormalUpgrade(unitType);
+                            break;
+                        /**
+                         * Normal-strong upgrade
+                         */
+                        case 3:
+                            upgradeInfo = UpgradeInfo.getNormalStrongUpgrade(unitType);
+                            break;
+                        /**
+                         * Strong upgrade
+                         */
+                        case 4:
+                            upgradeInfo = UpgradeInfo.getStrongUpgrade(unitType);
+                            break;
+                        /**
+                         * Uber upgrade
+                         */
+                        case 5:
+                            upgradeInfo = UpgradeInfo.getUberUpgrade(unitType);
+                            break;
+                    }
+
+                    if (upgradeInfo != null) {
+                        mysterybox = new Mysterybox(0, upgradeInfo.getUpgrade(), null, 0);
+                    }
+                }
+                break;
+            /**
+             * Mysterybox has unit(s)
+             */
+            case 2:
+                mysterybox = new Mysterybox(0, null, unitType, r.nextInt(9) + 1);
+                break;
         }
     }
 
@@ -569,15 +588,14 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
                     munnie += 2;
                 }
             }
-            //Check if give to player or to teammate
-            if (this.gameMode == GameMode.COOP) {
-                if (p.getBase().getHealthPoints() != 0) {
-                    p.addMoney(munnie);
-                } else {
-                    p.getBase().getLane(0).getBaseEnd2().getLane(0).getBaseEnd2().getOwner().addMoney(munnie / 2);
-                }
-            } else {
+
+            /**
+             * Check if give to player or to teammate
+             */
+            if (p.getBase().getHealthPoints() != 0) {
                 p.addMoney(munnie);
+            } else {
+                p.getBase().getLane(0).getBaseEnd2().getLane(0).getBaseEnd2().getOwner().addMoney(munnie / 2);
             }
         }
     }
