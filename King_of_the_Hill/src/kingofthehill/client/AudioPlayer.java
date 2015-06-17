@@ -19,14 +19,11 @@ import javax.sound.sampled.SourceDataLine;
  */
 public class AudioPlayer {
 
-    private ArrayList<AudioMessage> bufferedMessages;
     private boolean playing;
-    //private int lastPlayedClip;
     private VoiceClient parent;
     private AudioBuffer buffer;
 
     public AudioPlayer(VoiceClient parent) {
-        this.bufferedMessages = new ArrayList<>();
         this.buffer = new AudioBuffer(500000);
         this.playing = true;
         this.parent = parent;
@@ -61,37 +58,9 @@ public class AudioPlayer {
              */
             speakers.start();
 
-            //this.resetMessageCounter();
             this.parent.printMessage("<< Speakers are set up and ready to play >>");
 
             while (playing || speakers.isOpen()) {
-//                /**
-//                 * Find the next clip
-//                 */
-//                ArrayList<Integer> canRemove = new ArrayList();
-//
-//                for (int i = 0; i < bufferedMessages.size(); i++) {
-//                    if (bufferedMessages.get(i).getFollowupnumber() == lastPlayedClip + 1) {
-//                        /**
-//                         * Write an audio clip to the spreakers
-//                         */
-//                        Object dat = bufferedMessages.get(i).getData();
-//                        if (dat instanceof String) {
-//                            this.resetMessageCounter();
-//                        } else {
-//                            byte[] data = (byte[]) dat;
-//                            speakers.write(data, 0, data.length);
-//                            lastPlayedClip++;
-//                            canRemove.add(i);
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//                for (int i = 0; i < canRemove.size(); i++) {
-//                    bufferedMessages.remove((int) canRemove.get(i));
-//                }
-
                 /**
                  * Play the next audio clip
                  */
@@ -99,23 +68,6 @@ public class AudioPlayer {
                 if (data != null) {
                     speakers.write(data, 0, data.length);
                 }
-//                if (bufferedMessages.size() > 0) {
-//                    /**
-//                     * Write it to the speakers
-//                     */
-//                    Object dat = bufferedMessages.get(0).getData();
-//                    if (dat instanceof String) {
-//                        /**
-//                         * Old message kind, ignore
-//                         */
-//                        System.out.println("Microphone of sender reset");
-//                        bufferedMessages.remove(0);
-//                    } else {
-//                        byte[] data = (byte[]) dat;
-//                        speakers.write(data, 0, data.length);
-//                        bufferedMessages.remove(0);
-//                    }
-//                }
 
                 try {
                     Thread.sleep(1);
@@ -158,11 +110,4 @@ public class AudioPlayer {
     public void stopPlayback() {
         this.playing = false;
     }
-
-    /**
-     * Reset the counter for finding the next AudioMessage
-     */
-//    public void resetMessageCounter() {
-//        this.lastPlayedClip = -1;
-//    }
 }

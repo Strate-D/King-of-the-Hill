@@ -8,10 +8,9 @@ package kingofthehill.client;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 /**
- *
+ * Stores the bytes for playing back the audio recieved from other players
  * @author Bas
  */
 public class AudioBuffer {
@@ -32,6 +31,11 @@ public class AudioBuffer {
         isReading = false;
     }
 
+    /**
+     * Add new data into the buffer
+     * @param data The playable audio data
+     * @throws Exception Throws an exception if the buffer overflows
+     */
     public synchronized void addToBuffer(byte[] data) throws Exception {
         while (isReading) {
             Thread.sleep(1);
@@ -52,6 +56,10 @@ public class AudioBuffer {
         isWriting = false;
     }
 
+    /**
+     * Read the available bytes from the buffer
+     * @return The bytes that are read
+     */
     public synchronized byte[] readBuffer() {
         byte[] data;
 
@@ -80,6 +88,12 @@ public class AudioBuffer {
         return data;
     }
 
+    /**
+     * Merge 2 arrays of bytes together
+     * @param a Byte array #1
+     * @param b Byte array #2
+     * @return The merged byte array
+     */
     private byte[] concatArray(byte[] a, byte[] b) {
         int aLen = a.length;
         int bLen = b.length;

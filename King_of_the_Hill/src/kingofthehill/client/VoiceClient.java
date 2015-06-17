@@ -198,6 +198,9 @@ public class VoiceClient {
         }
     }
 
+    /**
+     * Stop the VoiceClient 
+     */
     public void stop() {
         this.stopAudioCapture();
         this.audioPlayer.stopPlayback();
