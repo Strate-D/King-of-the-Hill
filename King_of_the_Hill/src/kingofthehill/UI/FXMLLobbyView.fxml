@@ -86,8 +86,7 @@
             </Label>
             <Label id="lblStartRes" layoutX="201.0" layoutY="343.0" text="lblStartRes" />
             <Slider id="sliderResAtStart" layoutX="287.0" layoutY="345.0" max="200.0" min="50.0" />
-            <ChoiceBox id="cbGameMode" layoutX="287.0" layoutY="369.0" prefHeight="25.0" prefWidth="140.0" />
-            <Label id="lblGamemode" layoutX="201.0" layoutY="373.0" text="lblGamemode" />
+            <ComboBox fx:id="choiceBoxGameMode" layoutX="201.0" layoutY="369.0" onAction="#handleGameModeChanged" prefWidth="150.0" />
          </children>
       </Pane>
    </children>

@@ -15,17 +15,21 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import kingofthehill.client.ClientManager;
+import kingofthehill.domain.GameMode;
 import kingofthehill.rmimultiplayer.IGameInfo;
 import kingofthehill.rmimultiplayer.TextMessage;
 
@@ -60,6 +64,9 @@ public class FXMLLobbyViewController implements Initializable {
     @FXML
     private Label labelPlayer4;
 
+    @FXML
+    private ComboBox choiceBoxGameMode;
+
     ObservableList<String> messages;
 
     ClientManager cm = new ClientManager(King_of_the_Hill.context.getServerUrl());
@@ -67,6 +74,10 @@ public class FXMLLobbyViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ClientManager.AudioChat.setParent(this);
+
+        //Fill combobox
+        choiceBoxGameMode.getItems().add("2 versus 2");
+        choiceBoxGameMode.getItems().add("Free for all");
 
         try {
             ClientManager.AudioChat.start();
@@ -155,6 +166,19 @@ public class FXMLLobbyViewController implements Initializable {
                                         case 3:
                                             labelPlayer4.setText(playerName + readyString);
                                             break;
+                                    }
+                                    try {
+                                        if (cm.getGameManager().getGameMode() == GameMode.COOP) {
+                                            if (choiceBoxGameMode.getSelectionModel().isSelected(0)) {
+                                                choiceBoxGameMode.getSelectionModel().selectFirst();
+                                            }
+                                        } else {
+                                            if (choiceBoxGameMode.getSelectionModel().isSelected(1)) {
+                                                choiceBoxGameMode.getSelectionModel().selectLast();
+                                            }
+                                        }
+                                    } catch (RemoteException ex) {
+                                        Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
                                     }
                                 }
                             });
@@ -279,5 +303,25 @@ public class FXMLLobbyViewController implements Initializable {
                 messagesOutput.scrollTo(messages.size() - 1);
             }
         });
+    }
+
+    /**
+     * Handle when game mode button changed
+     *
+     * @param e
+     */
+    public void handleGameModeChanged(ActionEvent e) {
+        try {
+            if (choiceBoxGameMode.getSelectionModel().isSelected(0)) {
+                cm.getGameManager().setGameMode(GameMode.COOP);
+                System.out.println("Gamemode set to coop");
+            } else {
+                cm.getGameManager().setGameMode(GameMode.F4A);
+                System.out.println("Gamemode set to f4a");
+            }
+        } catch (RemoteException ex) {
+            System.out.println("Changing gamemode failed!");
+            System.out.println(ex.getMessage());
+        }
     }
 }

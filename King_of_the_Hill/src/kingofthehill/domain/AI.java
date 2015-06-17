@@ -26,6 +26,7 @@ public class AI implements IPlayer, Serializable {
     private Team team;
     private int money;
     private Base base;
+    private GameMode gameMode;
 
     /**
      * AI memory for calculating the next step
@@ -946,5 +947,17 @@ public class AI implements IPlayer, Serializable {
         /**
          * Not needed for AI, do nothing
          */
+    }
+    
+    @Override
+    public GameMode getGameMode() {
+        return this.gameMode;
+    }
+
+    @Override
+    public void setGameMode(GameMode newGameMode) {
+        if (newGameMode != null) {
+            this.gameMode = newGameMode;
+        }
     }
 }
