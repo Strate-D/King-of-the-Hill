@@ -136,9 +136,7 @@ public class FXMLLobbyViewController implements Initializable {
                                     int amount = (int) moneySlider.valueProperty().get() - 100; // Amount of money added to starting resources
                                     lblStartRes.setText("" + amount);
                                     gameInfo = lobby.getGame(gameName).getGameInfo();
-                                    //gameInfo.getPlayers().get(i).addMoney(amount);
-
-                                    //gameInfo = lobby.getGame(gameName).getGameInfo();
+                                    
                                     if (gameInfo.getPlayerName(0) != null) {
                                         labelPlayer1.setText(gameInfo.getPlayerName(0) + readyString(lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(0))));
                                     } else {

@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
-import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -38,6 +37,9 @@ public class FXMLLobbyListViewController implements Initializable {
 
     @FXML
     private AnchorPane content;
+    
+    @FXML
+    private Label errorLabel;
 
     @FXML
     private ListView<String> gamesList;
@@ -66,6 +68,7 @@ public class FXMLLobbyListViewController implements Initializable {
         games = FXCollections.observableArrayList();
         buttonJoin.setDisable(true);
         gamesList.setItems(games);
+        errorLabel.setVisible(false);
 
         String ipAddress = King_of_the_Hill.context.getServerUrl();
         ClientManager cm = new ClientManager(ipAddress);
@@ -156,6 +159,7 @@ public class FXMLLobbyListViewController implements Initializable {
     public void handleJoinButton(ActionEvent e) {
         try {
             if (gm != null) {
+                errorLabel.setVisible(false);
                 lobby.joinGame(gamesList.getSelectionModel().getSelectedIndex(), King_of_the_Hill.context.getPlayerName());
                 King_of_the_Hill.context.setGameName(gm.getName());
 
@@ -169,7 +173,11 @@ public class FXMLLobbyListViewController implements Initializable {
                     Logger.getLogger(FXMLMainController.class
                             .getName()).log(Level.SEVERE, null, ex);
                 }
-
+            } else {
+                errorLabel.setVisible(true);
+                errorLabel.setText("Kan het spel niet joinen, probeer het nogmaals");
+                games.clear();
+                games.addAll(lobby.getGames());
             }
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLLobbyListViewController.class

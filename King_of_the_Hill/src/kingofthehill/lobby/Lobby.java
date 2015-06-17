@@ -50,6 +50,7 @@ public class Lobby extends UnicastRemoteObject implements ILobby {
                 games.get(index).addPlayer(playername, false);
             }
         } catch (RemoteException ex) {
+            
             Logger.getLogger(Lobby.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
