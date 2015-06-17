@@ -226,7 +226,7 @@ public class FXMLLobbyViewController implements Initializable {
                             }
 
                             try {
-                                Thread.sleep(10);
+                                Thread.sleep(1000);
 
                             } catch (InterruptedException ex) {
                                 System.out.println("kingofthehill.UI.FXMLLobbyViewController handleReadyButton(): " + ex.getMessage());
