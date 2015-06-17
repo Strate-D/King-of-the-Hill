@@ -62,7 +62,7 @@ public class AudioPlayer {
             //this.resetMessageCounter();
             this.parent.printMessage("<< Speakers are set up and ready to play >>");
 
-            while (playing) {
+            while (playing || speakers.isOpen()) {
 //                /**
 //                 * Find the next clip
 //                 */
@@ -124,6 +124,7 @@ public class AudioPlayer {
              */
             speakers.drain();
             speakers.close();
+            this.parent.printMessage("<< Audio player has stopped >>");
 
         });
 
