@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="pane" fx:id="content" prefHeight="1080.0" prefWidth="1920.0" styleClass="mainFxmlClass" stylesheets="@fxmlmain.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kingofthehill.UI.FXMLLobbyListViewController">
+   <children>
+      <Button id="button" fx:id="buttonJoin" layoutX="972.0" layoutY="572.0" mnemonicParsing="false" onAction="#handleJoinButton" prefHeight="100.0" prefWidth="475.0" text="Meespelen" textFill="#ffcc00">
+         <font>
+            <Font size="45.0" />
+         </font></Button>
+      <Button id="button" layoutX="972.0" layoutY="364.0" mnemonicParsing="false" onAction="#handleNewGameButton" prefHeight="100.0" prefWidth="475.0" text="Nieuw spel" textFill="#ffcc00">
+         <font>
+            <Font size="45.0" />
+         </font>
+      </Button>
+      <Button id="button" layoutX="1431.0" layoutY="966.0" mnemonicParsing="false" onAction="#handleHomeButton" prefHeight="100.0" prefWidth="475.0" text="Hoofdmenu" textFill="#ffcc00">
+         <font>
+            <Font size="45.0" />
+         </font>
+      </Button>
+      <ListView fx:id="gamesList" layoutX="17.0" layoutY="16.0" onMouseClicked="#handleGamesListOnClick" prefHeight="728.0" prefWidth="852.0" />
+      <Pane layoutX="972.0" layoutY="18.0" prefHeight="230.0" prefWidth="941.0" style="-fx-background-color: lightgrey;">
+         <children>
+            <Label layoutX="33.0" layoutY="68.0" text="Lobby eigenaar:">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelPlayer1" layoutX="210.0" layoutY="68.0" text="Label">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="33.0" layoutY="98.0" text="Speler 2:">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelPlayer2" layoutX="210.0" layoutY="98.0" text="Label">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelPlayer3" layoutX="209.0" layoutY="131.0" text="Label">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="32.0" layoutY="130.0" text="Speler 3:">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="32.0" layoutY="162.0" text="Speler 4:">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelPlayer4" layoutX="209.0" layoutY="162.0" text="Label">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Button id="button" layoutX="394.0" layoutY="766.0" mnemonicParsing="false" onAction="#handleRefreshButton" prefHeight="100.0" prefWidth="475.0" text="Refresh" textFill="#ffcc00">
+         <font>
+            <Font size="45.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

@@ -40,6 +40,7 @@ import kingofthehill.domain.Resource;
 import kingofthehill.domain.Unit;
 import kingofthehill.domain.UnitType;
 import kingofthehill.domain.Upgrade;
+import kingofthehill.lobby.ILobby;
 import kingofthehill.unitinfo.UnitInfo;
 
 /**
@@ -121,13 +122,20 @@ public class FXMLMultiPlayerViewController implements Initializable {
          * Get ip address of server
          */
         String ipAddress = King_of_the_Hill.context.getServerUrl();
+        
+        String gameName = King_of_the_Hill.context.getGameName();
 
         ClientManager cm = new ClientManager(ipAddress);
 
         if (cm.locate()) {
-            gm = cm.getGameManager();
-
-            getGameInfo();
+            ILobby lobby = cm.getLobby();
+            
+            try {
+                gm = lobby.getGame(gameName);
+                getGameInfo();
+            } catch (RemoteException ex) {
+                Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             isMouseOnCanvas = false;
             selectedUnit = null;

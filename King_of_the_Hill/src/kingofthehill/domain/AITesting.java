@@ -19,9 +19,11 @@ public class AITesting {
      * @throws java.rmi.RemoteException When somthing goes wrong communicating
      * with the server
      */
-    public static void main(String[] args) throws RemoteException {
-        GameManager gm = new GameManager();
-        AI ai1 = (AI) (gm.getPlayers().get(1));
+    public static void main(String[] args) throws RemoteException 
+    {
+        GameManager gm = new GameManager("test");
+        //gm.setDebugLevelAI(true);
+        AI ai1 = (AI)(gm.getPlayers().get(1));
         ai1.setAIType(AIState.AGRESSIVE);
 
         AI ai = (AI) gm.getPlayers().get(1);

@@ -110,7 +110,7 @@ public class FXMLMainController implements Initializable {
                 try {
                     ClientManager.setupAudioChat(cm.getServerUrl(), 9090, playerName.getText());
                     Parent window1;
-                    window1 = FXMLLoader.load(getClass().getResource("FXMLLobbyView.fxml"));
+                    window1 = FXMLLoader.load(getClass().getResource("FXMLLobbyListView.fxml"));
                     King_of_the_Hill.currentStage.getScene().setRoot(window1);
                 } catch (IOException ex) {
                     System.out.println("kingofthehill.UI.FXMLMainController handleLoginButton(): " + ex.getMessage());

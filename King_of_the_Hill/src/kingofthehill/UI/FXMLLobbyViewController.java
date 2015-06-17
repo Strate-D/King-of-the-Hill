@@ -22,10 +22,12 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import kingofthehill.client.ClientManager;
+import kingofthehill.lobby.ILobby;
 import kingofthehill.rmimultiplayer.IGameInfo;
 import kingofthehill.rmimultiplayer.TextMessage;
 
@@ -35,39 +37,51 @@ import kingofthehill.rmimultiplayer.TextMessage;
  * @author Bas
  */
 public class FXMLLobbyViewController implements Initializable {
-
+    
     @FXML
     private AnchorPane content;
-
+    
     @FXML
     private TextField chatInput;
-
+    
     @FXML
     private ListView messagesOutput;
-
+    
     @FXML
     private Button buttonReady;
-
+    
     @FXML
     private Label labelPlayer1;
-
+    
     @FXML
     private Label labelPlayer2;
-
+    
     @FXML
     private Label labelPlayer3;
-
+    
     @FXML
     private Label labelPlayer4;
-
+    
+    @FXML
+    private Label lblStartRes;
+    
+    @FXML
+    private Slider moneySlider;
+    
     ObservableList<String> messages;
-
+    
     ClientManager cm = new ClientManager(King_of_the_Hill.context.getServerUrl());
-
+    String gameName = King_of_the_Hill.context.getGameName();
+    ILobby lobby;
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        if (cm.locate()) {
+            lobby = cm.getLobby();
+        }
+        
         ClientManager.AudioChat.setParent(this);
-
+        
         try {
             ClientManager.AudioChat.start();
             System.out.println("VoiceChat: Voice client started");
@@ -76,10 +90,10 @@ public class FXMLLobbyViewController implements Initializable {
             System.out.println("VoiceChat: Exception: " + ex.getMessage());
             return;
         }
-
+        
         messages = FXCollections.observableArrayList();
         messagesOutput.setItems(messages);
-
+        
         chatInput.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent E) -> {
             switch (E.getCode()) {
                 case ENTER: {
@@ -88,7 +102,7 @@ public class FXMLLobbyViewController implements Initializable {
                 }
             }
         });
-
+        
         content.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent E) -> {
             switch (E.getCode()) {
                 case F3: {
@@ -107,63 +121,59 @@ public class FXMLLobbyViewController implements Initializable {
                 }
             }
         });
-
-        if (cm.locate()) {
-            try {
-                cm.getGameManager().addPlayer(King_of_the_Hill.context.getPlayerName(), false);
-            } catch (RemoteException ex) {
-                System.out.println("kingofthehill.UI.FXMLLobbyViewController initialize(): " + ex.getMessage());
-            }
-        }
-
+        
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             IGameInfo gameInfo;
-
+            
             @Override
             public void run() {
                 try {
-                    while (!cm.getGameManager().readyGame()) {
-                        gameInfo = cm.getGameManager().getGameInfo();
+                    while (!lobby.getGame(gameName).readyGame()) {
+                        
+                        int amount = (int) moneySlider.valueProperty().get() - 100; // Amount of money added to starting resources
+                        lblStartRes.setText("" + amount);
+                        gameInfo = lobby.getGame(gameName).getGameInfo();
+                        //gameInfo.getPlayers().get(i).addMoney(amount);
 
-                        for (int i = 0; i < gameInfo.getPlayers().size(); i++) {
-                            final String playerName = gameInfo.getPlayers().get(i).getName();
-
-                            String ready = "";
-
-                            if (cm.getGameManager().getPlayerReady(gameInfo.getPlayers().get(i).getName())) {
-                                ready = " (Ready)";
-                            } else {
-                                ready = " (Unready)";
-                            }
-
-                            final Integer id = i;
-                            final String readyString = ready;
-
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    switch (id) {
-                                        case 0:
-                                            labelPlayer1.setText(playerName + readyString);
-                                            break;
-                                        case 1:
-                                            labelPlayer2.setText(playerName + readyString);
-                                            break;
-                                        case 2:
-                                            labelPlayer3.setText(playerName + readyString);
-                                            break;
-                                        case 3:
-                                            labelPlayer4.setText(playerName + readyString);
-                                            break;
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {                                
+                                try {
+                                    //gameInfo = lobby.getGame(gameName).getGameInfo();
+                                                                     
+                                    if (gameInfo.getPlayerName(0) != null) {
+                                        labelPlayer1.setText(gameInfo.getPlayerName(0) + lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(0)));
+                                    } else {
+                                        labelPlayer1.setText("Wachten op nieuwe speler...");
                                     }
+                                    
+                                    if (gameInfo.getPlayerName(1) != null) {
+                                        labelPlayer2.setText(gameInfo.getPlayerName(1) + lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(1)));
+                                    } else {
+                                        labelPlayer2.setText("Wachten op nieuwe speler...");
+                                    }
+                                    
+                                    if (gameInfo.getPlayerName(2) != null) {
+                                        labelPlayer3.setText(gameInfo.getPlayerName(2) + lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(2)));
+                                    } else {
+                                        labelPlayer3.setText("Wachten op nieuwe speler...");
+                                    }
+                                    
+                                    if (gameInfo.getPlayerName(3) != null) {
+                                        labelPlayer4.setText(gameInfo.getPlayerName(3) + lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(3)));
+                                    } else {
+                                        labelPlayer4.setText("Wachten op nieuwe speler...");
+                                    }
+                                } catch (RemoteException ex) {
+                                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
                 } catch (RemoteException ex) {
                     System.out.println("kingofthehill.UI.FXMLLobbyViewController initialize(): " + ex.getMessage());
                 }
-
+                
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
@@ -172,7 +182,7 @@ public class FXMLLobbyViewController implements Initializable {
             }
         });
     }
-
+    
     @FXML
     public void handleReadyButton() {
         try {
@@ -180,7 +190,7 @@ public class FXMLLobbyViewController implements Initializable {
                 /**
                  * Set player ready, if player already was ready unset ready
                  */
-                if (cm.getGameManager().setPlayerReady(King_of_the_Hill.context.getPlayerName())) {
+                if (lobby.getGame(gameName).setPlayerReady(King_of_the_Hill.context.getPlayerName())) {
                     buttonReady.setText("Unready");
                 } else {
                     buttonReady.setText("Ready");
@@ -192,9 +202,9 @@ public class FXMLLobbyViewController implements Initializable {
                 @Override
                 public void run() {
                     try {
-                        while (cm.getGameManager().getPlayerReady(King_of_the_Hill.context.getPlayerName())) {
+                        while (lobby.getGame(gameName).getPlayerReady(King_of_the_Hill.context.getPlayerName()).equals(" (Unready)")) {
                             try {
-                                if (cm.getGameManager().readyGame()) {
+                                if (lobby.getGame(gameName).readyGame()) {
                                     Platform.runLater(new Runnable() {
                                         @Override
                                         public void run() {
@@ -209,31 +219,31 @@ public class FXMLLobbyViewController implements Initializable {
                                         }
                                     });
                                     break;
-
+                                    
                                 }
                             } catch (RemoteException ex) {
                                 System.out.println("kingofthehill.UI.FXMLLobbyViewController handleReadyButton(): " + ex.getMessage());
                             }
-
+                            
                             try {
                                 Thread.sleep(10);
-
+                                
                             } catch (InterruptedException ex) {
                                 System.out.println("kingofthehill.UI.FXMLLobbyViewController handleReadyButton(): " + ex.getMessage());
                             }
-
+                            
                         }
                     } catch (RemoteException ex) {
                         System.out.println("kingofthehill.UI.FXMLLobbyViewController handleReadyButton(): " + ex.getMessage());
                     }
                 }
             });
-
+            
         } catch (IOException ex) {
             System.out.println("kingofthehill.UI.FXMLLobbyViewController handleReadyButton(): " + ex.getMessage());
         }
     }
-
+    
     @FXML
     public void handleSendButton() {
         if (!chatInput.getText().equals("")) {
@@ -243,34 +253,34 @@ public class FXMLLobbyViewController implements Initializable {
         }
         chatInput.setText("");
     }
-
+    
     @FXML
     public void handleQuitButton() {
         if (cm.locate()) {
             try {
-                cm.getGameManager().removePlayer(King_of_the_Hill.context.getPlayerName());
-
+                lobby.getGame(gameName).removePlayer(King_of_the_Hill.context.getPlayerName());
+                
             } catch (RemoteException ex) {
                 System.out.println("kingofthehill.UI.FXMLLobbyViewController handleQuitButton(): " + ex.getMessage());
             }
         }
-
+        
         try {
             //Load next window
             Parent window1;
-            window1 = FXMLLoader.load(getClass().getResource("FXMLMain.fxml"));
+            window1 = FXMLLoader.load(getClass().getResource("FXMLLobbyListView.fxml"));
             King_of_the_Hill.currentStage.getScene().setRoot(window1);
-
+            
         } catch (IOException ex) {
             System.out.println("kingofthehill.UI.FXMLLobbyViewController handleQuitButton(): " + ex.getMessage());
         }
     }
-
+    
     @FXML
     public void handleTextFieldKeyPress() {
-
+        
     }
-
+    
     public void printMessage(String message) {
         Platform.runLater(new Runnable() {
             @Override

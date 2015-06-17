@@ -10,8 +10,8 @@ import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import kingofthehill.domain.GameManager;
-import kingofthehill.domain.IGameManager;
+import kingofthehill.lobby.ILobby;
+import kingofthehill.lobby.Lobby;
 
 /**
  *
@@ -23,18 +23,17 @@ public class RMIserver {
      * Set the port number of the server for RMI communication
      */
     private static final int portNumber = 9999;
-
-    /**
-     * Set binding name for student administration
-     */
-    private static final String bindingName = "GameInfo";
+    
+    // Set binding name for student administration
+    private static final String bindingName = "Lobby";
 
     /**
      * References to registry and student administration
      */
     private Registry registry = null;
-    private IGameManager gameManager = null;
 
+    private ILobby lobby = null;
+    
     public RMIserver() {
         /**
          * Send a welcome message
@@ -55,12 +54,13 @@ public class RMIserver {
          * Create a gamemanager for running the server game
          */
         try {
-            gameManager = new GameManager();
+            //gameManager = new GameManager();
+            lobby = new Lobby();
             System.out.println("Server: Game created");
         } catch (RemoteException ex) {
             System.out.println("Server: Cannot create game");
             System.out.println("Server: RemoteException: " + ex.getMessage());
-            gameManager = null;
+            lobby = null;
         }
 
         /**
@@ -79,7 +79,7 @@ public class RMIserver {
          * Bind student administration using registry
          */
         try {
-            registry.rebind(bindingName, gameManager);
+            registry.rebind(bindingName, lobby);
         } catch (RemoteException ex) {
             System.out.println("Server: Cannot bind student administration");
             System.out.println("Server: RemoteException: " + ex.getMessage());

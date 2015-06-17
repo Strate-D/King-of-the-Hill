@@ -34,10 +34,11 @@ class ApplicationContext {
         } catch (FileNotFoundException ex) {
             props.setProperty("name", "Player");
             props.setProperty("url", "0.0.0.0");
-
+            props.setProperty("game", "null");
         } catch (IOException ex) {
             props.setProperty("name", "Player");
             props.setProperty("url", "0.0.0.0");
+            props.setProperty("game", "null");
         }
     }
 
@@ -119,6 +120,26 @@ class ApplicationContext {
             return;
         }
         props.setProperty("url", newUrl);
+        saveProps();
+    }
+    
+    /**
+     * Gets the name of the game from the properties
+     * @return name of game
+     */
+    public String getGameName() {
+        return props.getProperty("game");
+    }
+    
+    /**
+     * Sets the name of the game in the properties and saves it to the properties file
+     * @param newName new name of the game
+     */
+    public void setGameName(String newName) {
+        if(newName == null){
+            return;
+        }
+        props.setProperty("game", newName);
         saveProps();
     }
 }

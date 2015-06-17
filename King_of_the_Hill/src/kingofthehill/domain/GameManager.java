@@ -24,6 +24,7 @@ import kingofthehill.upgradeinfo.UpgradeInfo;
  */
 public class GameManager extends UnicastRemoteObject implements IGameManager {
 
+    private String name;
     private List<IPlayer> players;
     private List<String> readyPlayers;
     private Mysterybox mysterybox;
@@ -38,19 +39,27 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     /**
      * Creates a new gameManager, also creating a new game with it.
      *
+     * @param name name of the game
      * @throws java.rmi.RemoteException
      */
-    public GameManager() throws RemoteException {
+    public GameManager(String name) throws RemoteException {
+        this.name = name;
+        this.players = new ArrayList<>();
+        this.readyPlayers = new ArrayList<>();
+        this.readyGame = false;
+        this.gameInfo = new GameInfo();
+
         /**
          * Set resourceTimer to 0
          */
-        this.players = new ArrayList<>();
-        this.readyPlayers = new ArrayList<>();
         this.resourceTimer = 0;
         this.mysteryboxTimer = 0;
         this.mysteryboxTime = 0;
-        this.readyGame = false;
-        this.gameInfo = new GameInfo();
+        
+        /**
+         * Update gameinfo for the first time
+         */
+        gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
     }
 
     @Override
@@ -58,7 +67,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         /**
          * Check input
          */
-        if (player != null) {
+        if (player != null && players.size() < 4) {
             if (isAi) {
                 AI ai;
                 int count = 1;
@@ -151,17 +160,16 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     }
 
     @Override
-    public boolean getPlayerReady(String player) {
+    public String getPlayerReady(String player) {
         /**
          * Check if player with name is ready
          */
         for (String p : readyPlayers) {
             if (p.equals(player)) {
-                return true;
+                return " (Ready)";
             }
         }
-
-        return false;
+        return " (Unready)";
     }
 
     /**
@@ -500,7 +508,11 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
      */
     private synchronized void doStep() {
         /**
+<<<<<<< HEAD
          * Create game info for clients
+=======
+         * Update game info for clients
+>>>>>>> origin/Overkoekende-lobby
          */
         gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
 
@@ -765,5 +777,15 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     @Override
     public synchronized IGameInfo getGameInfo() throws RemoteException {
         return this.gameInfo;
+    }
+    
+    @Override
+    public String getName(){
+        return this.name;
+    }
+    
+    @Override
+    public String toString(){
+        return this.name + "- aantal actieve spelers: " + players.size() + "/4";
     }
 }

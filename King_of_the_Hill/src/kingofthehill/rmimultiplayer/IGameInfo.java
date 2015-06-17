@@ -5,6 +5,7 @@
  */
 package kingofthehill.rmimultiplayer;
 
+import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.List;
 import kingofthehill.domain.IPlayer;
@@ -73,4 +74,22 @@ public interface IGameInfo {
      * without being dependent of the remote gamemanager
      */
     public void doStep();
+
+    /**
+     * Get amount of active players in game
+     *
+     * @return amount of active players
+     * @throws RemoteException
+     */
+    public int getActivePlayerCount() throws RemoteException;
+
+    /**
+     * Get the name of the player at the index
+     *
+     * @param index index of the player in the list
+     * @return name of the player
+     * @throws RemoteException
+     */
+    public String getPlayerName(int index) throws RemoteException;
+
 }
