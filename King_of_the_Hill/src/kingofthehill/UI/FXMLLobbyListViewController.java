@@ -72,37 +72,18 @@ public class FXMLLobbyListViewController implements Initializable {
 
         if (cm.locate()) {
             lobby = cm.getLobby();
-
-//            Executors.newSingleThreadExecutor().execute(new Runnable() {
-//                @Override
-//                public void run() {
-//                    while (true) {
-//                        try {
-//                            games.addAll(lobby.getGames());
-//                        } catch (RemoteException ex) {
-//                            Logger.getLogger(FXMLLobbyListViewController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//
-//                        try {
-//                            Thread.sleep(100);
-//                        } catch (InterruptedException ex) {
-//                            Logger.getLogger(FXMLLobbyListViewController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//                }
-//            });
+            try {
+                games.addAll(lobby.getGames());
+            } catch (RemoteException ex) {
+                Logger.getLogger(FXMLLobbyListViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-
-//        try {
-//            gamesList.setItems(lobby.getGames());
-//        } catch (RemoteException ex) {
-//            Logger.getLogger(FXMLLobbyListViewController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
     }
 
     @FXML
     public void handleRefreshButton(ActionEvent e) {
         try {
+            games.clear();
             games.addAll(lobby.getGames());
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLLobbyListViewController.class.getName()).log(Level.SEVERE, null, ex);
@@ -114,6 +95,7 @@ public class FXMLLobbyListViewController implements Initializable {
     public void handleNewGameButton(ActionEvent e) {
         try {
             lobby.createGame(King_of_the_Hill.context.getPlayerName() + "'s lobby");
+            games.clear();
             games.addAll(lobby.getGames());
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLLobbyListViewController.class.getName()).log(Level.SEVERE, null, ex);

@@ -30,7 +30,7 @@ public class Lobby extends UnicastRemoteObject implements ILobby {
         try {
             if (name != null) {
                 if(checkGameName(name)){
-                games.add(new GameManager(name));
+                    games.add(new GameManager(name));
                 }
             }
         } catch (RemoteException ex) {
