@@ -105,12 +105,14 @@ public class AudioPlayer {
                         /**
                          * Old message kind, ignore
                          */
+                        System.out.println("Microphone of sender reset");
                     }
                     else
                     {
                         byte[] data = (byte[]) dat;
                         speakers.write(data, 0, data.length);
                         bufferedMessages.remove(0);
+                        System.out.println("Message: " + dat.toString());
                     }
                 }
 

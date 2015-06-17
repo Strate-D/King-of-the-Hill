@@ -192,6 +192,7 @@ public class Client implements Serializable {
                     /**
                      * If there was an AudioMessage send, do not do anything
                      */
+                    System.out.println(object.getData().toString());
                 } else {
                     this.parent.addMessage(object);
                 }

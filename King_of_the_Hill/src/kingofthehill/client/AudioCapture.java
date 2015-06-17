@@ -84,7 +84,7 @@ public class AudioCapture {
                  * Writes a message with the data of the audio
                  */
                 AudioMessage message = new AudioMessage(client.getClientId(), out.toByteArray(), volgnummer);
-                client.sendMessage(message);
+                client.sendMessage(message); 
                 this.client.printMessage("<< New package created and send >>");
 
                 volgnummer++;
