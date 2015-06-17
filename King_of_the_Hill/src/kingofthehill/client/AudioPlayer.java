@@ -96,7 +96,9 @@ public class AudioPlayer {
                  * Play the next audio clip
                  */
                 byte[] data = buffer.readBuffer();
-                speakers.write(data, 0, data.length);
+                if (data != null) {
+                    speakers.write(data, 0, data.length);
+                }
 //                if (bufferedMessages.size() > 0) {
 //                    /**
 //                     * Write it to the speakers
@@ -143,7 +145,7 @@ public class AudioPlayer {
         //this.bufferedMessages.add(message);
         if (message.getData() instanceof byte[]) {
             try {
-                buffer.addToBuffer((byte[])message.getData());
+                buffer.addToBuffer((byte[]) message.getData());
             } catch (Exception ex) {
                 Logger.getLogger(AudioPlayer.class.getName()).log(Level.SEVERE, null, ex);
             }

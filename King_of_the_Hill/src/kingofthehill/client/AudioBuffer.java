@@ -67,7 +67,8 @@ public class AudioBuffer {
         if (pointer < endpointer) {
             data = Arrays.copyOfRange(buf, pointer, endpointer);
         } else if (pointer == endpointer) {
-            data = new byte[] {0, 0};
+            //data = new byte[] {0, 0};
+            data = null;
         } else {
             data = concatArray(Arrays.copyOfRange(buf, pointer, buffersize), Arrays.copyOfRange(buf, 0, endpointer));
         }
