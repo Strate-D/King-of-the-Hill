@@ -5,6 +5,8 @@ package kingofthehill.client;
 
 import kingofthehill.rmimultiplayer.AudioMessage;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
@@ -25,7 +27,7 @@ public class AudioPlayer {
 
     public AudioPlayer(VoiceClient parent) {
         this.bufferedMessages = new ArrayList<>();
-        this.buffer = new AudioBuffer(8000);
+        this.buffer = new AudioBuffer(50000);
         this.playing = true;
         this.parent = parent;
     }
@@ -93,8 +95,14 @@ public class AudioPlayer {
                 /**
                  * Play the next audio clip
                  */
-                byte[] data = buffer.readBuffer();
-                speakers.write(data, 0, data.length);
+                byte[] data;
+                try {
+                    data = buffer.readBuffer();
+                    speakers.write(data, 0, data.length);
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+                
 //                if (bufferedMessages.size() > 0) {
 //                    /**
 //                     * Write it to the speakers
@@ -140,7 +148,11 @@ public class AudioPlayer {
     public synchronized void addAudioMessage(AudioMessage message) {
         //this.bufferedMessages.add(message);
         if (message.getData() instanceof byte[]) {
-            buffer.addToBuffer((byte[])message.getData());
+            try {
+                buffer.addToBuffer((byte[])message.getData());
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
