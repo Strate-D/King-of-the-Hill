@@ -200,7 +200,7 @@ public class FXMLLobbyViewController implements Initializable {
                 @Override
                 public void run() {
                     try {
-                        while (lobby.getGame(gameName).getPlayerReady(King_of_the_Hill.context.getPlayerName()).equals(" (Unready)")) {
+                        while (lobby.getGame(gameName).getPlayerReady(King_of_the_Hill.context.getPlayerName()).equals(" (Ready)")) {
                             try {
                                 if (lobby.getGame(gameName).readyGame()) {
                                     Platform.runLater(new Runnable() {
@@ -224,8 +224,7 @@ public class FXMLLobbyViewController implements Initializable {
                             }
 
                             try {
-                                Thread.sleep(1000);
-
+                                Thread.sleep(10);
                             } catch (InterruptedException ex) {
                                 System.out.println("kingofthehill.UI.FXMLLobbyViewController handleReadyButton(): " + ex.getMessage());
                             }
