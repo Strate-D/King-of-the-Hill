@@ -106,6 +106,7 @@ public class AudioPlayer {
                          * Old message kind, ignore
                          */
                         System.out.println("Microphone of sender reset");
+                        bufferedMessages.remove(0);
                     }
                     else
                     {
