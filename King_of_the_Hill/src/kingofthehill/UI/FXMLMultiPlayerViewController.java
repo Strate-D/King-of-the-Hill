@@ -26,6 +26,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -52,6 +53,9 @@ public class FXMLMultiPlayerViewController implements Initializable {
 
     @FXML
     private Canvas canvas;
+
+    @FXML
+    private AnchorPane background_pane;
 
     /**
      * Player unit sprites
@@ -111,7 +115,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
         /**
          * Bind the audio player to the F3 button
          */
-        canvas.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent E) -> {
+        background_pane.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent E) -> {
             switch (E.getCode()) {
                 case F3: {
                     if (!ClientManager.AudioChat.isAudioCaptureStarted()) {
@@ -121,7 +125,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
                 }
             }
         });
-        canvas.addEventFilter(KeyEvent.KEY_RELEASED, (KeyEvent E) -> {
+        background_pane.addEventFilter(KeyEvent.KEY_RELEASED, (KeyEvent E) -> {
             switch (E.getCode()) {
                 case F3: {
                     ClientManager.AudioChat.stopAudioCapture();
