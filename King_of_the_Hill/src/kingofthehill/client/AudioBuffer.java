@@ -26,17 +26,17 @@ public class AudioBuffer {
         endpointer = 0;
     }
 
-    public void addToBuffer(byte[] data) {
+    public synchronized void addToBuffer(byte[] data) {
         for (byte b : data) {
             buf[endpointer] = b;
             endpointer++;
-            if (endpointer > buffersize) {
+            if (endpointer >= buffersize) {
                 endpointer = 0;
             }
         }
     }
 
-    public byte[] readBuffer() {
+    public synchronized byte[] readBuffer() {
         byte[] data;
 
         if (pointer < endpointer) {

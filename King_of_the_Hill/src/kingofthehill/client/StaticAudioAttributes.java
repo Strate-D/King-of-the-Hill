@@ -15,5 +15,5 @@ public class StaticAudioAttributes {
             = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100.0F, 16, 2, 4, 44100.0F, false);
 
     public static AudioFormat AudioDataFormat
-            = new AudioFormat(8000.0F, 16, 1, true, false);
+            = new AudioFormat(44100.0F, 16, 1, true, false);
 }
