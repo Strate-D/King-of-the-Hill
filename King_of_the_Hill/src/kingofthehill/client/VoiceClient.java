@@ -38,6 +38,7 @@ public class VoiceClient {
     private FXMLLobbyViewController parent;
 
     private int clientID = -1;
+    private Thread thr;
 
     public VoiceClient(String ip, int port, String nickname) {
         audioPlayer = new AudioPlayer(this);
@@ -152,6 +153,7 @@ public class VoiceClient {
             audioPlayer.stopPlayback();
         });
         t.start();
+        thr = t;
     }
 
     /**
@@ -193,6 +195,15 @@ public class VoiceClient {
                 System.out.println("kingofthehill.rmimultiplayer.VoiceServer sendMessage(): " + ex.getMessage());
             }
 
+        }
+    }
+
+    public void stop() {
+        this.stopAudioCapture();
+        this.audioPlayer.stopPlayback();
+
+        if (thr != null) {
+            thr.interrupt();
         }
     }
 
