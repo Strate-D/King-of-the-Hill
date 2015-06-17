@@ -12,7 +12,6 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,6 +30,7 @@ import kingofthehill.rmimultiplayer.IGameInfo;
 import kingofthehill.rmimultiplayer.TextMessage;
 
 /**
+ * The lobby of a created game
  *
  * @author Bas
  */
@@ -112,7 +112,7 @@ public class FXMLLobbyViewController implements Initializable {
             try {
                 cm.getGameManager().addPlayer(King_of_the_Hill.context.getPlayerName(), false);
             } catch (RemoteException ex) {
-                Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("kingofthehill.UI.FXMLLobbyViewController initialize(): " + ex.getMessage());
             }
         }
 
@@ -138,7 +138,7 @@ public class FXMLLobbyViewController implements Initializable {
 
                             final Integer id = i;
                             final String readyString = ready;
-                            
+
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
@@ -161,13 +161,13 @@ public class FXMLLobbyViewController implements Initializable {
                         }
                     }
                 } catch (RemoteException ex) {
-                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("kingofthehill.UI.FXMLLobbyViewController initialize(): " + ex.getMessage());
                 }
 
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("kingofthehill.UI.FXMLLobbyViewController initialize(): " + ex.getMessage());
                 }
             }
         });
@@ -212,29 +212,25 @@ public class FXMLLobbyViewController implements Initializable {
 
                                 }
                             } catch (RemoteException ex) {
-                                Logger.getLogger(FXMLLobbyViewController.class
-                                        .getName()).log(Level.SEVERE, null, ex);
+                                System.out.println("kingofthehill.UI.FXMLLobbyViewController handleReadyButton(): " + ex.getMessage());
                             }
 
                             try {
                                 Thread.sleep(10);
 
                             } catch (InterruptedException ex) {
-                                Logger.getLogger(FXMLGameViewController.class
-                                        .getName()).log(Level.SEVERE, null, ex);
+                                System.out.println("kingofthehill.UI.FXMLLobbyViewController handleReadyButton(): " + ex.getMessage());
                             }
 
                         }
                     } catch (RemoteException ex) {
-                        Logger.getLogger(FXMLLobbyViewController.class
-                                .getName()).log(Level.SEVERE, null, ex);
+                        System.out.println("kingofthehill.UI.FXMLLobbyViewController handleReadyButton(): " + ex.getMessage());
                     }
                 }
             });
 
         } catch (IOException ex) {
-            Logger.getLogger(FXMLMainController.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            System.out.println("kingofthehill.UI.FXMLLobbyViewController handleReadyButton(): " + ex.getMessage());
         }
     }
 
@@ -255,8 +251,7 @@ public class FXMLLobbyViewController implements Initializable {
                 cm.getGameManager().removePlayer(King_of_the_Hill.context.getPlayerName());
 
             } catch (RemoteException ex) {
-                Logger.getLogger(FXMLLobbyViewController.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                System.out.println("kingofthehill.UI.FXMLLobbyViewController handleQuitButton(): " + ex.getMessage());
             }
         }
 
@@ -267,8 +262,7 @@ public class FXMLLobbyViewController implements Initializable {
             King_of_the_Hill.currentStage.getScene().setRoot(window1);
 
         } catch (IOException ex) {
-            Logger.getLogger(FXMLMainController.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            System.out.println("kingofthehill.UI.FXMLLobbyViewController handleQuitButton(): " + ex.getMessage());
         }
     }
 

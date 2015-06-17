@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package kingofthehill.domain;
 
@@ -7,32 +7,35 @@ import java.io.Serializable;
 
 /**
  * Contains information about a certain upgrade for units.
+ *
  * @author Jur
  */
-public class Upgrade implements Serializable{
+public class Upgrade implements Serializable {
+
     private double modHealth;
     private double modAttack;
     private double modArmor;
     private double modMovementSpeed;
     private UnitType targetUnit;
-    
+
     /**
      * Creates a new upgrade. (1 means add 100% of current units value)
+     *
      * @param modHealth Percentage that is added or removed. Not NULL.
      * @param modAttack Percentage that is added or removed. Not NULL.
      * @param modArmor Percentage that is added or removed. Not NULL.
      * @param modMovementSpeed Percentage that is added or removed. Not NULL.
      * @param targetUnit The type of unit that it is used for. Not NULL.
-     * @throws IllegalArgumentException 
+     * @throws IllegalArgumentException
      */
-    public Upgrade(Double modHealth, Double modAttack, Double modArmor, Double modMovementSpeed, UnitType targetUnit) throws IllegalArgumentException{
+    public Upgrade(Double modHealth, Double modAttack, Double modArmor, Double modMovementSpeed, UnitType targetUnit) throws IllegalArgumentException {
         /**
          * Check input
          */
-        if(modHealth == null || modAttack == null || modArmor == null || modMovementSpeed == null || targetUnit == null){
+        if (modHealth == null || modAttack == null || modArmor == null || modMovementSpeed == null || targetUnit == null) {
             throw new IllegalArgumentException("Variable must have a value!");
         }
-        
+
         /**
          * Fill fields
          */
@@ -42,49 +45,57 @@ public class Upgrade implements Serializable{
         this.modMovementSpeed = modMovementSpeed;
         this.targetUnit = targetUnit;
     }
-    
+
     /**
-     * Percentage that the original health of the unit is being added or removed.
+     * Percentage that the original health of the unit is being added or
+     * removed.
+     *
      * @return The modification of the health. Can be negative or 0.
      */
-    public double getModHealth(){
+    public double getModHealth() {
         return this.modHealth;
     }
-    
+
     /**
-     * Percentage that the original attack of the unit is being added or removed.
+     * Percentage that the original attack of the unit is being added or
+     * removed.
+     *
      * @return The modification of the attack. Can be negative or 0.
      */
-    public double getModAttack(){
+    public double getModAttack() {
         return this.modAttack;
     }
-    
+
     /**
      * Percentage that the original armor of the unit is being added or removed.
+     *
      * @return The modification of the armor. Can be negative or 0.
      */
-    public double getModArmor(){
+    public double getModArmor() {
         return this.modArmor;
     }
-    
+
     /**
-     * Percentage that the original movement speed of the unit is being added or removed.
+     * Percentage that the original movement speed of the unit is being added or
+     * removed.
+     *
      * @return The modification of the movement speed. Can be negative or 0.
      */
-    public double getModMovementSpeed(){
+    public double getModMovementSpeed() {
         return this.modMovementSpeed;
     }
-    
+
     /**
      * Gets the type of unit that the upgrade is used for
+     *
      * @return The unittype.
      */
-    public UnitType getTargetUnit(){
+    public UnitType getTargetUnit() {
         return this.targetUnit;
     }
-    
+
     @Override
-    public String toString(){
+    public String toString() {
         return "Upgrade voor " + targetUnit + ": +" + modHealth + " health, +" + modAttack + " attack, +" + modArmor + " armor, +" + modMovementSpeed + " speed";
     }
 }

@@ -33,7 +33,6 @@ public class ClientManager {
     /**
      * Tries to locate registery and bind the gamemanager
      *
-     * @param startVoiceClient
      * @return true if the registery is located and the gamemanager is bound,
      * else false
      */
@@ -108,13 +107,22 @@ public class ClientManager {
     }
 
     /**
+     * Returns the GameManager
      *
-     * @return
+     * @return The GameManager object
      */
     public IGameManager getGameManager() {
         return this.gm;
     }
 
+    /**
+     * Setup the audiochat audio format and the VoiceClient
+     *
+     * @param ipAddress IPAddress of the server
+     * @param port The port of the server
+     * @param username The username used to connect
+     * @return true if the setup was successfull; otherwise false
+     */
     public static boolean setupAudioChat(String ipAddress, int port, String username) {
         if (ClientManager.AudioChat == null) {
             ClientManager.AudioChat = new VoiceClient(ipAddress, port, username);
@@ -129,6 +137,11 @@ public class ClientManager {
         return true;
     }
 
+    /**
+     * Checks if the AudioChat is active and running
+     *
+     * @return true if the VoiceChat is running; otherwise false
+     */
     public static boolean isAudioChatRunning() {
         if (ClientManager.AudioChat != null) {
             if (ClientManager.AudioChat.isStarted()) {

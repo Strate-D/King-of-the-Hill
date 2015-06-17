@@ -1,13 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ *
  */
 package kingofthehill.DB;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,6 +13,7 @@ import java.util.List;
 import kingofthehill.domain.*;
 
 /**
+ * Database connection class
  *
  * @author Bas Koch
  */
@@ -26,10 +24,8 @@ public class DatabaseMediator {
     private static ResultSet rs = null;
     private static String query = "";
 
-    /*
-     ip: 94.211.145.73:3306
-     username: kingofthehill
-     password: proftaak
+    /**
+     * ip: 94.211.145.73:3306 username: kingofthehill password: proftaak
      */
     private static String url = "jdbc:mysql://94.211.145.73:3306/KingOfTheHill";
     private static String user = "kingofthehill";
@@ -69,15 +65,21 @@ public class DatabaseMediator {
      * @return True if information is correct
      */
     public static boolean checkLogin(String username, String password) {
-        //Check input
+        /**
+         * Check input
+         */
         if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             return false;
         }
         boolean result = false;
-        //Open connection
+        /**
+         * Open connection
+         */
         if (openConnection()) {
             try {
-                //Check if user is in db
+                /**
+                 * Check if user is in db
+                 */
                 st = con.createStatement();
                 query = "SELECT name, score FROM Player WHERE name='" + username + "' AND password='" + password + "';";
                 rs = st.executeQuery(query);
@@ -99,11 +101,15 @@ public class DatabaseMediator {
      * @param score The score that has to be added, higher than 0.
      */
     public static void increaseScore(String name, int score) {
-        //Open connection
+        /**
+         * Open connection
+         */
         if (score > 0) {
             if (openConnection()) {
                 try {
-                    //Get old score
+                    /**
+                     * Get old score
+                     */
                     st = con.createStatement();
                     query = "SELECT score FROM Player WHERE name='" + name + "';";
                     rs = st.executeQuery(query);
@@ -111,10 +117,14 @@ public class DatabaseMediator {
                     if (rs.next()) {
                         scoreOld = rs.getInt(1);
                     } else {
-                        //User doesn't exists
+                        /**
+                         * User doesn't exists
+                         */
                         return;
                     }
-                    //Set new score
+                    /**
+                     * Set new score
+                     */
                     st = con.createStatement();
                     query = "UPDATE Player SET score=" + (scoreOld + score) + " WHERE name='" + name + "';";
                     st.executeUpdate(query);
@@ -133,9 +143,13 @@ public class DatabaseMediator {
      * @return Score of player -1 if not found
      */
     public static int getScore(String name) {
-        //Open connection
+        /**
+         * Open connection
+         */
         if (openConnection()) {
-            //Get score
+            /**
+             * Get score
+             */
             try {
                 st = con.createStatement();
                 query = "SELECT score FROM Player WHERE name='" + name + "';";
@@ -158,9 +172,13 @@ public class DatabaseMediator {
      */
     public static List<IPlayer> getHighscores() {
         ArrayList<IPlayer> highscores = new ArrayList<IPlayer>();
-        //Open connection
+        /**
+         * Open connection
+         */
         if (openConnection()) {
-            //Get all the players
+            /**
+             * Get all the players
+             */
             try {
                 st = con.createStatement();
                 query = "SELECT name, score FROM Player ORDER BY score DESC limit 10;";
@@ -185,13 +203,19 @@ public class DatabaseMediator {
      * @return True if added, false if data is incorrect or name is taken
      */
     public static boolean addNewPlayer(String newName, String newPassword) {
-        //Check input
+        /**
+         * Check input
+         */
         if (newName.trim().isEmpty() || newPassword.trim().isEmpty()) {
             return false;
         }
-        //Check if player exists
+        /**
+         * Check if player exists
+         */
         if (getScore(newName.trim()) == -1) {
-            //Open connection
+            /**
+             * Open connection
+             */
             if (openConnection()) {
                 try {
                     st = con.createStatement();
@@ -203,7 +227,9 @@ public class DatabaseMediator {
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
                 }
-                //Close connection
+                /**
+                 * Close connection
+                 */
                 closeConnection();
             }
         }

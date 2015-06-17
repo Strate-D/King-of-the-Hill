@@ -1,24 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ *
  */
 package kingofthehill.server;
 
 import kingofthehill.rmimultiplayer.Client;
 import kingofthehill.rmimultiplayer.Message;
-import kingofthehill.rmimultiplayer.TextMessage;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
+ * The server for send text messages and audio messages
  * @author Bas
  */
 public class VoiceServer {
@@ -28,34 +23,48 @@ public class VoiceServer {
 
     private int portNumber = 9090;
 
+    /**
+     * Constructor for create a new VoiceServer object
+     *
+     * @param portnumber The portnumber that the VoiceServer can use to listen
+     * on
+     */
     public VoiceServer(int portnumber) {
         this.connectedClients = new ArrayList<>();
         lastMessages = new ArrayList<>();
 
         this.portNumber = portnumber;
     }
-    
-    public List<Message> getMessages()
-    {
+
+    /**
+     * Return the messages that have been send
+     *
+     * @return The messages as read-only list
+     */
+    public List<Message> getMessages() {
         return unmodifiableList(this.lastMessages);
     }
-    
-    public void addMessage(Message message)
-    {
+
+    /**
+     * Add a messages to the list of the last messages
+     *
+     * @param message The new message
+     */
+    public void addMessage(Message message) {
         this.lastMessages.add(message);
     }
 
+    /**
+     * Start running the VoiceServer so it starts accepting clients
+     */
     public void start() {
         Thread t = new Thread(() -> {
             try (ServerSocket listener = new ServerSocket(portNumber)) {
 
-                //writeMessage("Server is running...");
-                
                 while (true) {
                     System.out.println("Waiting for clients to connect...");
 
                     Socket socket = listener.accept();
-                    //writeMessage("Client " + socket.getInetAddress() + " connected");
 
                     try {
 
@@ -64,27 +73,24 @@ public class VoiceServer {
                             cli.addClient(c);
                         }
                         connectedClients.add(c);
-
-                        //c.sendLastMessages(lastMessages);
                     } catch (Exception ex) {
-                    } finally {
-                        //socket.close();
+                        System.out.println("kingofthehill.rmimultiplayer.VoiceServer start(): " + ex.getMessage());
                     }
 
                     Thread.sleep(10);
                 }
             } catch (InterruptedException | IOException ex) {
-                Logger.getLogger(VoiceServer.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("kingofthehill.rmimultiplayer.VoiceServer start(): " + ex.getMessage());
             }
         });
         t.start();
     }
 
-    public void writeMessage(String message) {
-        System.out.println(message);
-        lastMessages.add(new TextMessage(-10, message));
-    }
-
+    /**
+     * Removes a client from the list of clients
+     *
+     * @param toRemove The client that needs to be removed
+     */
     public void removeClient(Client toRemove) {
         int index = -1;
         for (int i = 0; i < connectedClients.size(); i++) {

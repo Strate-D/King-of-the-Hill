@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package kingofthehill.domain;
 
@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Jur
  */
-public class Lane implements Serializable{
+public class Lane implements Serializable {
 
     private final Base baseEnd1;
     private final Base baseEnd2;
@@ -21,20 +21,22 @@ public class Lane implements Serializable{
 
     /**
      * Creates a new lane object
+     *
      * @param end1 The base at end 1 of the lane
      * @param end2 The base at the other end of the lane
      */
-    public Lane(Base end1, Base end2){
-        if (end1 == null || end2 == null){
+    public Lane(Base end1, Base end2) {
+        if (end1 == null || end2 == null) {
             throw new IllegalArgumentException("Lane couldn't be made, ends cannot be null");
         }
         this.baseEnd1 = end1;
         this.baseEnd2 = end2;
         this.units = new ArrayList<>();
     }
-    
+
     /**
      * Gets the base which is at the first end of the lane
+     *
      * @return A base object, cannot be null.
      */
     public Base getBaseEnd1() {
@@ -43,6 +45,7 @@ public class Lane implements Serializable{
 
     /**
      * Gets the base which is at the second end of the lane
+     *
      * @return A base object, cannot be null
      */
     public Base getBaseEnd2() {
@@ -51,6 +54,7 @@ public class Lane implements Serializable{
 
     /**
      * Gets a list of all the units in the lane
+     *
      * @return A unmodifiable list
      */
     public List<Unit> getUnits() {
@@ -59,6 +63,7 @@ public class Lane implements Serializable{
 
     /**
      * Adds the given unit to the lane and sets the lane of the unit
+     *
      * @param unit The unit that has to be added, may not be null.
      */
     public void addUnit(Unit unit) {
@@ -67,13 +72,14 @@ public class Lane implements Serializable{
             this.units.add(unit);
         }
     }
-    
+
     /**
      * Removes the unit from the lane, and sets it lane to null.
+     *
      * @param unit The unit that has to be removed, may not be null.
      */
     public void removeUnit(Unit unit) {
-        if(unit != null){
+        if (unit != null) {
             unit.setLane(null);
             this.units.remove(unit);
         }

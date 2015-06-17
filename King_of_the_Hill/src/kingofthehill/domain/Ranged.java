@@ -1,15 +1,14 @@
 /**
- * 
+ *
  */
 package kingofthehill.domain;
-
 
 /**
  * Class containing all the information about the ranged unit Extends Unit
  *
  * @author Jur
  */
-public class Ranged extends Unit{
+public class Ranged extends Unit {
 
     private final int attackRange;
     private int lastAction;
@@ -17,6 +16,7 @@ public class Ranged extends Unit{
     /**
      * Creates a new ranged unit with the given parameters. Unit has to be set
      * to a lane or base manually!
+     *
      * @param health Amount of health the unit has. Must be positive.
      * @param attack Amount of attack the unit has. Must be positive.
      * @param armor Amount of armor the unit has. Must be 0 or positive.
@@ -33,9 +33,13 @@ public class Ranged extends Unit{
         this.attackRange = attackRange;
         this.lastAction = 0;
     }
-    
-    public int getAttackRange()
-    {
+
+    /**
+     * Returns the attackrange of the unit
+     *
+     * @return The attackrange of the unit
+     */
+    public int getAttackRange() {
         return this.attackRange;
     }
 
@@ -53,7 +57,7 @@ public class Ranged extends Unit{
                 Lane newLane = this.getBase().getLane(this);
                 this.getBase().removeUnit(this);
                 newLane.addUnit(this);
-                if(newLane.getBaseEnd1() == this.getOwner().getBase()) {
+                if (newLane.getBaseEnd1() == this.getOwner().getBase()) {
                     this.setPosition(pos * 55);
                 } else {
                     this.setPosition(1000 - pos * 55);
@@ -69,14 +73,14 @@ public class Ranged extends Unit{
                  * Check if target unit can attack back, to make combat fair
                  */
                 if (targetUnit.canAttackUnit() == this) {
-                    if(this.receiveDamage(targetUnit.getAttack())){
+                    if (this.receiveDamage(targetUnit.getAttack())) {
                         targetUnit.getOwner().addPoints(5);
                     }
                 }
                 /**
                  * Deal damage
                  */
-                if(targetUnit.receiveDamage(this.getAttack())){
+                if (targetUnit.receiveDamage(this.getAttack())) {
                     this.getOwner().addPoints(5);
                 }
                 lastAction = 60;
@@ -97,13 +101,14 @@ public class Ranged extends Unit{
         } else {
             IPlayer owner = this.getOwner();
             /**
-             * Check to which side the unit is moving
-             * and find the closest unit
+             * Check to which side the unit is moving and find the closest unit
              */
             int closestDistance = -1;
             Unit closestUnit = null;
             if (lane.getBaseEnd1().getOwner() == owner) {
-                //Check the lanes
+                /**
+                 * Check the lanes
+                 */
                 for (Unit u : lane.getUnits()) {
                     if ((u.getPosition() - this.getPosition() < closestDistance
                             || closestDistance == -1)) {
@@ -116,20 +121,24 @@ public class Ranged extends Unit{
                         }
                     }
                 }
-                //Check the defence spots
+                /**
+                 * Check the defence spots
+                 */
                 for (Unit u : lane.getBaseEnd2().getUnits()) {
                     int index = lane.getBaseEnd2().getUnitIndex(u);
                     int pos = 950 - index % 4 * 55;
                     int laneIndex = index / 4;
                     if (this.getLane() == lane.getBaseEnd2().getLane(laneIndex)) {
-                        if(pos - this.getPosition() < closestDistance || closestDistance == -1) {
+                        if (pos - this.getPosition() < closestDistance || closestDistance == -1) {
                             closestDistance = pos - this.getPosition();
                             closestUnit = u;
                         }
                     }
                 }
             } else {
-                //Check the lanes
+                /**
+                 * Check the lanes
+                 */
                 for (Unit u : lane.getUnits()) {
                     if ((this.getPosition() - u.getPosition() < closestDistance
                             || closestDistance == -1)) {
@@ -142,19 +151,28 @@ public class Ranged extends Unit{
                         }
                     }
                 }
-                //Check the defence spots
+                /**
+                 * Check the defence spots
+                 */
                 for (Unit u : lane.getBaseEnd1().getUnits()) {
                     int index = lane.getBaseEnd1().getUnitIndex(u);
                     int pos = (index % 4 * 55);
                     int laneIndex = index / 4;
                     if (this.getLane() == lane.getBaseEnd1().getLane(laneIndex)) {
-                        if(this.getPosition() - pos  < closestDistance || closestDistance == -1) {
-                            closestDistance = this.getPosition() - pos; 
+                        if (this.getPosition() - pos < closestDistance || closestDistance == -1) {
+                            closestDistance = this.getPosition() - pos;
                             closestUnit = u;
                         }
                     }
                 }
             }
+            /**
+             * Check if there is no null value
+             */
+            if (closestUnit == null) {
+                return null;
+            }
+
             /**
              * Check if the unit is within attack range
              */
