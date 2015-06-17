@@ -21,7 +21,7 @@ public class AudioPlayer {
 
     private ArrayList<AudioMessage> bufferedMessages;
     private boolean playing;
-    private int lastPlayedClip;
+    //private int lastPlayedClip;
     private VoiceClient parent;
 
     public AudioPlayer(VoiceClient parent) {
@@ -59,36 +59,59 @@ public class AudioPlayer {
              */
             speakers.start();
 
-            this.resetMessageCounter();
+            //this.resetMessageCounter();
 
             this.parent.printMessage("<< Speakers are set up and ready to play >>");
 
             while (playing) {
+//                /**
+//                 * Find the next clip
+//                 */
+//                ArrayList<Integer> canRemove = new ArrayList();
+//
+//                for (int i = 0; i < bufferedMessages.size(); i++) {
+//                    if (bufferedMessages.get(i).getFollowupnumber() == lastPlayedClip + 1) {
+//                        /**
+//                         * Write an audio clip to the spreakers
+//                         */
+//                        Object dat = bufferedMessages.get(i).getData();
+//                        if (dat instanceof String) {
+//                            this.resetMessageCounter();
+//                        } else {
+//                            byte[] data = (byte[]) dat;
+//                            speakers.write(data, 0, data.length);
+//                            lastPlayedClip++;
+//                            canRemove.add(i);
+//                            break;
+//                        }
+//                    }
+//                }
+//
+//                for (int i = 0; i < canRemove.size(); i++) {
+//                    bufferedMessages.remove((int) canRemove.get(i));
+//                }
+                
                 /**
-                 * Find the next clip
+                 * Play the next audio clip
                  */
-                ArrayList<Integer> canRemove = new ArrayList();
-
-                for (int i = 0; i < bufferedMessages.size(); i++) {
-                    if (bufferedMessages.get(i).getFollowupnumber() == lastPlayedClip + 1) {
+                if(bufferedMessages.size() > 0)
+                {
+                    /**
+                     * Write it to the speakers
+                     */
+                    Object dat = bufferedMessages.get(0).getData();
+                    if(dat instanceof String)
+                    {
                         /**
-                         * Write an audio clip to the spreakers
+                         * Old message kind, ignore
                          */
-                        Object dat = bufferedMessages.get(i).getData();
-                        if (dat instanceof String) {
-                            this.resetMessageCounter();
-                        } else {
-                            byte[] data = (byte[]) dat;
-                            speakers.write(data, 0, data.length);
-                            lastPlayedClip++;
-                            canRemove.add(i);
-                            break;
-                        }
                     }
-                }
-
-                for (int i = 0; i < canRemove.size(); i++) {
-                    bufferedMessages.remove((int) canRemove.get(i));
+                    else
+                    {
+                        byte[] data = (byte[]) dat;
+                        speakers.write(data, 0, data.length);
+                        bufferedMessages.remove(0);
+                    }
                 }
 
                 try {
@@ -128,7 +151,7 @@ public class AudioPlayer {
     /**
      * Reset the counter for finding the next AudioMessage
      */
-    public void resetMessageCounter() {
-        this.lastPlayedClip = -1;
-    }
+//    public void resetMessageCounter() {
+//        this.lastPlayedClip = -1;
+//    }
 }

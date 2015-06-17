@@ -93,7 +93,13 @@ public class VoiceClient {
             while (true) {
                 Message object;
                 try {
-                    object = (Message) reader.readObject();
+                    //object = (Message) reader.readObject();
+                    Object message = reader.readObject();
+                    if (message instanceof Message) {
+                        object = (Message) message;
+                    } else {
+                        throw new ClassNotFoundException("Wrong message type was send to the client from the server");
+                    }
                 } catch (IOException | ClassNotFoundException ex) {
                     System.out.println("kingofthehill.client.VoiceClient startMessageReader(): " + ex.getMessage());
                     continue;
