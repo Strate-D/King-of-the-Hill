@@ -129,16 +129,15 @@ public class FXMLLobbyViewController implements Initializable {
             public void run() {
                 try {
                     while (!lobby.getGame(gameName).readyGame()) {
-
-                        int amount = (int) moneySlider.valueProperty().get() - 100; // Amount of money added to starting resources
-                        lblStartRes.setText("" + amount);
-                        gameInfo = lobby.getGame(gameName).getGameInfo();
-                        //gameInfo.getPlayers().get(i).addMoney(amount);
-
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
                                 try {
+                                    int amount = (int) moneySlider.valueProperty().get() - 100; // Amount of money added to starting resources
+                                    lblStartRes.setText("" + amount);
+                                    gameInfo = lobby.getGame(gameName).getGameInfo();
+                                    //gameInfo.getPlayers().get(i).addMoney(amount);
+                                    
                                     //gameInfo = lobby.getGame(gameName).getGameInfo();
 
                                     if (gameInfo.getPlayerName(0) != null) {
@@ -167,14 +166,13 @@ public class FXMLLobbyViewController implements Initializable {
                                 } catch (RemoteException ex) {
                                     Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException ex) {
-                                    System.out.println("kingofthehill.UI.FXMLLobbyViewController initialize(): " + ex.getMessage());
-                                }
                             }
                         });
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ex) {
+                            System.out.println("kingofthehill.UI.FXMLLobbyViewController initialize(): " + ex.getMessage());
+                        }
                     }
                 } catch (RemoteException ex) {
                     System.out.println("kingofthehill.UI.FXMLLobbyViewController initialize(): " + ex.getMessage());
