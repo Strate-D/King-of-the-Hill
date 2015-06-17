@@ -6,6 +6,8 @@
 package kingofthehill.client;
 
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 /**
@@ -31,46 +33,47 @@ public class AudioBuffer {
     }
 
     public synchronized void addToBuffer(byte[] data) throws Exception {
-        while(isReading)
-        {
+        while (isReading) {
             Thread.sleep(1);
         }
-        
+
         isWriting = true;
         for (byte b : data) {
             buf[endpointer] = b;
             endpointer++;
-            if(endpointer == pointer)
-            {
+            if (endpointer == pointer) {
                 throw new Exception("Buffer overflow");
             }
             if (endpointer >= buffersize) {
                 endpointer = 0;
             }
         }
-        
+
         isWriting = false;
     }
 
-    public synchronized byte[] readBuffer() throws Exception {
+    public synchronized byte[] readBuffer() {
         byte[] data;
-        
-        while(isWriting)
-        {
-            Thread.sleep(1);
+
+        while (isWriting) {
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(AudioBuffer.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         isReading = true;
         if (pointer < endpointer) {
             data = Arrays.copyOfRange(buf, pointer, endpointer);
         } else if (pointer == endpointer) {
-            throw new Exception("Buffer is empty");
+            data = new byte[] {0, 0};
         } else {
             data = concatArray(Arrays.copyOfRange(buf, pointer, buffersize), Arrays.copyOfRange(buf, 0, endpointer));
         }
 
         pointer = endpointer;
-        
+
         isReading = false;
 
         return data;
