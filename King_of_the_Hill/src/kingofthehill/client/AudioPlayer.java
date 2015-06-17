@@ -60,7 +60,6 @@ public class AudioPlayer {
             speakers.start();
 
             //this.resetMessageCounter();
-
             this.parent.printMessage("<< Speakers are set up and ready to play >>");
 
             while (playing) {
@@ -90,30 +89,26 @@ public class AudioPlayer {
 //                for (int i = 0; i < canRemove.size(); i++) {
 //                    bufferedMessages.remove((int) canRemove.get(i));
 //                }
-                
+
                 /**
                  * Play the next audio clip
                  */
-                if(bufferedMessages.size() > 0)
-                {
+                if (bufferedMessages.size() > 0) {
                     /**
                      * Write it to the speakers
                      */
                     Object dat = bufferedMessages.get(0).getData();
-                    if(dat instanceof String)
-                    {
+                    if (dat instanceof String) {
                         /**
                          * Old message kind, ignore
                          */
                         System.out.println("Microphone of sender reset");
                         bufferedMessages.remove(0);
-                    }
-                    else
-                    {
+                    } else {
                         byte[] data = (byte[]) dat;
                         speakers.write(data, 0, data.length);
                         bufferedMessages.remove(0);
-                        System.out.println("Message: " + dat.toString());
+                        System.out.println("Message: " + ByteArrayToString(data));
                     }
                 }
 
@@ -157,4 +152,13 @@ public class AudioPlayer {
 //    public void resetMessageCounter() {
 //        this.lastPlayedClip = -1;
 //    }
+    private String ByteArrayToString(byte[] input) {
+        String output = "";
+        for (byte b : input) {
+            Integer i = ((int) b);
+            output += i.toString();
+        }
+
+        return output;
+    }
 }
