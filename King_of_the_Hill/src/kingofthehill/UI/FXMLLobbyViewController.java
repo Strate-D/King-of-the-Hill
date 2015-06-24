@@ -270,7 +270,6 @@ public class FXMLLobbyViewController implements Initializable {
                                     });
                                     break;
                                 }
-                                System.out.println("Checking for game start");
                             } catch (RemoteException ex) {
                                 System.out.println("kingofthehill.UI.FXMLLobbyViewController handleReadyButton(): " + ex.getMessage());
                             }
