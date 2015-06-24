@@ -49,8 +49,7 @@ public class Lobby extends UnicastRemoteObject implements ILobby {
             if (playername != null) {
                 games.get(index).addPlayer(playername, false);
             }
-        } catch (RemoteException ex) {
-            
+        } catch (RemoteException ex) {           
             Logger.getLogger(Lobby.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -83,6 +82,12 @@ public class Lobby extends UnicastRemoteObject implements ILobby {
         return stringGames;
     }
     
+    /**
+     * Checks if name of new game already exists in the list of games
+     * @param name name of the game to create
+     * @return true if name doesnt exists, false if name exists
+     * @throws RemoteException 
+     */
     private boolean checkGameName(String name) throws RemoteException{
         for(IGameManager gm : games){
             if(gm.getName().equals(name)){

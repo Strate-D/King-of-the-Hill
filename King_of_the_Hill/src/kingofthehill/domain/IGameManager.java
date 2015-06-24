@@ -103,6 +103,12 @@ public interface IGameManager extends Remote {
      */
     public String getName() throws RemoteException;
     
+    /**
+     * Resets the hearthbeat of the player
+     * 
+     * @param playername name of the player
+     * @throws RemoteException 
+     */
     public void sendPlayerSignal(String playername) throws RemoteException;
 
     /**
