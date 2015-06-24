@@ -86,7 +86,7 @@ public class AudioCapture {
                  */
                 AudioMessage message = new AudioMessage(client.getClientId(), out.toByteArray(), volgnummer);
                 client.sendMessage(message); 
-                this.client.printMessage("<< New package created and send >>");
+                /*this.client.printMessage("<< New package created and send >>");*/
 
                 volgnummer++;
             }

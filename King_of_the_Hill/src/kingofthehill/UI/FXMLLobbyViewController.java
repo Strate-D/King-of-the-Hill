@@ -280,8 +280,17 @@ public class FXMLLobbyViewController implements Initializable {
             @Override
             public void run() {
                 messages.add(message);
+                if (messages.size() > 40) {
+                    messages.remove(0);
+                }
                 messagesOutput.scrollTo(messages.size() - 1);
             }
+        });
+    }
+
+    public void leaveLobby() {
+        Platform.runLater(() -> {
+            handleQuitButton();
         });
     }
 }

@@ -5,6 +5,8 @@
  */
 package kingofthehill.rmimultiplayer;
 
+import java.util.Date;
+
 /**
  * An InfoMessage contains information from the server towards the client. The
  * class extends the Message class
@@ -18,7 +20,7 @@ public class InfoMessage extends Message {
     public InfoMessage(Object information, String defined) {
         super.setHeader("info");
         super.setData(information);
-        super.setTime(null);
+        super.setTime(new Date());
         super.setSender(-10);
         this.define = defined;
     }
