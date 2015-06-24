@@ -256,6 +256,10 @@ public class FXMLLobbyViewController implements Initializable {
 
     @FXML
     public void handleQuitButton() {
+        if (ClientManager.isAudioChatRunning()) {
+            ClientManager.AudioChat.stop();
+        }
+
         if (cm.locate()) {
             try {
                 lobby.getGame(gameName).removePlayer(King_of_the_Hill.context.getPlayerName());
@@ -286,8 +290,17 @@ public class FXMLLobbyViewController implements Initializable {
             @Override
             public void run() {
                 messages.add(message);
+                if (messages.size() > 40) {
+                    messages.remove(0);
+                }
                 messagesOutput.scrollTo(messages.size() - 1);
             }
+        });
+    }
+
+    public void leaveLobby() {
+        Platform.runLater(() -> {
+            handleQuitButton();
         });
     }
 }

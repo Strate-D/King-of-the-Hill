@@ -5,6 +5,7 @@
  */
 package kingofthehill.client;
 
+import java.io.EOFException;
 import kingofthehill.rmimultiplayer.AudioMessage;
 import kingofthehill.rmimultiplayer.InfoMessage;
 import kingofthehill.rmimultiplayer.Message;
@@ -13,7 +14,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kingofthehill.UI.FXMLLobbyViewController;
 
 /**
@@ -38,6 +42,7 @@ public class VoiceClient {
     private FXMLLobbyViewController parent;
 
     private int clientID = -1;
+    private Thread thr;
 
     public VoiceClient(String ip, int port, String nickname) {
         audioPlayer = new AudioPlayer(this);
@@ -93,9 +98,17 @@ public class VoiceClient {
             while (true) {
                 Message object;
                 try {
-                    object = (Message) reader.readObject();
+                    //object = (Message) reader.readObject();
+                    Object message = reader.readObject();
+                    if (message instanceof Message) {
+                        object = (Message) message;
+                    } else {
+                        throw new ClassNotFoundException("Wrong message type was send to the client from the server");
+                    }
+                } catch (SocketException | EOFException ex) {
+                    break;
                 } catch (IOException | ClassNotFoundException ex) {
-                    System.out.println("kingofthehill.client.VoiceClient startMessageReader(): " + ex.getMessage());
+                    System.out.println("kingofthehill.client.VoiceClient startMessageReader()(r. 110): " + ex.getMessage());
                     continue;
                 }
                 if (object instanceof InfoMessage) {
@@ -107,12 +120,16 @@ public class VoiceClient {
                             try {
                                 sender.writeObject(new InfoMessage(this.clientID, "GET_LAST_MESSAGES"));
                             } catch (IOException ex) {
-                                System.out.println("kingofthehill.client.VoiceClient startMessageReader(): " + ex.getMessage());
+                                System.out.println("kingofthehill.client.VoiceClient startMessageReader()(r. 117): " + ex.getMessage());
                             }
                             continue;
                         case "KICK":
+                            this.sendMessage(new InfoMessage(this.clientID, "LEAVE_PARTY"));
                             this.printMessage("<< The host kicked you >>");
                             break OUTER;
+                        case "KICK_REPLY":
+                            this.printMessage("<< " + mess.getData() + " >>");
+                            break;
                         case "SEND_LAST_MESSAGES":
                             this.printMessage("<< Printing previous messages from server >>");
                             for (Message m : (List<Message>) mess.getData()) {
@@ -133,7 +150,7 @@ public class VoiceClient {
                     audioPlayer.addAudioMessage((AudioMessage) object);
                     continue;
                 }
-                if (this.parent != null) {
+                if (this.parent != null && !(object instanceof InfoMessage)) {
                     this.printMessage(object.getTime() + ": " + object.getSenderName() + " says: " + object.getData());
                 }
                 try {
@@ -144,8 +161,16 @@ public class VoiceClient {
             }
 
             audioPlayer.stopPlayback();
+            
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ex) {
+            }
+            this.parent.leaveLobby();
+            
         });
         t.start();
+        thr = t;
     }
 
     /**
@@ -159,14 +184,15 @@ public class VoiceClient {
             TextMessage tmessage = (TextMessage) message;
             try {
                 if (tmessage.getData().toString().startsWith("/kick ")) {
-                    if (this.clientID == 1) {
-                        sender.writeObject(new InfoMessage(Integer.parseInt(tmessage.getData().toString().replace("/kick ", "")), "KICK_CLIENT"));
-                    } else {
-                        this.printMessage("<< You are not allowed to do that >>");
-                    }
+                    //if (this.clientID == 1) {
+                    sender.writeObject(new InfoMessage(tmessage.getData().toString().replace("/kick ", ""), "KICK_CLIENT"));
+                    //} else {
+                    //    this.printMessage("<< You are not allowed to do that >>");
+                    //}
                     return;
                 } else if (tmessage.getData().toString().startsWith("/leave")) {
                     sender.writeObject(new InfoMessage(this.clientID, "LEAVE_PARTY"));
+                    this.parent.leaveLobby();
                     return;
                 } else if (tmessage.getData().toString().startsWith("/start")) {
                     this.audioCapturer.startCapture();
@@ -177,16 +203,32 @@ public class VoiceClient {
                 }
 
                 sender.writeObject(message);
+            } catch (SocketException ex) {
+                this.parent.printMessage("<< Connection to the server was lost >>");
             } catch (Exception ex) {
                 System.out.println("kingofthehill.rmimultiplayer.VoiceServer sendMessage(): " + ex.getMessage());
             }
         } else {
             try {
                 sender.writeObject(message);
+            } catch (SocketException ex) {
             } catch (IOException ex) {
                 System.out.println("kingofthehill.rmimultiplayer.VoiceServer sendMessage(): " + ex.getMessage());
             }
 
+        }
+    }
+
+    /**
+     * Stop the VoiceClient
+     */
+    public void stop() {
+        this.sendMessage(new InfoMessage(this.clientID, "LEAVE_PARTY"));
+        this.stopAudioCapture();
+        this.audioPlayer.stopPlayback();
+
+        if (thr != null) {
+            thr.interrupt();
         }
     }
 

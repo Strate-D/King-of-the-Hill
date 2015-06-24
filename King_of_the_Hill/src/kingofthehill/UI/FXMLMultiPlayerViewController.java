@@ -24,7 +24,9 @@ import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -52,6 +54,9 @@ public class FXMLMultiPlayerViewController implements Initializable {
 
     @FXML
     private Canvas canvas;
+
+    @FXML
+    private AnchorPane background_pane;
 
     /**
      * Player unit sprites
@@ -108,6 +113,28 @@ public class FXMLMultiPlayerViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        /**
+         * Bind the audio player to the F3 button
+         */
+        background_pane.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent E) -> {
+            switch (E.getCode()) {
+                case F3: {
+                    if (!ClientManager.AudioChat.isAudioCaptureStarted()) {
+                        ClientManager.AudioChat.startAudioCapture();
+                    }
+                    break;
+                }
+            }
+        });
+        background_pane.addEventFilter(KeyEvent.KEY_RELEASED, (KeyEvent E) -> {
+            switch (E.getCode()) {
+                case F3: {
+                    ClientManager.AudioChat.stopAudioCapture();
+                    break;
+                }
+            }
+        });
+
         /**
          * Create the game
          */
@@ -348,6 +375,13 @@ public class FXMLMultiPlayerViewController implements Initializable {
      */
     @FXML
     public void handleQuitButton(ActionEvent e) {
+        /**
+         * Stop the audio chat and player
+         */
+        if (ClientManager.isAudioChatRunning()) {
+            ClientManager.AudioChat.stop();
+        }
+
         try {
             /**
              * Load next window

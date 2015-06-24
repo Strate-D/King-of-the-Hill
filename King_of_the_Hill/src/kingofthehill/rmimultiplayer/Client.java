@@ -170,10 +170,23 @@ public class Client implements Serializable {
                             sendMessageToAll(new TextMessage(-10, name + " joined the game"));
                             continue;
                         case "KICK_CLIENT": {
-                            System.out.print("\r<< Client " + mess.getData() + " will be kicked >>\n");
-                            Client c = getClient((int) mess.getData());
-                            c.sendMessageToMyself(new InfoMessage(null, "KICK"));
-                            c.killClient();
+                            Client c = getClient((String) mess.getData());
+
+                            if (c != null) {
+                                if (this.clientID == 1 && c.clientID != 1) {
+                                    System.out.print("\r<< Client " + mess.getData() + " will be kicked >>\n");
+                                    this.sendMessageToMyself(new InfoMessage("Player " + c.name + " will be kicked", "KICK_REPLY"));
+                                    c.sendMessageToMyself(new InfoMessage(null, "KICK"));
+                                    c.killClient();
+                                } else if (this.clientID == c.clientID) {
+                                    this.sendMessageToMyself(new InfoMessage("Why would you want to kick yourself ?", "KICK_REPLY"));
+                                } else {
+                                    this.sendMessageToMyself(new InfoMessage("You are not allowed to do this", "KICK_REPLY"));
+                                }
+                            } else {
+                                this.sendMessageToMyself(new InfoMessage("Cannot kick the player, player not found", "KICK_REPLY"));
+                            }
+
                             continue;
                         }
                         case "LEAVE_PARTY":
@@ -243,6 +256,30 @@ public class Client implements Serializable {
                 continue;
             }
             if (id == c.clientID) {
+                return c;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Return the Client object retrieved from a name
+     *
+     * @param name The name of the client to find
+     * @return The found client object
+     */
+    private Client getClient(String name) {
+        name = name.toLowerCase();
+        if (name.equals(this.name.toLowerCase())) {
+            return this;
+        }
+
+        for (Client c : knownClients) {
+            if (!c.isAlive) {
+                continue;
+            }
+            if (name.equals(c.name.toLowerCase())) {
                 return c;
             }
         }

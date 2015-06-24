@@ -46,11 +46,12 @@ public class AudioCapture {
                 line.open(StaticAudioAttributes.AudioDataFormat);
             } catch (LineUnavailableException | NullPointerException ex) {
                 this.client.printMessage("Could not open the microphone line");
+                System.out.println("kingofthehill.client.AudioCapture startCapture(): " + ex.getMessage());
                 return;
             }
 
             int numBytesRead;
-            byte[] data = new byte[line.getBufferSize() / 5];
+            byte[] data = new byte[line.getBufferSize() / 4];
 
             /**
              * Begin audio capture.
@@ -84,7 +85,8 @@ public class AudioCapture {
                  * Writes a message with the data of the audio
                  */
                 AudioMessage message = new AudioMessage(client.getClientId(), out.toByteArray(), volgnummer);
-                client.sendMessage(message);
+                client.sendMessage(message); 
+                /*this.client.printMessage("<< New package created and send >>");*/
 
                 volgnummer++;
             }
