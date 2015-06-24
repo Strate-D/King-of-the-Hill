@@ -370,4 +370,12 @@ public class FXMLLobbyViewController implements Initializable {
             System.out.println(ex.getMessage());
         }
     }
+    
+    public void handleFilleRoomWithAIButton(ActionEvent e) {
+        try {
+            lobby.getGame(gameName).fillLobbyWithAI(King_of_the_Hill.context.getPlayerName());
+        } catch (RemoteException ex) {
+            System.out.println("Fill lobby with AI failed, remote exception");
+        }
+    }
 }

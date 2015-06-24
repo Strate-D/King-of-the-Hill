@@ -87,6 +87,11 @@
             <Label id="lblStartRes" fx:id="lblStartRes" layoutX="201.0" layoutY="343.0" text="100" />
             <Slider id="sliderResAtStart" fx:id="moneySlider" layoutX="287.0" layoutY="345.0" max="200.0" min="20.0" showTickMarks="true" value="100.0" />
             <ComboBox fx:id="choiceBoxGameMode" layoutX="201.0" layoutY="369.0" onAction="#handleGameModeChanged" prefHeight="25.0" prefWidth="222.0" />
+            <Button layoutX="32.0" layoutY="440.0" mnemonicParsing="false" onAction="#handleFilleRoomWithAIButton" prefHeight="51.0" prefWidth="412.0" text="Fill room with AI (2 players needed)">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
          </children>
       </Pane>
    </children>

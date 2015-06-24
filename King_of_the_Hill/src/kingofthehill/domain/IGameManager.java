@@ -132,4 +132,6 @@ public interface IGameManager extends Remote {
      * @throws RemoteException 
      */
     public int checkFinished() throws RemoteException;
+    
+    public void fillLobbyWithAI(String playername) throws RemoteException;
 }

@@ -391,6 +391,26 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         return this.startMoney;
     }
 
+    @Override
+    public void fillLobbyWithAI(String playername) throws RemoteException {
+        //Check if player is the owner of the lobby
+        if(this.players.get(0).getName().equals(playername)) {
+            //Check if there are at least 2 players in the lobby
+            int playerCounter = 0;
+            for(IPlayer p : players) {
+                if(p instanceof Player) {
+                    playerCounter++;
+                }
+            }
+            if(playerCounter >= 2) {
+                //Add AI till there are 4 players
+                while(players.size() < 4) {
+                    this.addPlayer("", true);
+                }
+            }
+        }
+    }
+
     /**
      * GameLoop class with timertask to call the doStep method in a loop
      */
@@ -547,9 +567,6 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
      */
     private synchronized void doStep() {
         /**
-<<<<<<< HEAD
-         * Create game info for clients
-=======
          * Check if game is finished, only for teams now
          */     
         if (players.get(0).getBase().getHealthPoints() == 0 && players.get(2).getBase().getHealthPoints() == 0) {
@@ -565,7 +582,6 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
             
         /**
          * Update game info for clients
->>>>>>> origin/3e-Iteratie
          */
         gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
       
