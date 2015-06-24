@@ -43,6 +43,15 @@ public interface ILobby extends Remote{
     public void joinGame(int index, String playername) throws RemoteException;
     
     /**
+     * Joins a game
+     * 
+     * @param name name of the game
+     * @param playername name of the player to join the game
+     * @throws RemoteException 
+     */
+    public void joinGame(String name, String playername) throws RemoteException;
+    
+    /**
      * Gets a game with the givin' index
      * 
      * @param index index of the game in the list

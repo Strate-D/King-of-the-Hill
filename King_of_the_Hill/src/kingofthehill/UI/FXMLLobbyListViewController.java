@@ -38,7 +38,7 @@ public class FXMLLobbyListViewController implements Initializable {
 
     @FXML
     private AnchorPane content;
-    
+
     @FXML
     private Label errorLabel;
 
@@ -103,12 +103,15 @@ public class FXMLLobbyListViewController implements Initializable {
         }
         gamesList.setItems(games);
     }
+
     @FXML
     public void handleNewGameButton(ActionEvent e) {
         try {
-            lobby.createGame(King_of_the_Hill.context.getPlayerName() + "'s lobby");
-            games.clear();
-            games.addAll(lobby.getGames());
+            String gameName = King_of_the_Hill.context.getPlayerName() + "'s lobby";
+            lobby.createGame(gameName);
+            King_of_the_Hill.context.setGameName(gm.getName());
+            lobby.joinGame(gameName, King_of_the_Hill.context.getPlayerName());
+            loadGameView();
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLLobbyListViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -178,17 +181,7 @@ public class FXMLLobbyListViewController implements Initializable {
                 errorLabel.setVisible(false);
                 lobby.joinGame(gamesList.getSelectionModel().getSelectedIndex(), King_of_the_Hill.context.getPlayerName());
                 King_of_the_Hill.context.setGameName(gm.getName());
-
-                try {
-                    //Load next window
-                    Parent window1;
-                    window1 = FXMLLoader.load(getClass().getResource("FXMLLobbyView.fxml"));
-                    King_of_the_Hill.currentStage.getScene().setRoot(window1);
-
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLMainController.class
-                            .getName()).log(Level.SEVERE, null, ex);
-                }
+                loadGameView();
             } else {
                 errorLabel.setVisible(true);
                 errorLabel.setText("Kan het spel niet joinen, probeer het nogmaals");
@@ -197,6 +190,19 @@ public class FXMLLobbyListViewController implements Initializable {
             }
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLLobbyListViewController.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void loadGameView() {
+        try {
+            //Load next window
+            Parent window1;
+            window1 = FXMLLoader.load(getClass().getResource("FXMLLobbyView.fxml"));
+            King_of_the_Hill.currentStage.getScene().setRoot(window1);
+
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLMainController.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
     }
