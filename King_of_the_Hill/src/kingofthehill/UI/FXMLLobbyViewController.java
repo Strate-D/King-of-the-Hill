@@ -96,7 +96,7 @@ public class FXMLLobbyViewController implements Initializable {
         choiceBoxGameMode.getItems().add("Free for all");
 
         try {
-            ClientManager.AudioChat.start();
+            ClientManager.AudioChat.start(gameName);
             System.out.println("VoiceChat: Voice client started");
         } catch (Exception ex) {
             System.out.println("VoiceChat: Cannot start voice client");

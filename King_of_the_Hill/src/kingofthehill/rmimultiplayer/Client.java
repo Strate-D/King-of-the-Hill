@@ -31,6 +31,7 @@ public class Client implements Serializable {
     private String name;
     private boolean isAlive;
     private VoiceServer parent;
+    private String lobby;
 
     private static int clientCounter = 0;
 
@@ -167,6 +168,7 @@ public class Client implements Serializable {
                         case "CLIENT_NAME":
                             System.out.print("\r<< Client(" + clientID + ") changed name from \'" + name + "\' to \'" + mess.getData() + "\' >>\n");
                             name = (String) mess.getData();
+                            lobby = mess.getLobbyName();
                             sendMessageToAll(new TextMessage(-10, name + " joined the game"));
                             continue;
                         case "KICK_CLIENT": {
@@ -232,7 +234,9 @@ public class Client implements Serializable {
      */
     private void sendMessageToAll(Message message) {
         for (Client c : knownClients) {
-            c.sendMessageToMyself(message);
+            if (c.lobby.equals(this.lobby)) {
+                c.sendMessageToMyself(message);
+            }
         }
 
         if (!(message instanceof AudioMessage)) {

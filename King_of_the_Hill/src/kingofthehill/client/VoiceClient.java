@@ -56,8 +56,9 @@ public class VoiceClient {
 
     /**
      * Starts the VoiceServer threads for receiving and sending messages
+     * @param lobbyname
      */
-    public void start() {
+    public void start(String lobbyname) {
         String serverAddress = ip;
         try {
             socket = new Socket(serverAddress, port);
@@ -81,7 +82,7 @@ public class VoiceClient {
         startMessageReader();
 
         try {
-            sender.writeObject(new InfoMessage(name, "CLIENT_NAME"));
+            sender.writeObject(new InfoMessage(name, "CLIENT_NAME", lobbyname));
         } catch (IOException ex) {
             System.out.println("kingofthehill.client.VoiceClient start(): " + ex.getMessage());
         }

@@ -19,6 +19,7 @@ public class Message implements Serializable {
     private Date time;
     private int sender;
     private String senderName;
+    private String lobbyName;
 
     /**
      * Return the header of the Message
@@ -109,5 +110,23 @@ public class Message implements Serializable {
      */
     public void setSenderName(String value) {
         this.senderName = value;
+    }
+    
+    /**
+     * Returns the name of the lobby
+     * @return The name of the lobby
+     */
+    public String getLobbyName()
+    {
+        return this.lobbyName;
+    }
+    
+    /**
+     * Set a new name for the lobby
+     * @param name The new name for the lobby
+     */
+    public void setLobbyName(String name)
+    {
+        this.lobbyName = name;
     }
 }

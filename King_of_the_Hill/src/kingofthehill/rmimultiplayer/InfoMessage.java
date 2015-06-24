@@ -17,6 +17,15 @@ public class InfoMessage extends Message {
 
     private String define;
 
+    public InfoMessage(Object information, String defined, String lobby) {
+        super.setHeader("info");
+        super.setData(information);
+        super.setTime(new Date());
+        super.setSender(-10);
+        super.setLobbyName(lobby);
+        this.define = defined;
+    }
+    
     public InfoMessage(Object information, String defined) {
         super.setHeader("info");
         super.setData(information);

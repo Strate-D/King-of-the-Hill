@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import kingofthehill.DB.DatabaseMediator;
+import kingofthehill.server.VoiceServer;
 import kingofthehill.unitinfo.UnitInfo;
 import kingofthehill.upgradeinfo.UpgradeInfo;
 
@@ -39,7 +40,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     private GameMode gameMode;
     private int startMoney;
     private int gameState;
-
+    
     /**
      * Creates a new gameManager, also creating a new game with it.
      *
