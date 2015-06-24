@@ -297,7 +297,7 @@ public class FXMLLobbyViewController implements Initializable {
     public void handleSendButton() {
         if (!chatInput.getText().equals("")) {
             if (ClientManager.isAudioChatRunning()) {
-                ClientManager.AudioChat.sendMessage(new TextMessage(ClientManager.AudioChat.getClientId(), chatInput.getText()));
+                ClientManager.AudioChat.sendMessage(new TextMessage(ClientManager.AudioChat.getClientId(), chatInput.getText(), this.gameName));
             }
         }
         chatInput.setText("");

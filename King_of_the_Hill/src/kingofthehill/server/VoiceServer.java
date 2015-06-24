@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * The server for send text messages and audio messages
+ *
  * @author Bas
  */
 public class VoiceServer {
@@ -39,10 +40,18 @@ public class VoiceServer {
     /**
      * Return the messages that have been send
      *
+     * @param lobby
      * @return The messages as read-only list
      */
-    public List<Message> getMessages() {
-        return unmodifiableList(this.lastMessages);
+    public List<Message> getMessages(String lobby) {
+        ArrayList<Message> last = new ArrayList();
+        for (Message m : this.lastMessages) {
+            if (m.getLobbyName().equals(lobby)) {
+                last.add(m);
+            }
+        }
+
+        return unmodifiableList(last);
     }
 
     /**

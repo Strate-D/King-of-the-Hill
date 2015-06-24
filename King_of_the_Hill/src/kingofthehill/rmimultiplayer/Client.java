@@ -169,7 +169,7 @@ public class Client implements Serializable {
                             System.out.print("\r<< Client(" + clientID + ") changed name from \'" + name + "\' to \'" + mess.getData() + "\' >>\n");
                             name = (String) mess.getData();
                             lobby = mess.getLobbyName();
-                            sendMessageToAll(new TextMessage(-10, name + " joined the game"));
+                            sendMessageToAll(new TextMessage(-10, name + " joined the game", lobby));
                             continue;
                         case "KICK_CLIENT": {
                             Client c = getClient((String) mess.getData());
@@ -192,14 +192,14 @@ public class Client implements Serializable {
                             continue;
                         }
                         case "LEAVE_PARTY":
-                            this.sendMessageToAll(new TextMessage(-10, name + " left the game"));
+                            this.sendMessageToAll(new TextMessage(-10, name + " left the game", this.lobby));
                             System.out.println(name + " left the game");
                             this.killClient();
                             continue;
                         case "GET_LAST_MESSAGES": {
                             System.out.println("\r<< Sending previous messages to client(" + mess.getSender() + ")");
                             Client c = getClient((int) mess.getData());
-                            c.sendMessageToMyself(new InfoMessage(this.parent.getMessages(), "SEND_LAST_MESSAGES"));
+                            c.sendMessageToMyself(new InfoMessage(this.parent.getMessages(this.lobby), "SEND_LAST_MESSAGES"));
                             continue;
                         }
                     }

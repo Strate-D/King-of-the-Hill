@@ -11,11 +11,12 @@ import java.util.Date;
  */
 public class TextMessage extends Message {
 
-    public TextMessage(int sender, Object data) {
+    public TextMessage(int sender, Object data, String lobby) {
         super.setHeader("text");
         super.setData(data);
         super.setTime(new Date());
         super.setSender(sender);
+        super.setLobbyName(lobby);
     }
 
 }
