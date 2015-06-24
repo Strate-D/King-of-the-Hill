@@ -13,6 +13,8 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -67,7 +69,7 @@ public class FXMLLobbyViewController implements Initializable {
     private Label labelPlayer4;
 
     @FXML
-    private ComboBox choiceBoxGameMode;
+    private ChoiceBox choiceBoxGameMode;
 
     @FXML
     private Label lblStartRes;
@@ -206,6 +208,21 @@ public class FXMLLobbyViewController implements Initializable {
                 }
             }
         });
+        
+        /**
+         * Add value property listener
+         */
+        moneySlider.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                Number old_val, Number new_val) {
+                    lblStartRes.setText(new_val.intValue() + "");
+                try {
+                    lobby.getGame(gameName).setStartMoney(new_val.intValue());
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
     }
 
     private String readyString(boolean ready) {
@@ -337,15 +354,6 @@ public class FXMLLobbyViewController implements Initializable {
             }
         } catch (RemoteException ex) {
             System.out.println("Changing gamemode failed!");
-            System.out.println(ex.getMessage());
-        }
-    }
-    
-    public void handleStartMoneySlider(ActionEvent e) {
-        try {
-            lblStartRes.setText(moneySlider.getValue() + "");
-            lobby.getGame(gameName).setStartMoney((int)moneySlider.getValue());
-        } catch(RemoteException ex) {
             System.out.println(ex.getMessage());
         }
     }
