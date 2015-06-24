@@ -170,12 +170,12 @@ public class FXMLLobbyViewController implements Initializable {
                                     try {
                                         if (cm.getGameManager().getGameMode() == GameMode.COOP) {
                                             if (!choiceBoxGameMode.getSelectionModel().isSelected(0)) {
-                                                choiceBoxGameMode.getSelectionModel().selectLast();
+                                                choiceBoxGameMode.getSelectionModel().selectFirst();
                                                 System.out.println("Coop gamemode set!");
                                             }
                                         } else {
                                             if (!choiceBoxGameMode.getSelectionModel().isSelected(1)) {
-                                                choiceBoxGameMode.getSelectionModel().selectFirst();
+                                                choiceBoxGameMode.getSelectionModel().selectLast();
                                                 System.out.println("F4a gamemode set!");
                                             }
                                         }
