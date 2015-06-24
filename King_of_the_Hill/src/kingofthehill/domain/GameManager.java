@@ -37,6 +37,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     private Timer timer;
     private boolean readyGame;
     private GameMode gameMode;
+    private int startMoney;
 
     private boolean DebugLevelAI = false;
 
@@ -57,6 +58,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         this.readyGame = false;
         this.gameInfo = new GameInfo();
         this.gameMode = GameMode.COOP;
+        this.startMoney = 100;
     }
 
     @Override
@@ -225,11 +227,13 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
             i++;
         }
         /**
-         * Set player gamemodes
+         * Set player gamemodes and start money
          */
         for (IPlayer p : this.getPlayers()) {
             p.setGameMode(this.gameMode);
+            p.setMoney(this.startMoney);
         }
+        
         /**
          * Set mysteryboxtime at random for the first time
          */
@@ -293,6 +297,8 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         newPlayer.setBase(oldPlayer.getBase());
         //Set type
         newPlayer.setAIType(AIState.AGRESSIVE);
+        //Get the money
+        newPlayer.setMoney(oldPlayer.getMoney());
         //Add to the list and remove old one
         this.players.set(this.players.indexOf(oldPlayer), newPlayer);
         System.out.println("Replaced player!");
@@ -322,6 +328,18 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         if (newGameMode != null) {
             this.gameMode = newGameMode;
         }
+    }
+
+    @Override
+    public void setStartMoney(int newAmount) throws RemoteException {
+        if(newAmount >= 0) {
+            this.startMoney = newAmount;
+        }
+    }
+
+    @Override
+    public int getStartMoney() throws RemoteException {
+        return this.startMoney;
     }
 
     /**

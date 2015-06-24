@@ -75,6 +75,12 @@ public interface IPlayer {
      * @return Returns the amount of money the player has.
      */
     public int getMoney();
+    
+    /**
+     * Sets the new amount of money for the player, has to be 0 or higher
+     * @param newAmount Has to be 0 or higher
+     */
+    public void setMoney(int newAmount);
 
     /**
      * Adds money to the players amount of money

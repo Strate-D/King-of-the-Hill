@@ -954,4 +954,11 @@ public class AI implements IPlayer, Serializable {
             this.gameMode = newGameMode;
         }
     }
+
+    @Override
+    public void setMoney(int newAmount) {
+        if(newAmount >= 0) {
+            this.money = newAmount;
+        }
+    }
 }

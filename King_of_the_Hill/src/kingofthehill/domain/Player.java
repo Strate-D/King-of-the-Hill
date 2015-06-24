@@ -161,4 +161,11 @@ public class Player implements IPlayer, Serializable {
         }
     }
 
+    @Override
+    public void setMoney(int newAmount) {
+        if(newAmount >= 0) {
+            this.money = newAmount;
+        }
+    }
+
 }
