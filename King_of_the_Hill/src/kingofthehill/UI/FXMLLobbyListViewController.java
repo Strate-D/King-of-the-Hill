@@ -109,7 +109,7 @@ public class FXMLLobbyListViewController implements Initializable {
         try {
             String gameName = King_of_the_Hill.context.getPlayerName() + "'s lobby";
             lobby.createGame(gameName);
-            King_of_the_Hill.context.setGameName(gm.getName());
+            King_of_the_Hill.context.setGameName(gameName);
             lobby.joinGame(gameName, King_of_the_Hill.context.getPlayerName());
             loadGameView();
         } catch (RemoteException ex) {
