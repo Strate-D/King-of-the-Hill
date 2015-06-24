@@ -174,6 +174,21 @@ public class FXMLMainController implements Initializable {
         }
     }
 
+    /**
+     * Register the player
+     *
+     * @param e
+     */
+    public void handleHighscoreButton(ActionEvent e) {
+        try {
+            Parent window1;
+            window1 = FXMLLoader.load(getClass().getResource("FXMLHighscoreView.fxml"));
+            King_of_the_Hill.currentStage.getScene().setRoot(window1);
+        } catch (IOException ex) {
+            System.out.println("kingofthehill.UI.FXMLMainController handleHighscoreButton(): " + ex.getMessage());
+        }
+    }
+
     public void handleRadioButtonChanged(ActionEvent e) {
         if (e.getSource() == radioBtnMelee) {
             King_of_the_Hill.context.setFaction("melee");
