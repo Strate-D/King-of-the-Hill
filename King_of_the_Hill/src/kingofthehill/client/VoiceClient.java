@@ -16,6 +16,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kingofthehill.UI.FXMLLobbyViewController;
 
 /**
@@ -159,6 +161,13 @@ public class VoiceClient {
             }
 
             audioPlayer.stopPlayback();
+            
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ex) {
+            }
+            this.parent.leaveLobby();
+            
         });
         t.start();
         thr = t;

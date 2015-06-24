@@ -5,12 +5,14 @@
  */
 package kingofthehill.client;
 
+import java.nio.BufferOverflowException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Stores the bytes for playing back the audio recieved from other players
+ *
  * @author Bas
  */
 public class AudioBuffer {
@@ -33,6 +35,7 @@ public class AudioBuffer {
 
     /**
      * Add new data into the buffer
+     *
      * @param data The playable audio data
      * @throws Exception Throws an exception if the buffer overflows
      */
@@ -46,18 +49,24 @@ public class AudioBuffer {
             buf[endpointer] = b;
             endpointer++;
             if (endpointer == pointer) {
-                throw new Exception("Buffer overflow");
+                throw new BufferOverflowException();
             }
             if (endpointer >= buffersize) {
                 endpointer = 0;
             }
         }
 
+        buf[endpointer] = 0;
+        endpointer++;
+        buf[endpointer] = 0;
+        endpointer++;
+
         isWriting = false;
     }
 
     /**
      * Read the available bytes from the buffer
+     *
      * @return The bytes that are read
      */
     public synchronized byte[] readBuffer() {
@@ -81,7 +90,9 @@ public class AudioBuffer {
             data = concatArray(Arrays.copyOfRange(buf, pointer, buffersize), Arrays.copyOfRange(buf, 0, endpointer));
         }
 
-        pointer = endpointer;
+        while (pointer != endpointer) {
+            pointer = endpointer;
+        }
 
         isReading = false;
 
@@ -90,6 +101,7 @@ public class AudioBuffer {
 
     /**
      * Merge 2 arrays of bytes together
+     *
      * @param a Byte array #1
      * @param b Byte array #2
      * @return The merged byte array
