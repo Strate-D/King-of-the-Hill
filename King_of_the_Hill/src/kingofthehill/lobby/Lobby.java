@@ -8,6 +8,7 @@ package kingofthehill.lobby;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kingofthehill.domain.GameManager;
@@ -20,16 +21,46 @@ import kingofthehill.domain.IGameManager;
 public class Lobby extends UnicastRemoteObject implements ILobby {
 
     private ArrayList<IGameManager> games;
+    private Timer timer;
 
     public Lobby() throws RemoteException {
         this.games = new ArrayList<>();
+
+        timer = new Timer();
+        timer.schedule(new Lobby.CheckLoop(), 0, 5000);
+    }
+
+    /**
+     * CheckLoop class with timertask to call the checkFinished method in a loop
+     */
+    private class CheckLoop extends java.util.TimerTask {
+
+        @Override
+        public void run() {
+            checkFinished();
+        }
+    }
+
+    /**
+     * Check if the game is finished, if finished than remove game from list of game
+     */
+    private void checkFinished() {
+        for(IGameManager gm : games){
+            try {
+                if(gm.checkFinished() != 0){
+                    games.remove(gm);
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(Lobby.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
     public synchronized void createGame(String name) throws RemoteException {
         try {
             if (name != null) {
-                if(checkGameName(name)){
+                if (checkGameName(name)) {
                     games.add(new GameManager(name));
                 }
             }
@@ -49,7 +80,7 @@ public class Lobby extends UnicastRemoteObject implements ILobby {
             if (playername != null) {
                 games.get(index).addPlayer(playername, false);
             }
-        } catch (RemoteException ex) {   
+        } catch (RemoteException ex) {
             Logger.getLogger(Lobby.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -81,20 +112,23 @@ public class Lobby extends UnicastRemoteObject implements ILobby {
 
         return stringGames;
     }
-    
+
+
     /**
      * Checks if name of new game already exists in the list of games
+     *
      * @param name name of the game to create
      * @return true if name doesnt exists, false if name exists
-     * @throws RemoteException 
+     * @throws RemoteException
      */
-    private boolean checkGameName(String name) throws RemoteException{
-        for(IGameManager gm : games){
-            if(gm.getName().equals(name)){
+    private boolean checkGameName(String name) throws RemoteException {
+        for (IGameManager gm : games) {
+            if (gm.getName().equals(name)) {
                 return false;
             }
         }
-        
+
         return true;
     }
+
 }
