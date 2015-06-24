@@ -347,12 +347,12 @@ public class FXMLLobbyViewController implements Initializable {
         });
     }
 
-<<<<<<< HEAD
+
     public void leaveLobby() {
         Platform.runLater(() -> {
             handleQuitButton();
         });
-=======
+    }
     /**
      * Handle when game mode button changed
      *
@@ -369,6 +369,5 @@ public class FXMLLobbyViewController implements Initializable {
             System.out.println("Changing gamemode failed!");
             System.out.println(ex.getMessage());
         }
->>>>>>> origin/3e-Iteratie
     }
 }
