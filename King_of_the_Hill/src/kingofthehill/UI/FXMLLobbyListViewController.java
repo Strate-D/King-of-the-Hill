@@ -24,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import kingofthehill.client.ClientManager;
 import kingofthehill.domain.IGameManager;
 import kingofthehill.lobby.ILobby;
@@ -62,9 +63,17 @@ public class FXMLLobbyListViewController implements Initializable {
     ObservableList<String> games;
     ILobby lobby;
     IGameManager gm;
+    
+    @FXML
+    private Pane currentLobbyPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        /**
+         * Clear the player labels
+         */
+        currentLobbyPane.setVisible(false);
+        
         games = FXCollections.observableArrayList();
         buttonJoin.setDisable(true);
         gamesList.setItems(games);
@@ -116,6 +125,13 @@ public class FXMLLobbyListViewController implements Initializable {
             } else {
                 buttonJoin.setDisable(true);
             }
+            
+            if(e.getClickCount() == 2)
+            {
+                this.handleJoinButton(null);
+            }
+            
+            currentLobbyPane.setVisible(true);
 
             Platform.runLater(new Runnable() {
                 @Override

@@ -26,7 +26,7 @@
          </font>
       </Button>
       <ListView fx:id="gamesList" layoutX="17.0" layoutY="16.0" onMouseClicked="#handleGamesListOnClick" prefHeight="728.0" prefWidth="852.0" />
-      <Pane layoutX="972.0" layoutY="18.0" prefHeight="230.0" prefWidth="941.0" style="-fx-background-color: lightgrey;">
+      <Pane fx:id="currentLobbyPane" layoutX="972.0" layoutY="18.0" prefHeight="230.0" prefWidth="941.0" style="-fx-background-color: lightgrey;">
          <children>
             <Label layoutX="33.0" layoutY="68.0" text="Lobby eigenaar:">
                <font>
