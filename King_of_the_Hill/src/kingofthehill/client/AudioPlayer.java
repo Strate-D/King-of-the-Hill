@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ *
  */
 package kingofthehill.client;
 
@@ -15,6 +13,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
 /**
+ * The AudioPlayer class for playing the recieved Audio fragments
  *
  * @author Bas
  */
@@ -31,10 +30,15 @@ public class AudioPlayer {
         this.parent = parent;
     }
 
-    public void play() throws Exception {
+    /**
+     * Starts playing recieved fragments
+     */
+    public void play() {
         Thread t = new Thread(() -> {
 
-            // Find and create a speaker object
+            /**
+             * Find and create a speaker object
+             */
             DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, StaticAudioAttributes.AudioDataFormat);
             SourceDataLine speakers = null;
 
@@ -42,6 +46,7 @@ public class AudioPlayer {
                 speakers = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
                 speakers.open(StaticAudioAttributes.AudioDataFormat);
             } catch (LineUnavailableException ex) {
+                System.out.println("kingofthehill.client.AudioPlayer play(): " + ex.getMessage());
             }
 
             if (speakers == null) {
@@ -49,7 +54,9 @@ public class AudioPlayer {
                 return;
             }
 
-            // "Start" the speakers. 
+            /**
+             * "Start" the speakers.
+             */
             speakers.start();
 
             this.resetMessageCounter();
@@ -57,12 +64,16 @@ public class AudioPlayer {
             this.parent.printMessage("<< Speakers are set up and ready to play >>");
 
             while (playing) {
-                // Find the next clip
+                /**
+                 * Find the next clip
+                 */
                 ArrayList<Integer> canRemove = new ArrayList();
 
                 for (int i = 0; i < bufferedMessages.size(); i++) {
-                    if (bufferedMessages.get(i).getVolgnummer() == lastPlayedClip + 1) {
-                        // Write an audio clip to the spreakers
+                    if (bufferedMessages.get(i).getFollowupnumber() == lastPlayedClip + 1) {
+                        /**
+                         * Write an audio clip to the spreakers
+                         */
                         Object dat = bufferedMessages.get(i).getData();
                         if (dat instanceof String) {
                             this.resetMessageCounter();
@@ -83,11 +94,13 @@ public class AudioPlayer {
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(AudioPlayer.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("kingofthehill.client.AudioPlayer play(): " + ex.getMessage());
                 }
             }
 
-            // Clear the last bits from the speakers and close them
+            /**
+             * Clear the last bits from the speakers and close them
+             */
             speakers.drain();
             speakers.close();
 
@@ -96,14 +109,25 @@ public class AudioPlayer {
         t.start();
     }
 
+    /**
+     * Add an AudioMessage to the list for playback
+     *
+     * @param message The message to add
+     */
     public synchronized void addAudioMessage(AudioMessage message) {
         this.bufferedMessages.add(message);
     }
 
+    /**
+     * Stop playing the audio
+     */
     public void stopPlayback() {
         this.playing = false;
     }
 
+    /**
+     * Reset the counter for finding the next AudioMessage
+     */
     public void resetMessageCounter() {
         this.lastPlayedClip = -1;
     }

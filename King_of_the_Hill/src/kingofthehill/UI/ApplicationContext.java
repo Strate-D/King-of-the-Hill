@@ -14,6 +14,7 @@ import java.util.Properties;
 
 /**
  * Object that keepss all het info about the application
+ *
  * @author Jur
  */
 class ApplicationContext {
@@ -21,8 +22,8 @@ class ApplicationContext {
     private Properties props;
 
     /**
-     * Creates a new applicationcontext and tries to load the properties.
-     * If failes creates a new properties file
+     * Creates a new applicationcontext and tries to load the properties. If
+     * failes creates a new properties file
      */
     public ApplicationContext() {
         FileInputStream in;
@@ -34,95 +35,109 @@ class ApplicationContext {
             props.setProperty("name", "Player");
             props.setProperty("faction", "melee");
             props.setProperty("url", "0.0.0.0");
-            
+            props.setProperty("game", "null");
         } catch (IOException ex) {
             props.setProperty("name", "Player");
             props.setProperty("faction", "melee");
             props.setProperty("url", "0.0.0.0");
+            props.setProperty("game", "null");
         }
     }
-    
+
     /**
      * Save the properties to a file
      */
     private void saveProps() {
         FileOutputStream out;
-        
+
         try {
             out = new FileOutputStream("gamesettings.properties");
             props.store(out, null);
         } catch (FileNotFoundException ex) {
+            System.out.println("kingofthehill.UI.ApplicationContext saveProps(): " + ex.getMessage());
             try {
                 out = new FileOutputStream(new File("gamesettings.properties"));
                 props.store(out, null);
             } catch (FileNotFoundException ex1) {
                 System.out.println("Saving failed!");
+                System.out.println("kingofthehill.UI.ApplicationContext saveProps(): " + ex1.getMessage());
             } catch (IOException ex1) {
                 System.out.println("Saving failed!");
+                System.out.println("kingofthehill.UI.ApplicationContext saveProps(): " + ex1.getMessage());
             }
         } catch (IOException ex) {
+            System.out.println("kingofthehill.UI.ApplicationContext saveProps(): " + ex.getMessage());
             try {
                 out = new FileOutputStream(new File("gamesettings.properties"));
                 props.store(out, null);
             } catch (FileNotFoundException ex1) {
                 System.out.println("Saving failed!");
+                System.out.println("kingofthehill.UI.ApplicationContext saveProps(): " + ex1.getMessage());
             } catch (IOException ex1) {
                 System.out.println("Saving failed!");
+                System.out.println("kingofthehill.UI.ApplicationContext saveProps(): " + ex1.getMessage());
             }
         }
     }
-    
+
     /**
      * Gets the name of the player from the properties
+     *
      * @return A string
      */
     public String getPlayerName() {
         return props.getProperty("name");
     }
-    
+
     /**
      * Sets the name of the player and saves it to the properties file
+     *
      * @param newName The new name of the player, cannot be null!
      */
     public void setPlayerName(String newName) {
-        if(newName == null) {
+        if (newName == null) {
             return;
         }
         props.setProperty("name", newName);
         saveProps();
     }
-    
 
     /**
      * Gets the url of the server from the properties
+     *
      * @return a string containing the server url
      */
     public String getServerUrl() {
         return props.getProperty("url");
     }
-    
+
     /**
-     * Sets the url of the server in the properties and saves it to the properties file
+     * Sets the url of the server in the properties and saves it to the
+     * properties file
+     *
      * @param newUrl the new url of the server, cannot be null!
      */
     public void setServerUrl(String newUrl) {
-        if(newUrl == null){
+        if (newUrl == null) {
             return;
         }
         props.setProperty("url", newUrl);
         saveProps();
     }
-    
+
     /**
      * Gets the faction that the player prefers
+     *
      * @return A string with the faction (Melee, ranged or defence)
      */
-    public String getFaction () {
+    public String getFaction() {
         return props.getProperty("faction");
     }
-    
+
     /**
-     * Sets the new preferred faction of the player and saves it to the properties file
+     * Sets the new preferred faction of the player and saves it to the
+     * properties file
+     *
      * @param newFaction The new faction string, not null
      */
     public void setFaction(String newFaction) {
@@ -130,6 +145,28 @@ class ApplicationContext {
             return;
         }
         props.setProperty("faction", newFaction);
+    }
+
+    /**
+     * Gets the name of the game from the properties
+     *
+     * @return name of game
+     */
+    public String getGameName() {
+        return props.getProperty("game");
+    }
+
+    /**
+     * Sets the name of the game in the properties and saves it to the
+     * properties file
+     *
+     * @param newName new name of the game
+     */
+    public void setGameName(String newName) {
+        if (newName == null) {
+            return;
+        }
+        props.setProperty("game", newName);
         saveProps();
     }
 }

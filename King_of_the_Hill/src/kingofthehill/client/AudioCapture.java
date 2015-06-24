@@ -1,7 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
  */
 package kingofthehill.client;
 
@@ -13,6 +10,8 @@ import javax.sound.sampled.TargetDataLine;
 import kingofthehill.rmimultiplayer.AudioMessage;
 
 /**
+ * AudioCapture class captures audio from the microphone and make packages of
+ * data from it
  *
  * @author Bas
  */
@@ -26,11 +25,16 @@ public class AudioCapture {
         this.client = client;
     }
 
-    public void startCapture() throws Exception {
+    /**
+     * Start capturing the audio from the microphone
+     */
+    public void startCapture() {
         this.stopped = false;
         Thread t = new Thread(() -> {
-            // Open the microphone input line
-            TargetDataLine line = null;
+            /**
+             * Open the microphone input line
+             */
+            TargetDataLine line;
             DataLine.Info info = new DataLine.Info(TargetDataLine.class, StaticAudioAttributes.AudioDataFormat);
             if (!AudioSystem.isLineSupported(info)) {
                 this.client.printMessage("Something went wrong while setting up the audio format");
@@ -40,12 +44,7 @@ public class AudioCapture {
             try {
                 line = (TargetDataLine) AudioSystem.getLine(info);
                 line.open(StaticAudioAttributes.AudioDataFormat);
-            } catch (LineUnavailableException ex) {
-                this.client.printMessage("Could not open the microphone line");
-                return;
-            }
-
-            if (line == null) {
+            } catch (LineUnavailableException | NullPointerException ex) {
                 this.client.printMessage("Could not open the microphone line");
                 return;
             }
@@ -53,27 +52,37 @@ public class AudioCapture {
             int numBytesRead;
             byte[] data = new byte[line.getBufferSize() / 5];
 
-            // Begin audio capture.
+            /**
+             * Begin audio capture.
+             */
             line.start();
 
-            // A number indicating the order in with the audio needs to be played back
+            /**
+             * A number indicating the order in with the audio needs to be
+             * played back
+             */
             int volgnummer = 0;
 
-            // Here, stopped is a global boolean set by another thread.
+            /**
+             * Here, stopped is a global boolean set by another thread.
+             */
             this.client.printMessage("<< Started recording >>");
 
-            while (!stopped /*&& line.isRunning()*/) {
-                //this.client.printMessage("<< Recording ... >>");
-
-                // Read the next chunk of data from the TargetDataLine.
+            while (!stopped) {
+                /**
+                 * Read the next chunk of data from the TargetDataLine.
+                 */
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-                numBytesRead
-                        = line.read(data, 0, data.length);
-                // Save this chunk of data.
+                numBytesRead = line.read(data, 0, data.length);
+                /**
+                 * Save this chunk of data.
+                 */
                 out.write(data, 0, numBytesRead);
 
-                // Writes a message with the data of the audio
+                /**
+                 * Writes a message with the data of the audio
+                 */
                 AudioMessage message = new AudioMessage(client.getClientId(), out.toByteArray(), volgnummer);
                 client.sendMessage(message);
 
@@ -89,10 +98,18 @@ public class AudioCapture {
         t.start();
     }
 
+    /**
+     * Stop the capture of audio from the microphone
+     */
     public void stopCapture() {
         this.stopped = true;
     }
 
+    /**
+     * Check if the audio capture is active
+     *
+     * @return true if the audio capture is active; otherwise false
+     */
     public boolean isRunning() {
         return !this.stopped;
     }

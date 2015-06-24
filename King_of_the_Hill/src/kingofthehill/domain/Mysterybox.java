@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package kingofthehill.domain;
 
@@ -23,6 +23,7 @@ public class Mysterybox implements Serializable {
 
     /**
      * Creates a new Mysterybox object that contains info about the mysterybox.
+     *
      * @param resources Amount of resources in the mysterybox. May not be a
      * negative number!
      * @param upgrade Optional upgrade in the mysterybox. May be null.
@@ -41,12 +42,12 @@ public class Mysterybox implements Serializable {
         if (unitType != null && amount < 1) {
             throw new IllegalArgumentException("Amount of units must 1 or more if unittype is not null");
         }
-        
+
         /**
          * initialize random
          */
         Random mysteryboxRandom = new Random();
-        
+
         /**
          * Set fields
          */
@@ -61,6 +62,7 @@ public class Mysterybox implements Serializable {
 
     /**
      * Bid on the mysterybox
+     *
      * @param bidder player that bids on the mysterybox
      * @param bid amount of gold the bidder bid on the mysterybox
      */
@@ -70,16 +72,16 @@ public class Mysterybox implements Serializable {
                 /**
                  * Give money back to previous higest bidder
                  */
-                if(highestBidder != null){
+                if (highestBidder != null) {
                     highestBidder.addMoney(highestBid);
                 }
-                
+
                 /**
                  * Set new higest bidder and bid
                  */
                 this.highestBidder = bidder;
                 this.highestBid = bid;
-                
+
                 /**
                  * Take money from new higest bidder
                  */
@@ -90,6 +92,7 @@ public class Mysterybox implements Serializable {
 
     /**
      * Gets the amount of resources in the mysterybox.
+     *
      * @return The amount of resources. Always 0 or higher.
      */
     public int getResourceAmount() {
@@ -98,6 +101,7 @@ public class Mysterybox implements Serializable {
 
     /**
      * Gets the upgrade in the mysterybox.
+     *
      * @return The upgrade in the mysterybox. Can be null.
      */
     public Upgrade getUpgrade() {
@@ -107,6 +111,7 @@ public class Mysterybox implements Serializable {
     /**
      * Returns the duration of the mysterybox in frames. (amount of seconds
      * times 60)
+     *
      * @return Returns the duration
      */
     public int getDuration() {
@@ -115,6 +120,7 @@ public class Mysterybox implements Serializable {
 
     /**
      * Returns the type of unit that the mysterybox contains
+     *
      * @return Returns the UnitType
      */
     public UnitType getUnitType() {
@@ -123,6 +129,7 @@ public class Mysterybox implements Serializable {
 
     /**
      * Returns the amount of units that the mysterybox contains
+     *
      * @return Returns the amount of units
      */
     public int getAmount() {
@@ -131,25 +138,28 @@ public class Mysterybox implements Serializable {
 
     /**
      * Return the highest bid
+     *
      * @return Returns the highest bid
      */
     public int getHighestBid() {
         return this.highestBid;
     }
-    
+
     /**
      * Return the new highest bid
+     *
      * @return Returns the new highest bid
      */
-    public int getNewHighestBid(){
+    public int getNewHighestBid() {
         return this.highestBid + 10;
     }
-    
+
     /**
      * Return the higest bidder
+     *
      * @return Returns the player that has the highest bid
      */
-    public IPlayer getHigestBidder(){
+    public IPlayer getHigestBidder() {
         return this.highestBidder;
     }
 }

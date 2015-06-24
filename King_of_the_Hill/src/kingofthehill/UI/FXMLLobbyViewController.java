@@ -12,7 +12,6 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,15 +25,18 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import kingofthehill.client.ClientManager;
 import kingofthehill.domain.GameMode;
+import kingofthehill.lobby.ILobby;
 import kingofthehill.rmimultiplayer.IGameInfo;
 import kingofthehill.rmimultiplayer.TextMessage;
 
 /**
+ * The lobby of a created game
  *
  * @author Bas
  */
@@ -67,12 +69,24 @@ public class FXMLLobbyViewController implements Initializable {
     @FXML
     private ComboBox choiceBoxGameMode;
 
+    @FXML
+    private Label lblStartRes;
+
+    @FXML
+    private Slider moneySlider;
+
     ObservableList<String> messages;
 
     ClientManager cm = new ClientManager(King_of_the_Hill.context.getServerUrl());
+    String gameName = King_of_the_Hill.context.getGameName();
+    ILobby lobby;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        if (cm.locate()) {
+            lobby = cm.getLobby();
+        }
+
         ClientManager.AudioChat.setParent(this);
 
         //Fill combobox
@@ -119,84 +133,87 @@ public class FXMLLobbyViewController implements Initializable {
             }
         });
 
-        if (cm.locate()) {
-            try {
-                cm.getGameManager().addPlayer(King_of_the_Hill.context.getPlayerName(), false);
-            } catch (RemoteException ex) {
-                Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             IGameInfo gameInfo;
 
             @Override
             public void run() {
                 try {
-                    while (!cm.getGameManager().readyGame()) {
-                        gameInfo = cm.getGameManager().getGameInfo();
+                    while (!lobby.getGame(gameName).readyGame()) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    gameInfo = lobby.getGame(gameName).getGameInfo();
 
-                        for (int i = 0; i < gameInfo.getPlayers().size(); i++) {
-                            final String playerName = gameInfo.getPlayers().get(i).getName();
-
-                            String ready = "";
-
-                            if (cm.getGameManager().getPlayerReady(gameInfo.getPlayers().get(i).getName())) {
-                                ready = " (Ready)";
-                            } else {
-                                ready = " (Unready)";
-                            }
-
-                            final Integer id = i;
-                            final String readyString = ready;
-
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    switch (id) {
-                                        case 0:
-                                            labelPlayer1.setText(playerName + readyString);
-                                            break;
-                                        case 1:
-                                            labelPlayer2.setText(playerName + readyString);
-                                            break;
-                                        case 2:
-                                            labelPlayer3.setText(playerName + readyString);
-                                            break;
-                                        case 3:
-                                            labelPlayer4.setText(playerName + readyString);
-                                            break;
+                                    if (gameInfo.getPlayerName(0) != null) {
+                                        labelPlayer1.setText(gameInfo.getPlayerName(0) + readyString(lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(0))));
+                                    } else {
+                                        labelPlayer1.setText("Wachten op nieuwe speler...");
                                     }
-                                    try {
-                                        if (cm.getGameManager().getGameMode() == GameMode.COOP) {
-                                            if (!choiceBoxGameMode.getSelectionModel().isSelected(0)) {
-                                                choiceBoxGameMode.getSelectionModel().selectFirst();
-                                                System.out.println("Coop gamemode set!");
-                                            }
-                                        } else {
-                                            if (!choiceBoxGameMode.getSelectionModel().isSelected(1)) {
-                                                choiceBoxGameMode.getSelectionModel().selectLast();
-                                                System.out.println("F4a gamemode set!");
-                                            }
-                                        }
-                                    } catch (RemoteException ex) {
-                                        Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+
+                                    if (gameInfo.getPlayerName(1) != null) {
+                                        labelPlayer2.setText(gameInfo.getPlayerName(1) + readyString(lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(1))));
+                                    } else {
+                                        labelPlayer2.setText("Wachten op nieuwe speler...");
                                     }
+
+                                    if (gameInfo.getPlayerName(2) != null) {
+                                        labelPlayer3.setText(gameInfo.getPlayerName(2) + readyString(lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(2))));
+                                    } else {
+                                        labelPlayer3.setText("Wachten op nieuwe speler...");
+                                    }
+                                    if (gameInfo.getPlayerName(3) != null) {
+                                        labelPlayer4.setText(gameInfo.getPlayerName(3) + readyString(lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(3))));
+                                    } else {
+                                        labelPlayer4.setText("Wachten op nieuwe speler...");
+                                    }
+                                } catch (RemoteException ex) {
+                                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                            });
+
+                                //Check for UI values
+                                try {
+                                    if (lobby.getGame(gameName).getGameMode() == GameMode.COOP) {
+                                        if (!choiceBoxGameMode.getSelectionModel().isSelected(0)) {
+                                            choiceBoxGameMode.getSelectionModel().selectFirst();
+                                            System.out.println("Coop gamemode set!");
+                                        }
+                                    } else {
+                                        if (!choiceBoxGameMode.getSelectionModel().isSelected(1)) {
+                                            choiceBoxGameMode.getSelectionModel().selectLast();
+                                            System.out.println("F4a gamemode set!");
+                                        }
+                                    }
+                                    
+                                    if (lobby.getGame(gameName).getStartMoney() != (int)moneySlider.getValue()) {
+                                        moneySlider.setValue(lobby.getGame(gameName).getStartMoney());
+                                        lblStartRes.setText(lobby.getGame(gameName).getStartMoney() + "");
+                                    }
+                                } catch (RemoteException e) {
+                                    System.out.println(e.getMessage());
+                                }
+                            }
+                        });
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException ex) {
+                            System.out.println("kingofthehill.UI.FXMLLobbyViewController initialize(): " + ex.getMessage());
                         }
                     }
                 } catch (RemoteException ex) {
-                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("kingofthehill.UI.FXMLLobbyViewController initialize(): " + ex.getMessage());
                 }
             }
         });
+    }
+
+    private String readyString(boolean ready) {
+        if (ready) {
+            return " (Ready)";
+        } else {
+            return " (Unready)";
+        }
     }
 
     @FXML
@@ -206,7 +223,7 @@ public class FXMLLobbyViewController implements Initializable {
                 /**
                  * Set player ready, if player already was ready unset ready
                  */
-                if (cm.getGameManager().setPlayerReady(King_of_the_Hill.context.getPlayerName())) {
+                if (lobby.getGame(gameName).setPlayerReady(King_of_the_Hill.context.getPlayerName())) {
                     buttonReady.setText("Unready");
                 } else {
                     buttonReady.setText("Ready");
@@ -218,9 +235,9 @@ public class FXMLLobbyViewController implements Initializable {
                 @Override
                 public void run() {
                     try {
-                        while (cm.getGameManager().getPlayerReady(King_of_the_Hill.context.getPlayerName())) {
+                        while (lobby.getGame(gameName).getPlayerReady(King_of_the_Hill.context.getPlayerName())) {
                             try {
-                                if (cm.getGameManager().readyGame()) {
+                                if (lobby.getGame(gameName).readyGame()) {
                                     Platform.runLater(new Runnable() {
                                         @Override
                                         public void run() {
@@ -235,32 +252,27 @@ public class FXMLLobbyViewController implements Initializable {
                                         }
                                     });
                                     break;
-
                                 }
+                                System.out.println("Checking for game start");
                             } catch (RemoteException ex) {
-                                Logger.getLogger(FXMLLobbyViewController.class
-                                        .getName()).log(Level.SEVERE, null, ex);
+                                System.out.println("kingofthehill.UI.FXMLLobbyViewController handleReadyButton(): " + ex.getMessage());
                             }
 
                             try {
                                 Thread.sleep(10);
-
                             } catch (InterruptedException ex) {
-                                Logger.getLogger(FXMLGameViewController.class
-                                        .getName()).log(Level.SEVERE, null, ex);
+                                System.out.println("kingofthehill.UI.FXMLLobbyViewController handleReadyButton(): " + ex.getMessage());
                             }
 
                         }
                     } catch (RemoteException ex) {
-                        Logger.getLogger(FXMLLobbyViewController.class
-                                .getName()).log(Level.SEVERE, null, ex);
+                        System.out.println("kingofthehill.UI.FXMLLobbyViewController handleReadyButton(): " + ex.getMessage());
                     }
                 }
             });
 
         } catch (IOException ex) {
-            Logger.getLogger(FXMLMainController.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            System.out.println("kingofthehill.UI.FXMLLobbyViewController handleReadyButton(): " + ex.getMessage());
         }
     }
 
@@ -278,23 +290,21 @@ public class FXMLLobbyViewController implements Initializable {
     public void handleQuitButton() {
         if (cm.locate()) {
             try {
-                cm.getGameManager().removePlayer(King_of_the_Hill.context.getPlayerName());
+                lobby.getGame(gameName).removePlayer(King_of_the_Hill.context.getPlayerName());
 
             } catch (RemoteException ex) {
-                Logger.getLogger(FXMLLobbyViewController.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                System.out.println("kingofthehill.UI.FXMLLobbyViewController handleQuitButton(): " + ex.getMessage());
             }
         }
 
         try {
             //Load next window
             Parent window1;
-            window1 = FXMLLoader.load(getClass().getResource("FXMLMain.fxml"));
+            window1 = FXMLLoader.load(getClass().getResource("FXMLLobbyListView.fxml"));
             King_of_the_Hill.currentStage.getScene().setRoot(window1);
 
         } catch (IOException ex) {
-            Logger.getLogger(FXMLMainController.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            System.out.println("kingofthehill.UI.FXMLLobbyViewController handleQuitButton(): " + ex.getMessage());
         }
     }
 
@@ -321,12 +331,21 @@ public class FXMLLobbyViewController implements Initializable {
     public void handleGameModeChanged(ActionEvent e) {
         try {
             if (choiceBoxGameMode.getSelectionModel().isSelected(0)) {
-                cm.getGameManager().setGameMode(GameMode.COOP);
+                lobby.getGame(gameName).setGameMode(GameMode.COOP);
             } else {
-                cm.getGameManager().setGameMode(GameMode.F4A);
+                lobby.getGame(gameName).setGameMode(GameMode.F4A);
             }
         } catch (RemoteException ex) {
             System.out.println("Changing gamemode failed!");
+            System.out.println(ex.getMessage());
+        }
+    }
+    
+    public void handleStartMoneySlider(ActionEvent e) {
+        try {
+            lblStartRes.setText(moneySlider.getValue() + "");
+            lobby.getGame(gameName).setStartMoney((int)moneySlider.getValue());
+        } catch(RemoteException ex) {
             System.out.println(ex.getMessage());
         }
     }

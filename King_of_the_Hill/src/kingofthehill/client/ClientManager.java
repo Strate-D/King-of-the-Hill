@@ -5,6 +5,7 @@ import kingofthehill.domain.*;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import kingofthehill.lobby.ILobby;
 
 /**
  * Class that manages the rmi connection of the client
@@ -13,10 +14,10 @@ import java.rmi.registry.Registry;
  */
 public class ClientManager {
 
-    private IGameManager gm;
+    private ILobby lobby;
     private Registry registry = null;
     private final int portNumber = 9999;
-    private static final String bindingName = "GameInfo";
+    private static final String bindingName = "Lobby";
     private final String ipAddress;
 
     public static VoiceClient AudioChat;
@@ -33,7 +34,6 @@ public class ClientManager {
     /**
      * Tries to locate registery and bind the gamemanager
      *
-     * @param startVoiceClient
      * @return true if the registery is located and the gamemanager is bound,
      * else false
      */
@@ -73,22 +73,22 @@ public class ClientManager {
          */
         if (registry != null) {
             try {
-                gm = (IGameManager) registry.lookup(bindingName);
+                lobby = (ILobby) registry.lookup(bindingName);
             } catch (RemoteException ex) {
                 System.out.println("Client: Cannot bind gamemanager");
                 System.out.println("Client: RemoteException: " + ex.getMessage());
-                gm = null;
+                lobby = null;
             } catch (NotBoundException ex) {
                 System.out.println("Client: Cannot bind gamemanager");
                 System.out.println("Client: NotBoundException: " + ex.getMessage());
-                gm = null;
+                lobby = null;
             }
         }
 
         /**
          * Print result binding gamemanager
          */
-        if (gm != null) {
+        if (lobby != null) {
             System.out.println("Client: Gamemanager bound");
         } else {
             System.out.println("Client: Gamemanager is null pointer");
@@ -108,13 +108,22 @@ public class ClientManager {
     }
 
     /**
+     * Returns the GameManager
      *
-     * @return
+     * @return The GameManager object
      */
-    public IGameManager getGameManager() {
-        return this.gm;
+    public ILobby getLobby() {
+        return this.lobby;
     }
 
+    /**
+     * Setup the audiochat audio format and the VoiceClient
+     *
+     * @param ipAddress IPAddress of the server
+     * @param port The port of the server
+     * @param username The username used to connect
+     * @return true if the setup was successfull; otherwise false
+     */
     public static boolean setupAudioChat(String ipAddress, int port, String username) {
         if (ClientManager.AudioChat == null) {
             ClientManager.AudioChat = new VoiceClient(ipAddress, port, username);
@@ -129,6 +138,11 @@ public class ClientManager {
         return true;
     }
 
+    /**
+     * Checks if the AudioChat is active and running
+     *
+     * @return true if the VoiceChat is running; otherwise false
+     */
     public static boolean isAudioChatRunning() {
         if (ClientManager.AudioChat != null) {
             if (ClientManager.AudioChat.isStarted()) {

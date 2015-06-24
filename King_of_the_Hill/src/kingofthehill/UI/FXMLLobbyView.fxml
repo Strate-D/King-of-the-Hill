@@ -44,12 +44,12 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="labelPlayer2" layoutX="210.0" layoutY="98.0" text="Wachten op nieuwe speler...">
+            <Label fx:id="labelPlayer2" layoutX="210.0" layoutY="98.0" text="Label">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="labelPlayer3" layoutX="209.0" layoutY="131.0" text="Wachten op nieuwe speler...">
+            <Label fx:id="labelPlayer3" layoutX="209.0" layoutY="131.0" text="Label">
                <font>
                   <Font size="24.0" />
                </font>
@@ -64,7 +64,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="labelPlayer4" layoutX="209.0" layoutY="162.0" text="Wachten op nieuwe speler...">
+            <Label fx:id="labelPlayer4" layoutX="209.0" layoutY="162.0" text="Label">
                <font>
                   <Font size="24.0" />
                </font>
@@ -84,9 +84,9 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label id="lblStartRes" layoutX="201.0" layoutY="343.0" text="lblStartRes" />
-            <Slider id="sliderResAtStart" layoutX="287.0" layoutY="345.0" max="200.0" min="50.0" />
-            <ComboBox fx:id="choiceBoxGameMode" layoutX="201.0" layoutY="369.0" onAction="#handleGameModeChanged" prefWidth="150.0" />
+            <Label id="lblStartRes" fx:id="lblStartRes" layoutX="201.0" layoutY="343.0" text="100" />
+            <Slider id="sliderResAtStart" fx:id="moneySlider" layoutX="287.0" layoutY="345.0" max="200.0" min="20.0" showTickMarks="true" value="100.0" />
+            <ChoiceBox id="cbGameMode" layoutX="203.0" layoutY="369.0" prefHeight="25.0" prefWidth="224.0" />
          </children>
       </Pane>
    </children>

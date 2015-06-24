@@ -63,6 +63,7 @@ public class Base implements Serializable {
         try {
             return this.lanes[index];
         } catch (Exception ex) {
+            System.out.println("kingofthehill.domain.Base getLane(): " + ex.getMessage());
             return null;
         }
     }
@@ -84,6 +85,7 @@ public class Base implements Serializable {
                 return false;
             }
         } catch (Exception ex) {
+            System.out.println("kingofthehill.domain.Base setLane(): " + ex.getMessage());
             return false;
         }
     }
@@ -99,6 +101,7 @@ public class Base implements Serializable {
         try {
             return this.units[index];
         } catch (Exception ex) {
+            System.out.println("kingofthehill.domain.Base getUnit(): " + ex.getMessage());
             return null;
         }
     }
@@ -132,6 +135,7 @@ public class Base implements Serializable {
                 return false;
             }
         } catch (Exception ex) {
+            System.out.println("kingofthehill.domain.Base setUnit(): " + ex.getMessage());
             return false;
         }
     }
@@ -173,14 +177,14 @@ public class Base implements Serializable {
 
     /**
      * Gets the unit index of the defence unit
-     * 
+     *
      * @param unit Can be null
-     * @return The index of the unit, 0 - 15 for lane where this base is baseEnd1
-     * is -1 when unit not found.
+     * @return The index of the unit, 0 - 15 for lane where this base is
+     * baseEnd1 is -1 when unit not found.
      */
     public int getUnitIndex(Unit unit) {
-        for (int i = 0;  i <= 32; i++) {
-            if(unit == this.units[i]){
+        for (int i = 0; i <= 32; i++) {
+            if (unit == this.units[i]) {
                 return i;
             }
         }
@@ -230,13 +234,14 @@ public class Base implements Serializable {
 
         return lanes[lane];
     }
-    
+
     /**
      * Sets a new owner to the base
+     *
      * @param player The new owner, not null
      */
     public void setOwner(IPlayer player) {
-        if(player != null) {
+        if (player != null) {
             this.owner = player;
         }
     }

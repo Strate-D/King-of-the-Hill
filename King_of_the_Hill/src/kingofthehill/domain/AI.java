@@ -4,7 +4,6 @@
 package kingofthehill.domain;
 
 import java.io.Serializable;
-import static java.lang.System.gc;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -97,11 +96,6 @@ public class AI implements IPlayer, Serializable {
     @Override
     public int getScore() {
         return this.score;
-    }
-
-    @Override
-    public boolean checkPassword(String password) {
-        return true;
     }
 
     @Override
@@ -225,7 +219,7 @@ public class AI implements IPlayer, Serializable {
      *
      * @param type The new type of AI
      */
-    public void setAIType(AIState type) {
+    public final void setAIType(AIState type) {
         /**
          * Set the values for random choices a.k.a. How much chance is there to
          * spawn defence for AI type Total value must be 100 to work correctly
@@ -233,13 +227,10 @@ public class AI implements IPlayer, Serializable {
          */
         if (type == AIState.DEFENSIVE) {
             this.chances = new double[]{60.0, 20.0, 8.0, 5.0, 7.0};
-            //this.chances = new double[]{65.0, 20.0, 10.0, 5.0};
         } else if (type == AIState.AGRESSIVE) {
             this.chances = new double[]{10.0, 65.0, 13.0, 7.0, 5.0};
-            //this.chances = new double[]{12.5, 70.0, 12.5, 5.0};
         } else if (type == AIState.MODERNATE) {
             this.chances = new double[]{35.0, 42.5, 10.5, 6.0, 6.0};
-            //this.chances = new double[]{40.0, 40.0, 15.0, 5.0};
         }
 
         /**
@@ -843,11 +834,19 @@ public class AI implements IPlayer, Serializable {
             } else {
                 return false;
             }
+        } else if (unit == UnitType.RESOURCE) {
+            if (this.stepsSinceLastResource <= 0) {
+                this.stepsSinceLastResource = 0;
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            if (this.stepsSinceLastDefence <= 0 && this.stepsSinceLastMelee <= 0 && this.stepsSinceLastRanged <= 0) {
+            if (this.stepsSinceLastDefence <= 0 && this.stepsSinceLastMelee <= 0 && this.stepsSinceLastRanged <= 0 && this.stepsSinceLastResource <= 0) {
                 this.stepsSinceLastDefence = 0;
                 this.stepsSinceLastMelee = 0;
                 this.stepsSinceLastRanged = 0;
+                this.stepsSinceLastResource = 0;
                 return true;
             } else {
                 return false;
@@ -930,17 +929,24 @@ public class AI implements IPlayer, Serializable {
 
     @Override
     public int getConnectionTimer() {
+        /**
+         * Not needed for AI, do nothing
+         */
         return -1;
     }
 
     @Override
     public void resetConnectionTimer() {
-        //Do nothing
+        /**
+         * Not needed for AI, do nothing
+         */
     }
 
     @Override
     public void lowerConnectionTimer() {
-        //Do nothing
+        /**
+         * Not needed for AI, do nothing
+         */
     }
     
     @Override
@@ -960,5 +966,10 @@ public class AI implements IPlayer, Serializable {
         if(newAmount >= 0) {
             this.money = newAmount;
         }
+    }
+
+    @Override
+    public boolean checkPassword(String password) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

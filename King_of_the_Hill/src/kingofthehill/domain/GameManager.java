@@ -13,8 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import kingofthehill.unitinfo.UnitInfo;
 import kingofthehill.upgradeinfo.UpgradeInfo;
 
@@ -26,6 +24,7 @@ import kingofthehill.upgradeinfo.UpgradeInfo;
  */
 public class GameManager extends UnicastRemoteObject implements IGameManager {
 
+    private String name;
     private List<IPlayer> players;
     private List<String> readyPlayers;
     private Mysterybox mysterybox;
@@ -39,19 +38,22 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     private GameMode gameMode;
     private int startMoney;
 
-    private boolean DebugLevelAI = false;
-
     /**
      * Creates a new gameManager, also creating a new game with it.
      *
+     * @param name name of the game
      * @throws java.rmi.RemoteException
      */
-    public GameManager() throws RemoteException {
+    public GameManager(String name) throws RemoteException {
+        this.name = name;
+        this.players = new ArrayList<>();
+        this.readyPlayers = new ArrayList<>();
+        this.readyGame = false;
+        this.gameInfo = new GameInfo();
+
         /**
          * Set resourceTimer to 0
          */
-        this.players = new ArrayList<>();
-        this.readyPlayers = new ArrayList<>();
         this.resourceTimer = 0;
         this.mysteryboxTimer = 0;
         this.mysteryboxTime = 0;
@@ -59,6 +61,11 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         this.gameInfo = new GameInfo();
         this.gameMode = GameMode.COOP;
         this.startMoney = 100;
+        
+        /**
+         * Update gameinfo for the first time
+         */
+        gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
     }
 
     @Override
@@ -66,7 +73,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         /**
          * Check input
          */
-        if (player != null) {
+        if (player != null && players.size() < 4) {
             if (isAi) {
                 AI ai;
                 int count = 1;
@@ -159,7 +166,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     }
 
     @Override
-    public boolean getPlayerReady(String player) {
+    public synchronized boolean getPlayerReady(String player) {
         /**
          * Check if player with name is ready
          */
@@ -168,7 +175,6 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -261,25 +267,37 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
 
     @Override
     public synchronized void sendPlayerSignal(String playername) throws RemoteException {
-        //Get the player
+        /**
+         * Get the player
+         */
         IPlayer player = this.getPlayer(playername);
-        //Set hearthbeat
+        /**
+         * Set hearthbeat
+         */
         player.resetConnectionTimer();
     }
 
     @Override
     public synchronized void setPlayerToAI(String playername) throws RemoteException {
-        //Create new AI
+        /**
+         * Create new AI
+         */
         AI newPlayer = new AI("AI" + playername);
 
-        //Get old player
+        /**
+         * Get old player
+         */
         IPlayer oldPlayer = this.getPlayer(playername);
 
-        //Give all upgrades to new player
+        /**
+         * Give all upgrades to new player
+         */
         for (Upgrade u : oldPlayer.getUpgrades()) {
             newPlayer.addUpgrade(u);
         }
-        //Give the units
+        /**
+         * Give the units
+         */
         for (Lane l : oldPlayer.getBase().getLanes()) {
             for (Unit u : l.getUnits()) {
                 if (u.getOwner() == oldPlayer) {
@@ -292,14 +310,23 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
                 u.setOwner(newPlayer);
             }
         }
-        //Give the player the base
+
+        /**
+         * Give the player the base
+         */
         oldPlayer.getBase().setOwner(newPlayer);
         newPlayer.setBase(oldPlayer.getBase());
-        //Set type
+
+        /**
+         * Set type
+         */
         newPlayer.setAIType(AIState.AGRESSIVE);
         //Get the money
         newPlayer.setMoney(oldPlayer.getMoney());
-        //Add to the list and remove old one
+
+        /**
+         * Add to the list and remove old one
+         */
         this.players.set(this.players.indexOf(oldPlayer), newPlayer);
         System.out.println("Replaced player!");
     }
@@ -371,6 +398,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
                                 }
                             }
                         } catch (Exception ecx) {
+                            System.out.println("kingofthehill.domain.GameManager operateUnits(): " + ecx.getMessage());
                         }
                     }
 
@@ -386,6 +414,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
                             }
                         }
                     } catch (Exception ecx) {
+                        System.out.println("kingofthehill.domain.GameManager operateUnits(): " + ecx.getMessage());
                     }
                 }
             }
@@ -412,6 +441,9 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         return list.iterator();
     }
 
+    /**
+     * Generate a new Mysterybox
+     */
     private void generateMysterybox() {
         Random r = new Random();
         UnitType unitType = null;
@@ -475,10 +507,14 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
      * Does a step in the game (1/60 of a second).
      */
     private synchronized void doStep() {
-        //Create game info for clients
+        /**
+         * Update game info for clients
+         */
         gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
 
-        //Check player connections
+        /**
+         * Check player connections
+         */
         for (IPlayer p : this.players) {
             p.lowerConnectionTimer();
             if (p.getConnectionTimer() == 0) {
@@ -535,8 +571,6 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
                         higestBidder.addMoney(mysterybox.getResourceAmount());
                     } else if (mysterybox.getUpgrade() != null) {
                         higestBidder.addUpgrade(mysterybox.getUpgrade());
-                    } else if (mysterybox.getUnitType() != null) {
-                        //todo
                     }
                 }
                 mysterybox = null;
@@ -562,7 +596,9 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
                     munnie += 2;
                 }
             }
-            //Check if give to player or to teammate
+            /**
+             * Check if give to player or to teammate
+             */
             if (this.gameMode == GameMode.COOP) {
                 if (p.getBase().getHealthPoints() != 0) {
                     p.addMoney(munnie);
@@ -591,7 +627,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
          * Check input
          */
         if (player == null || player.getBase() == null || unit == null || index < 0 || index > 7 || cost < 1 || player.getBase().getHealthPoints() <= 0) {
-            return false;
+            throw new IllegalArgumentException("One or more parameters do not meet the prequisitions");
         }
 
         /**
@@ -740,5 +776,15 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     @Override
     public synchronized IGameInfo getGameInfo() throws RemoteException {
         return this.gameInfo;
+    }
+    
+    @Override
+    public String getName(){
+        return this.name;
+    }
+    
+    @Override
+    public String toString(){
+        return this.name + "- aantal actieve spelers: " + players.size() + "/4";
     }
 }

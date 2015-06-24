@@ -61,13 +61,8 @@ public class Player implements IPlayer, Serializable {
     }
 
     @Override
-    public boolean checkPassword(String password) {
-        throw new UnsupportedOperationException("Not supported yet");
-    }
-
-    @Override
-    public void addUpgrade(Upgrade upgrade) {
-        if (upgrade != null) {
+    public void addUpgrade(Upgrade upgrade){
+        if(upgrade != null){
             upgrades.add(upgrade);
         }
     }
@@ -166,6 +161,11 @@ public class Player implements IPlayer, Serializable {
         if(newAmount >= 0) {
             this.money = newAmount;
         }
+    }
+
+    @Override
+    public boolean checkPassword(String password) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ *
  */
 package kingofthehill.rmimultiplayer;
 
@@ -18,8 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -38,6 +34,15 @@ public class Client implements Serializable {
 
     private static int clientCounter = 0;
 
+    /**
+     * The constructor for a client. The server holds a list of Client objects.
+     * There objects run their own threads for reading and sending messages
+     *
+     * @param socket The socket on wich the client is connected
+     * @param knownClients The otherclients that are already connected
+     * @param parent The VoiceServer paren who controls all the other Client
+     * objects
+     */
     public Client(Socket socket, List<Client> knownClients, VoiceServer parent) {
         this.socket = socket;
         clientCounter += 1;
@@ -50,27 +55,45 @@ public class Client implements Serializable {
             sender = new ObjectOutputStream(this.socket.getOutputStream());
             reader = new ObjectInputStream(this.socket.getInputStream());
         } catch (Exception ex) {
+            System.out.printf("kingofthehill.rmimultiplayer.Client constructor: " + ex.getMessage());
         }
 
         try {
             sender.writeObject(new InfoMessage(this.clientID, "CLIENT_ID"));
         } catch (IOException ex) {
+            System.out.printf("kingofthehill.rmimultiplayer.Client constructor: " + ex.getMessage());
         }
 
         startMessageReader();
     }
 
+    /**
+     * Adds a new client to the list of the knownclients
+     *
+     * @param c The new client to add to the knownclients list
+     */
     public void addClient(Client c) {
         knownClients.add(c);
     }
 
+    /**
+     * Returns the socket on wich the client is connected
+     *
+     * @return The socket object
+     */
     public Socket getSocket() {
         return this.socket;
     }
 
+    /**
+     * Send a message to the current client
+     *
+     * @param message The message to send
+     */
     public void sendMessageToMyself(Message message) {
-        // Message contains a client id
-        // replace the client id for a name
+        /**
+         * Message contains a client id Replace the client id for a name
+         */
         if (message.getSender() == -10) {
             message.setSenderName("SERVER");
         }
@@ -92,8 +115,9 @@ public class Client implements Serializable {
             }
         }
 
-        // The message now has a client name
-        // Send the message
+        /**
+         * The message now has a client name Send the message
+         */
         try {
             if (!this.isAlive) {
                 return;
@@ -105,6 +129,10 @@ public class Client implements Serializable {
         }
     }
 
+    /**
+     * Start the Client Messages reader. This method handles the messages that
+     * are recieved from the client and sends them out to all the other clients
+     */
     private void startMessageReader() {
         Thread t = new Thread(() -> {
             while (isAlive) {
@@ -117,11 +145,17 @@ public class Client implements Serializable {
                 Message object = null;
                 try {
                     object = (Message) reader.readObject();
-                } catch (EOFException|SocketException ex) {
+                } catch (EOFException | SocketException ex) {
                     this.killClient();
-                } catch (Exception ex) {
+                } catch (IOException | ClassNotFoundException ex) {
+                    System.out.println("kingofthehill.rmimultiplayer.Client startMessageReader() @ ClientID(" + this.clientID + "): " + ex.getMessage());
                     continue;
-                } 
+                }
+
+                if (object == null) {
+                    System.out.println("kingofthehill.rmimultiplayer.Client startMessageReader() @ ClientID(" + this.clientID + "): " + "null object found");
+                    continue;
+                }
 
                 SimpleDateFormat dt = new SimpleDateFormat("hh:mm:ss");
 
@@ -129,30 +163,35 @@ public class Client implements Serializable {
 
                 if (object instanceof InfoMessage) {
                     InfoMessage mess = (InfoMessage) object;
-                    if (mess.getDefine().equals("CLIENT_NAME")) {
-                        System.out.print("\r<< Client(" + clientID + ") changed name from \'" + name + "\' to \'" + mess.getData() + "\' >>\n");
-                        name = (String) mess.getData();
-                        sendMessageToAll(new TextMessage(-10, name + " joined the game"));
-                        continue;
-                    } else if (mess.getDefine().equals("KICK_CLIENT")) {
-                        System.out.print("\r<< Client " + mess.getData() + " will be kicked >>\n");
-                        Client c = getClient((int) mess.getData());
-                        c.sendMessageToMyself(new InfoMessage(null, "KICK"));
-                        c.killClient();
-                        continue;
-                    } else if (mess.getDefine().equals("LEAVE_PARTY")) {
-                        this.sendMessageToAll(new TextMessage(-10, name + " left the game"));
-                        System.out.println(name + " left the game");
-                        this.killClient();
-                        continue;
-                    } else if (mess.getDefine().equals("GET_LAST_MESSAGES")) {
-                        System.out.println("\r<< Sending previous messages to client(" + mess.getSender() + ")");
-                        Client c = getClient((int) mess.getData());
-                        c.sendMessageToMyself(new InfoMessage(this.parent.getMessages(), "SEND_LAST_MESSAGES"));
-                        continue;
+                    switch (mess.getDefine()) {
+                        case "CLIENT_NAME":
+                            System.out.print("\r<< Client(" + clientID + ") changed name from \'" + name + "\' to \'" + mess.getData() + "\' >>\n");
+                            name = (String) mess.getData();
+                            sendMessageToAll(new TextMessage(-10, name + " joined the game"));
+                            continue;
+                        case "KICK_CLIENT": {
+                            System.out.print("\r<< Client " + mess.getData() + " will be kicked >>\n");
+                            Client c = getClient((int) mess.getData());
+                            c.sendMessageToMyself(new InfoMessage(null, "KICK"));
+                            c.killClient();
+                            continue;
+                        }
+                        case "LEAVE_PARTY":
+                            this.sendMessageToAll(new TextMessage(-10, name + " left the game"));
+                            System.out.println(name + " left the game");
+                            this.killClient();
+                            continue;
+                        case "GET_LAST_MESSAGES": {
+                            System.out.println("\r<< Sending previous messages to client(" + mess.getSender() + ")");
+                            Client c = getClient((int) mess.getData());
+                            c.sendMessageToMyself(new InfoMessage(this.parent.getMessages(), "SEND_LAST_MESSAGES"));
+                            continue;
+                        }
                     }
                 } else if (object instanceof AudioMessage) {
-
+                    /**
+                     * If there was an AudioMessage send, do not do anything
+                     */
                 } else {
                     this.parent.addMessage(object);
                 }
@@ -162,6 +201,7 @@ public class Client implements Serializable {
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException ex) {
+                    System.out.println("kingofthehill.rmimultiplayer.Client startMessageReader() @ ClientID(" + this.clientID + "): " + ex.getMessage());
                 }
 
                 gc();
@@ -172,6 +212,11 @@ public class Client implements Serializable {
         t.start();
     }
 
+    /**
+     * Sends a message to all known clients
+     *
+     * @param message The message to send
+     */
     private void sendMessageToAll(Message message) {
         for (Client c : knownClients) {
             c.sendMessageToMyself(message);
@@ -182,6 +227,12 @@ public class Client implements Serializable {
         }
     }
 
+    /**
+     * Return the Client object retrieved from an id
+     *
+     * @param id The id of the client to find
+     * @return The found client object
+     */
     private Client getClient(int id) {
         if (id == this.clientID) {
             return this;
@@ -199,16 +250,26 @@ public class Client implements Serializable {
         return null;
     }
 
+    /**
+     * Removes a client from the known clients list
+     *
+     * @param toRemove The client object to remove
+     */
     public void removeClient(Client toRemove) {
         this.knownClients.remove(toRemove);
     }
 
+    /**
+     * Kills the current client. It removes itself from the VoiceServer client
+     * list
+     */
     public void killClient() {
         try {
             this.isAlive = false;
             this.socket.close();
             this.parent.removeClient(this);
         } catch (Exception ex) {
+            System.out.println("kingofthehill.rmimultiplayer.Client killClient() @ ClientID(" + this.clientID + "): " + ex.getMessage());
         }
     }
 }

@@ -349,7 +349,9 @@ public abstract class Unit implements Serializable {
      */
     public void setPosition(int newPos) {
         if (newPos < 0 || newPos >= 1000) {
-            //do nothing
+            /**
+             * Do nothing, reached base
+             */
         } else {
             this.position = newPos;
         }

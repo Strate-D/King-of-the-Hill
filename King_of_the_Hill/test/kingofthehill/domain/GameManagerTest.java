@@ -23,7 +23,7 @@ public class GameManagerTest
         
         //default value
         Player bas = new Player("Bas", 100);
-        GameManager gm = new GameManager();
+        GameManager gm = new GameManager(bas.getName());
                 
         // normal test
         assertEquals(bas, gm.getPlayers().get(0));
@@ -36,14 +36,14 @@ public class GameManagerTest
         
         // normal test
         AI rick = new AI("Rick");
-        gm = new GameManager();
+        gm = new GameManager(rick.getName());
         assertEquals(rick, gm.getPlayers().get(0));
         assertEquals(1, gm.getPlayers().get(0).getTeam().getNr());
         
         // fail test
         try
         {
-            gm = new GameManager();
+            gm = new GameManager(rick.getName());
             fail("GameManager cannot have an null player");
         }
         catch (IllegalArgumentException ecx) {}
@@ -54,7 +54,7 @@ public class GameManagerTest
         // create values
         IPlayer ai = new AI("AI1");
         Unit def = new Defence(10, 10, 10, ai);
-        GameManager gm = new GameManager();
+        GameManager gm = new GameManager(ai.getName());
         Base base1 = new Base(ai);
         IPlayer player = new Player("Henkie", 100);
         Base base2 = new Base(player);
@@ -79,7 +79,7 @@ public class GameManagerTest
         // create values
         IPlayer ai = new AI("AI1");
         Unit def = new Defence(10, 10, 10, ai);
-        GameManager gm = new GameManager();
+        GameManager gm = new GameManager(ai.getName());
         Base base = new Base(ai);
         
         // normal test

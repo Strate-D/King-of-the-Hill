@@ -14,11 +14,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import kingofthehill.UI.FXMLLobbyViewController;
 
 /**
+ * The VoiceClient recieves audio and text messages from the server
  *
  * @author Bas
  */
@@ -50,22 +49,24 @@ public class VoiceClient {
         this.clientStarted = false;
     }
 
-    public void start() throws IOException {
-        //Scanner input = new Scanner(System.in);
-        //System.out.print("Client: Enter IP address of server: ");
-        String serverAddress = ip; //= input.nextLine();
-
-        socket = new Socket(serverAddress, port);
-        sender = new ObjectOutputStream(this.socket.getOutputStream());
-        reader = new ObjectInputStream(this.socket.getInputStream());
-
-        //System.out.print("Client: Enter a nickname for the chat: ");
-        String name = this.nickname; //= input.nextLine();
-        if (name.equals("")) {
-            name = "Ballenzuiger";
+    /**
+     * Starts the VoiceServer threads for receiving and sending messages
+     */
+    public void start() {
+        String serverAddress = ip;
+        try {
+            socket = new Socket(serverAddress, port);
+            sender = new ObjectOutputStream(this.socket.getOutputStream());
+            reader = new ObjectInputStream(this.socket.getInputStream());
+        } catch (IOException ex) {
+            System.out.println("kingofthehill.client.VoiceClient start(): " + ex.getMessage());
         }
 
-        // Create an audio player
+        String name = this.nickname;
+
+        /**
+         * Create an audio player
+         */
         try {
             audioPlayer.play();
         } catch (Exception ex) {
@@ -74,75 +75,84 @@ public class VoiceClient {
 
         startMessageReader();
 
-        sender.writeObject(new InfoMessage(name, "CLIENT_NAME"));
+        try {
+            sender.writeObject(new InfoMessage(name, "CLIENT_NAME"));
+        } catch (IOException ex) {
+            System.out.println("kingofthehill.client.VoiceClient start(): " + ex.getMessage());
+        }
 
         this.clientStarted = true;
     }
 
+    /**
+     * Starts the thread for the messages reader
+     */
     private void startMessageReader() {
         Thread t = new Thread(() -> {
+            OUTER:
             while (true) {
-                Message object = null;
+                Message object;
                 try {
                     object = (Message) reader.readObject();
                 } catch (IOException | ClassNotFoundException ex) {
+                    System.out.println("kingofthehill.client.VoiceClient startMessageReader(): " + ex.getMessage());
                     continue;
                 }
-
                 if (object instanceof InfoMessage) {
                     InfoMessage mess = (InfoMessage) object;
-                    if (mess.getDefine().equals("CLIENT_ID")) {
-                        this.clientID = (int) mess.getData();
-                        this.printMessage("<< ClientID received from server >>");
-                        try {
-                            sender.writeObject(new InfoMessage(this.clientID, "GET_LAST_MESSAGES"));
-                        } catch (IOException ex) {
-                        }
-                        continue;
-                    } else if (mess.getDefine().equals("KICK")) {
-                        this.printMessage("<< The host kicked you >>");
-                        break;
-                    } else if (mess.getDefine().equals("SEND_LAST_MESSAGES")) {
-                        this.printMessage("<< Printing previous messages from server >>");
-                        for (Message m : (List<Message>) mess.getData()) {
+                    switch (mess.getDefine()) {
+                        case "CLIENT_ID":
+                            this.clientID = (int) mess.getData();
+                            this.printMessage("<< ClientID received from server >>");
                             try {
-                                this.printMessage(
-                                        (m.getTime() == null ? "never" : m.getTime()) + ": "
-                                        + m.getSenderName() + " says: " + m.getData());
-                            } catch (Exception ex) {
-                                this.printMessage(ex.getMessage());
+                                sender.writeObject(new InfoMessage(this.clientID, "GET_LAST_MESSAGES"));
+                            } catch (IOException ex) {
+                                System.out.println("kingofthehill.client.VoiceClient startMessageReader(): " + ex.getMessage());
                             }
-                        }
-                        continue;
+                            continue;
+                        case "KICK":
+                            this.printMessage("<< The host kicked you >>");
+                            break OUTER;
+                        case "SEND_LAST_MESSAGES":
+                            this.printMessage("<< Printing previous messages from server >>");
+                            for (Message m : (List<Message>) mess.getData()) {
+                                try {
+                                    this.printMessage(
+                                            (m.getTime() == null ? "never" : m.getTime()) + ": "
+                                            + m.getSenderName() + " says: " + m.getData());
+                                } catch (Exception ex) {
+                                    this.printMessage(ex.getMessage());
+                                }
+                            }
+                            continue;
                     }
                 } else if (object instanceof AudioMessage) {
-                    //Send the audio message to the speakers
+                    /**
+                     * Send the audio message to the speakers
+                     */
                     audioPlayer.addAudioMessage((AudioMessage) object);
                     continue;
                 }
-
                 if (this.parent != null) {
                     this.printMessage(object.getTime() + ": " + object.getSenderName() + " says: " + object.getData());
                 }
-//                System.out.print("\r" + object.getTime() + ": " + object.getSenderName() + " says: ");
-//                System.out.println(object.getData());
-//                System.out.print(">");
-
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException ex) {
-                    //Logger.getLogger(VoiceClient.class.getName()).log(Level.SEVERE, null, ex);
                     this.printMessage(ex.getMessage());
                 }
             }
 
             audioPlayer.stopPlayback();
-
-            //System.exit(0);
         });
         t.start();
     }
 
+    /**
+     * Sends a message to the server
+     *
+     * @param message The message to send
+     */
     public void sendMessage(Message message) {
 
         if (message instanceof TextMessage) {
@@ -168,38 +178,68 @@ public class VoiceClient {
 
                 sender.writeObject(message);
             } catch (Exception ex) {
-
+                System.out.println("kingofthehill.rmimultiplayer.VoiceServer sendMessage(): " + ex.getMessage());
             }
         } else {
             try {
                 sender.writeObject(message);
             } catch (IOException ex) {
+                System.out.println("kingofthehill.rmimultiplayer.VoiceServer sendMessage(): " + ex.getMessage());
             }
+
         }
     }
 
+    /**
+     * Returns the current clientID
+     *
+     * @return The clientID
+     */
     public int getClientId() {
         return this.clientID;
     }
 
+    /**
+     * Returns if the client is started recieving messages
+     *
+     * @return true if the client started; otherwise false
+     */
     public boolean isStarted() {
         return this.clientStarted;
     }
 
+    /**
+     * The FXML application for printing the output messages
+     *
+     * @param value The FXML Controller for the window
+     */
     public void setParent(FXMLLobbyViewController value) {
         this.parent = value;
     }
 
+    /**
+     * Prints a message to the FXML application
+     *
+     * @param message The message to print
+     */
     void printMessage(String message) {
         if (this.parent != null) {
             this.parent.printMessage(message);
         }
     }
 
+    /**
+     * Checks if the microphone is started
+     *
+     * @return true if the microphone is started; otherwise false
+     */
     public boolean isAudioCaptureStarted() {
         return this.audioCapturer.isRunning();
     }
 
+    /**
+     * Enable the microphone for capturing audio
+     */
     public void startAudioCapture() {
         try {
             this.audioCapturer.startCapture();
@@ -207,6 +247,9 @@ public class VoiceClient {
         }
     }
 
+    /**
+     * Disable the microphone for audio capture
+     */
     public void stopAudioCapture() {
         this.audioCapturer.stopCapture();
     }
