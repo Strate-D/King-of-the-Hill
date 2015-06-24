@@ -307,19 +307,36 @@ public abstract class Unit implements Serializable {
         if (lane != null) {
             if (lane.getBaseEnd1().getOwner() == this.getOwner()) {
                 this.position += this.getMovementSpeed();
-            } else {
+            } else if (lane.getBaseEnd2().getOwner() == this.getOwner()) {
                 this.position -= this.getMovementSpeed();
             }
 
             /**
-             * Check if unit has reached the base, if so, do damage
+             * Check if unit has reached the base, if so, do damage If Gamemode
+             * FFA and enemy base destroyed, place unit to next base
              */
             if (this.position > 1000) {
-                lane.getBaseEnd2().receiveDamage(this.getAttack());
-                this.killUnit();
+                if (lane.getBaseEnd2().getHealthPoints() != 0 || owner.getGameMode() != GameMode.F4A) {
+                    lane.getBaseEnd2().receiveDamage(this.getAttack());
+                    this.killUnit();
+                } else {
+                    int index = lane.getBaseEnd2().getLanes().indexOf(lane);
+                    Lane newLane = lane.getBaseEnd2().getLane(index - 4);
+                    this.setLane(newLane);
+                    this.setPosition(0);
+                    this.setOwner(lane.getBaseEnd2().getOwner());
+                }
             } else if (this.position < 0) {
-                lane.getBaseEnd1().receiveDamage(this.getAttack());
-                this.killUnit();
+                if (lane.getBaseEnd1().getHealthPoints() != 0 || owner.getGameMode() != GameMode.F4A) {
+                    lane.getBaseEnd1().receiveDamage(this.getAttack());
+                    this.killUnit();
+                } else {
+                    int index = lane.getBaseEnd1().getLanes().indexOf(lane);
+                    Lane newLane = lane.getBaseEnd1().getLane(index + 4);
+                    this.setLane(newLane);
+                    this.setPosition(1000);
+                    this.setOwner(lane.getBaseEnd1().getOwner());
+                }
             }
         }
     }

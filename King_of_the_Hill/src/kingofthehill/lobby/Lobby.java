@@ -113,6 +113,7 @@ public class Lobby extends UnicastRemoteObject implements ILobby {
         return stringGames;
     }
 
+
     /**
      * Checks if name of new game already exists in the list of games
      *

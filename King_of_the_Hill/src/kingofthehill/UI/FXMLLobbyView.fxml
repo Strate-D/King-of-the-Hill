@@ -84,10 +84,9 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label id="lblStartRes" fx:id="lblStartRes" layoutX="201.0" layoutY="343.0" text="lblStartRes" />
-            <Slider id="sliderResAtStart" fx:id="moneySlider" layoutX="287.0" layoutY="345.0" max="200.0" min="50.0" />
-            <ChoiceBox id="cbGameMode" layoutX="287.0" layoutY="369.0" prefHeight="25.0" prefWidth="140.0" />
-            <Label id="lblGamemode" layoutX="201.0" layoutY="373.0" text="lblGamemode" />
+            <Label id="lblStartRes" fx:id="lblStartRes" layoutX="201.0" layoutY="343.0" text="100" />
+            <Slider id="sliderResAtStart" fx:id="moneySlider" layoutX="287.0" layoutY="345.0" max="200.0" min="20.0" showTickMarks="true" value="100.0" />
+            <ComboBox fx:id="choiceBoxGameMode" layoutX="201.0" layoutY="369.0" onAction="#handleGameModeChanged" prefHeight="25.0" prefWidth="222.0" />
          </children>
       </Pane>
    </children>

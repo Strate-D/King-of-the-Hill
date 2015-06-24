@@ -13,13 +13,18 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
@@ -27,6 +32,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import kingofthehill.client.ClientManager;
+import kingofthehill.domain.GameMode;
 import kingofthehill.lobby.ILobby;
 import kingofthehill.rmimultiplayer.IGameInfo;
 import kingofthehill.rmimultiplayer.TextMessage;
@@ -63,6 +69,9 @@ public class FXMLLobbyViewController implements Initializable {
     private Label labelPlayer4;
 
     @FXML
+    private ComboBox choiceBoxGameMode;
+
+    @FXML
     private Label lblStartRes;
 
     @FXML
@@ -81,6 +90,10 @@ public class FXMLLobbyViewController implements Initializable {
         }
 
         ClientManager.AudioChat.setParent(this);
+
+        //Fill combobox
+        choiceBoxGameMode.getItems().add("2 versus 2");
+        choiceBoxGameMode.getItems().add("Free for all");
 
         try {
             ClientManager.AudioChat.start();
@@ -152,7 +165,6 @@ public class FXMLLobbyViewController implements Initializable {
                                     } else {
                                         labelPlayer3.setText("Wachten op nieuwe speler...");
                                     }
-
                                     if (gameInfo.getPlayerName(3) != null) {
                                         labelPlayer4.setText(gameInfo.getPlayerName(3) + readyString(lobby.getGame(gameName).getPlayerReady(gameInfo.getPlayerName(3))));
                                     } else {
@@ -161,16 +173,53 @@ public class FXMLLobbyViewController implements Initializable {
                                 } catch (RemoteException ex) {
                                     Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
+
+                                //Check for UI values
+                                try {
+                                    if (lobby.getGame(gameName).getGameMode() == GameMode.COOP) {
+                                        if (!choiceBoxGameMode.getSelectionModel().isSelected(0)) {
+                                            choiceBoxGameMode.getSelectionModel().selectFirst();
+                                            System.out.println("Coop gamemode set!");
+                                        }
+                                    } else {
+                                        if (!choiceBoxGameMode.getSelectionModel().isSelected(1)) {
+                                            choiceBoxGameMode.getSelectionModel().selectLast();
+                                            System.out.println("F4a gamemode set!");
+                                        }
+                                    }
+                                    
+                                    if (lobby.getGame(gameName).getStartMoney() != (int)moneySlider.getValue()) {
+                                        moneySlider.setValue(lobby.getGame(gameName).getStartMoney());
+                                        lblStartRes.setText(lobby.getGame(gameName).getStartMoney() + "");
+                                    }
+                                } catch (RemoteException e) {
+                                    System.out.println(e.getMessage());
+                                }
                             }
                         });
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(200);
                         } catch (InterruptedException ex) {
                             System.out.println("kingofthehill.UI.FXMLLobbyViewController initialize(): " + ex.getMessage());
                         }
                     }
                 } catch (RemoteException ex) {
                     System.out.println("kingofthehill.UI.FXMLLobbyViewController initialize(): " + ex.getMessage());
+                }
+            }
+        });
+        
+        /**
+         * Add value property listener
+         */
+        moneySlider.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                Number old_val, Number new_val) {
+                    lblStartRes.setText(new_val.intValue() + "");
+                try {
+                    lobby.getGame(gameName).setStartMoney(new_val.intValue());
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FXMLLobbyViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -298,9 +347,28 @@ public class FXMLLobbyViewController implements Initializable {
         });
     }
 
+<<<<<<< HEAD
     public void leaveLobby() {
         Platform.runLater(() -> {
             handleQuitButton();
         });
+=======
+    /**
+     * Handle when game mode button changed
+     *
+     * @param e
+     */
+    public void handleGameModeChanged(ActionEvent e) {
+        try {
+            if (choiceBoxGameMode.getSelectionModel().isSelected(0)) {
+                lobby.getGame(gameName).setGameMode(GameMode.COOP);
+            } else {
+                lobby.getGame(gameName).setGameMode(GameMode.F4A);
+            }
+        } catch (RemoteException ex) {
+            System.out.println("Changing gamemode failed!");
+            System.out.println(ex.getMessage());
+        }
+>>>>>>> origin/3e-Iteratie
     }
 }
