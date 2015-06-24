@@ -119,4 +119,12 @@ public interface IGameManager extends Remote {
      * server
      */
     public void setPlayerToAI(String playername) throws RemoteException;
+    
+    /**
+     * Check if game is finished
+     * 
+     * @return 0 if game is running, 1 if there is only ai, 2 if team blue, 3 if team red won
+     * @throws RemoteException 
+     */
+    public int checkFinished() throws RemoteException;
 }

@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
+import kingofthehill.DB.DatabaseMediator;
 import kingofthehill.unitinfo.UnitInfo;
 import kingofthehill.upgradeinfo.UpgradeInfo;
 
@@ -35,6 +36,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
     private GameInfo gameInfo;
     private Timer timer;
     private boolean readyGame;
+    private int gameState;
 
     /**
      * Creates a new gameManager, also creating a new game with it.
@@ -48,6 +50,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         this.readyPlayers = new ArrayList<>();
         this.readyGame = false;
         this.gameInfo = new GameInfo();
+        this.gameState = 0;
 
         /**
          * Set resourceTimer to 0
@@ -62,6 +65,11 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
     }
 
+    @Override
+    public int checkFinished() throws RemoteException {
+        return this.gameState;
+    }
+    
     @Override
     public synchronized void addPlayer(String player, boolean isAi) throws RemoteException {
         /**
@@ -120,6 +128,7 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
          */
         if (player != null) {
             players.remove(getPlayer(player));
+            readyPlayers.remove(player);
         }
 
         /**
@@ -245,6 +254,19 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         timer.schedule(new GameLoop(), 0, 1000 / 30);
 
         readyGame = true;
+    }
+    
+    /**
+     * Stop the game
+     */
+    private void stopGame(){
+        timer.cancel();
+        
+        for(IPlayer p : players){
+            if(p instanceof Player){
+                DatabaseMediator.increaseScore(p.getName(), p.getScore());
+            }
+        }
     }
 
     @Override
@@ -502,20 +524,47 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         }
         player.doNextAction(this);
     }
+    
+    /**
+     * Gets the amount of ai in the game
+     * 
+     * @return amount of ai in the game
+     */
+    private int countAi(){
+        int count = 0;
+        
+        for(IPlayer p : players){
+            if(p instanceof AI){
+                count++;
+            }
+        }
+        
+        return count;
+    }
 
     /**
      * Does a step in the game (1/60 of a second).
      */
     private synchronized void doStep() {
         /**
-<<<<<<< HEAD
-         * Create game info for clients
-=======
+         * Check if game is finished, only for teams now
+         */     
+        if (players.get(0).getBase().getHealthPoints() == 0 && players.get(2).getBase().getHealthPoints() == 0) {
+            stopGame();
+            gameState = 1;
+        } else if (players.get(1).getBase().getHealthPoints() == 0 && players.get(3).getBase().getHealthPoints() == 0){
+            stopGame();
+            gameState = 2;
+        } else if (countAi() >= 4){
+            stopGame();
+            gameState = 3;
+        }
+            
+        /**
          * Update game info for clients
->>>>>>> origin/Overkoekende-lobby
          */
         gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
-
+      
         /**
          * Check player connections
          */

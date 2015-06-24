@@ -122,14 +122,14 @@ public class FXMLMultiPlayerViewController implements Initializable {
          * Get ip address of server
          */
         String ipAddress = King_of_the_Hill.context.getServerUrl();
-        
+
         String gameName = King_of_the_Hill.context.getGameName();
 
         ClientManager cm = new ClientManager(ipAddress);
 
         if (cm.locate()) {
             ILobby lobby = cm.getLobby();
-            
+
             try {
                 gm = lobby.getGame(gameName);
                 getGameInfo();
@@ -279,14 +279,22 @@ public class FXMLMultiPlayerViewController implements Initializable {
                     /**
                      * Check if game ended
                      */
-                    if (gameInfo.getPlayers().get(0).getBase().getHealthPoints() == 0 && gameInfo.getPlayers().get(2).getBase().getHealthPoints() == 0) {
+                    int gameState = 0;
+
+                    try {
+                        gameState = gm.checkFinished();
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    if (gameState == 1) {
                         canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
                         drawBackground();
                         drawField();
                         drawUnits();
                         canvas.getGraphicsContext2D().fillText("Team blue won!", 450, 450);
                         this.stop();
-                    } else if (gameInfo.getPlayers().get(1).getBase().getHealthPoints() == 0 && gameInfo.getPlayers().get(3).getBase().getHealthPoints() == 0) {
+                    } else if (gameState == 2) {
                         canvas.getGraphicsContext2D().setTransform(1, 0, 0, 1, 0, 0);
                         drawBackground();
                         drawField();
