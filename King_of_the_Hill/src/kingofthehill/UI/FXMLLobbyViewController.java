@@ -69,7 +69,7 @@ public class FXMLLobbyViewController implements Initializable {
     private Label labelPlayer4;
 
     @FXML
-    private ChoiceBox choiceBoxGameMode;
+    private ComboBox choiceBoxGameMode;
 
     @FXML
     private Label lblStartRes;
