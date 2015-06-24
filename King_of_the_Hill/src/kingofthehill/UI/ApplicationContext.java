@@ -33,10 +33,12 @@ class ApplicationContext {
             props.load(in);
         } catch (FileNotFoundException ex) {
             props.setProperty("name", "Player");
+            props.setProperty("faction", "melee");
             props.setProperty("url", "0.0.0.0");
             props.setProperty("game", "null");
         } catch (IOException ex) {
             props.setProperty("name", "Player");
+            props.setProperty("faction", "melee");
             props.setProperty("url", "0.0.0.0");
             props.setProperty("game", "null");
         }
@@ -122,9 +124,32 @@ class ApplicationContext {
         props.setProperty("url", newUrl);
         saveProps();
     }
-    
+
+    /**
+     * Gets the faction that the player prefers
+     *
+     * @return A string with the faction (Melee, ranged or defence)
+     */
+    public String getFaction() {
+        return props.getProperty("faction");
+    }
+
+    /**
+     * Sets the new preferred faction of the player and saves it to the
+     * properties file
+     *
+     * @param newFaction The new faction string, not null
+     */
+    public void setFaction(String newFaction) {
+        if (newFaction == null) {
+            return;
+        }
+        props.setProperty("faction", newFaction);
+    }
+
     /**
      * Gets the name of the game from the properties
+     *
      * @return name of game
      */
     public String getGameName() {

@@ -60,9 +60,10 @@ public interface IGameManager extends Remote {
      *
      * @param player name of the player to check
      * @return String unready if player is ready, else ready
-     * @throws RemoteException 
+     * @throws RemoteException
      */
     public boolean getPlayerReady(String player) throws RemoteException;
+    
     /**
      * Status of the game, if the game can be started
      *
@@ -85,24 +86,33 @@ public interface IGameManager extends Remote {
      */
     //Unit to unittype
     public boolean placeUnitAtBaseMulti(String playername, Unit unit, int index, int cost) throws RemoteException;
+    
+    public void setPlayerFaction(String playername, String faction) throws RemoteException;
+
+    public GameMode getGameMode() throws RemoteException;
+
+    public void setGameMode(GameMode newGameMode) throws RemoteException;
+
+    public void setStartMoney(int newAmount) throws RemoteException;
+
+    public int getStartMoney() throws RemoteException;
+    
+    public void bidMysteryboxMulti(String playername, int bid) throws RemoteException;
 
     /**
-     * Bid on mysterybox
-     *
-     * @param playername name of the player that bids on the mysterybox
-     * @param bid amount of resources
-     * @throws RemoteException If something goes wrong on communicating with the
-     * server
-     */
-    public void bidMysteryboxMulti(String playername, int bid) throws RemoteException;
-    
-    /**
      * Get name of game
+     *
      * @return name of game
-     * @throws RemoteException 
+     * @throws RemoteException
      */
     public String getName() throws RemoteException;
-    
+
+    /**
+     * Resets the hearthbeat of the player
+     *
+     * @param playername name of the player
+     * @throws RemoteException
+     */
     public void sendPlayerSignal(String playername) throws RemoteException;
 
     /**

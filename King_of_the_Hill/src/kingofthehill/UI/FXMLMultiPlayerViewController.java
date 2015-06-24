@@ -133,6 +133,8 @@ public class FXMLMultiPlayerViewController implements Initializable {
             try {
                 gm = lobby.getGame(gameName);
                 getGameInfo();
+                //Set player faction
+                gm.setPlayerFaction(King_of_the_Hill.context.getPlayerName(), King_of_the_Hill.context.getFaction());
             } catch (RemoteException ex) {
                 Logger.getLogger(FXMLMultiPlayerViewController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -646,7 +648,7 @@ public class FXMLMultiPlayerViewController implements Initializable {
                 && lastRealMousePosy >= 90 && lastRealMousePosy <= 120 && defenceCooldown <= 0) {
             selectedUnit = UnitInfo.getDefenceUnit(gameInfo.getPlayers().get(0));
         } else if (lastRealMousePosx >= 125 && lastRealMousePosx <= 155
-                && lastRealMousePosy >= 125 && lastRealMousePosy <= 155 && defenceCooldown <= 0) {
+                && lastRealMousePosy >= 125 && lastRealMousePosy <= 155 && resourceCooldown <= 0) {
             selectedUnit = UnitInfo.getResourceUnit(gameInfo.getPlayers().get(0));
         }
         /**
