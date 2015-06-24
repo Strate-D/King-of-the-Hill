@@ -18,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import kingofthehill.DB.DatabaseMediator;
@@ -33,21 +34,42 @@ public class FXMLHighscoreViewController implements Initializable {
     private AnchorPane content;
     
     @FXML
+    private Label lblScore;
+    
+    @FXML
+    private Label lblName;
+    
+    @FXML
     private ListView<String> lvHighscore;
+    
+    @FXML
+    private ListView<String> lvHighscoreNum;
     
     ObservableList<String> highscores;
 
+    ObservableList<String> highscoresNum;
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         highscores = FXCollections.observableArrayList();
+        highscoresNum = FXCollections.observableArrayList();
         lvHighscore.setItems(highscores);
-        
+        lvHighscoreNum.setItems(highscoresNum);
+
+        int num = 1;
         List<IPlayer> players = DatabaseMediator.getHighscores();
         for(IPlayer p : players){
-            highscores.add(p.getName() + "\t" + "Score: " +  p.getExp());
+            highscores.add(num + ". "+ p.getName());
+            highscoresNum.add("" + p.getScore());
+            /*
+            // Single List view option
+            highscores.add(num + ". " + p.getName() + "\t" p.getScore());
+            
+            */
+            num++;
+
         }
     }    
 
