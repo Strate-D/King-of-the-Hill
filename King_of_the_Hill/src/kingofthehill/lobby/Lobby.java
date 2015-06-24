@@ -78,7 +78,7 @@ public class Lobby extends UnicastRemoteObject implements ILobby {
     public synchronized void joinGame(String name, String playername) throws RemoteException {
         try {
             if (name != null && playername != null) {
-                getGame(name).addPlayer(playername, true);
+                getGame(name).addPlayer(playername, false);
             }
         } catch (RemoteException ex) {
             Logger.getLogger(Lobby.class.getName()).log(Level.SEVERE, null, ex);

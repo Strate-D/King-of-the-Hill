@@ -175,7 +175,7 @@ public class FXMLMainController implements Initializable {
     }
 
     /**
-     * Register the player
+     * Open highscore view
      *
      * @param e
      */
