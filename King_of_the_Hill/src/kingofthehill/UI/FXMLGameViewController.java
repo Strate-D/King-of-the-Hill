@@ -214,13 +214,13 @@ public class FXMLGameViewController implements Initializable {
                 drawUnits();
 
                 try {
-                    /**
-                     * Send heartbeat to server
-                     */
-                    gm.sendPlayerSignal(King_of_the_Hill.context.getPlayerName());
+                   /**
+                    * Send heartbeat to server
+                   */
+                  gm.sendPlayerSignal(King_of_the_Hill.context.getPlayerName());
                 } catch (RemoteException ex) {
-                    System.out.println("Failed to inform server!");
-                }
+                 System.out.println("Failed to inform server!");
+             }
 
                 /**
                  * Check and handle mouse scrolling
@@ -342,6 +342,7 @@ public class FXMLGameViewController implements Initializable {
             /**
              * Load next window
              */
+            antimer.stop();
             Parent window1;
             window1 = FXMLLoader.load(getClass().getResource("FXMLMain.fxml"));
             King_of_the_Hill.currentStage.getScene().setRoot(window1);
