@@ -67,6 +67,8 @@ public class AudioPlayer {
                 byte[] data = buffer.readBuffer();
                 if (data != null) {
                     speakers.write(data, 0, data.length);
+                } else {
+                    speakers.flush();
                 }
 
                 try {
