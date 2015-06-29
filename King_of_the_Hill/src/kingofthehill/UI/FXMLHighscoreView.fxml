@@ -20,8 +20,8 @@
             <Font size="45.0" />
          </font>
       </Button>
-      <ListView fx:id="lvHighscore" layoutX="661.0" layoutY="438.0" prefHeight="270.0" prefWidth="200.0" />
-      <ListView fx:id="lvHighscoreNum" layoutX="860.0" layoutY="438.0" prefHeight="270.0" prefWidth="200.0" />
+      <ListView fx:id="lvHighscore" layoutX="661.0" layoutY="438.0" prefHeight="292.0" prefWidth="200.0" />
+      <ListView fx:id="lvHighscoreNum" layoutX="860.0" layoutY="438.0" prefHeight="292.0" prefWidth="200.0" />
       <Label fx:id="lblName" layoutX="678.0" layoutY="409.0" text="Name" textFill="#f2ff00">
          <font>
             <Font name="System Bold" size="18.0" />
