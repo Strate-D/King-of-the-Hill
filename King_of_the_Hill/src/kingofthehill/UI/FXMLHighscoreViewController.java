@@ -62,7 +62,7 @@ public class FXMLHighscoreViewController implements Initializable {
         List<IPlayer> players = DatabaseMediator.getHighscores();
         for(IPlayer p : players){
             highscores.add(num + ". "+ p.getName());
-            highscoresNum.add("" + p.getScore());
+            highscoresNum.add("" + p.getExp());
             /*
             // Single List view option
             highscores.add(num + ". " + p.getName() + "\t" p.getScore());
