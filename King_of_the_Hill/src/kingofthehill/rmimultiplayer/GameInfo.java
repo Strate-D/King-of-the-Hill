@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package kingofthehill.rmimultiplayer;
 
@@ -27,11 +27,13 @@ public class GameInfo implements IGameInfo, Serializable {
     private int mysteryboxTime;
 
     public void setInfo(List<IPlayer> players, Mysterybox mbox, int resourcetimer, int mysteryboxtimer, int mysteryboxtime) {
-        this.players = players;
-        this.mbox = mbox;
-        this.resourceTimer = resourcetimer;
-        this.mysteryboxTimer = mysteryboxtimer;
-        this.mysteryboxTime = mysteryboxtime;
+        if (players.size() == 4) {
+            this.players = players;
+            this.mbox = mbox;
+            this.resourceTimer = resourcetimer;
+            this.mysteryboxTimer = mysteryboxtimer;
+            this.mysteryboxTime = mysteryboxtime;
+        }
     }
 
     @Override
