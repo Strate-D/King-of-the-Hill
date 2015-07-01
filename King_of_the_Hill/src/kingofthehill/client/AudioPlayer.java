@@ -68,7 +68,8 @@ public class AudioPlayer {
                 if (data != null) {
                     speakers.write(data, 0, data.length);
                 } else {
-                    speakers.flush();
+                    // Just write null data
+                    speakers.write(new byte[] {0, 0}, 0, 2);
                 }
 
                 try {
