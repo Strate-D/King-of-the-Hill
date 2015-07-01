@@ -586,8 +586,8 @@ public class GameManager extends UnicastRemoteObject implements IGameManager {
         /**
          * Update game info for clients
          */
-        if(this.players.size() == 4) {
-        gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
+        if (this.players.size() == 4) {
+            gameInfo.setInfo(this.players, this.mysterybox, this.resourceTimer, this.mysteryboxTimer, this.mysteryboxTime);
         } else {
             System.out.println("Player list not complete! Cannot set gameinfo in game!");
         }

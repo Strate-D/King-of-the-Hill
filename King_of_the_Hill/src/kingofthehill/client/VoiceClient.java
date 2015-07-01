@@ -191,11 +191,12 @@ public class VoiceClient {
                     //    this.printMessage("<< You are not allowed to do that >>");
                     //}
                     return;
-                } else if (tmessage.getData().toString().startsWith("/leave")) {
-                    sender.writeObject(new InfoMessage(this.clientID, "LEAVE_PARTY"));
-                    this.parent.leaveLobby();
-                    return;
-                } else if (tmessage.getData().toString().startsWith("/start")) {
+                }// else if (tmessage.getData().toString().startsWith("/leave")) {
+                //    sender.writeObject(new InfoMessage(this.clientID, "LEAVE_PARTY"));
+                 //   this.parent.leaveLobby();
+                //    return;
+                //}
+                 else if (tmessage.getData().toString().startsWith("/start")) {
                     this.audioCapturer.startCapture();
                     return;
                 } else if (tmessage.getData().toString().startsWith("/stop")) {
