@@ -225,7 +225,7 @@ public class VoiceClient {
      * Stop the VoiceClient
      */
     public void stop() {
-        this.sendMessage(new InfoMessage(this.clientID, "LEAVE_PARTY"));
+        //this.sendMessage(new InfoMessage(this.clientID, "LEAVE_PARTY"));
         this.stopAudioCapture();
         this.audioPlayer.stopPlayback();
 
