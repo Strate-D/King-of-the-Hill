@@ -759,6 +759,10 @@ public class FXMLMultiPlayerViewController implements Initializable {
              * *****************************
              * Draw for player 0 *****************************
              */
+            /**
+             * ************************
+             * Draw for player 0 ************************
+             */
             if (u.getOwner() == gameInfo.getPlayers().get(0)) {
                 /**
                  * Check which sprite to use
@@ -834,8 +838,8 @@ public class FXMLMultiPlayerViewController implements Initializable {
                 }
             }
             /**
-             * *****************************
-             * Draw for player 1 *****************************
+             * ************************
+             * Draw for player 1 ************************
              */
             if (u.getOwner() == gameInfo.getPlayers().get(1)) {
                 /**
@@ -858,28 +862,28 @@ public class FXMLMultiPlayerViewController implements Initializable {
                  * Draw unit Lane 0
                  */
                 if (u.getLane() == gameInfo.getPlayers().get(1).getBase().getLane(0)) {
-                    x = 743;
+                    x = 818;
                     y = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                 }
                 /**
                  * Lane 1
                  */
                 if (u.getLane() == gameInfo.getPlayers().get(1).getBase().getLane(1)) {
-                    x = 768;
+                    x = 793;
                     y = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                 }
                 /**
                  * Lane 2
                  */
                 if (u.getLane() == gameInfo.getPlayers().get(1).getBase().getLane(2)) {
-                    x = 793;
+                    x = 768;
                     y = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                 }
                 /**
                  * Lane 3
                  */
                 if (u.getLane() == gameInfo.getPlayers().get(1).getBase().getLane(3)) {
-                    x = 818;
+                    x = 743;
                     y = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                 }
                 /**
@@ -912,8 +916,8 @@ public class FXMLMultiPlayerViewController implements Initializable {
                 }
             }
             /**
-             * *****************************
-             * Draw for player 2 *****************************
+             * ************************
+             * Draw for player 2 ************************
              */
             if (u.getOwner() == gameInfo.getPlayers().get(2)) {
                 /**
@@ -937,61 +941,61 @@ public class FXMLMultiPlayerViewController implements Initializable {
                  */
                 if (u.getLane() == gameInfo.getPlayers().get(2).getBase().getLane(0)) {
                     x = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
-                    y = 743;
+                    y = 818;
                 }
                 /**
                  * Lane 1
                  */
                 if (u.getLane() == gameInfo.getPlayers().get(2).getBase().getLane(1)) {
                     x = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
-                    y = 768;
+                    y = 793;
                 }
                 /**
                  * Lane 2
                  */
                 if (u.getLane() == gameInfo.getPlayers().get(2).getBase().getLane(2)) {
                     x = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
-                    y = 793;
+                    y = 768;
                 }
                 /**
                  * Lane 3
                  */
                 if (u.getLane() == gameInfo.getPlayers().get(2).getBase().getLane(3)) {
                     x = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
-                    y = 818;
+                    y = 743;
                 }
                 /**
                  * Lane 4
                  */
                 if (u.getLane() == gameInfo.getPlayers().get(2).getBase().getLane(4)) {
-                    x = 743;
+                    x = 818;
                     y = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                 }
                 /**
                  * Lane 5
                  */
                 if (u.getLane() == gameInfo.getPlayers().get(2).getBase().getLane(5)) {
-                    x = 768;
+                    x = 793;
                     y = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                 }
                 /**
                  * Lane 6
                  */
                 if (u.getLane() == gameInfo.getPlayers().get(2).getBase().getLane(6)) {
-                    x = 793;
+                    x = 768;
                     y = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                 }
                 /**
                  * Lane 7
                  */
                 if (u.getLane() == gameInfo.getPlayers().get(2).getBase().getLane(7)) {
-                    x = 818;
+                    x = 743;
                     y = (float) u.getPosition() / (float) 1000 * (float) 470 + (float) 215;
                 }
             }
             /**
-             * *****************************
-             * Draw for player 3 *****************************
+             * ************************
+             * Draw for player 3 ************************
              */
             if (u.getOwner() == gameInfo.getPlayers().get(3)) {
                 /**
@@ -1043,28 +1047,28 @@ public class FXMLMultiPlayerViewController implements Initializable {
                  */
                 if (u.getLane() == gameInfo.getPlayers().get(3).getBase().getLane(4)) {
                     x = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
-                    y = 743;
+                    y = 818;
                 }
                 /**
                  * Lane 5
                  */
                 if (u.getLane() == gameInfo.getPlayers().get(3).getBase().getLane(5)) {
                     x = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
-                    y = 768;
+                    y = 793;
                 }
                 /**
                  * Lane 6
                  */
                 if (u.getLane() == gameInfo.getPlayers().get(3).getBase().getLane(6)) {
                     x = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
-                    y = 793;
+                    y = 768;
                 }
                 /**
                  * Lane 7
                  */
                 if (u.getLane() == gameInfo.getPlayers().get(3).getBase().getLane(7)) {
                     x = (float) 685 - (float) u.getPosition() / (float) 1000 * (float) 470;
-                    y = 818;
+                    y = 743;
                 }
             }
             /**
